@@ -119,6 +119,29 @@ class TranscribirRequest(ModeloCable):
     audio_mime: str = "audio/ogg"
 
 
+class InterpretarRequest(ModeloCable):
+    """Un mensaje suelto de WhatsApp que hay que clasificar."""
+
+    mensaje: str = ""
+    #: Camino de audio: nota de voz → texto → decisión, en una sola llamada.
+    audio_base64: str | None = None
+    audio_mime: str = "audio/ogg"
+    #: Qué sabe `core` de este paramédico ahora mismo (caso abierto, sede
+    #: asignada, estado del handshake). Sin esto el modelo no puede
+    #: distinguir "ya llegué" a la escena de "ya llegué" al hospital.
+    contexto: str | None = None
+
+
+class InterpretarResponse(ModeloCable):
+    #: Nombre de la herramienta elegida. `no_entendido` es una respuesta
+    #: válida y esperada, no un error.
+    accion: str
+    argumentos: dict[str, object] = Field(default_factory=dict)
+    motor: Literal["claude", "heuristica"]
+    latencia_ms: int
+    transcripcion: Transcripcion | None = None
+
+
 class HablarRequest(ModeloCable):
     """Texto → audio, para la llamada de seguimiento."""
 

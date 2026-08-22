@@ -66,5 +66,19 @@ class Settings(BaseSettings):
     tts_formato: str = "mp3_44100_128"
     tts_timeout_s: float = 20.0
 
+    # ── Agentes conversacionales de ElevenLabs ───────────────────
+    # Dos agentes, dos momentos distintos de la operacion:
+    #
+    #   REPORTE     — habla con el paramedico cuando reporta la situacion.
+    #                 Entrante: el paramedico inicia.
+    #   SEGUIMIENTO — llama cuando una ambulancia se demora mas de lo
+    #                 normal, para saber que paso y si necesita apoyo.
+    #                 Saliente: PULSO inicia.
+    #
+    # Se configuran en elevenlabs.io -> Agents. Aqui solo van los IDs;
+    # la credencial es la misma ELEVENLABS_API_KEY.
+    elevenlabs_agente_reporte_id: str = ""
+    elevenlabs_agente_seguimiento_id: str = ""
+
 
 settings = Settings()

@@ -20,6 +20,7 @@ uv run pytest                      # 52 tests, sin red
 | `POST /v1/transcribir/archivo` | Lo mismo, con `curl -F`. Para probar a mano. |
 | `POST /v1/hablar` | Texto → audio (TTS). Devuelve bytes, no JSON. |
 | `GET /v1/voz` | Qué hay disponible de voz, en los dos sentidos. |
+| `POST /v1/interpretar` | Mensaje suelto de WhatsApp → una acción decidida. |
 
 ```bash
 curl -s -X POST localhost:8000/v1/triage -H "Content-Type: application/json" \
@@ -86,6 +87,49 @@ el audio que entra por WhatsApp.
 `POST /v1/triage` acepta `audioBase64` y hace STT + extracción en **una sola
 llamada**, porque WhatsApp ya paga suficientes saltos de red. Si mandas `texto`
 y audio a la vez, gana el texto: quien ya transcribió sabe algo que nosotros no.
+
+## El agente: structured outputs para extraer, tools para decidir
+
+Dos preguntas distintas, dos mecanismos distintos:
+
+| | Pregunta | Mecanismo |
+|---|---|---|
+| `/v1/triage` | *"¿qué dice este dictado?"* | structured outputs (`messages.parse`) |
+| `/v1/interpretar` | *"¿qué hago con este mensaje?"* | tool use (`strict: true`) |
+
+El triaje tiene **una** respuesta y su forma se conoce de antemano — meterle
+tools sería más maquinaria por la misma garantía. El enrutador tiene que
+**elegir una acción** entre varias, y para eso sirven las tools.
+
+Seis herramientas: `registrar_caso`, `confirmar_llegada`, `reportar_demora`,
+`pedir_ubicacion`, `consultar_estado` y `no_entendido`. La última es la salida
+de escape: sin ella el modelo responde texto libre ante un mensaje raro y el
+despachador se queda sin acción que ejecutar.
+
+`/v1/interpretar` **no ejecuta nada** — ai-core no tiene estado. Devuelve la
+acción y sus argumentos validados; quien sabe de qué caso y de qué teléfono se
+trata es `core`.
+
+Sin `ANTHROPIC_API_KEY` cae a un clasificador por palabras clave. Es tosco,
+pero el canal nunca se queda mudo.
+
+## Prompts
+
+`app/agente/prompts/` tiene los dos agentes conversacionales de ElevenLabs,
+listos para pegar en la consola:
+
+| Archivo | Cuándo | Dirección |
+|---|---|---|
+| `agente_reporte.txt` | El paramédico reporta desde la escena | entrante |
+| `agente_seguimiento.txt` | Una ambulancia se demora más de lo normal | saliente |
+
+Siguen el esqueleto de secciones en mayúsculas con ruteo por flechas, y las
+herramientas van indexadas dentro de `FLUJO` en vez de listadas aparte.
+
+⚠️ **La rama de APOYO del agente de seguimiento está sin definir a propósito.**
+Cuando un paramédico pide apoyo, PULSO hoy no tiene a quién escalar — no hay
+integración con el CRUE ni con el 123. El prompt reconoce y devuelve al canal
+que sí funciona, y no promete nada. Está marcado como pendiente de producto.
 
 ## El contrato es camelCase a propósito
 

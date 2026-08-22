@@ -6,13 +6,14 @@ the browser, which is why it carries no CORS middleware.
 
 from fastapi import FastAPI
 
-from .routers import score, transcribir, triage
+from .routers import interpretar, score, transcribir, triage
 
 app = FastAPI(title="ai-core", version="0.1.0")
 
 app.include_router(triage.router)
 app.include_router(score.router)
 app.include_router(transcribir.router)
+app.include_router(interpretar.router)
 
 
 @app.get("/health")
