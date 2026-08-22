@@ -1,0 +1,524 @@
+{
+  "flotaAmbulancias": {
+    "fuente": "Observatorio de Salud de Bogota — razon de ambulancias",
+    "detalle": [
+      {
+        "tipo": "Básica",
+        "naturaleza": "Privada",
+        "cantidad": 608.0,
+        "tasaPor10kHab": 0.76
+      },
+      {
+        "tipo": "Medicalizada",
+        "naturaleza": "Privada",
+        "cantidad": 184.0,
+        "tasaPor10kHab": 0.23
+      },
+      {
+        "tipo": "Básica",
+        "naturaleza": "Pública",
+        "cantidad": 108.0,
+        "tasaPor10kHab": 0.14
+      },
+      {
+        "tipo": "Medicalizada",
+        "naturaleza": "Pública",
+        "cantidad": 52.0,
+        "tasaPor10kHab": 0.06
+      }
+    ],
+    "total": {
+      "tipo": "Total",
+      "naturaleza": "Total",
+      "cantidad": 952.0,
+      "tasaPor10kHab": 1.2
+    },
+    "poblacionProyectada": null,
+    "medicalizadas": 236.0
+  },
+  "camasCiudad": {
+    "fuente": "Observatorio de Salud de Bogota — razon de camas",
+    "detalle": [
+      {
+        "concepto": "Adultos",
+        "naturaleza": "Privada",
+        "cantidad": 5611.0
+      },
+      {
+        "concepto": "Atención del Parto",
+        "naturaleza": "Privada",
+        "cantidad": 36.0
+      },
+      {
+        "concepto": "Cuna Básico Neonatal",
+        "naturaleza": "Privada",
+        "cantidad": 82.0
+      },
+      {
+        "concepto": "Cuna Intensiva Neonatal",
+        "naturaleza": "Privada",
+        "cantidad": 32.0
+      },
+      {
+        "concepto": "Cuna Intermedia Neonatal",
+        "naturaleza": "Privada",
+        "cantidad": 24.0
+      },
+      {
+        "concepto": "Incubadora Básico Neonatal",
+        "naturaleza": "Privada",
+        "cantidad": 56.0
+      },
+      {
+        "concepto": "Incubadora Intensiva Neonatal",
+        "naturaleza": "Privada",
+        "cantidad": 157.0
+      },
+      {
+        "concepto": "Incubadora Intermedia Neonatal",
+        "naturaleza": "Privada",
+        "cantidad": 155.0
+      },
+      {
+        "concepto": "Intensiva Adultos",
+        "naturaleza": "Privada",
+        "cantidad": 843.0
+      },
+      {
+        "concepto": "Intensiva Pediátrica",
+        "naturaleza": "Privada",
+        "cantidad": 204.0
+      },
+      {
+        "concepto": "Intensiva Quemado Adulto",
+        "naturaleza": "Privada",
+        "cantidad": 10.0
+      },
+      {
+        "concepto": "Intensiva Quemado pediátrica",
+        "naturaleza": "Privada",
+        "cantidad": 3.0
+      },
+      {
+        "concepto": "Intermedia Adultos",
+        "naturaleza": "Privada",
+        "cantidad": 405.0
+      },
+      {
+        "concepto": "Intermedia Pediátrica",
+        "naturaleza": "Privada",
+        "cantidad": 74.0
+      },
+      {
+        "concepto": "Paciente crónico con ventilador",
+        "naturaleza": "Privada",
+        "cantidad": 154.0
+      },
+      {
+        "concepto": "Paciente crónico sin ventilador",
+        "naturaleza": "Privada",
+        "cantidad": 497.0
+      },
+      {
+        "concepto": "Pediátrica",
+        "naturaleza": "Privada",
+        "cantidad": 1052.0
+      },
+      {
+        "concepto": "Salud Mental Adulto",
+        "naturaleza": "Privada",
+        "cantidad": 1243.0
+      },
+      {
+        "concepto": "Salud Mental Pediátrico",
+        "naturaleza": "Privada",
+        "cantidad": 292.0
+      },
+      {
+        "concepto": "SPA Adultos",
+        "naturaleza": "Privada",
+        "cantidad": 117.0
+      },
+      {
+        "concepto": "SPA Básico Adultos",
+        "naturaleza": "Privada",
+        "cantidad": 276.0
+      },
+      {
+        "concepto": "SPA Básico Pediátricos",
+        "naturaleza": "Privada",
+        "cantidad": 24.0
+      },
+      {
+        "concepto": "SPA Pediátricas",
+        "naturaleza": "Privada",
+        "cantidad": 56.0
+      },
+      {
+        "concepto": "Trabajo de Parto y Recuperación",
+        "naturaleza": "Privada",
+        "cantidad": 29.0
+      },
+      {
+        "concepto": "Adultos",
+        "naturaleza": "Pública",
+        "cantidad": 2092.0
+      },
+      {
+        "concepto": "Atención del Parto",
+        "naturaleza": "Pública",
+        "cantidad": 216.0
+      },
+      {
+        "concepto": "Cuna Básico Neonatal",
+        "naturaleza": "Pública",
+        "cantidad": 96.0
+      },
+      {
+        "concepto": "Cuna Intensiva Neonatal",
+        "naturaleza": "Pública",
+        "cantidad": 19.0
+      },
+      {
+        "concepto": "Cuna Intermedia Neonatal",
+        "naturaleza": "Pública",
+        "cantidad": 23.0
+      },
+      {
+        "concepto": "Incubadora Básico Neonatal",
+        "naturaleza": "Pública",
+        "cantidad": 31.0
+      },
+      {
+        "concepto": "Incubadora Intensiva Neonatal",
+        "naturaleza": "Pública",
+        "cantidad": 61.0
+      },
+      {
+        "concepto": "Incubadora Intermedia Neonatal",
+        "naturaleza": "Pública",
+        "cantidad": 93.0
+      },
+      {
+        "concepto": "Intensiva Adultos",
+        "naturaleza": "Pública",
+        "cantidad": 234.0
+      },
+      {
+        "concepto": "Intensiva Pediátrica",
+        "naturaleza": "Pública",
+        "cantidad": 44.0
+      },
+      {
+        "concepto": "Intensiva Quemado Adulto",
+        "naturaleza": "Pública",
+        "cantidad": 18.0
+      },
+      {
+        "concepto": "Intensiva Quemado pediátrica",
+        "naturaleza": "Pública",
+        "cantidad": 13.0
+      },
+      {
+        "concepto": "Intermedia Adultos",
+        "naturaleza": "Pública",
+        "cantidad": 103.0
+      },
+      {
+        "concepto": "Intermedia Pediátrica",
+        "naturaleza": "Pública",
+        "cantidad": 21.0
+      },
+      {
+        "concepto": "Paciente crónico con ventilador",
+        "naturaleza": "Pública",
+        "cantidad": null
+      },
+      {
+        "concepto": "Paciente crónico sin ventilador",
+        "naturaleza": "Pública",
+        "cantidad": 17.0
+      },
+      {
+        "concepto": "Pediátrica",
+        "naturaleza": "Pública",
+        "cantidad": 431.0
+      },
+      {
+        "concepto": "Salud Mental Adulto",
+        "naturaleza": "Pública",
+        "cantidad": 300.0
+      },
+      {
+        "concepto": "Salud Mental Pediátrico",
+        "naturaleza": "Pública",
+        "cantidad": 16.0
+      },
+      {
+        "concepto": "SPA Adultos",
+        "naturaleza": "Pública",
+        "cantidad": null
+      },
+      {
+        "concepto": "SPA Básico Adultos",
+        "naturaleza": "Pública",
+        "cantidad": null
+      },
+      {
+        "concepto": "SPA Básico Pediátricos",
+        "naturaleza": "Pública",
+        "cantidad": null
+      },
+      {
+        "concepto": "SPA Pediátricas",
+        "naturaleza": "Pública",
+        "cantidad": null
+      },
+      {
+        "concepto": "Trabajo de Parto y Recuperación",
+        "naturaleza": "Pública",
+        "cantidad": 10.0
+      },
+      {
+        "concepto": "Total",
+        "naturaleza": null,
+        "cantidad": 15270.0
+      }
+    ],
+    "camasIntensivas": 1638.0
+  },
+  "tiemposPorLocalidad": {
+    "fuente": "Observatorio de Salud de Bogota — tiempo promedio al centro medico",
+    "serie": [
+      {
+        "anio": "2017",
+        "localidad": "Usaquén",
+        "minutos": 20.6
+      },
+      {
+        "anio": "2017",
+        "localidad": "Chapinero",
+        "minutos": 17.4
+      },
+      {
+        "anio": "2017",
+        "localidad": "Santa Fe",
+        "minutos": 19.4
+      },
+      {
+        "anio": "2017",
+        "localidad": "San Cristóbal",
+        "minutos": 23.1
+      },
+      {
+        "anio": "2017",
+        "localidad": "Usme",
+        "minutos": 28.8
+      },
+      {
+        "anio": "2017",
+        "localidad": "Tunjuelito",
+        "minutos": 21.6
+      },
+      {
+        "anio": "2017",
+        "localidad": "Bosa",
+        "minutos": 30.9
+      },
+      {
+        "anio": "2017",
+        "localidad": "Kennedy",
+        "minutos": 24.7
+      },
+      {
+        "anio": "2017",
+        "localidad": "Fontibón",
+        "minutos": 25.4
+      },
+      {
+        "anio": "2017",
+        "localidad": "Engativá",
+        "minutos": 24.7
+      },
+      {
+        "anio": "2017",
+        "localidad": "Suba",
+        "minutos": 25.6
+      },
+      {
+        "anio": "2017",
+        "localidad": "Barrios Unidos",
+        "minutos": 20.9
+      },
+      {
+        "anio": "2017",
+        "localidad": "Teusaquillo",
+        "minutos": 18.1
+      },
+      {
+        "anio": "2017",
+        "localidad": "Los Mártires",
+        "minutos": 19.8
+      },
+      {
+        "anio": "2017",
+        "localidad": "Antonio Nariño",
+        "minutos": 20.3
+      },
+      {
+        "anio": "2017",
+        "localidad": "Puente Aranda",
+        "minutos": 27.3
+      },
+      {
+        "anio": "2017",
+        "localidad": "La Candelaria",
+        "minutos": 21.7
+      },
+      {
+        "anio": "2017",
+        "localidad": "Rafael Uribe Uribe",
+        "minutos": 22.3
+      },
+      {
+        "anio": "2017",
+        "localidad": "Ciudad Bolívar",
+        "minutos": 29.7
+      },
+      {
+        "anio": "2017",
+        "localidad": "Sumapaz",
+        "minutos": 77.4
+      },
+      {
+        "anio": "2017",
+        "localidad": "Bogotá D.C.",
+        "minutos": 24.7
+      },
+      {
+        "anio": "2021",
+        "localidad": "Usaquén",
+        "minutos": 25.2
+      },
+      {
+        "anio": "2021",
+        "localidad": "Chapinero",
+        "minutos": 23.7
+      },
+      {
+        "anio": "2021",
+        "localidad": "Santa Fe",
+        "minutos": 22.0
+      },
+      {
+        "anio": "2021",
+        "localidad": "San Cristóbal",
+        "minutos": 31.0
+      },
+      {
+        "anio": "2021",
+        "localidad": "Usme",
+        "minutos": 33.5
+      },
+      {
+        "anio": "2021",
+        "localidad": "Tunjuelito",
+        "minutos": 25.0
+      },
+      {
+        "anio": "2021",
+        "localidad": "Bosa",
+        "minutos": 35.4
+      },
+      {
+        "anio": "2021",
+        "localidad": "Kennedy",
+        "minutos": 29.4
+      },
+      {
+        "anio": "2021",
+        "localidad": "Fontibón",
+        "minutos": 26.3
+      },
+      {
+        "anio": "2021",
+        "localidad": "Engativá",
+        "minutos": 27.0
+      },
+      {
+        "anio": "2021",
+        "localidad": "Suba",
+        "minutos": 27.6
+      },
+      {
+        "anio": "2021",
+        "localidad": "Barrios Unidos",
+        "minutos": 20.2
+      },
+      {
+        "anio": "2021",
+        "localidad": "Teusaquillo",
+        "minutos": 17.6
+      },
+      {
+        "anio": "2021",
+        "localidad": "Los Mártires",
+        "minutos": 25.1
+      },
+      {
+        "anio": "2021",
+        "localidad": "Antonio Nariño",
+        "minutos": 18.5
+      },
+      {
+        "anio": "2021",
+        "localidad": "Puente Aranda",
+        "minutos": 22.9
+      },
+      {
+        "anio": "2021",
+        "localidad": "La Candelaria",
+        "minutos": 22.4
+      },
+      {
+        "anio": "2021",
+        "localidad": "Rafael Uribe Uribe",
+        "minutos": 26.5
+      },
+      {
+        "anio": "2021",
+        "localidad": "Ciudad Bolívar",
+        "minutos": 31.9
+      },
+      {
+        "anio": "2021",
+        "localidad": "Bogotá D.C.",
+        "minutos": 27.8
+      }
+    ],
+    "minutosPorLocalidad": {
+      "Usaquén": 25.2,
+      "Chapinero": 23.7,
+      "Santa Fe": 22.0,
+      "San Cristóbal": 31.0,
+      "Usme": 33.5,
+      "Tunjuelito": 25.0,
+      "Bosa": 35.4,
+      "Kennedy": 29.4,
+      "Fontibón": 26.3,
+      "Engativá": 27.0,
+      "Suba": 27.6,
+      "Barrios Unidos": 20.2,
+      "Teusaquillo": 17.6,
+      "Los Mártires": 25.1,
+      "Antonio Nariño": 18.5,
+      "Puente Aranda": 22.9,
+      "La Candelaria": 22.4,
+      "Rafael Uribe Uribe": 26.5,
+      "Ciudad Bolívar": 31.9,
+      "Sumapaz": 77.4,
+      "Bogotá D.C.": 27.8
+    },
+    "promedioCiudad": 28.4
+  }
+}

@@ -9,5 +9,6 @@ import { MatchService } from './match.service';
   imports: [SedesModule, EtaModule, ScoringModule],
   controllers: [MatchController],
   providers: [MatchService],
+  exports: [MatchService],
 })
 export class MatchModule {}

@@ -13,12 +13,14 @@ vars:
   FRONTEND: apps/frontend
   CORE: apps/backend/core
   AI_CORE: apps/backend/ai-core
+  VOZ: apps/services/voz
 
   # Single source of truth for the dev ports: `dev` binds them and `doctor`
   # checks them. Override per run, e.g. `task dev PORT_CORE=3005`.
   PORT_FRONTEND: '{{.PORT_FRONTEND | default "3000"}}'
   PORT_CORE: '{{.PORT_CORE | default "3001"}}'
   PORT_AI_CORE: '{{.PORT_AI_CORE | default "8000"}}'
+  PORT_VOZ: '{{.PORT_VOZ | default "8090"}}'
 
 tasks:
   default:
@@ -36,6 +38,7 @@ tasks:
       - dev:frontend
       - dev:core
       - dev:ai-core
+      - dev:voz
 
   dev:frontend:
     desc: Next.js dev server (default :3000).
@@ -53,6 +56,12 @@ tasks:
       PORT: "{{.PORT_CORE}}"
     cmds:
       - pnpm start:dev
+
+  dev:voz:
+    desc: Canal público (WhatsApp + telefonía). El único con cara a internet.
+    dir: "{{.VOZ}}"
+    cmds:
+      - uv run uvicorn app.main:app --reload --port {{.PORT_VOZ}}
 
   dev:ai-core:
     desc: FastAPI service with reload (default :8000).
@@ -138,6 +147,24 @@ tasks:
     dir: "{{.CORE}}"
     cmds:
       - pnpm run migrate -- verify
+  # --------------------------------------------------------------- data ---
+
+  datos:descargar:
+    desc: Download the Bogota REPS sources (17 MB, not committed).
+    cmds:
+      - python scripts/datos/descargar.py
+
+  datos:
+    desc: Rebuild data/procesado and the generated TypeScript from data/.
+    cmds:
+      # Solo stdlib de Python: no necesita el venv de ai-core ni pip install.
+      - python scripts/datos/construir.py
+
+  datos:catalogo:
+    desc: Regenerate data/CATALOGO.md only (fast, no transforms).
+    cmds:
+      - python -c "import sys; sys.path.insert(0, 'scripts/datos'); import catalogar; catalogar.construir()"
+      - echo "data/CATALOGO.md actualizado"
 
   # --------------------------------------------------------------- misc ---
 

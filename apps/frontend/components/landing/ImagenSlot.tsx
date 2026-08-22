@@ -3,10 +3,12 @@
 /**
  * Slot de imagen de la landing. Si el registro no tiene `src`, pinta un
  * placeholder que dice exactamente qué imagen va ahí; con `src`, pinta
- * la imagen real. Cambiar una cosa por la otra es editar config.ts.
+ * la imagen real; con `video`, un clip mudo en loop (gana sobre `src`).
+ * Cambiar una cosa por la otra es editar config.ts.
  */
 
 import Image from "next/image";
+import { useReducedMotion } from "motion/react";
 import { ImageIcon } from "lucide-react";
 import { IMAGENES } from "./config";
 
@@ -20,6 +22,24 @@ export function ImagenSlot({
   sizes?: string;
 }) {
   const registro = IMAGENES[id];
+  const sinMovimiento = useReducedMotion();
+
+  if (registro?.video) {
+    return (
+      <div className={`relative overflow-hidden ${className}`}>
+        <video
+          src={registro.video}
+          autoPlay={!sinMovimiento}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-label={registro.alt}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      </div>
+    );
+  }
 
   if (registro?.src) {
     return (

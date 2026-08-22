@@ -15,6 +15,7 @@ import type {
 import { AlmacenService } from '../almacen/almacen.service';
 import { SedesService } from '../sedes/sedes.service';
 import { CongestionService } from '../scoring/congestion.service';
+import { VozClient } from '../voz/voz.client';
 
 @Injectable()
 export class HandshakeService {
@@ -24,6 +25,7 @@ export class HandshakeService {
     private readonly almacen: AlmacenService,
     private readonly sedes: SedesService,
     private readonly congestion: CongestionService,
+    private readonly voz: VozClient,
   ) {}
 
   /**
@@ -43,12 +45,23 @@ export class HandshakeService {
     const h = this.almacen.obtenerHandshake(cuerpo.handshakeId);
     if (!h) throw new NotFoundException('Handshake no encontrado');
 
-    // Idempotencia: sin esto, un doble toque en el celular duplica la señal y
-    // ensucia el modelo. En un demo en vivo esto pasa siempre.
+    // Dos casos distintos que se manejan igual, y por eso comparten rama:
+    //
+    //  DOBLE TOQUE (ya aceptado/rechazado). Sin esto la señal se duplica y
+    //  ensucia el modelo. En un demo en vivo esto pasa siempre.
+    //
+    //  RESPUESTA TARDÍA (ya en timeout). El paramédico probablemente ya siguió
+    //  con el siguiente candidato, así que revivir esta solicitud podría dejar
+    //  a dos hospitales esperando al mismo paciente. La respuesta se descarta
+    //  y `aplicada: false` obliga a quien llama a decirlo en voz alta.
     if (h.estado !== 'enviado') {
+      this.log.warn(
+        `respuesta ignorada sobre handshake ${h.id}: ya estaba en '${h.estado}'`,
+      );
       return {
         handshake: h,
         congestionActualizada: await this.congestionDe(h.sedeCodigo),
+        aplicada: false,
       };
     }
 
@@ -66,16 +79,57 @@ export class HandshakeService {
     this.almacen.guardarHandshake(actualizado);
 
     // ⭐ El dato se etiqueta solo.
-    this.almacen.registrarRespuesta(h.sedeCodigo, cuerpo.decision);
+    this.almacen.registrarRespuesta(
+      h.sedeCodigo,
+      cuerpo.decision,
+      actualizado.latenciaS,
+    );
 
     const congestionActualizada = await this.congestionDe(h.sedeCodigo);
+
+    // ⭐ CIERRA EL BUCLE. Sin esto, el jefe de urgencias acepta y el
+    // paramédico nunca se entera: la confirmación se queda en el servidor.
+    // Es el momento 1:50 del guion, el del cronómetro.
+    await this.avisarAlParamedico(actualizado);
 
     this.log.log(
       `${h.sedeCodigo} → ${cuerpo.decision} en ${actualizado.latenciaS}s ` +
         `· congestión ahora ${(congestionActualizada * 100).toFixed(0)}%`,
     );
 
-    return { handshake: actualizado, congestionActualizada };
+    return { handshake: actualizado, congestionActualizada, aplicada: true };
+  }
+
+  /** Nunca lanza: un fallo del canal no puede tumbar el handshake. */
+  private async avisarAlParamedico(h: Handshake): Promise<void> {
+    const caso = this.almacen.obtenerCaso(h.casoId);
+    const telefono = caso?.telefonoReporta;
+    if (!telefono || !this.voz.configurado()) return;
+
+    const sede = await this.sedes.porCodigo(h.sedeCodigo);
+    const nombre = sede?.nombre ?? 'la sede';
+
+    if (h.estado === 'aceptado') {
+      await this.voz.notificar(
+        telefono,
+        `✅ ${nombre} aceptó el traslado. Van para allá.`,
+        sede
+          ? {
+              lat: sede.coord.lat,
+              lng: sede.coord.lng,
+              nombre: sede.nombre,
+              direccion: sede.direccion ?? '',
+            }
+          : undefined,
+      );
+      return;
+    }
+
+    const motivo = h.motivoRechazo ? ` (${h.motivoRechazo})` : '';
+    await this.voz.notificar(
+      telefono,
+      `⚠️ ${nombre} no puede recibir${motivo}. Buscando otra sede.`,
+    );
   }
 
   private async congestionDe(sedeCodigo: string): Promise<number> {

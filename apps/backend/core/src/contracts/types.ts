@@ -30,7 +30,7 @@ export interface Coordenada {
 export type CodServicio = number;
 
 /** Res. 3100/2019 clasifica por complejidad, no por "nivel I/II/III". */
-export type Complejidad = "baja" | "media" | "alta";
+export type Complejidad = 'baja' | 'media' | 'alta';
 
 /**
  * Tipo de movil (Res. 3100/2019).
@@ -38,7 +38,7 @@ export type Complejidad = "baja" | "media" | "alta";
  *  TAM = Transporte Asistencial Medicalizado (medico a bordo)
  * Es un FILTRO DURO: un TAB no traslada un paciente que requiere ventilacion.
  */
-export type TipoMovil = "TAB" | "TAM";
+export type TipoMovil = 'TAB' | 'TAM';
 
 /**
  * Triage segun Res. 5596/2015 (Colombia).
@@ -50,7 +50,26 @@ export type TipoMovil = "TAB" | "TAM";
  */
 export type NivelTriage = 1 | 2 | 3 | 4 | 5;
 
-export type Sexo = "M" | "F" | "desconocido";
+export type Sexo = 'M' | 'F' | 'desconocido';
+
+/**
+ * La unidad que atiende el caso.
+ *
+ * La sesion de core es una contrasena compartida por turno (ver
+ * sesion.service.ts): NO hay usuarios en el sistema. Esto no pretende
+ * arreglarlo — es trazabilidad operativa, no autenticacion. El movil se
+ * declara desde /campo y viaja pegado al caso para que el regulador del CRUE
+ * sepa que ambulancia esta preguntando.
+ *
+ * No lo uses para autorizar nada: quien tiene la contrasena del turno puede
+ * escribir el id que quiera.
+ */
+export interface Unidad {
+  /** Identificador del movil, ej "AMB-014". Es lo que ve el regulador. */
+  id: string;
+  /** Quien opera. Opcional: la sesion es por turno, no por persona. */
+  tripulante?: string;
+}
 
 // ─────────────────────────────────────────────────────────────────
 // Sede — el universo de destinos posibles (Zaid)
@@ -71,7 +90,7 @@ export interface Sede {
   direccion: string;
   localidad: string | null;
   coord: Coordenada;
-  naturaleza: "Pública" | "Privada" | "Mixta";
+  naturaleza: 'Pública' | 'Privada' | 'Mixta';
   complejidad: Complejidad;
   telefono: string | null;
   /** Codigos REPS habilitados en esta sede. Ver SERVICIOS en servicios-reps.ts */
@@ -110,12 +129,38 @@ export interface ExtraccionClinica {
 
 export interface Caso extends ExtraccionClinica {
   id: string;
+  /**
+   * Telefono desde el que se reporto, si entro por WhatsApp. Es lo que
+   * permite avisarle al paramedico cuando el hospital responde: sin esto
+   * la confirmacion se queda en el servidor y el bucle no se cierra.
+   */
+  telefonoReporta?: string | null;
   /** El dictado literal, sin tocar. Se conserva para auditoria. */
   textoCrudo: string;
   origen: Coordenada;
   tipoMovil: TipoMovil;
+  /** Movil que atiende. null si /campo no la declaro. Viaja al CRUE. */
+  unidad: Unidad | null;
   creadoEn: string; // ISO 8601
 }
+
+/**
+ * Lo que sale por GET /estado.
+ *
+ * `textoCrudo` (el dictado literal del paramedico) y `origen` (las
+ * coordenadas de recogida del paciente) NO viajan aqui: son los dos campos
+ * mas sensibles del sistema y ninguna consola los pinta. El dictado se
+ * conserva en el servidor para auditoria; el mapa de /campo usa el `origen`
+ * que ya recibio en la respuesta de POST /triage, no el de /estado.
+ *
+ * Si alguna vista llega a necesitarlos, se expone un endpoint por caso con su
+ * propia autorizacion — no se re-abren en el listado.
+ *
+ * Agregar un campo a Caso hace que este tipo lo exija, y eso ROMPE el build de
+ * `despojar()` en estado.service.ts, que construye el objeto campo por campo.
+ * Es a proposito: obliga a decidir si ese dato nuevo puede salir del servidor.
+ */
+export type CasoPublico = Omit<Caso, 'textoCrudo' | 'origen'>;
 
 // ─────────────────────────────────────────────────────────────────
 // Candidato — el ranking (Zaid + Neid)
@@ -168,8 +213,8 @@ export interface Candidato {
 // Handshake — el apreton de manos de un toque (Sebas)
 // ─────────────────────────────────────────────────────────────────
 
-export type CanalHandshake = "telegram" | "whatsapp" | "consola";
-export type EstadoHandshake = "enviado" | "aceptado" | "rechazado" | "timeout";
+export type CanalHandshake = 'telegram' | 'whatsapp' | 'consola';
+export type EstadoHandshake = 'enviado' | 'aceptado' | 'rechazado' | 'timeout';
 
 export interface Handshake {
   id: string;
@@ -180,8 +225,98 @@ export interface Handshake {
   /** "Sin camas UCI", "Hemodinamia en procedimiento"... */
   motivoRechazo: string | null;
   enviadoEn: string;
+  /**
+   * Cuando esta solicitud deja de esperar y pasa a 'timeout'.
+   *
+   * Lo calcula el servidor al despachar (enviadoEn + HANDSHAKE_TIMEOUT_S) y
+   * viaja al cliente para que /campo pinte el cronometro de expiracion contra
+   * el MISMO instante que va a usar core. Si el front inventara su propio
+   * plazo, la barra llegaria a cero mientras el servidor sigue esperando —o al
+   * reves— y el paramedico veria una cuenta que miente.
+   */
+  expiraEn: string;
   respondidoEn: string | null;
   latenciaS: number | null;
+  /**
+   * ETA en minutos al momento de despachar. Es la LINEA BASE contra la que
+   * se mide si el traslado se esta demorando. Sin esto no hay con que
+   * comparar y la deteccion de demoras no puede existir.
+   */
+  etaMinAlDespachar?: number | null;
+  /** Ya se disparo la llamada de seguimiento por demora. Evita repetirla. */
+  demoraAvisada?: boolean;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Escalamiento al CRUE — el "paseo de la muerte" resuelto
+// ─────────────────────────────────────────────────────────────────
+
+/**
+ * Por que este caso dejo de resolverse solo.
+ *  sin-candidatos        el match no devolvio ni una sede elegible
+ *  candidatos-agotados   todas rechazaron o dejaron vencer la solicitud
+ *  solicitud-paramedico  lo pidio la tripulacion (boton en /campo)
+ */
+export type MotivoEscalamiento =
+  | 'sin-candidatos'
+  | 'candidatos-agotados'
+  | 'solicitud-paramedico';
+
+/**
+ * Un caso que el ruteo automatico no pudo cerrar y pasa a manos de un
+ * regulador humano.
+ *
+ * Existe por una razon de producto, no tecnica: sin esto, cuando el ranking
+ * sale vacio /campo muestra una lista en blanco y el paramedico queda solo
+ * frente a la pantalla con un paciente en la camilla. Ese es exactamente el
+ * escenario que PULSO dice eliminar, asi que el sistema tiene que nombrarlo,
+ * registrarlo y ponerlo en la consola del CRUE.
+ */
+export interface Escalamiento {
+  id: string;
+  casoId: string;
+  motivo: MotivoEscalamiento;
+  /** Sedes que ya dijeron que no. Es lo primero que el regulador necesita. */
+  sedesIntentadas: string[];
+  detalle: string | null;
+  creadoEn: string;
+  /** null mientras nadie del CRUE lo haya tomado. */
+  atendidoEn: string | null;
+  atendidoPor: string | null;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Capacidades — que puede hacer el sistema AHORA MISMO
+// ─────────────────────────────────────────────────────────────────
+
+/**
+ * Estado real de las integraciones, para la barra persistente de /campo.
+ *
+ * Cada campo de core degrada a un modo mock sin credenciales (esa es la regla
+ * del proyecto), y hasta ahora esa degradacion era INVISIBLE: la consola
+ * mostraba un ETA calculado por regla de tres exactamente igual que uno de
+ * Mapbox con trafico. Esto lo hace decible.
+ *
+ * No lleva secretos ni URLs: solo dice en que modo esta cada pieza.
+ */
+export interface Capacidades {
+  /** llm = Claude extrae. heuristico = palabras clave (confianza 0.35). */
+  ia: 'llm' | 'heuristico';
+  /** trafico = Mapbox Matrix. estimado = distancia / velocidad media. */
+  ruteo: 'trafico' | 'estimado';
+  /**
+   * De donde sale la transcripcion del dictado.
+   *  ai-core     el audio se manda a POST /v1/transcribir del servicio de IA
+   *  navegador   Web Speech API — NO existe en Safari/iOS, ahi no hay dictado
+   */
+  voz: 'ai-core' | 'navegador';
+  /** Canal por el que sale el handshake si no se pide otro. */
+  canal: CanalHandshake;
+  /** supabase = catalogo REPS en DB. semillas = catalogo compilado. */
+  datos: 'supabase' | 'semillas';
+  /** Segundos que espera una solicitud antes de vencer. Lo pinta /campo. */
+  handshakeTimeoutS: number;
+  ts: string;
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -194,10 +329,22 @@ export interface TriageRequest {
   texto: string;
   origen?: Coordenada;
   tipoMovil?: TipoMovil;
+  /** Movil que atiende. Se guarda en el caso y viaja al CRUE. */
+  unidad?: Unidad;
+  /** Quien reporta, si entro por WhatsApp. Viaja hasta el Caso. */
+  telefonoReporta?: string | null;
 }
 export interface TriageResponse {
   caso: Caso;
   latenciaMs: number;
+  /**
+   * Qué produjo la extracción. Opcional para no romper a nadie.
+   * Antes la única pista de que estabas viendo la heurística era
+   * `confianza === 0.35` exacto, y eso se pasa por alto justo cuando importa.
+   */
+  motor?: "claude" | "heuristica";
+  /** Dónde corrió. `ai-core` solo aparece si AI_CORE_BASE_URL está puesta. */
+  via?: "core" | "ai-core";
 }
 
 /** POST /api/match — Zaid */
@@ -230,13 +377,43 @@ export interface DispatchResponse {
 /** POST /api/handshake/respond — Sebas (lo llaman la consola Y el webhook) */
 export interface RespondRequest {
   handshakeId: string;
-  decision: "aceptado" | "rechazado";
+  decision: 'aceptado' | 'rechazado';
   motivo?: string;
 }
 export interface RespondResponse {
   handshake: Handshake;
   /** Congestion de la sede DESPUES de procesar la respuesta. */
   congestionActualizada: number;
+  /**
+   * false = la respuesta NO cambio nada, porque la solicitud ya estaba
+   * resuelta (doble toque) o ya habia vencido.
+   *
+   * Quien llama TIENE que mirar esto antes de decirle a alguien que el
+   * traslado quedo aceptado: sin este campo, un "Aceptar" tocado 20 segundos
+   * tarde devolvia el handshake en 'timeout' y el webhook de Telegram
+   * respondia igualmente "traslado ACEPTADO". Dos hospitales creyendo que
+   * reciben al mismo paciente es peor que un rechazo.
+   */
+  aplicada: boolean;
+}
+
+/** POST /api/escalamiento — el caso pasa a un regulador humano */
+export interface EscalarRequest {
+  casoId: string;
+  motivo: MotivoEscalamiento;
+  detalle?: string;
+}
+export interface EscalarResponse {
+  escalamiento: Escalamiento;
+}
+
+/** POST /api/escalamiento/atender — lo toma el CRUE */
+export interface AtenderEscalamientoRequest {
+  escalamientoId: string;
+  atendidoPor?: string;
+}
+export interface AtenderEscalamientoResponse {
+  escalamiento: Escalamiento;
 }
 
 /** Forma de error uniforme. Todas las rutas la devuelven igual. */

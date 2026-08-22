@@ -6,7 +6,13 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['eslint.config.mjs'],
+    ignores: [
+      'eslint.config.mjs',
+      // Generados por `python scripts/datos/construir.py`. Formatearlos no
+      // sirve de nada: la siguiente corrida los reescribe igual.
+      'src/**/*.generado.ts',
+      'src/**/*.generada.ts',
+    ],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,

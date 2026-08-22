@@ -189,6 +189,115 @@ function checkMigrationEnv() {
       "missing — core can boot, but 'task migrate*' requires a direct/session port 5432 URL",
     );
   }
+// ----------------------------------------------------------- security ---
+
+/** Reads KEY=value pairs out of a .env file. Returns {} when it is not there. */
+function readEnv(path) {
+  if (!existsSync(path)) return {};
+
+  const pairs = {};
+  for (const line of readFileSync(path, "utf8").split("\n")) {
+    // trim() also drops the trailing \r of a CRLF file, so this handles both.
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+
+    const eq = trimmed.indexOf("=");
+    if (eq <= 0) continue;
+
+    const value = trimmed.slice(eq + 1).trim().replace(/^["']|["']$/g, "");
+    if (value) pairs[trimmed.slice(0, eq).trim()] = value;
+  }
+  return pairs;
+}
+
+/**
+ * core serves raw clinical dictation and patient pickup coordinates, and the
+ * Telegram webhook forces it onto the public internet. These checks exist so a
+ * misconfiguration surfaces here instead of during the demo.
+ */
+function checkSecurity() {
+  const env = readEnv(join(CORE, ".env"));
+
+  if (env.OPERADOR_PASSWORD) {
+    pass("auth: operator password", "set");
+  } else {
+    // Not fatal: core generates one and prints it. Just annoying to hunt for.
+    warn("auth: operator password", "OPERADOR_PASSWORD unset — core prints a random one on boot");
+  }
+
+  if (!env.SESION_SECRET) {
+    warn("auth: session secret", "SESION_SECRET unset — sessions die on every restart");
+  } else if (env.SESION_SECRET.length < 16) {
+    warn("auth: session secret", "SESION_SECRET under 16 chars — ignored, a random one is used");
+  } else {
+    pass("auth: session secret", "set");
+  }
+
+  // The one that breaks a demo silently: with a bot token but no webhook
+  // secret, core rejects every update and the Telegram buttons do nothing.
+  if (!env.TELEGRAM_BOT_TOKEN) {
+    pass("auth: telegram webhook", "no bot token — webhook not in use");
+  } else if (env.TELEGRAM_WEBHOOK_SECRET) {
+    pass("auth: telegram webhook", "secret set — must match setWebhook(secret_token=...)");
+  } else {
+    fail(
+      "auth: telegram webhook",
+      "TELEGRAM_BOT_TOKEN set but TELEGRAM_WEBHOOK_SECRET missing — core rejects every update",
+    );
+  }
+
+  if (env.CORS_ORIGIN === "*") {
+    fail("auth: CORS_ORIGIN", "'*' cannot carry session cookies — set the exact frontend origin");
+  }
+}
+
+// --------------------------------------------------------------- data ---
+
+/**
+ * core importa dos archivos que genera `task datos`. Si faltan, el build de
+ * core no compila y el error apunta a un import roto, no a la causa real.
+ */
+function checkData() {
+  const generados = [
+    { label: "data: catalogo de sedes", path: join(CORE, "src", "sedes", "catalogo.generado.ts") },
+    { label: "data: curva de demanda", path: join(CORE, "src", "scoring", "demanda.generada.ts") },
+  ];
+
+  for (const { label, path } of generados) {
+    if (existsSync(path)) {
+      pass(label, "generado");
+    } else {
+      fail(label, "falta — corre 'task datos' (core no compila sin esto)");
+    }
+  }
+
+  // Las fuentes REPS son 17 MB y no se commitean. Sin ellas el pipeline no
+  // corre, pero el demo SI: lo generado esta en el repo.
+  const descargas = ["sedes.json", "capacidad.json", "ocupacion.json"].filter(
+    (n) => !existsSync(join(ROOT, "data", "reps_bogota", n)),
+  );
+  if (descargas.length) {
+    warn("data: fuentes REPS", "sin descargar — 'task datos:descargar' (solo hace falta para re-generar)");
+  } else {
+    pass("data: fuentes REPS", "descargadas");
+  }
+
+  const reporte = join(ROOT, "data", "procesado", "reporte.json");
+  if (!existsSync(reporte)) {
+    warn("data: pipeline", "sin correr todavia — 'task datos'");
+    return;
+  }
+
+  try {
+    const { _fallidos = [], _generado } = JSON.parse(readFileSync(reporte, "utf8"));
+    if (_fallidos.length) {
+      fail("data: pipeline", `fallaron ${_fallidos.length} paso(s): ${_fallidos.join(", ")}`);
+    } else {
+      pass("data: pipeline", `ultima corrida ${String(_generado).slice(0, 16)}`);
+    }
+  } catch {
+    warn("data: pipeline", "reporte.json ilegible — vuelve a correr 'task datos'");
+  }
 }
 
 // -------------------------------------------------------------- ports ---
@@ -262,5 +371,7 @@ checkNodeDeps("core deps", CORE, "@nestjs/core");
 checkVenv();
 checkEnvFiles();
 checkMigrationEnv();
+checkSecurity();
+checkData();
 await checkPorts();
 report();

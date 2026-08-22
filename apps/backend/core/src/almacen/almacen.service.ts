@@ -14,8 +14,8 @@
  * de colgarse de `globalThis` que exigía el hot-reload de Next.
  */
 
-import { Injectable } from '@nestjs/common';
-import type { Caso, Handshake } from '../contracts/types';
+import { Injectable, Logger } from '@nestjs/common';
+import type { Caso, Escalamiento, Handshake } from '../contracts/types';
 
 interface Historial {
   aceptados: number;
@@ -24,12 +24,17 @@ interface Historial {
 
 @Injectable()
 export class AlmacenService {
+  private readonly log = new Logger(AlmacenService.name);
+
   private readonly casos = new Map<string, Caso>();
   private readonly handshakes = new Map<string, Handshake>();
+  private readonly escalamientos = new Map<string, Escalamiento>();
   /** sedeCodigo → { aceptados, rechazados } — alimenta P(aceptación) */
   private readonly historial = new Map<string, Historial>();
   /** sedeCodigo → timestamps ISO de rechazos, para la ventana de 6h */
   private readonly rechazosRecientes = new Map<string, string[]>();
+  /** sedeCodigo → segundos que tardó en responder cada handshake */
+  private readonly latenciasRespuesta = new Map<string, number[]>();
 
   // ── Casos ──────────────────────────────────────────────────────
 
@@ -70,6 +75,35 @@ export class AlmacenService {
     return this.listarHandshakes().filter((h) => h.estado === 'enviado');
   }
 
+  // Aquí vivió un barrido perezoso que vencía solicitudes al leerlas. Lo
+  // reemplaza VigilanteService, que hace lo mismo con un @Interval y además
+  // re-rutea al siguiente candidato. Dos mecanismos venciendo el mismo
+  // handshake es peor que cualquiera de los dos por separado.
+
+  // ── Escalamientos al CRUE ──────────────────────────────────────
+
+  guardarEscalamiento(e: Escalamiento): Escalamiento {
+    this.escalamientos.set(e.id, e);
+    return e;
+  }
+
+  obtenerEscalamiento(id: string): Escalamiento | undefined {
+    return this.escalamientos.get(id);
+  }
+
+  /** Escalamiento abierto de un caso, si lo hay. Evita duplicarlos. */
+  escalamientoAbiertoDe(casoId: string): Escalamiento | undefined {
+    return [...this.escalamientos.values()].find(
+      (e) => e.casoId === casoId && e.atendidoEn === null,
+    );
+  }
+
+  listarEscalamientos(casoId?: string): Escalamiento[] {
+    const todos = [...this.escalamientos.values()];
+    const filtrados = casoId ? todos.filter((e) => e.casoId === casoId) : todos;
+    return filtrados.sort((a, b) => b.creadoEn.localeCompare(a.creadoEn));
+  }
+
   // ── Historial de aceptación — el dataset que se auto-etiqueta ───
 
   /**
@@ -80,6 +114,7 @@ export class AlmacenService {
   registrarRespuesta(
     sedeCodigo: string,
     decision: 'aceptado' | 'rechazado',
+    latenciaS?: number | null,
   ): void {
     const h = this.historial.get(sedeCodigo) ?? { aceptados: 0, rechazados: 0 };
     if (decision === 'aceptado') h.aceptados += 1;
@@ -91,6 +126,19 @@ export class AlmacenService {
       lista.push(new Date().toISOString());
       this.rechazosRecientes.set(sedeCodigo, lista);
     }
+
+    // Cuánto tardó en contestar es la mitad medible del costo de rebotarla.
+    // Ver penalizacionRebote() en scoring.service.ts.
+    if (typeof latenciaS === 'number' && latenciaS >= 0) {
+      const lista = this.latenciasRespuesta.get(sedeCodigo) ?? [];
+      lista.push(latenciaS);
+      this.latenciasRespuesta.set(sedeCodigo, lista);
+    }
+  }
+
+  /** Minutos que esta sede ha tardado en responder handshakes anteriores. */
+  latenciasRespuestaMin(sedeCodigo: string): number[] {
+    return (this.latenciasRespuesta.get(sedeCodigo) ?? []).map((s) => s / 60);
   }
 
   historialSede(sedeCodigo: string): Historial {
@@ -108,7 +156,9 @@ export class AlmacenService {
   reiniciarTodo(): void {
     this.casos.clear();
     this.handshakes.clear();
+    this.escalamientos.clear();
     this.historial.clear();
     this.rechazosRecientes.clear();
+    this.latenciasRespuesta.clear();
   }
 }

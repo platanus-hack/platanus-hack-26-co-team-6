@@ -6,20 +6,154 @@
 
 ---
 
-## Tu punto de partida
+## Dónde vive tu carril
 
-Ya funciona. `/triage` extrae entidades estructuradas con Claude vía structured outputs, y cae a un extractor heurístico si no hay API key. `apps/backend/core/src/scoring/scoring.service.ts` y `apps/backend/core/src/scoring/congestion.service.ts` implementan el modelo completo.
+Después del refactor de Zaid (todo el backend salió de Next a NestJS) el carril
+quedó partido en dos, y el corte es a propósito:
 
-Tu trabajo no es construirlo: es **hacer que la rama del LLM sea claramente mejor que la heurística**, y que el modelo de congestión se pueda defender ante un médico.
+| Pieza | Dónde vive | Por qué ahí |
+|---|---|---|
+| **Parser clínico** | `apps/backend/ai-core` (Python) | Es una llamada texto → JSON sin estado. La API key vive en un solo sitio. |
+| **Motor de scoring** | `apps/backend/core` (TypeScript) | Necesita el estado de `AlmacenService`. Es aritmética, no IA. |
+
+`core` intenta el triaje en ai-core **primero**, y si no puede sigue con su
+camino de siempre:
+
+```
+ai-core (Claude)  →  Claude local en core  →  heurística por palabras clave
+```
+
+La respuesta trae `motor` (qué produjo la extracción) y `via` (dónde corrió).
+**Míralos siempre**: antes la única pista de que estabas viendo la heurística
+era `confianza == 0.35` exacto.
+
+Es opt-in: sin `AI_CORE_BASE_URL` en `apps/backend/core/.env`, core resuelve
+todo local y nada cambia. Con ella puesta, si ai-core se cae el endpoint
+responde igual — esa garantía es del contrato y está cubierta por tests.
+
+```bash
+task dev                            # los tres servicios
+curl localhost:3001/health/ai-core  # ¿la costura está viva?
+
+cd apps/backend/ai-core && uv run pytest    # 84 tests
+cd apps/backend/core    && pnpm test        # 34 tests
+```
+
+Tu trabajo no es construirlo: es **hacer que la rama del LLM sea claramente
+mejor que la heurística**, y que el modelo de congestión se pueda defender ante
+un médico.
 
 ## Tus archivos
 
 | Archivo | Qué es |
 |---|---|
-| [`apps/backend/core/src/triage/triage.service.ts`](../apps/backend/core/src/triage/triage.service.ts) | Parser clínico. Esquema Zod + prompt + fallback heurístico. |
-| [`apps/backend/core/src/scoring/scoring.service.ts`](../apps/backend/core/src/scoring/scoring.service.ts) | Score en minutos, `P(aceptación)` Beta-Bernoulli. |
-| [`apps/backend/core/src/scoring/congestion.service.ts`](../apps/backend/core/src/scoring/congestion.service.ts) | Índice de congestión, 4 señales. |
-| [`apps/backend/core/src/catalogo/servicios-reps.ts`](../apps/backend/core/src/catalogo/servicios-reps.ts) | Catálogo FHIR de MinSalud + filtros duros. |
+| [`ai-core/app/triage.py`](../apps/backend/ai-core/app/triage.py) | Prompt del sistema, llamada a Claude, cinturón de seguridad, fallback. |
+| [`ai-core/evals/corpus.py`](../apps/backend/ai-core/evals/corpus.py) | 14 dictados con sus asserts. Tu banco de pruebas. |
+| [`core/src/scoring/scoring.service.ts`](../apps/backend/core/src/scoring/scoring.service.ts) | Score en minutos, `P(aceptación)`, rebote por sede. |
+| [`core/src/scoring/congestion.service.ts`](../apps/backend/core/src/scoring/congestion.service.ts) | Índice de congestión, 4 señales. |
+| [`core/src/ai-core/ai-core.client.ts`](../apps/backend/core/src/ai-core/ai-core.client.ts) | La costura. Único archivo de core que conoce la URL de ai-core. |
+| [`core/src/triage/triage.service.ts`](../apps/backend/core/src/triage/triage.service.ts) | El respaldo en TypeScript. Corre cuando ai-core no está. |
+
+⚠️ **El parser existe dos veces**, con prompts idénticos carácter por carácter.
+**Si tocas el prompt o el catálogo REPS, tócalo en los dos** o divergen en
+silencio. El día que ai-core sea el único camino, el de TypeScript se borra.
+
+⚠️ **El motor también.** `core/src/scoring/*` es el que corre en el demo;
+`ai-core/app/scoring.py` es el mismo modelo en Python y hoy nadie lo llama.
+Sirve para probar el modelo aislado y de forma reproducible.
+
+---
+
+## Evaluar el parser
+
+14 dictados con asserts defendibles ante un médico: los 3 del pitch más los
+feos (voz sin tildes ni puntuación, jerga como *SCACEST* y *TEC* con
+anisocoria, truncados, sin edad ni sexo, ambiguos entre dos niveles, neonato vs.
+pediátrico vs. adulto, obstétrico, intoxicación sin código REPS propio, y dos
+trampas de sobre-pedido).
+
+```bash
+cd apps/backend/ai-core
+uv run python -m evals.run --heuristica       # línea base MEDIDA: 4/14
+uv run python -m evals.run                    # la rama de Claude
+uv run python -m evals.run --esfuerzo medium  # ¿mejora si subo el effort?
+uv run python -m evals.run --filtro trampa    # solo el sobre-pedido
+```
+
+La heurística falla exactamente donde debe: pide UCI de adultos para una
+apendicitis estable, no reconoce `SCACEST` sin tildes, manda UCI de adultos a
+un neonato. **Ese 4/14 es tu número de comparación** — si la rama del LLM no
+gana por mucho, no hay nada que defender en el pitch.
+
+---
+
+## Audio: el paso que Claude no puede dar
+
+**La API de Claude no recibe audio.** Toma texto, imágenes y PDFs. Una nota de
+voz de WhatsApp necesita transcripción antes de que el parser vea nada, y eso
+es un servicio aparte.
+
+ai-core ya tiene la costura, con los dos proveedores detrás de la misma
+interfaz:
+
+| Proveedor | Cómo | El detalle que rompe la integración |
+|---|---|---|
+| Deepgram (`nova-3`) | `POST /v1/listen`, bytes crudos | `Authorization: Token <key>` — **"Token", no "Bearer"** |
+| ElevenLabs (`scribe_v2`) | `POST /v1/speech-to-text`, multipart | header `xi-api-key` — **no** Authorization |
+
+Cambiar de uno a otro es `STT_PROVEEDOR` en `.env`, no un refactor. En `auto`
+prefiere Deepgram porque en dictados cortos es el más rápido, y aquí la
+latencia se paga en el número del pitch.
+
+```bash
+curl localhost:8000/v1/stt      # ¿qué proveedor correría ahora?
+curl -F archivo=@nota.ogg localhost:8000/v1/transcribir/archivo
+```
+
+⚠️ **Rompe el patrón de degradación del proyecto, y hay que saberlo.** Todo lo
+demás cae con gracia cuando falta una credencial: el triaje tiene su
+heurística, el ETA su estimación por distancia, el handshake su consola. Esto
+no tiene a dónde caer — sin proveedor no hay texto, y sin texto no hay triaje.
+Por eso devuelve **503 explícito** en vez de fingir que funcionó.
+
+**Para el demo eso casi no importa:** la PWA transcribe con Web Speech API en
+el navegador — gratis, instantáneo, sin dependencias. Esta costura sólo hace
+falta para el audio que entra por WhatsApp.
+
+`POST /v1/triage` acepta `audioBase64` y hace STT + extracción en **una sola
+llamada**. Si mandas texto y audio a la vez, gana el texto: quien ya
+transcribió sabe algo que nosotros no, y así no se paga el STT dos veces.
+
+Cuando una extracción salga rara en un ensayo, mira `transcripcion.texto`
+**antes** de culpar al prompt. La mitad de las veces el STT oyó mal.
+
+---
+
+## El rebote ahora se aprende por sede
+
+`PENALIZACION_REBOTE = 22` era una constante global para todos los hospitales
+de Bogotá, y este doc mismo admitía que era *"juicio informado, no medición"*.
+
+Ahora está descompuesto en sus dos mitades, y solo una es observable:
+
+```
+rebote(sede) = espera_de_respuesta(sede)   ← SÍ lo medimos: handshake.latenciaS
+             + SOBRECOSTO_REBOTE (18 min)  ← descargar, re-llamar, re-rutear
+```
+
+Sobre la mitad observable va el mismo encogimiento hacia el prior que usa
+`P(aceptación)`: con cero handshakes devuelve **exactamente 22 minutos** —el
+número que ya está en el pitch no se mueve— y cada respuesta observada lo
+acerca a lo que esa sede hace de verdad. Una sede que contesta en 40 segundos
+cuesta menos rebotarla que una que se demora ocho minutos.
+
+Para el pitch: convierte *"asumimos 22 minutos"* en *"arrancamos en 22 y cada
+handshake lo calibra por hospital, sin pedirle nada al hospital"*. Es la misma
+tesis del rechazo-como-sensor, aplicada al tiempo.
+
+**Ojo con la dependencia:** se alimenta de `handshake.latenciaS`, que hoy vive
+solo en memoria. Al reiniciar core, la calibración vuelve al prior. Ver el
+hallazgo abierto en [zaid-backend.md](zaid-backend.md).
 
 ---
 
