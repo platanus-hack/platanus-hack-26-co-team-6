@@ -30,6 +30,8 @@ export class AlmacenService {
   private readonly historial = new Map<string, Historial>();
   /** sedeCodigo → timestamps ISO de rechazos, para la ventana de 6h */
   private readonly rechazosRecientes = new Map<string, string[]>();
+  /** sedeCodigo → segundos que tardó en responder cada handshake */
+  private readonly latenciasRespuesta = new Map<string, number[]>();
 
   // ── Casos ──────────────────────────────────────────────────────
 
@@ -80,6 +82,7 @@ export class AlmacenService {
   registrarRespuesta(
     sedeCodigo: string,
     decision: 'aceptado' | 'rechazado',
+    latenciaS?: number | null,
   ): void {
     const h = this.historial.get(sedeCodigo) ?? { aceptados: 0, rechazados: 0 };
     if (decision === 'aceptado') h.aceptados += 1;
@@ -91,6 +94,19 @@ export class AlmacenService {
       lista.push(new Date().toISOString());
       this.rechazosRecientes.set(sedeCodigo, lista);
     }
+
+    // Cuánto tardó en contestar es la mitad medible del costo de rebotarla.
+    // Ver penalizacionRebote() en scoring.service.ts.
+    if (typeof latenciaS === 'number' && latenciaS >= 0) {
+      const lista = this.latenciasRespuesta.get(sedeCodigo) ?? [];
+      lista.push(latenciaS);
+      this.latenciasRespuesta.set(sedeCodigo, lista);
+    }
+  }
+
+  /** Minutos que esta sede ha tardado en responder handshakes anteriores. */
+  latenciasRespuestaMin(sedeCodigo: string): number[] {
+    return (this.latenciasRespuesta.get(sedeCodigo) ?? []).map((s) => s / 60);
   }
 
   historialSede(sedeCodigo: string): Historial {
@@ -110,5 +126,6 @@ export class AlmacenService {
     this.handshakes.clear();
     this.historial.clear();
     this.rechazosRecientes.clear();
+    this.latenciasRespuesta.clear();
   }
 }

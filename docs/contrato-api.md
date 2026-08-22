@@ -26,6 +26,9 @@ Si necesitas un campo nuevo: **agrégalo opcional** (`campo?: tipo`). Así nadie
 | `Candidato`, `DesgloseScore` | Zaid (ETA) + Neid (score) | Juan |
 | `Handshake` | Sebas — `/dispatch` | Juan, Sebas |
 
+Nota: `apps/frontend/lib/types.ts` es un espejo manual de `contracts/types.ts`.
+Un campo nuevo hay que agregarlo en los dos o el runtime miente aunque el build pase.
+
 ---
 
 ## Las cinco rutas
@@ -121,10 +124,21 @@ apps/backend/core/      NestJS  :3001   gateway. Único origen que ve el navegad
 apps/backend/ai-core/   FastAPI :8000   IA. Interno, sin CORS. Aquí van las API keys.
 ```
 
-La topología que diseñó ese scaffold es `frontend → core → ai-core`, con las
-credenciales de proveedor **solo** en ai-core. Hoy el frontend llama a Claude
-directo con su propia key. **Las dos realidades conviven y ninguna está mal**;
-solo hay que saber cuál se usa en el demo.
+La topología es `frontend → core → ai-core`. **La costura ya está conectada
+para el triaje**: `POST /triage` de core intenta resolver en ai-core y, si no
+puede, resuelve local.
+
+```
+POST /triage → ai-core (Claude) → Claude local en core → heurística
+               solo si AI_CORE_BASE_URL está puesta
+```
+
+Sin `AI_CORE_BASE_URL`, core resuelve todo local y el comportamiento es
+idéntico al de antes. Con ella puesta, si ai-core se cae el endpoint responde
+igual: **la garantía de "nunca falla por falta de credencial" ahora también
+cubre "nunca falla porque ai-core esté caído"**, y está bajo test.
+
+`GET /health/ai-core` prueba la costura sin tocar la liveness de core.
 
 ### Lo que ya expone ai-core
 
@@ -137,15 +151,18 @@ solo hay que saber cuál se usa en el demo.
 Los cuerpos son **los mismos tipos de `types.ts`, en camelCase**, a propósito:
 migrar una ruta del frontend a ai-core no debe tocar un solo tipo de TypeScript.
 
-**Dos diferencias contra el contrato de arriba, ambas aditivas:**
+**Dos campos nuevos en `TriageResponse`, los dos opcionales:**
 
-1. `POST /v1/triage` devuelve un campo extra `motor: "claude" | "heuristica"`.
-   Sin él, la única pista de que estabas viendo la heurística era
-   `confianza == 0.35` exacto — y eso se pasa por alto justo cuando importa.
-2. `POST /v1/score` **no** busca sedes ni calcula ETA: eso es el carril de Zaid
-   y se queda en `/api/match`. Recibe `caso + sedes + etas + senales` y devuelve
-   `candidatos`. Es una función pura: el mismo request siempre da el mismo
-   ranking (fija `ahora` y es reproducible al minuto).
+- `motor?: "claude" | "heuristica"` — qué produjo la extracción. Sin él, la
+  única pista de que estabas viendo la heurística era `confianza == 0.35`
+  exacto, y eso se pasa por alto justo cuando importa.
+- `via?: "core" | "ai-core"` — dónde corrió.
+
+**`POST /v1/score` no está conectado.** El scoring del demo corre en core
+(`ScoringService`) porque necesita el estado de `AlmacenService`; mandarlo
+afuera obligaría a serializar señales de ~60 sedes en cada `/match` sin ganar
+nada — el scoring es aritmética, no IA. La versión de ai-core sirve para probar
+el modelo aislado y de forma reproducible (fija `ahora` y da el mismo ranking).
 
 ### `senales` — lo que ai-core necesita para aprender
 

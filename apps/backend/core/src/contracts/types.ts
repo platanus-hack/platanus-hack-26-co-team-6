@@ -198,6 +198,14 @@ export interface TriageRequest {
 export interface TriageResponse {
   caso: Caso;
   latenciaMs: number;
+  /**
+   * Qué produjo la extracción. Opcional para no romper a nadie.
+   * Antes la única pista de que estabas viendo la heurística era
+   * `confianza === 0.35` exacto, y eso se pasa por alto justo cuando importa.
+   */
+  motor?: "claude" | "heuristica";
+  /** Dónde corrió. `ai-core` solo aparece si AI_CORE_BASE_URL está puesta. */
+  via?: "core" | "ai-core";
 }
 
 /** POST /api/match — Zaid */

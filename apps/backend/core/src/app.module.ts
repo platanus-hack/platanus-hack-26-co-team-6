@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { HealthController } from './health/health.controller';
 import { AlmacenModule } from './almacen/almacen.module';
+import { AiCoreModule } from './ai-core/ai-core.module';
 import { SedesModule } from './sedes/sedes.module';
 import { EtaModule } from './eta/eta.module';
 import { ScoringModule } from './scoring/scoring.module';
@@ -22,6 +23,9 @@ import { TelegramModule } from './telegram/telegram.module';
 
     // Estado de sesión (@Global): casos, handshakes e historial de aceptación.
     AlmacenModule,
+
+    // Costura con el servicio interno de IA. Único dueño de AI_CORE_BASE_URL.
+    AiCoreModule,
 
     // Dominio.
     SedesModule,

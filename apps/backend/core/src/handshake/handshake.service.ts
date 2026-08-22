@@ -66,7 +66,11 @@ export class HandshakeService {
     this.almacen.guardarHandshake(actualizado);
 
     // ⭐ El dato se etiqueta solo.
-    this.almacen.registrarRespuesta(h.sedeCodigo, cuerpo.decision);
+    this.almacen.registrarRespuesta(
+      h.sedeCodigo,
+      cuerpo.decision,
+      actualizado.latenciaS,
+    );
 
     const congestionActualizada = await this.congestionDe(h.sedeCodigo);
 
