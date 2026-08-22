@@ -13,9 +13,7 @@ export class EstadoController {
   constructor(private readonly estado: EstadoService) {}
 
   @Get()
-  async instantanea(
-    @Query('casoId') casoId?: string,
-  ): Promise<EstadoResponse> {
+  async instantanea(@Query('casoId') casoId?: string): Promise<EstadoResponse> {
     return this.estado.instantanea(casoId);
   }
 }

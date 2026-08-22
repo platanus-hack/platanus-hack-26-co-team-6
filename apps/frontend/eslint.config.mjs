@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Los produce `python scripts/datos/construir.py`. Formatearlos no sirve
+    // de nada: la siguiente corrida los reescribe igual.
+    "**/*.generado.ts",
+    "**/*.generada.ts",
   ]),
 ]);
 

@@ -20,7 +20,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AnimatePresence } from "motion/react";
-import type { Caso, CongestionSede, Handshake } from "@/lib/types";
+import type { CasoPublico, CongestionSede, Handshake } from "@/lib/types";
 import { ETIQUETA_TRIAGE } from "@/lib/presentacion";
 import * as api from "@/lib/api";
 import { LogoPulso } from "@/components/LogoPulso";
@@ -56,7 +56,9 @@ const PUNTO_ESTADO: Record<EstadoCaso, string> = {
 type FiltroKpi = "activos" | "esperando" | "escalados" | null;
 
 export default function Crue() {
-  const [casos, setCasos] = useState<Caso[]>([]);
+  // CasoPublico, no Caso: /estado ya no manda el dictado crudo ni las
+  // coordenadas del paciente. El tablero nunca los pintó.
+  const [casos, setCasos] = useState<CasoPublico[]>([]);
   const [handshakes, setHandshakes] = useState<Handshake[]>([]);
   const [congestion, setCongestion] = useState<CongestionSede[]>([]);
 

@@ -16,7 +16,8 @@
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import type { Caso, CongestionSede, Handshake } from "@/lib/types";
+import type { CongestionSede, Handshake } from "@/lib/types";
+import type { CasoConsola } from "./derivados";
 import {
   colorCongestion,
   ESTILO_MAPA,
@@ -27,7 +28,7 @@ import { arcoEntre } from "@/components/mapa/geometria";
 
 interface Props {
   congestion: CongestionSede[];
-  casos: Caso[];
+  casos: CasoConsola[];
   handshakes: Handshake[];
 }
 
@@ -225,6 +226,8 @@ export default function MapaRed({ congestion, casos, handshakes }: Props) {
 
     const vigentes = new Set<string>();
     for (const c of casos) {
+      // /estado ya no expone el origen del paciente; sin coordenada no hay pin.
+      if (!c.origen) continue;
       vigentes.add(c.id);
       let pin = pinsCasosRef.current.get(c.id);
       if (!pin) {

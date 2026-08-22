@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { HealthController } from './health/health.controller';
+import { AuthModule } from './auth/auth.module';
 import { AlmacenModule } from './almacen/almacen.module';
 import { SedesModule } from './sedes/sedes.module';
 import { EtaModule } from './eta/eta.module';
@@ -19,6 +20,11 @@ import { TelegramModule } from './telegram/telegram.module';
     // módulo. Sin esto, `apps/backend/core/.env` no lo lee nadie y las
     // credenciales fallan en silencio.
     ConfigModule.forRoot({ isGlobal: true }),
+
+    // Sesión de operador. Registra el APP_GUARD global: desde aquí toda
+    // ruta exige sesión salvo las marcadas con @Publico(). Va primero a
+    // propósito — es la puerta, no una feature más.
+    AuthModule,
 
     // Estado de sesión (@Global): casos, handshakes e historial de aceptación.
     AlmacenModule,

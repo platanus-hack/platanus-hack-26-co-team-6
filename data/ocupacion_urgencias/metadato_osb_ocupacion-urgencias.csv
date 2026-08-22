@@ -1,0 +1,10 @@
+METADATO;DESCRIPCION
+Serie de tiempo desde;2019
+Definición del indicador;Es un estimado de la Proporción de ocupación del área de Observación de Urgencias en cada Unidad de Servicios de Salud de la Red Pública.
+Utilidad;Medir el nivel de uso de los servicios de urgencias en las instituciones adscritas a la SDS
+Unidad de medición;Porcentaje
+Periodicidad;Mensual
+Fuente de Información ;Aplicativo SIRC (Sistema Integral de Referencia y Contrareferencia)) Secretaria Distrital de Salud- Dirección de Provisión de Servicios de Salud 2016-2020.
+Periodo;Periodo de tiempo al cual corresponde la medición del indicador
+Porcentaje ocupación;Porcentaje de dispositivos ocupados en el periodo en mención
+Formula de cálculo;Cociente entre el Número de pacientes que se encuentran en el servicio de observación de Urgencias y el Número de Dispositivos para Decúbito Escualizables, en el servicio de Urgencias de la Unidad de Servicios de Salud en el periodo, por 100

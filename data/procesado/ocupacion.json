@@ -1,0 +1,1187 @@
+{
+  "fuente": "Observatorio de Salud de Bogota — ocupacion de urgencias",
+  "encodingOrigen": "cp1252",
+  "desde": "Enero 2021",
+  "hasta": "Septiembre 2025",
+  "meses": 57,
+  "ultimo": {
+    "anio": 2025,
+    "mes": "Septiembre",
+    "mesNumero": 9,
+    "totalRiss": 1.3252000000000002,
+    "subredes": {
+      "Norte": 1.1055,
+      "Centro Oriente": 0.7890999999999999,
+      "Sur": 1.5941999999999998,
+      "Sur Occidente": 1.9742
+    },
+    "sedesPriorizadas": {
+      "Santa Clara": 0.9431999999999999,
+      "Engativá Calle 80": 0.9832,
+      "Simón Bolívar": 1.5861,
+      "El Tunal": 2.813,
+      "Hospital de Bosa": 1.3783,
+      "Occidente de Kennedy": 2.8092
+    }
+  },
+  "picoHistoricoPorSubred": {
+    "Norte": {
+      "valor": 1.1687,
+      "periodo": "Julio 2025"
+    },
+    "Centro Oriente": {
+      "valor": 1.2404,
+      "periodo": "Mayo 2023"
+    },
+    "Sur": {
+      "valor": 1.764,
+      "periodo": "Junio 2025"
+    },
+    "Sur Occidente": {
+      "valor": 2.2466,
+      "periodo": "Mayo 2025"
+    }
+  },
+  "serie": [
+    {
+      "anio": 2021,
+      "mes": "Enero",
+      "mesNumero": 1,
+      "totalRiss": 0.7326999999999999,
+      "subredes": {
+        "Norte": 0.6354,
+        "Centro Oriente": 0.7896,
+        "Sur": 0.7711,
+        "Sur Occidente": 0.7139
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 0.9501999999999999,
+        "Engativá Calle 80": 0.5517,
+        "Simón Bolívar": 0.6172,
+        "El Tunal": 0.8922,
+        "Hospital de Bosa": 0.5288,
+        "Occidente de Kennedy": 1.1251
+      }
+    },
+    {
+      "anio": 2021,
+      "mes": "Febrero",
+      "mesNumero": 2,
+      "totalRiss": 0.6557999999999999,
+      "subredes": {
+        "Norte": 0.6033,
+        "Centro Oriente": 0.652,
+        "Sur": 0.7033,
+        "Sur Occidente": 0.6515000000000001
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 0.9146,
+        "Engativá Calle 80": 0.541,
+        "Simón Bolívar": 0.6163000000000001,
+        "El Tunal": 0.773,
+        "Hospital de Bosa": 0.5429999999999999,
+        "Occidente de Kennedy": 0.9625
+      }
+    },
+    {
+      "anio": 2021,
+      "mes": "Marzo",
+      "mesNumero": 3,
+      "totalRiss": 0.7012,
+      "subredes": {
+        "Norte": 0.6152000000000001,
+        "Centro Oriente": 0.7545999999999999,
+        "Sur": 0.7202,
+        "Sur Occidente": 0.7009000000000001
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 0.9605,
+        "Engativá Calle 80": 0.4807,
+        "Simón Bolívar": 0.7936,
+        "El Tunal": 0.8262999999999999,
+        "Hospital de Bosa": 0.6229,
+        "Occidente de Kennedy": 0.92
+      }
+    },
+    {
+      "anio": 2021,
+      "mes": "Abril",
+      "mesNumero": 4,
+      "totalRiss": 0.7373000000000001,
+      "subredes": {
+        "Norte": 0.6164000000000001,
+        "Centro Oriente": 0.8203,
+        "Sur": 0.715,
+        "Sur Occidente": 0.7829
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.0916,
+        "Engativá Calle 80": 0.5466,
+        "Simón Bolívar": 0.8234999999999999,
+        "El Tunal": 0.8763,
+        "Hospital de Bosa": 0.7962,
+        "Occidente de Kennedy": 0.9537
+      }
+    },
+    {
+      "anio": 2021,
+      "mes": "Mayo",
+      "mesNumero": 5,
+      "totalRiss": 0.8431000000000001,
+      "subredes": {
+        "Norte": 0.7069,
+        "Centro Oriente": 0.9818000000000001,
+        "Sur": 0.8864,
+        "Sur Occidente": 0.7968000000000001
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.2184,
+        "Engativá Calle 80": 0.6618,
+        "Simón Bolívar": 0.7902,
+        "El Tunal": 1.1698,
+        "Hospital de Bosa": 0.8436,
+        "Occidente de Kennedy": 0.9175
+      }
+    },
+    {
+      "anio": 2021,
+      "mes": "Junio",
+      "mesNumero": 6,
+      "totalRiss": 0.9679000000000001,
+      "subredes": {
+        "Norte": 0.7829,
+        "Centro Oriente": 1.1869,
+        "Sur": 1.0287,
+        "Sur Occidente": 0.8881999999999999
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.3638,
+        "Engativá Calle 80": 0.7545999999999999,
+        "Simón Bolívar": 0.8220000000000001,
+        "El Tunal": 1.2573,
+        "Hospital de Bosa": 0.9712000000000001,
+        "Occidente de Kennedy": 0.9704
+      }
+    },
+    {
+      "anio": 2021,
+      "mes": "Julio",
+      "mesNumero": 7,
+      "totalRiss": 0.753,
+      "subredes": {
+        "Norte": 0.5502,
+        "Centro Oriente": 0.9224,
+        "Sur": 0.733,
+        "Sur Occidente": 0.8204
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.1691,
+        "Engativá Calle 80": 0.5946,
+        "Simón Bolívar": 0.7686,
+        "El Tunal": 0.9579000000000001,
+        "Hospital de Bosa": 0.9065000000000001,
+        "Occidente de Kennedy": 0.9688
+      }
+    },
+    {
+      "anio": 2021,
+      "mes": "Agosto",
+      "mesNumero": 8,
+      "totalRiss": 0.7262000000000001,
+      "subredes": {
+        "Norte": 0.6196,
+        "Centro Oriente": 0.8812000000000001,
+        "Sur": 0.5871999999999999,
+        "Sur Occidente": 0.8195
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.1417,
+        "Engativá Calle 80": 0.5417000000000001,
+        "Simón Bolívar": 0.7884,
+        "El Tunal": 0.6744,
+        "Hospital de Bosa": 0.9013,
+        "Occidente de Kennedy": 0.9529000000000001
+      }
+    },
+    {
+      "anio": 2021,
+      "mes": "Septiembre",
+      "mesNumero": 9,
+      "totalRiss": 0.7931,
+      "subredes": {
+        "Norte": 0.7302,
+        "Centro Oriente": 0.96,
+        "Sur": 0.6544,
+        "Sur Occidente": 0.8406
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.2553,
+        "Engativá Calle 80": 0.6169,
+        "Simón Bolívar": 0.8354,
+        "El Tunal": 0.6799,
+        "Hospital de Bosa": 0.8277,
+        "Occidente de Kennedy": 0.9451
+      }
+    },
+    {
+      "anio": 2021,
+      "mes": "Octubre",
+      "mesNumero": 10,
+      "totalRiss": 0.8270000000000001,
+      "subredes": {
+        "Norte": 0.7389,
+        "Centro Oriente": 0.9534,
+        "Sur": 0.7598,
+        "Sur Occidente": 0.8501000000000001
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.3048,
+        "Engativá Calle 80": 0.6285000000000001,
+        "Simón Bolívar": 0.8365,
+        "El Tunal": 0.8045,
+        "Hospital de Bosa": 0.9634,
+        "Occidente de Kennedy": 0.9555
+      }
+    },
+    {
+      "anio": 2021,
+      "mes": "Noviembre",
+      "mesNumero": 11,
+      "totalRiss": 0.8434999999999999,
+      "subredes": {
+        "Norte": 0.7706000000000001,
+        "Centro Oriente": 0.9984999999999999,
+        "Sur": 0.7341,
+        "Sur Occidente": 0.8647
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.2959,
+        "Engativá Calle 80": 0.6795,
+        "Simón Bolívar": 0.8672,
+        "El Tunal": 0.7868,
+        "Hospital de Bosa": 0.9984999999999999,
+        "Occidente de Kennedy": 0.9007999999999999
+      }
+    },
+    {
+      "anio": 2021,
+      "mes": "Diciembre",
+      "mesNumero": 12,
+      "totalRiss": 0.7892,
+      "subredes": {
+        "Norte": 0.7552,
+        "Centro Oriente": 0.9767,
+        "Sur": 0.62,
+        "Sur Occidente": 0.7598999999999999
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.3093000000000001,
+        "Engativá Calle 80": 0.6877,
+        "Simón Bolívar": 0.8571,
+        "El Tunal": 0.6758,
+        "Hospital de Bosa": 0.9971,
+        "Occidente de Kennedy": 0.7896
+      }
+    },
+    {
+      "anio": 2022,
+      "mes": "Enero",
+      "mesNumero": 1,
+      "totalRiss": 0.7958,
+      "subredes": {
+        "Norte": 0.752,
+        "Centro Oriente": 0.8415,
+        "Sur": 0.7548,
+        "Sur Occidente": 0.8392000000000001
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.146,
+        "Engativá Calle 80": 0.6960999999999999,
+        "Simón Bolívar": 0.8264,
+        "El Tunal": 0.8883,
+        "Hospital de Bosa": 1.0314,
+        "Occidente de Kennedy": 0.9147
+      }
+    },
+    {
+      "anio": 2022,
+      "mes": "Febrero",
+      "mesNumero": 2,
+      "totalRiss": 0.8438,
+      "subredes": {
+        "Norte": 0.7967,
+        "Centro Oriente": 0.9229,
+        "Sur": 0.8123,
+        "Sur Occidente": 0.8584
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.2541,
+        "Engativá Calle 80": 0.6797,
+        "Simón Bolívar": 0.9761,
+        "El Tunal": 0.9797,
+        "Hospital de Bosa": 1.0162,
+        "Occidente de Kennedy": 0.8959999999999999
+      }
+    },
+    {
+      "anio": 2022,
+      "mes": "Marzo",
+      "mesNumero": 3,
+      "totalRiss": 0.8736,
+      "subredes": {
+        "Norte": 0.7785,
+        "Centro Oriente": 0.9631000000000001,
+        "Sur": 0.8767,
+        "Sur Occidente": 0.8955
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.3538999999999999,
+        "Engativá Calle 80": 0.7005,
+        "Simón Bolívar": 0.941,
+        "El Tunal": 0.9396,
+        "Hospital de Bosa": 1.0265,
+        "Occidente de Kennedy": 0.9025
+      }
+    },
+    {
+      "anio": 2022,
+      "mes": "Abril",
+      "mesNumero": 4,
+      "totalRiss": 0.8759999999999999,
+      "subredes": {
+        "Norte": 0.7889,
+        "Centro Oriente": 0.9176000000000001,
+        "Sur": 0.8711,
+        "Sur Occidente": 0.9301
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.2831000000000001,
+        "Engativá Calle 80": 0.6114,
+        "Simón Bolívar": 1.0061,
+        "El Tunal": 0.8445,
+        "Hospital de Bosa": 0.8112999999999999,
+        "Occidente de Kennedy": 0.9678
+      }
+    },
+    {
+      "anio": 2022,
+      "mes": "Mayo",
+      "mesNumero": 5,
+      "totalRiss": 1.0186,
+      "subredes": {
+        "Norte": 0.9079999999999999,
+        "Centro Oriente": 1.0090000000000001,
+        "Sur": 1.0701,
+        "Sur Occidente": 1.0862
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.3327,
+        "Engativá Calle 80": 0.6319,
+        "Simón Bolívar": 1.1101999999999999,
+        "El Tunal": 0.9749,
+        "Hospital de Bosa": 0.9902,
+        "Occidente de Kennedy": 1.1798
+      }
+    },
+    {
+      "anio": 2022,
+      "mes": "Junio",
+      "mesNumero": 6,
+      "totalRiss": 1.0166,
+      "subredes": {
+        "Norte": 0.9377,
+        "Centro Oriente": 1.0406,
+        "Sur": 1.0994,
+        "Sur Occidente": 1.0073999999999999
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.4349,
+        "Engativá Calle 80": 0.5607,
+        "Simón Bolívar": 1.1811,
+        "El Tunal": 1.1061,
+        "Hospital de Bosa": 1.1289,
+        "Occidente de Kennedy": 1.1068
+      }
+    },
+    {
+      "anio": 2022,
+      "mes": "Julio",
+      "mesNumero": 7,
+      "totalRiss": 1.0078,
+      "subredes": {
+        "Norte": 0.9439,
+        "Centro Oriente": 1.0559,
+        "Sur": 1.2059,
+        "Sur Occidente": 0.8858
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.4506000000000001,
+        "Engativá Calle 80": 0.7547,
+        "Simón Bolívar": 1.2454,
+        "El Tunal": 1.2429999999999999,
+        "Hospital de Bosa": 1.0427,
+        "Occidente de Kennedy": 1.047
+      }
+    },
+    {
+      "anio": 2022,
+      "mes": "Agosto",
+      "mesNumero": 8,
+      "totalRiss": 0.9473,
+      "subredes": {
+        "Norte": 0.8679000000000001,
+        "Centro Oriente": 0.9658,
+        "Sur": 1.0314,
+        "Sur Occidente": 0.9481
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.2336,
+        "Engativá Calle 80": 0.624,
+        "Simón Bolívar": 1.0974,
+        "El Tunal": 1.0611,
+        "Hospital de Bosa": 0.9394,
+        "Occidente de Kennedy": 1.2331999999999999
+      }
+    },
+    {
+      "anio": 2022,
+      "mes": "Septiembre",
+      "mesNumero": 9,
+      "totalRiss": 0.9303,
+      "subredes": {
+        "Norte": 0.8495,
+        "Centro Oriente": 1.0366,
+        "Sur": 0.9643999999999999,
+        "Sur Occidente": 0.9059
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.6557,
+        "Engativá Calle 80": 0.6222,
+        "Simón Bolívar": 1.0773000000000001,
+        "El Tunal": 1.0692,
+        "Hospital de Bosa": 0.8362999999999999,
+        "Occidente de Kennedy": 1.2209
+      }
+    },
+    {
+      "anio": 2022,
+      "mes": "Octubre",
+      "mesNumero": 10,
+      "totalRiss": 0.9011,
+      "subredes": {
+        "Norte": 0.7925,
+        "Centro Oriente": 1.0664,
+        "Sur": 0.9306,
+        "Sur Occidente": 0.8695
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.6557,
+        "Engativá Calle 80": 0.6222,
+        "Simón Bolívar": 1.0773000000000001,
+        "El Tunal": 1.0692,
+        "Hospital de Bosa": 0.8362999999999999,
+        "Occidente de Kennedy": 1.2209
+      }
+    },
+    {
+      "anio": 2022,
+      "mes": "Noviembre",
+      "mesNumero": 11,
+      "totalRiss": 0.9666,
+      "subredes": {
+        "Norte": 0.8493999999999999,
+        "Centro Oriente": 1.1040999999999999,
+        "Sur": 1.1040999999999999,
+        "Sur Occidente": 0.8732
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 2.0381,
+        "Engativá Calle 80": 0.6685,
+        "Simón Bolívar": 1.0692,
+        "El Tunal": 1.1074,
+        "Hospital de Bosa": 0.8047,
+        "Occidente de Kennedy": 1.1618000000000002
+      }
+    },
+    {
+      "anio": 2022,
+      "mes": "Diciembre",
+      "mesNumero": 12,
+      "totalRiss": 0.8244,
+      "subredes": {
+        "Norte": 0.7487999999999999,
+        "Centro Oriente": 0.7968999999999999,
+        "Sur": 0.9673999999999999,
+        "Sur Occidente": 0.8085
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.1609,
+        "Engativá Calle 80": 0.5533,
+        "Simón Bolívar": 0.9845999999999999,
+        "El Tunal": 0.9118,
+        "Hospital de Bosa": 0.8164,
+        "Occidente de Kennedy": 1.1702
+      }
+    },
+    {
+      "anio": 2023,
+      "mes": "Enero",
+      "mesNumero": 1,
+      "totalRiss": 0.7646,
+      "subredes": {
+        "Norte": 0.7191,
+        "Centro Oriente": 0.7084,
+        "Sur": 0.8767,
+        "Sur Occidente": 0.7695000000000001
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 0.94,
+        "Engativá Calle 80": 0.6798000000000001,
+        "Simón Bolívar": 0.9266,
+        "El Tunal": 0.9133,
+        "Hospital de Bosa": 0.5403,
+        "Occidente de Kennedy": 1.2831000000000001
+      }
+    },
+    {
+      "anio": 2023,
+      "mes": "Febrero",
+      "mesNumero": 2,
+      "totalRiss": 0.9614,
+      "subredes": {
+        "Norte": 0.7204999999999999,
+        "Centro Oriente": 0.9978,
+        "Sur": 1.0768,
+        "Sur Occidente": 1.1649
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.4362000000000001,
+        "Engativá Calle 80": 0.5244,
+        "Simón Bolívar": 0.986,
+        "El Tunal": 1.0929,
+        "Hospital de Bosa": 0.5818,
+        "Occidente de Kennedy": 3.1346
+      }
+    },
+    {
+      "anio": 2023,
+      "mes": "Marzo",
+      "mesNumero": 3,
+      "totalRiss": 1.0987,
+      "subredes": {
+        "Norte": 0.8626999999999999,
+        "Centro Oriente": 1.1636,
+        "Sur": 1.1901000000000002,
+        "Sur Occidente": 1.2422
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.6965999999999999,
+        "Engativá Calle 80": 0.8795999999999999,
+        "Simón Bolívar": 1.0545,
+        "El Tunal": 1.2412999999999998,
+        "Hospital de Bosa": 0.7992,
+        "Occidente de Kennedy": 2.735
+      }
+    },
+    {
+      "anio": 2023,
+      "mes": "Abril",
+      "mesNumero": 4,
+      "totalRiss": 1.1319,
+      "subredes": {
+        "Norte": 0.8956000000000001,
+        "Centro Oriente": 1.1718000000000002,
+        "Sur": 1.2116,
+        "Sur Occidente": 1.3184
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.6384,
+        "Engativá Calle 80": 0.8826999999999999,
+        "Simón Bolívar": 1.0724,
+        "El Tunal": 1.1698,
+        "Hospital de Bosa": 1.0526,
+        "Occidente de Kennedy": 2.7212
+      }
+    },
+    {
+      "anio": 2023,
+      "mes": "Mayo",
+      "mesNumero": 5,
+      "totalRiss": 1.2878,
+      "subredes": {
+        "Norte": 0.9772,
+        "Centro Oriente": 1.2404000000000002,
+        "Sur": 1.4766,
+        "Sur Occidente": 1.5388
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.7149,
+        "Engativá Calle 80": 0.9544,
+        "Simón Bolívar": 1.1108,
+        "El Tunal": 1.3855000000000002,
+        "Hospital de Bosa": 1.1571,
+        "Occidente de Kennedy": 2.6456999999999997
+      }
+    },
+    {
+      "anio": 2023,
+      "mes": "Junio",
+      "mesNumero": 6,
+      "totalRiss": 1.1601000000000001,
+      "subredes": {
+        "Norte": 0.9448000000000001,
+        "Centro Oriente": 1.0617,
+        "Sur": 1.4938,
+        "Sur Occidente": 1.2579
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.4737,
+        "Engativá Calle 80": 0.9689,
+        "Simón Bolívar": 1.087,
+        "El Tunal": 2.2047,
+        "Hospital de Bosa": 0.6493000000000001,
+        "Occidente de Kennedy": 2.1830000000000003
+      }
+    },
+    {
+      "anio": 2023,
+      "mes": "Julio",
+      "mesNumero": 7,
+      "totalRiss": 1.0885,
+      "subredes": {
+        "Norte": 0.9316,
+        "Centro Oriente": 1.0572,
+        "Sur": 1.2576,
+        "Sur Occidente": 1.187
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.4447,
+        "Engativá Calle 80": 0.9256,
+        "Simón Bolívar": 1.1311,
+        "El Tunal": 2.23,
+        "Hospital de Bosa": 0.6492,
+        "Occidente de Kennedy": 2.1158
+      }
+    },
+    {
+      "anio": 2023,
+      "mes": "Agosto",
+      "mesNumero": 8,
+      "totalRiss": 1.1615,
+      "subredes": {
+        "Norte": 0.9076000000000001,
+        "Centro Oriente": 1.1261,
+        "Sur": 1.4928,
+        "Sur Occidente": 1.2628
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.4447,
+        "Engativá Calle 80": 0.9256,
+        "Simón Bolívar": 1.1311,
+        "El Tunal": 2.23,
+        "Hospital de Bosa": 0.6492,
+        "Occidente de Kennedy": 2.1158
+      }
+    },
+    {
+      "anio": 2023,
+      "mes": "Septiembre",
+      "mesNumero": 9,
+      "totalRiss": 1.1967,
+      "subredes": {
+        "Norte": 0.8824,
+        "Centro Oriente": 1.089,
+        "Sur": 1.5754,
+        "Sur Occidente": 1.5012999999999999
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.5043,
+        "Engativá Calle 80": 0.7924,
+        "Simón Bolívar": 1.169,
+        "El Tunal": 2.477,
+        "Hospital de Bosa": 0.8345999999999999,
+        "Occidente de Kennedy": 2.0728999999999997
+      }
+    },
+    {
+      "anio": 2023,
+      "mes": "Octubre",
+      "mesNumero": 10,
+      "totalRiss": 1.2191,
+      "subredes": {
+        "Norte": 0.8608,
+        "Centro Oriente": 1.0563,
+        "Sur": 1.5304,
+        "Sur Occidente": 1.6918
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.4249,
+        "Engativá Calle 80": 0.8399,
+        "Simón Bolívar": 1.2018,
+        "El Tunal": 2.3475,
+        "Hospital de Bosa": 0.8632,
+        "Occidente de Kennedy": 2.4919
+      }
+    },
+    {
+      "anio": 2023,
+      "mes": "Noviembre",
+      "mesNumero": 11,
+      "totalRiss": 1.2404000000000002,
+      "subredes": {
+        "Norte": 0.9269,
+        "Centro Oriente": 1.1858,
+        "Sur": 1.5131000000000001,
+        "Sur Occidente": 1.5486000000000002
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.5077,
+        "Engativá Calle 80": 0.9077,
+        "Simón Bolívar": 1.2226000000000001,
+        "El Tunal": 2.5976,
+        "Hospital de Bosa": 0.884,
+        "Occidente de Kennedy": 2.1604
+      }
+    },
+    {
+      "anio": 2023,
+      "mes": "Diciembre",
+      "mesNumero": 12,
+      "totalRiss": 1.0403,
+      "subredes": {
+        "Norte": 0.8081999999999999,
+        "Centro Oriente": 0.9501000000000001,
+        "Sur": 1.2099,
+        "Sur Occidente": 1.2863999999999998
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.4468,
+        "Engativá Calle 80": 0.7461,
+        "Simón Bolívar": 1.1108,
+        "El Tunal": 2.0809,
+        "Hospital de Bosa": 0.6831,
+        "Occidente de Kennedy": 2.3807
+      }
+    },
+    {
+      "anio": 2024,
+      "mes": "Enero",
+      "mesNumero": 1,
+      "totalRiss": 1.1303,
+      "subredes": {
+        "Norte": 0.8798,
+        "Centro Oriente": 1.0008,
+        "Sur": 1.3836000000000002,
+        "Sur Occidente": 1.3761
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.382,
+        "Engativá Calle 80": 0.8031999999999999,
+        "Simón Bolívar": 1.1208,
+        "El Tunal": 2.5679000000000003,
+        "Hospital de Bosa": 0.5490999999999999,
+        "Occidente de Kennedy": 2.497
+      }
+    },
+    {
+      "anio": 2024,
+      "mes": "Febrero",
+      "mesNumero": 2,
+      "totalRiss": 1.1537,
+      "subredes": {
+        "Norte": 0.9025,
+        "Centro Oriente": 0.9716,
+        "Sur": 1.4301,
+        "Sur Occidente": 1.4434
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.494,
+        "Engativá Calle 80": 0.865,
+        "Simón Bolívar": 1.2009999999999998,
+        "El Tunal": 2.57,
+        "Hospital de Bosa": 1.1698,
+        "Occidente de Kennedy": 2.3805
+      }
+    },
+    {
+      "anio": 2024,
+      "mes": "Marzo",
+      "mesNumero": 3,
+      "totalRiss": 1.1721,
+      "subredes": {
+        "Norte": 0.9476,
+        "Centro Oriente": 0.9871,
+        "Sur": 1.3772,
+        "Sur Occidente": 1.5063
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.4316,
+        "Engativá Calle 80": 0.9097,
+        "Simón Bolívar": 1.2721,
+        "El Tunal": 2.461,
+        "Hospital de Bosa": 1.5419999999999998,
+        "Occidente de Kennedy": 2.3392
+      }
+    },
+    {
+      "anio": 2024,
+      "mes": "Abril",
+      "mesNumero": 4,
+      "totalRiss": 1.2329,
+      "subredes": {
+        "Norte": 0.9625,
+        "Centro Oriente": 0.9931,
+        "Sur": 1.517,
+        "Sur Occidente": 1.6288999999999998
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.4881,
+        "Engativá Calle 80": 0.9059,
+        "Simón Bolívar": 1.2651999999999999,
+        "El Tunal": 2.6832,
+        "Hospital de Bosa": 1.8554,
+        "Occidente de Kennedy": 2.4183000000000003
+      }
+    },
+    {
+      "anio": 2024,
+      "mes": "Mayo",
+      "mesNumero": 5,
+      "totalRiss": 1.3315000000000001,
+      "subredes": {
+        "Norte": 1.0215,
+        "Centro Oriente": 1.0628,
+        "Sur": 1.6535,
+        "Sur Occidente": 1.8628
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.4921,
+        "Engativá Calle 80": 0.8787,
+        "Simón Bolívar": 1.2537,
+        "El Tunal": 2.7549,
+        "Hospital de Bosa": 2.3905000000000003,
+        "Occidente de Kennedy": 2.3583000000000003
+      }
+    },
+    {
+      "anio": 2024,
+      "mes": "Junio",
+      "mesNumero": 6,
+      "totalRiss": 1.3032,
+      "subredes": {
+        "Norte": 1.034,
+        "Centro Oriente": 1.0978,
+        "Sur": 1.5436,
+        "Sur Occidente": 1.7594999999999998
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.3776,
+        "Engativá Calle 80": 0.8603000000000001,
+        "Simón Bolívar": 1.2422,
+        "El Tunal": 2.5963,
+        "Hospital de Bosa": 2.5394,
+        "Occidente de Kennedy": 2.2641
+      }
+    },
+    {
+      "anio": 2024,
+      "mes": "Julio",
+      "mesNumero": 7,
+      "totalRiss": 1.1732,
+      "subredes": {
+        "Norte": 0.9756999999999999,
+        "Centro Oriente": 1.0342,
+        "Sur": 1.4008,
+        "Sur Occidente": 1.4845
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.4333,
+        "Engativá Calle 80": 0.8967,
+        "Simón Bolívar": 1.2787,
+        "El Tunal": 2.733,
+        "Hospital de Bosa": 2.3722,
+        "Occidente de Kennedy": 1.9574
+      }
+    },
+    {
+      "anio": 2024,
+      "mes": "Agosto",
+      "mesNumero": 8,
+      "totalRiss": 1.0793000000000001,
+      "subredes": {
+        "Norte": 0.8779,
+        "Centro Oriente": 0.9731000000000001,
+        "Sur": 1.3459,
+        "Sur Occidente": 1.3021
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.3069,
+        "Engativá Calle 80": 0.8148000000000001,
+        "Simón Bolívar": 1.1451,
+        "El Tunal": 2.3965,
+        "Hospital de Bosa": 1.3837000000000002,
+        "Occidente de Kennedy": 1.8803
+      }
+    },
+    {
+      "anio": 2024,
+      "mes": "Septiembre",
+      "mesNumero": 9,
+      "totalRiss": 1.0951,
+      "subredes": {
+        "Norte": 0.8499,
+        "Centro Oriente": 0.9715,
+        "Sur": 1.3546,
+        "Sur Occidente": 1.4318
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.1924,
+        "Engativá Calle 80": 0.7559,
+        "Simón Bolívar": 1.0518,
+        "El Tunal": 2.4093999999999998,
+        "Hospital de Bosa": 1.5844,
+        "Occidente de Kennedy": 2.0991
+      }
+    },
+    {
+      "anio": 2024,
+      "mes": "Octubre",
+      "mesNumero": 10,
+      "totalRiss": 1.0687,
+      "subredes": {
+        "Norte": 0.8608,
+        "Centro Oriente": 0.9147,
+        "Sur": 1.1957,
+        "Sur Occidente": 1.4927000000000001
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.1418000000000001,
+        "Engativá Calle 80": 0.7954000000000001,
+        "Simón Bolívar": 1.1059,
+        "El Tunal": 2.5492,
+        "Hospital de Bosa": 2.4345,
+        "Occidente de Kennedy": 2.0897
+      }
+    },
+    {
+      "anio": 2024,
+      "mes": "Noviembre",
+      "mesNumero": 11,
+      "totalRiss": 1.1084,
+      "subredes": {
+        "Norte": 0.9064,
+        "Centro Oriente": 0.9417,
+        "Sur": 1.2689,
+        "Sur Occidente": 1.5072999999999999
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.3069,
+        "Engativá Calle 80": 0.8148000000000001,
+        "Simón Bolívar": 1.1451,
+        "El Tunal": 2.3965,
+        "Hospital de Bosa": 1.3837000000000002,
+        "Occidente de Kennedy": 1.8803
+      }
+    },
+    {
+      "anio": 2024,
+      "mes": "Diciembre",
+      "mesNumero": 12,
+      "totalRiss": 1.0907,
+      "subredes": {
+        "Norte": 0.9165000000000001,
+        "Centro Oriente": 0.9656,
+        "Sur": 1.1576,
+        "Sur Occidente": 1.5721
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.3069,
+        "Engativá Calle 80": 0.8148000000000001,
+        "Simón Bolívar": 1.1451,
+        "El Tunal": 2.3965,
+        "Hospital de Bosa": 1.3837000000000002,
+        "Occidente de Kennedy": 1.8803
+      }
+    },
+    {
+      "anio": 2025,
+      "mes": "Enero",
+      "mesNumero": 1,
+      "totalRiss": 1.0823,
+      "subredes": {
+        "Norte": 0.8776999999999999,
+        "Centro Oriente": 1.0209000000000001,
+        "Sur": 1.1878,
+        "Sur Occidente": 1.4436000000000002
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.2938999999999998,
+        "Engativá Calle 80": 0.8695999999999999,
+        "Simón Bolívar": 1.0923,
+        "El Tunal": 2.0476,
+        "Hospital de Bosa": 2.5203,
+        "Occidente de Kennedy": 1.9805000000000001
+      }
+    },
+    {
+      "anio": 2025,
+      "mes": "Febrero",
+      "mesNumero": 2,
+      "totalRiss": 1.182,
+      "subredes": {
+        "Norte": 0.9295,
+        "Centro Oriente": 1.0619,
+        "Sur": 1.218,
+        "Sur Occidente": 1.7124000000000001
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.3343,
+        "Engativá Calle 80": 0.8617,
+        "Simón Bolívar": 1.192,
+        "El Tunal": 2.1204,
+        "Hospital de Bosa": 3.1546,
+        "Occidente de Kennedy": 2.2268
+      }
+    },
+    {
+      "anio": 2025,
+      "mes": "Marzo",
+      "mesNumero": 3,
+      "totalRiss": 1.2631000000000001,
+      "subredes": {
+        "Norte": 0.9469,
+        "Centro Oriente": 1.0962,
+        "Sur": 1.4766,
+        "Sur Occidente": 1.8403
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.4043999999999999,
+        "Engativá Calle 80": 0.8683,
+        "Simón Bolívar": 1.2367,
+        "El Tunal": 2.4941,
+        "Hospital de Bosa": 2.943,
+        "Occidente de Kennedy": 2.3404
+      }
+    },
+    {
+      "anio": 2025,
+      "mes": "Abril",
+      "mesNumero": 4,
+      "totalRiss": 1.2961,
+      "subredes": {
+        "Norte": 1.0356999999999998,
+        "Centro Oriente": 0.9627,
+        "Sur": 1.4357,
+        "Sur Occidente": 2.1172999999999997
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.0595,
+        "Engativá Calle 80": 0.9745999999999999,
+        "Simón Bolívar": 1.2963999999999998,
+        "El Tunal": 2.3375,
+        "Hospital de Bosa": 3.1289999999999996,
+        "Occidente de Kennedy": 2.4919
+      }
+    },
+    {
+      "anio": 2025,
+      "mes": "Mayo",
+      "mesNumero": 5,
+      "totalRiss": 1.4399000000000002,
+      "subredes": {
+        "Norte": 1.1183,
+        "Centro Oriente": 1.0295999999999998,
+        "Sur": 1.6339,
+        "Sur Occidente": 2.2466
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.1152,
+        "Engativá Calle 80": 0.976,
+        "Simón Bolívar": 1.5275,
+        "El Tunal": 2.4669,
+        "Hospital de Bosa": 3.5452,
+        "Occidente de Kennedy": 2.5614
+      }
+    },
+    {
+      "anio": 2025,
+      "mes": "Junio",
+      "mesNumero": 6,
+      "totalRiss": 1.3659000000000001,
+      "subredes": {
+        "Norte": 1.1312,
+        "Centro Oriente": 0.9423999999999999,
+        "Sur": 1.764,
+        "Sur Occidente": 1.9974
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 0.9361,
+        "Engativá Calle 80": 0.9833,
+        "Simón Bolívar": 1.5090000000000001,
+        "El Tunal": 2.4616,
+        "Hospital de Bosa": 3.0433,
+        "Occidente de Kennedy": 2.3971999999999998
+      }
+    },
+    {
+      "anio": 2025,
+      "mes": "Julio",
+      "mesNumero": 7,
+      "totalRiss": 1.3566,
+      "subredes": {
+        "Norte": 1.1687,
+        "Centro Oriente": 0.8889,
+        "Sur": 1.4893,
+        "Sur Occidente": 2.1934
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 1.0215,
+        "Engativá Calle 80": 1.028,
+        "Simón Bolívar": 1.5731,
+        "El Tunal": 2.7133999999999996,
+        "Hospital de Bosa": 2.6825,
+        "Occidente de Kennedy": 2.6733999999999996
+      }
+    },
+    {
+      "anio": 2025,
+      "mes": "Agosto",
+      "mesNumero": 8,
+      "totalRiss": 1.2612999999999999,
+      "subredes": {
+        "Norte": 1.1113,
+        "Centro Oriente": 0.7582,
+        "Sur": 1.524,
+        "Sur Occidente": 1.921
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 0.8390000000000001,
+        "Engativá Calle 80": 1.1535,
+        "Simón Bolívar": 1.4938999999999998,
+        "El Tunal": 2.7858,
+        "Hospital de Bosa": 1.7997999999999998,
+        "Occidente de Kennedy": 2.7386
+      }
+    },
+    {
+      "anio": 2025,
+      "mes": "Septiembre",
+      "mesNumero": 9,
+      "totalRiss": 1.3252000000000002,
+      "subredes": {
+        "Norte": 1.1055,
+        "Centro Oriente": 0.7890999999999999,
+        "Sur": 1.5941999999999998,
+        "Sur Occidente": 1.9742
+      },
+      "sedesPriorizadas": {
+        "Santa Clara": 0.9431999999999999,
+        "Engativá Calle 80": 0.9832,
+        "Simón Bolívar": 1.5861,
+        "El Tunal": 2.813,
+        "Hospital de Bosa": 1.3783,
+        "Occidente de Kennedy": 2.8092
+      }
+    }
+  ]
+}

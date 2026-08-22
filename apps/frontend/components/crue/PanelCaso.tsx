@@ -16,7 +16,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import type { Candidato } from "@/lib/types";
+import type { Candidato, Caso } from "@/lib/types";
 import { nombresServicios, ETIQUETA_TRIAGE } from "@/lib/presentacion";
 import * as api from "@/lib/api";
 import {
@@ -45,8 +45,8 @@ interface Props {
   /** codigo → nombre, para pintar sedes que solo conocemos por handshake. */
   nombresSedes: ReadonlyMap<string, string>;
   ahoraMs: number;
-  /** Quien firma los overrides. Vacío = no puede forzar. */
-  regulador: string;
+  /** Quien firma los overrides. Vacío o ausente = no puede forzar. */
+  regulador?: string;
   onCerrar: () => void;
 }
 
@@ -54,7 +54,7 @@ export default function PanelCaso({
   derivado,
   nombresSedes,
   ahoraMs,
-  regulador,
+  regulador = "",
   onCerrar,
 }: Props) {
   const { caso, estado, vivo, handshakes, motivoEscalamiento } = derivado;
@@ -69,8 +69,12 @@ export default function PanelCaso({
     setCandidatos(null);
     setCompatibles(null);
     setErrorRanking(null);
+    // POST /match exige el Caso completo (con origen), pero /estado ya no lo
+    // expone (lista blanca de estado.service.ts). Core responde 400 y este
+    // panel lo pinta como errorRanking — hasta que el equipo decida si el
+    // origen vuelve a salir detrás de la sesión.
     api
-      .match({ caso, limite: 5 })
+      .match({ caso: caso as Caso, limite: 5 })
       .then((m) => {
         if (!vigente) return;
         setCandidatos(m.candidatos);
@@ -551,7 +555,10 @@ export default function PanelCaso({
                   <p className="text-[10px] uppercase tracking-wide text-[color:var(--color-texto-tenue)] mb-1">
                     Lo que dijo el paramédico (crudo, para auditoría)
                   </p>
-                  <p className="text-sm leading-relaxed">{caso.textoCrudo}</p>
+                  <p className="text-sm leading-relaxed">
+                    {caso.textoCrudo ??
+                      "— no disponible: /estado omite el dictado crudo por privacidad —"}
+                  </p>
                 </div>
                 <div className="p-3 rounded-2xl border border-[color:var(--color-info)]/40">
                   <p className="text-[10px] uppercase tracking-wide text-[color:var(--color-texto-tenue)] mb-1">
@@ -579,6 +586,386 @@ export default function PanelCaso({
           </motion.div>
         )}
       </AnimatePresence>
+
+      <PopupForzar
+        abierto={forzarAbierto}
+        candidatos={candidatos ?? []}
+        regulador={regulador}
+        cargando={cargandoAccion}
+        solicitudEnCurso={vivo ? nombreSede(vivo.sedeCodigo) : null}
+        onCerrar={() => setForzarAbierto(false)}
+        onConfirmar={(c, justificacion) =>
+          despachar({
+            sedeCodigo: c.sede.codigo,
+            sedeNombre: c.sede.nombre,
+            tipo: "override",
+            detalle:
+              `Forzó asignación a ${c.sede.nombre}. Justificación: "${justificacion}"` +
+              (c.motivoDescarte ? ` · SALTÓ REGLA DURA: ${c.motivoDescarte}` : ""),
+          })
+        }
+      />
+
+      <PopupPerimetro
+        abierto={perimetroAbierto}
+        derivado={derivado}
+        onCerrar={() => setPerimetroAbierto(false)}
+        onAplicar={(m, radio) => {
+          setCandidatos(m.candidatos);
+          setCompatibles(m.compatibles);
+          registrarEvento({
+            casoId: caso.id,
+            tipo: "perimetro",
+            regulador: regulador || "(sin nombre)",
+            texto: `Amplió el perímetro de búsqueda a ${radio} km (${m.compatibles} compatibles de ${m.evaluadas})`,
+          });
+          setBitacora(listarEventos(caso.id));
+          setPerimetroAbierto(false);
+          setMensaje(`Perímetro a ${radio} km: ${m.compatibles} compatibles`);
+        }}
+      />
     </motion.aside>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Pop-ups de acción
+// ─────────────────────────────────────────────────────────────────
+
+function MarcoPopup({
+  abierto,
+  etiqueta,
+  onCerrar,
+  children,
+}: {
+  abierto: boolean;
+  etiqueta: string;
+  onCerrar: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <AnimatePresence>
+      {abierto && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={onCerrar}
+        >
+          <motion.div
+            initial={{ scale: 0.94, y: 12 }}
+            animate={{ scale: 1, y: 0 }}
+            exit={{ scale: 0.94, y: 12 }}
+            transition={{ duration: 0.3, ease: SUAVE }}
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-[2rem] bg-[color:var(--color-superficie)] border border-[color:var(--color-borde)] p-5 space-y-4"
+            role="dialog"
+            aria-label={etiqueta}
+          >
+            {children}
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+/**
+ * El override del CRUE: potestad legal (Res. 1220/2010), pero nunca a la
+ * ligera — justificación obligatoria, firma del regulador, y si la sede no
+ * cumple un filtro duro, el sistema no lo oculta: dice exactamente qué regla
+ * se salta y exige asumirla con un paso extra.
+ */
+function PopupForzar({
+  abierto,
+  candidatos,
+  regulador,
+  cargando,
+  solicitudEnCurso,
+  onCerrar,
+  onConfirmar,
+}: {
+  abierto: boolean;
+  candidatos: Candidato[];
+  regulador: string;
+  cargando: boolean;
+  solicitudEnCurso: string | null;
+  onCerrar: () => void;
+  onConfirmar: (c: Candidato, justificacion: string) => void;
+}) {
+  const [codigo, setCodigo] = useState<string | null>(null);
+  const [justificacion, setJustificacion] = useState("");
+  const [asumeRegla, setAsumeRegla] = useState(false);
+  const [confirmando, setConfirmando] = useState(false);
+
+  // Cada apertura arranca limpia: un override no hereda el anterior.
+  useEffect(() => {
+    if (abierto) {
+      setCodigo(null);
+      setJustificacion("");
+      setAsumeRegla(false);
+      setConfirmando(false);
+    }
+  }, [abierto]);
+
+  const elegida = candidatos.find((c) => c.sede.codigo === codigo) ?? null;
+  const saltaRegla = elegida?.motivoDescarte != null;
+  const sinFirma = regulador.trim() === "";
+  const puedeContinuar =
+    elegida !== null &&
+    justificacion.trim().length >= 10 &&
+    (!saltaRegla || asumeRegla) &&
+    !sinFirma;
+
+  return (
+    <MarcoPopup abierto={abierto} etiqueta="Forzar asignación" onCerrar={onCerrar}>
+      <h3 className="font-bold">Forzar asignación</h3>
+
+      {!confirmando ? (
+        <>
+          {solicitudEnCurso && (
+            <p className="text-xs p-2 rounded-lg bg-[color:var(--color-alerta)]/15 border border-[color:var(--color-alerta)]/40">
+              Hay una solicitud en curso a {solicitudEnCurso}. Forzar ahora crea
+              una segunda solicitud en paralelo (riesgo de doble reserva).
+            </p>
+          )}
+
+          <div className="space-y-1.5 max-h-56 overflow-y-auto">
+            {candidatos.length === 0 && (
+              <p className="text-xs text-[color:var(--color-texto-tenue)]">
+                Sin candidatos cargados. Cierra y espera el re-puntaje.
+              </p>
+            )}
+            {candidatos.map((c) => (
+              <label
+                key={c.sede.codigo}
+                className={`flex items-center gap-2 p-2.5 rounded-xl border cursor-pointer text-sm ${
+                  codigo === c.sede.codigo
+                    ? "border-[color:var(--color-info)] bg-[color:var(--color-superficie-alta)]"
+                    : "border-[color:var(--color-borde)]"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="sede-forzar"
+                  checked={codigo === c.sede.codigo}
+                  onChange={() => setCodigo(c.sede.codigo)}
+                />
+                <span className="flex-1 truncate">{c.sede.nombre}</span>
+                <span className="tabular text-xs">{Math.round(c.etaMin)}′</span>
+                {c.motivoDescarte && (
+                  <span className="text-[10px] text-[color:var(--color-critico)]">
+                    ⛔ no elegible
+                  </span>
+                )}
+              </label>
+            ))}
+          </div>
+
+          {saltaRegla && elegida && (
+            <div className="p-3 rounded-xl bg-[color:var(--color-critico)]/10 border border-[color:var(--color-critico)]/60 space-y-2">
+              <p className="text-xs font-medium text-[color:var(--color-critico)]">
+                Vas a saltar una regla dura: {elegida.motivoDescarte}
+              </p>
+              <label className="flex items-start gap-2 text-xs cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={asumeRegla}
+                  onChange={(e) => setAsumeRegla(e.target.checked)}
+                  className="mt-0.5"
+                />
+                Entiendo qué regla se omite y asumo la decisión como regulador.
+              </label>
+            </div>
+          )}
+
+          <div>
+            <label className="text-xs text-[color:var(--color-texto-tenue)]">
+              Justificación (obligatoria, queda en el registro)
+            </label>
+            <textarea
+              value={justificacion}
+              onChange={(e) => setJustificacion(e.target.value)}
+              rows={3}
+              placeholder="Ej: única sede con hemodinamia disponible confirmada por teléfono a las 21:40…"
+              className="mt-1 w-full p-3 rounded-xl bg-[color:var(--color-superficie-alta)] border border-[color:var(--color-borde)] text-sm focus:outline-none focus:border-[color:var(--color-info)]"
+            />
+          </div>
+
+          <p className="text-[11px] text-[color:var(--color-texto-tenue)]">
+            {sinFirma
+              ? "⚠ Declara tu nombre en la barra superior: el override queda firmado."
+              : `Queda auditado a nombre de: ${regulador}`}
+          </p>
+
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={onCerrar}
+              className="rounded-full border border-[color:var(--color-borde)] font-medium"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={() => setConfirmando(true)}
+              disabled={!puedeContinuar}
+              className="rounded-full font-semibold bg-[color:var(--color-critico)] text-white disabled:opacity-40"
+            >
+              Continuar
+            </button>
+          </div>
+        </>
+      ) : (
+        elegida && (
+          <>
+            <div className="p-3 rounded-xl border border-[color:var(--color-borde)] text-sm space-y-1">
+              <p>
+                <span className="text-[color:var(--color-texto-tenue)]">Destino:</span>{" "}
+                <strong>{elegida.sede.nombre}</strong>
+              </p>
+              {saltaRegla && (
+                <p className="text-[color:var(--color-critico)] text-xs">
+                  ⛔ Saltando: {elegida.motivoDescarte}
+                </p>
+              )}
+              <p className="text-xs text-[color:var(--color-texto-tenue)]">
+                &ldquo;{justificacion.trim()}&rdquo; — {regulador}
+              </p>
+            </div>
+            <p className="text-xs text-[color:var(--color-texto-tenue)]">
+              Se enviará la solicitud a la sede por consola. Esta acción queda
+              en la línea de tiempo del caso.
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => setConfirmando(false)}
+                className="rounded-full border border-[color:var(--color-borde)] font-medium"
+              >
+                Volver
+              </button>
+              <button
+                onClick={() => onConfirmar(elegida, justificacion.trim())}
+                disabled={cargando}
+                className="rounded-full font-semibold bg-[color:var(--color-critico)] text-white disabled:opacity-40"
+              >
+                {cargando ? "Enviando…" : "Confirmar asignación forzada"}
+              </button>
+            </div>
+          </>
+        )
+      )}
+    </MarcoPopup>
+  );
+}
+
+/** Relaja el geofiltro con previsualización: primero ver, después aplicar. */
+function PopupPerimetro({
+  abierto,
+  derivado,
+  onCerrar,
+  onAplicar,
+}: {
+  abierto: boolean;
+  derivado: CasoDerivado;
+  onCerrar: () => void;
+  onAplicar: (
+    m: Awaited<ReturnType<typeof api.match>>,
+    radio: number,
+  ) => void;
+}) {
+  const [radio, setRadio] = useState(30);
+  const [preview, setPreview] = useState<Awaited<
+    ReturnType<typeof api.match>
+  > | null>(null);
+  const [cargando, setCargando] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (abierto) {
+      setRadio(30);
+      setPreview(null);
+      setError(null);
+    }
+  }, [abierto]);
+
+  async function previsualizar() {
+    setCargando(true);
+    setError(null);
+    try {
+      setPreview(
+        await api.match({
+          // Mismo cast que arriba: sin origen, core responde 400 y se pinta.
+          caso: derivado.caso as Caso,
+          limite: 5,
+          radioKm: radio,
+        }),
+      );
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "core no respondió");
+    } finally {
+      setCargando(false);
+    }
+  }
+
+  return (
+    <MarcoPopup
+      abierto={abierto}
+      etiqueta="Ampliar perímetro de búsqueda"
+      onCerrar={onCerrar}
+    >
+      <h3 className="font-bold">Ampliar perímetro de búsqueda</h3>
+      <div>
+        <div className="flex items-baseline justify-between text-sm">
+          <label htmlFor="radio-km">Radio</label>
+          <span className="tabular font-bold">{radio} km</span>
+        </div>
+        <input
+          id="radio-km"
+          type="range"
+          min={10}
+          max={100}
+          step={5}
+          value={radio}
+          onChange={(e) => {
+            setRadio(Number(e.target.value));
+            setPreview(null);
+          }}
+          className="w-full"
+        />
+      </div>
+
+      {error && <p className="text-xs text-[color:var(--color-alerta)]">{error}</p>}
+      {preview && (
+        <p className="text-sm p-3 rounded-xl border border-[color:var(--color-borde)]">
+          Con {radio} km: <strong>{preview.compatibles}</strong> sedes
+          compatibles de {preview.evaluadas} evaluadas.
+          {preview.compatibles === 0 &&
+            " Sigue sin haber prestador elegible: considera forzar asignación."}
+        </p>
+      )}
+
+      <div className="grid grid-cols-2 gap-2">
+        <button
+          onClick={previsualizar}
+          disabled={cargando}
+          className="rounded-full border border-[color:var(--color-borde)] font-medium disabled:opacity-40"
+        >
+          {cargando ? "Calculando…" : "Previsualizar"}
+        </button>
+        <button
+          onClick={() => preview && onAplicar(preview, radio)}
+          disabled={!preview}
+          className="rounded-full font-semibold bg-[color:var(--color-info)] text-[#04121f] disabled:opacity-40"
+        >
+          Aplicar al ranking
+        </button>
+      </div>
+      <button
+        onClick={onCerrar}
+        className="w-full rounded-full border border-[color:var(--color-borde)] font-medium"
+      >
+        Cerrar
+      </button>
+    </MarcoPopup>
   );
 }

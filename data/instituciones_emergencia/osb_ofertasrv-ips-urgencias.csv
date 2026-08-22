@@ -1,0 +1,85 @@
+sede_nombre;direccion;Longitud;Latitud;Localidad;Subred;telefono;email;Naturaleza jurídica;Complejidad
+Clínica La Inmaculada;KR 7 68 70;-74,05710014;4,651620869;Chapinero;Norte;5870366;inmaculada@clinicalainmaculada.org;Privada;BAJA
+Centro de Atención En Salud Cafam Floresta;AK 68 90 88;-74,0749953;4,686709467;Barrios Unidos;Norte;5550700 ext 12017-12015;calidadsalud@cafam.com.co;Privada;BAJA
+Centro de Atención En Salud Cafam Suba;KR 113 C 142 A 98;-74,10329678;4,748005027;Suba;Norte;5550700 ext 12017-12015;calidadsalud@cafam.com.co;Privada;BAJA
+Fundación Santa Fe de Bogotá;CL 119 7 75;-74,03293464;4,69617701;Usaquén;Norte;6030303 ext. 5105;adriana.urrego@fsfb.org.co;Privada;ALTA
+Hospital Universitario Clínica San Rafael;KR 8 17 45 SUR;-74,09108594;4,576605361;San Cristóbal;Centro Oriente;7464714 EXT. 2740;direcciongeneral1@stewardcolombia.org;Privada;ALTA
+Fundación Hospital de La Misericordia;AK 14 1 65;-74,08780586;4,593419751;Los Mártires;Centro Oriente;3811970 EXT 227;lidercalidad@homifundacion.org.co;Privada;ALTA
+Clínica de Nuestra Señora de La Paz;KR 69 12 75;-74,12524693;4,638212339;Kennedy;Sur Occidente;2921277;gestorcalidad@cllapaz.com.co;Privada;BAJA
+Instituto Nacional de Cancerología;Cl 1 9 85;-74,08427613;4,588775777;San Cristóbal;Centro Oriente;0913905012 Ext. 2000 - 2001;direccion@cancer.gov.co;Pública;MEDIANA
+Fundación Abood Shaio;DG 115 A 70 C 75;-74,07330768;4,69834751;Suba;Norte;2261025;direcciongeneral@shaio.org;Privada;ALTA
+Cruz Roja Colombiana Seccional Cundinamarca Y Bogotá;AK 68 68 B 31;-74,0889642;4,672834062;Engativá;Norte;7460909;dsalud@cruzrojabogota.org.co;Privada;BAJA
+Cruz Roja Colombiana Seccional Cundinamarca Y Bogotá Sede Norte;AC 134 7 B 41;-74,03096533;4,711936533;Usaquén;Norte;7460909;dsalud@cruzrojabogota.org.co;Privada;BAJA
+Cruz Roja Colombiana Seccional Cundinamarca Y Bogotá Sede Alquería;AK 68 31 41 SUR;-74,13069155;4,606863739;Kennedy;Sur Occidente;7460909;dsalud@cruzrojabogota.org.co;Privada;BAJA
+Clínica Nueva;CL 45 F 16 A 11;-74,07066124;4,634348081;Teusaquillo;Norte;3274444 ext 515-530;calidad@clinicanueva.com;Privada;MEDIANA
+Salud Sura Calle 100 Bogotá;Cl. 100 19 A 35;-74,05330016;4,685845063;Chapinero;Norte;(1) 487 38 88 / 3164625445;rqext@suramericana.com.co;Privada;BAJA
+Clínica de La Mujer;KR 19 C 91 17;-74,05716959;4,677630739;Chapinero;Norte;6161799- 3506005706;Elizabeth.Parada@QuironSalud.com;Privada;MEDIANA
+Clínica Infantil Colsubsidio;CL 66 10 48;-74,06128709;4,651803035;Chapinero;Norte;7467310 extensión 75210;calidad.colsubsidio@colsubsidio.com;Privada;MEDIANA
+Clínica Colsubsidio Ciudad Roma;CL 53 SUR 79 D 71;-74,17239245;4,615232824;Kennedy;Sur Occidente;7420100 Ext. 74439;calidad.colsubsidio@colsubsidio.com;Privada;MEDIANA
+Centro Medico Colsubsidio Quiroga;CL 38 SUR 18 30;-74,11880453;4,576373377;Rafael Uribe Uribe;Centro Oriente;7607461 Ext. 101;calidad.colsubsidio@colsubsidio.com;Privada;BAJA
+Clínica de Ortopedia Y Accidentes Laborales;CL 6 A 70 06;-74,1308998;4,630339894;Kennedy;Sur Occidente;;gerenciasmo@coal.clinic;Privada;BAJA
+Sociedad de Cirugía de Bogotá - Hospital de San José;CL 10 18 75;-74,08589037;4,603998294;Los Mártires;Centro Oriente;3538000 ext 523 o 509;calidad@hospitaldesanjose.org.co;Privada;ALTA
+Clínica Palermo;CL 45 C 22 02;-74,07366275;4,635640609;Teusaquillo;Norte;7454500;GestiondeCalidad@clinicapalermo.com.co;Privada;MEDIANA
+Clínica Juan N Corpas Ltda;KR 111 159 A 61;-74,09259788;4,76076659;Suba;Norte;6865000 Ext.1060 - 3233103491;dir_calidad@clinicajuanncorpas.com;Privada;MEDIANA
+Fundación Cardio Infantil Instituto de Cardiología;CL 163 A 13 B 60;-74,03440547;4,741266998;Usaquén;Norte;6672727 Ext. 53304 Cel. 3183569506;pcasallas@lacardio.org;Privada;ALTA
+Centro Policlinico Del Olaya;KR 20 23 23 SUR;-74,1057183;4,583047441;Rafael Uribe Uribe;Centro Oriente;3612888;zayda.rodriguez@cpolaya.com.co;Privada;MEDIANA
+Clínica Reina Sofia;KR 21 127 03 ;-74,05161009;4,706786665;Usaquén;Norte;6466060 ext 5717528;calidadclinica@colsanitas.com;Privada;ALTA
+Clínica Universitaria Colombia;Cl 23 66 46;-74,10698778;4,647611083;Teusaquillo;Norte;5948650;calidadclinica@colsanitas.com;Privada;ALTA
+Clínica Reina Sofia Pediatrica Y Mujer;Ac 127 20 56;-74,05100114;4,706358867;Usaquén;Norte;6466060;calidadclinica@colsanitas.com;Privada;MEDIANA
+Clínica Infantil Santa María Del Lago;CL 73 A 76 66;-74,09830369;4,692350128;Engativá;Norte;3406767;calidadclinica@colsanitas.com;Privada;ALTA
+Empresa Social Del Estado Hospital Universitario de La Samaritana;KR 8 0 29 SUR;-74,08339977;4,587020264;San Cristóbal;Centro Oriente;4077075 ext 10702;gerencia@hus.org.co;Pública;ALTA
+Clínica de Marly;CL 50 9 67;-74,06510608;4,637006368;Chapinero;Norte;3436600;cmarly@clinicademarly.com.co;Privada;ALTA
+Hospital Universitario San Ignacio;KR 7 40 62;-74,06510137;4,628036689;Chapinero;Norte;5946161;calidad@husi.org.co;Privada;ALTA
+Virrey Solis I.P.S S.A. Americas;AV LAS AMERICAS 66 A 27 ;-74,12108513;4,628246766;Puente Aranda;Sur Occidente;6014473535 ext 248, 1360, 1365;calidad@virreysolisips.com.co;Privada;BAJA
+Virrey Solis IPS S.A - Clínica Suba;AC 145 95 B 22;-74,08860552;4,740826137;Suba;Norte;6014473535 ext 248, 1360, 1365;calidad@virreysolisips.com.co;Privada;BAJA
+Virrey Solis IPS.S.A. Calle 98;KR 49 98 A 28;-74,06085853;4,686827986;Barrios Unidos;Norte;6014473535 ext 248, 1360, 1365;calidad@virreysolisips.com.co;Privada;BAJA
+Clínica Del Country IPS;KR 16 82 57;-74,05673432;4,668692919;Chapinero;Norte;6013905099;notificacionescdc@clinicadelcountry.com;Privada;ALTA
+Clínica Del Occidente S.A.;AV DE LAS AMERICAS 71 C 29;-74,13574766;4,629582574;Kennedy;Sur Occidente;4254620 Ext 150;calidad@clinicadeloccidente.com;Privada;ALTA
+Fundación Hospital Infantil Universitario de San Jose;KR 52 67 A 71;-74,07794126;4,66538182;Barrios Unidos;Norte;4377540;direccion.general@hospitalinfantildesanjose.org.co;Privada;ALTA
+Hospital Militar Central;TV 3C 49 02;-74,06226045;4,635693763;Chapinero;Norte;3486868 ext: 3001/3002 3158653821;ayudantia@homil.gov.co;Pública;ALTA
+Hospital Universitario Mayor-Mederi;CL 24 29 45;-74,08189483;4,623553488;Los Mártires;Centro Oriente;7055999 Ext 4140;ana.ulloa@mederi.com.co;Privada;ALTA
+Hospital Universitario Barrios Unidos-Mederi;CL 66 A 52 25;-74,07970261;4,664007206;Barrios Unidos;Norte;4855970 ext 6214;ana.ulloa@mederi.com.co;Privada;MEDIANA
+Medicentro Familiar IPS SAS;CL 20 98 62;-74,14229548;4,674254276;Fontibón;Sur Occidente;3108062745-3118895118;lidercalidad@clinicamedicentrofamiliar.com;Privada;MEDIANA
+Clínica Medicentro Familiar Sede Suba;KR 94B 132A 65;-74,0889621;4,732644212;Suba;Norte;3108077965;lidercalidad@clinicamedicentrofamiliar.com;Privada;MEDIANA
+Clínica Medical S.A.S.;CL 36 Sur 77 33;-74,14954826;4,621923974;Kennedy;Sur Occidente;4505200 3168757999;coor.calidad@clinicamedical.com.co;Privada;MEDIANA
+Administradora Clínica La Colina SAS;CL 167 72 07;-74,06534257;4,750760939;Suba;Norte;6013905355;notificacionesclc@clinicadelcountry.com;Privada;ALTA
+Clínica Los Nogales SAS;CL 95 23 61;-74,05727667;4,683180479;Chapinero;Norte;5937000 Ext: 2045 / 2036 Cel: 3014199316;notificacioneslegales@clinicanogales.com;Privada;ALTA
+Unidad de Servicios de Salud Santa Clara Hospital Universitario;KR 14 B 1 45 SUR;-74,09191172;4,591033227;Antonio Nariño;Centro Oriente;3282828 ext 18191, 18000, 18151;radicacionmedioselectronicos@subredcentrooriente.gov.co;Pública;ALTA
+Unidad de Servicios de Salud San Blas;TV 5 ESTE 19 50 SUR;-74,08373114;4,570145323;San Cristóbal;Centro Oriente;3282828 EXT 13192, 13941,13620;radicacionmedioselectronicos@subredcentrooriente.gov.co;Pública;MEDIANA
+Unidad de Servicios de Salud Perseverancia;KR 5 33 A 45;-74,0653902;4,619850978;Santa Fe;Centro Oriente;3282828 ETX 25181,25191;radicacionmedioselectronicos@subredcentrooriente.gov.co;Pública;BAJA
+Unidad de Servicios de Salud Samper Mendoza;KR 22 22 A 26;-74,08132486;4,616992082;Los Mártires;Centro Oriente;3282828 EXT 19191,19181,19611;radicacionmedioselectronicos@subredcentrooriente.gov.co;Pública;BAJA
+Unidad de Servicios de Salud Jorge Eliecer Gaitan;KR 4 A ESTE 5 20;-74,06670643;4,587542336;Santa Fe;Centro Oriente;3282828 ETX 16912, 16611,16571;radicacionmedioselectronicos@subredcentrooriente.gov.co;Pública;BAJA
+Unidad de Servicios de Salud Diana Turbay;KR 1f 48x 40 sur;-74,10648641;4,545658207;Rafael Uribe Uribe;Centro Oriente;3282828;radicacionmedioselectronicos@subredcentrooriente.gov.co;Pública;BAJA
+Unidad de Servicios de Salud Chircales;TV 5 L BIS 48 F 69 SUR;-74,11186869;4,557584615;Rafael Uribe Uribe;Centro Oriente;3282828 EXT 21341, 21181,21621;radicacionmedioselectronicos@subredcentrooriente.gov.co;Pública;BAJA
+Unidad de Servicios de Salud Olaya;KR 21 22 51 SUR;-74,1051232;4,584067177;Rafael Uribe Uribe;Centro Oriente;3282828 EXT 24192,24191,24851;radicacionmedioselectronicos@subredcentrooriente.gov.co;Pública;BAJA
+Unidad de Servicios de Salud Victoria;DG 39 SUR 3 20 ESTE;-74,09436651;4,552173581;San Cristóbal;Centro Oriente;3282828 EXT 14131, 14132, 14192;radicacionmedioselectronicos@subredcentrooriente.gov.co;Pública;MEDIANA
+Unidad de Servicios de Salud Simón Bolívar;CL 165 7 06;-74,02257713;4,741159573;Usaquén;Norte;4431790;subrednorte@saludcapital.gov.co;Pública;ALTA
+Unidad de Servicios de Salud Engativá Calle 80;TV 100 A 80 A 50;-74,10989743;4,711372841;Engativá;Norte;4431790;subrednorte@saludcapital.gov.co;Pública;MEDIANA
+Unidad de Servicios de Salud Emaus;CL 64 C 121 76;-74,14116905;4,715129121;Engativá;Norte;4431790;subrednorte@saludcapital.gov.co;Pública;BAJA
+Unidad de Servicios de Salud Centro de Servicios Especializado;KR 104 152C 50;-74,09226791;4,753562743;Suba;Norte;4431790;subrednorte@saludcapital.gov.co;Pública;MEDIANA
+Unidad de Servicios de Salud Gaitana I;TV 126 134 88;-74,10861039;4,742217785;Suba;Norte;4431790;subrednorte@saludcapital.gov.co;Pública;BAJA
+Unidad de Servicios de Salud Chapinero;CL 66 15 41;-74,06541136;4,653765669;Barrios Unidos;Norte;4431790;subrednorte@saludcapital.gov.co;Pública;BAJA
+Unidad de Servicios de Salud El Tunal;CR 20 47B 35 SUR;-74,13078571;4,582016623;Tunjuelito;Sur;7300000 Opción 0;subredsur@saludcapital.gov.co;Pública;ALTA
+Unidad de Servicios de Salud Meissen;KR 18 B 60 G 36 SUR;-74,13874453;4,559662316;Ciudad Bolívar;Sur;7300000 Opción 0;subredsur@saludcapital.gov.co;Pública;MEDIANA
+Unidad de Servicios de Salud Ambulatoria Tunjuelito;AK 14 51 21 SUR;-74,126887;4,566050718;Tunjuelito;Sur;7300000 Opción 0;subredsur@saludcapital.gov.co;Pública;BAJA
+Unidad de Servicios de Salud Jerusalen;CL 77 85 B 13 SUR;-74,16343103;4,571505241;Ciudad Bolívar;Sur;7300000 Opción 0;subredsur@saludcapital.gov.co;Pública;BAJA
+Unidad de Servicios de Salud Vista Hermosa;KR 18 C 66 A 55 SUR;-74,14444835;4,552675071;Ciudad Bolívar;Sur;7300000 Opción 0;subredsur@saludcapital.gov.co;Pública;BAJA
+Unidad de Servicios de Salud Usme;KR 13 135 A 42 SUR;-74,12185347;4,473258906;Usme;Sur;7300000 Opción 0;subredsur@saludcapital.gov.co;Pública;BAJA
+Unidad de Servicios de Salud Santa Librada I;KR 9 B 75 49 SUR;-74,11341447;4,514665626;Usme;Sur;7300000 Opción 0;subredsur@saludcapital.gov.co;Pública;BAJA
+Unidad de Servicios de Salud San Juan de Sumapáz;Corregimiento San Juan de Sumapáz;-74,31517477;4,029047329;Sumapaz;Sur;3219007751;subredsur@saludcapital.gov.co;Pública;BAJA
+Unidad de Servicios de Salud Nazareth;Corregimiento de Nazareth de Sumapaz;-74,1466194;4,173242184;Sumapaz;Sur;3108879305;subredsur@saludcapital.gov.co;Pública;BAJA
+Hospital de Usme;Cl. 137 Sur 3a 44;4,489229593;-74,10977084;Usme;Sur;7300000 Opción 0;subredsur@saludcapital.gov.co;Pública;BAJA
+Hospital Occidente de Kennedy;TV 74 F 40 B 54 SUR;-74,15383281;4,616779903;Kennedy;Sur Occidente;3849160;contactenos@subredsuroccidente.gov.co;Pública;ALTA
+Hospital Pediátrico Tintal;CL 10 86 58;-74,14879759;4,651066045;Kennedy;Sur Occidente;5550950;contactenos@subredsuroccidente.gov.co;Pública;MEDIANA
+Centro de Salud Patio Bonito;DG 38 sur 82 30;4,634283738;-74,16154647;Kennedy;Sur Occidente;4547018;contactenos@subredsuroccidente.gov.co;Pública;BAJA
+Centro de Salud Trinidad Galán;KR 60 4 15;-74,12050975;4,622195193;Puente Aranda;Sur Occidente;2607876;contactenos@subredsuroccidente.gov.co;Pública;BAJA
+Hospital Fontibón;KR 99 16i 41;-74,14598632;4,67165411;Fontibón;Sur Occidente;4860033;contactenos@subredsuroccidente.gov.co;Pública;MEDIANA
+Hospital de Bosa;CL 73 Sur 100 A 53;-74,20589586;4,635412455;Bosa;Sur Occidente;6013849160;contactenos@subredsuroccidente.gov.co;Pública;ALTA
+Grupo Empresarial Jarbsalud IPS S.A.S.;CL 33 bis 15 64;-74,07125754;4,621650917;Teusaquillo;Norte;4673216 - 7561334;jarbsalud.gerencia@gmail.com;Privada;BAJA
+Loscobos Medical Center SAS - Loscobos;AK 9 131 A 40;-74,03277845;4,710741664;Usaquén;Norte;7457581 EXT 2366;calidad@loscobosmc.com;Privada;ALTA
+Clininorte 161;Ac 161 16 C 39/51;-74,04041422;4,740042801;Usaquén;Norte;3188604159;gerencia@clinicadeltrabajador.com;Privada;BAJA
+Sociedad Medica Alcala SAS;AK 19 135 24;-74,0466117;4,720053281;Usaquén;Norte;3232255717-3114849286;calidad@smaclinica.com;Privada;BAJA
+Clínica Nueva El Lago S.A.S - Sede Calle 76;CL 76 15 55;-74,05965985;4,663083371;Chapinero;Norte;3078061 - 3123459128;info@clinicanuevaellago.com;Privada;MEDIANA
+Clínica Azul;KR 49 D 91 33;-74,0643508;4,679822676;Barrios Unidos;Norte;3184871071;calidadca@clinicaazul.co;Privada;MEDIANA
+Central de Urgencias Norte;CL 163 A 22 22;-74,04645986;4,744251808;Usaquén;Norte;6466060 Ext 5719469;mnempeque@epssanitas.com;Privada;BAJA
+Unidad de Urgencias Puente Aranda;KR 62 14 41;-74,11224648;4,634365273;Puente Aranda;Sur Occidente;6466060;mnempeque@epssanitas.com;Privada;BAJA

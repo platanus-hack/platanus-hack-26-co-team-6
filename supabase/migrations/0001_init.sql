@@ -144,14 +144,39 @@ as $$
   limit 60;
 $$;
 
--- ── Permisos para el demo ──────────────────────────────────────
--- OJO: esto abre lectura pública. Es un demo de hackathon con datos
--- abiertos del REPS, no hay dato de paciente en `sede`. Para producción
--- esto se cierra con RLS de verdad.
+-- ── Permisos ───────────────────────────────────────────────────
+--
+-- RLS EN TODAS LAS TABLAS, SIN EXCEPCIÓN.
+--
+-- En Supabase, una tabla del esquema `public` SIN rls habilitada queda
+-- abierta a lectura Y escritura por PostgREST para el rol `anon` — y la
+-- llave anon es pública por diseño: viaja en el bundle del navegador
+-- (NEXT_PUBLIC_SUPABASE_ANON_KEY). "No le puse policy" no cierra nada:
+-- lo que cierra es habilitar RLS.
+--
+-- Las tres tablas del REPS llevan policy de lectura pública a propósito:
+-- son datos abiertos de MinSalud y no hay dato de paciente en ellas.
+-- `caso` y `handshake` NO llevan ninguna: core habla con la service role
+-- key, que se salta RLS, así que el backend sigue funcionando igual y el
+-- rol anon se queda sin puerta.
 
 alter table sede            enable row level security;
 alter table servicio_sede   enable row level security;
 alter table capacidad_sede  enable row level security;
+
+-- ⚠️ Estas dos son las que guardan al paciente: texto_crudo es el dictado
+--    literal, origen son sus coordenadas de recogida. Sin estas dos líneas,
+--    `curl "$SUPABASE_URL/rest/v1/caso?select=*" -H "apikey: $ANON_KEY"`
+--    devuelve la historia clínica entera a cualquiera.
+alter table caso            enable row level security;
+alter table handshake       enable row level security;
+
+-- Cinturón sobre tirantes: revocamos también los grants por defecto que
+-- Supabase le da a anon/authenticated en el esquema public. Con RLS activa
+-- ya no harían nada, pero si alguien añade una policy permisiva sin pensar,
+-- esto lo sigue frenando.
+revoke all on table caso      from anon, authenticated;
+revoke all on table handshake from anon, authenticated;
 
 drop policy if exists lectura_publica_sede on sede;
 create policy lectura_publica_sede on sede for select using (true);

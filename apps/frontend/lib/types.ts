@@ -116,6 +116,24 @@ export interface Caso extends ExtraccionClinica {
   creadoEn: string; // ISO 8601
 }
 
+/**
+ * Lo que sale por GET /estado.
+ *
+ * `textoCrudo` (el dictado literal del paramedico) y `origen` (las
+ * coordenadas de recogida del paciente) NO viajan aqui: son los dos campos
+ * mas sensibles del sistema y ninguna consola los pinta. El dictado se
+ * conserva en el servidor para auditoria; el mapa de /campo usa el `origen`
+ * que ya recibio en la respuesta de POST /triage, no el de /estado.
+ *
+ * Si alguna vista llega a necesitarlos, se expone un endpoint por caso con su
+ * propia autorizacion — no se re-abren en el listado.
+ *
+ * Agregar un campo a Caso hace que este tipo lo exija, y eso ROMPE el build de
+ * `despojar()` en estado.service.ts, que construye el objeto campo por campo.
+ * Es a proposito: obliga a decidir si ese dato nuevo puede salir del servidor.
+ */
+export type CasoPublico = Omit<Caso, "textoCrudo" | "origen">;
+
 // ─────────────────────────────────────────────────────────────────
 // Candidato — el ranking
 // ─────────────────────────────────────────────────────────────────
@@ -228,7 +246,7 @@ export interface CongestionSede {
 
 /** GET {API}/estado */
 export interface EstadoResponse {
-  casos: Caso[];
+  casos: CasoPublico[];
   handshakes: Handshake[];
   congestion: CongestionSede[];
   ts: string;

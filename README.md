@@ -43,6 +43,23 @@ Abre <http://localhost:3000>. **Funciona sin ninguna credencial**: sin Supabase 
 
 Para el demo se abren **dos pantallas a la vez**: `/campo` en el celular y `/hospital` en el portátil.
 
+### Las consolas piden contraseña
+
+La landing (`/`) es pública. Las tres consolas (`/campo`, `/hospital`, `/crue`) no: core sirve el dictado clínico y las coordenadas del paciente, así que exige sesión.
+
+Pon una contraseña de turno en `apps/backend/core/.env`:
+
+```bash
+OPERADOR_PASSWORD=lo-que-quieras
+SESION_SECRET=$(openssl rand -hex 32)   # firma la cookie de sesión
+```
+
+Si las dejas en blanco arranca igual: **core genera una contraseña aleatoria y la imprime al arrancar**, buscála en su log. Lo que nunca hace es arrancar sin autenticar.
+
+Se entra una vez en `/entrar` y la sesión dura 12 horas — no molesta durante el pitch.
+
+> Si vas a usar el webhook de Telegram, `TELEGRAM_WEBHOOK_SECRET` es **obligatorio**: sin él, core ignora todos los updates y los botones no hacen nada. `task doctor` te avisa. Ver [`telegram.controller.ts`](apps/backend/core/src/telegram/telegram.controller.ts).
+
 <details>
 <summary><b>Trabajando con Live Share</b></summary>
 
@@ -155,9 +172,42 @@ Una sede sin hemodinamia no es "peor opción": **es no-opción**. Ver una clíni
 
 | Ruta | Quién la usa | Qué hace |
 |---|---|---|
+| `/` | Cualquiera | Landing. La única ruta pública. |
+| `/entrar` | El equipo de turno | Contraseña compartida → cookie de sesión. Las tres consolas de abajo pasan por aquí. |
 | `/campo` | Paramédico (celular) | Dictado → caso estructurado → ranking → despacho → confirmación. El cronómetro de hora dorada vive aquí. |
 | `/hospital` | Jefe de urgencias | Consola de handshake: aceptar / rechazar con motivo. En **triage I no ofrece rechazo** (escala al CRUE). |
 | `/crue` | Regulador | Vista de supervisión: casos, handshakes y estado de la red. **PULSO propone; el CRUE regula.** |
+
+---
+
+## 🔧 El pipeline de datos
+
+```bash
+task datos:descargar   # una vez: 17 MB del REPS, no van al repo
+task datos             # regenera data/procesado/ y el TypeScript que core importa
+```
+
+**Para correr el demo no hace falta ninguno de los dos**: lo generado está
+commiteado.
+
+`data/` trae 17 archivos de datos abiertos en tres encodings distintos. El
+pipeline los normaliza y los convierte en artefactos tipados. Lee
+[`scripts/datos/README.md`](scripts/datos/README.md); el inventario vive en
+[`data/CATALOGO.md`](data/CATALOGO.md), y se genera solo.
+
+Lo que salió de ahí y **cambió el producto**:
+
+| Antes | Ahora |
+|---|---|
+| 14 sedes escritas a mano, servicios "ilustrativos" | **84 IPS de urgencias reales**, todas con código de habilitación REPS único, coordenadas y complejidad oficiales |
+| Curva de demanda inventada, pico supuesto a las 20:00 | **Medida sobre 9206 incidentes del 123**. El pico real es a las **09:00** |
+| Fin de semana +12% de carga | Sábado y domingo son los días **más flojos**. Los picos son lunes y martes |
+| Ocupación de camas estimada | **62 sedes con camas medidas** (total y ocupadas, REPS) + ocupación real por subred 2021-2025 |
+| Dictados de demo inventados | **400 casos** derivados de incidentes reales |
+
+Dos archivos TypeScript se generan y **se commitean**, para que quien clone el
+repo compile sin correr Python: `sedes/catalogo.generado.ts` y
+`scoring/demanda.generada.ts`. No se editan a mano.
 
 ---
 

@@ -16,12 +16,23 @@
  *  El dataset "Registro diario de ocupación de capacidad instalada"
  *  (uwc4-gvg3 en datos.gov.co) tiene 8.389 filas y UNA SOLA FECHA:
  *  2022-11-30. El Estado ya intentó pedir el reporte manual. Se apagó.
+ *
+ *  Lo que SÍ tenemos medido, y alimenta las señales 1 y 2:
+ *    - ocupación mensual real de urgencias por subred, 2021-2025
+ *      (Sur Occidente llegó a 219%)
+ *    - curva de demanda de 9206 incidentes reales del 123
+ *  Ver data/CATALOGO.md y scripts/datos/.
  * ═══════════════════════════════════════════════════════════════════
  */
 
 import { Injectable } from '@nestjs/common';
 import type { Sede } from '../contracts/types';
 import { AlmacenService } from '../almacen/almacen.service';
+import {
+  CURVA_DIA_POR_INDICE,
+  CURVA_HORA,
+  DEMANDA_META,
+} from './demanda.generada';
 
 /** Pesos de las cuatro señales. Suman 1. */
 export const PESOS = {
@@ -56,24 +67,31 @@ export class CongestionService {
   }
 
   /**
-   * Señal 2 — curva de demanda de urgencias.
-   * Los picos reales de urgencias en Bogotá son al final de la tarde/noche y
-   * los fines de semana. Devuelve 0..1 donde 1 = pico.
+   * Señal 2 — curva de demanda de urgencias. MEDIDA, no supuesta.
+   *
+   * Sale de CURVA_HORA, que genera el pipeline de datos a partir de 9206
+   * incidentes reales del 123. Devuelve 0..1 donde 1 = hora pico.
+   *
+   * ⚠️ ESTA CURVA CONTRADIJO LO QUE TENIAMOS. Antes había aquí una curva
+   *    escrita a mano que ponía el pico a las 20:00 y suponía que la tarde
+   *    (17:00-18:00) era casi tan cargada como la noche. Los datos dicen:
+   *
+   *      pico real     09:00   (la curva vieja le daba 0.70)
+   *      20:00         0.65    (la curva vieja le daba 1.00)
+   *
+   *    Estábamos penalizando hospitales por "hora pico" siete horas tarde.
+   *
+   *    El día de semana también estaba al revés: el código asumía fin de
+   *    semana +12%, y los datos dicen que sábado (0.92) y domingo (0.91) son
+   *    los días MÁS flojos. Los picos son lunes (1.11) y martes (1.12).
+   *
+   *    Si alguien vuelve a escribir números a mano aquí, esto se pierde.
    */
   factorHorario(fecha = new Date()): number {
-    const hora = fecha.getHours();
-    const dia = fecha.getDay(); // 0 = domingo
-
-    // Curva diurna: valle de madrugada, pico 18:00-23:00
-    const curvaHora: Record<number, number> = {
-      0: 0.55, 1: 0.45, 2: 0.35, 3: 0.3, 4: 0.3, 5: 0.35,
-      6: 0.45, 7: 0.6, 8: 0.7, 9: 0.7, 10: 0.68, 11: 0.7,
-      12: 0.72, 13: 0.7, 14: 0.68, 15: 0.7, 16: 0.75, 17: 0.82,
-      18: 0.9, 19: 0.95, 20: 1.0, 21: 0.95, 22: 0.85, 23: 0.7,
-    };
-    const base = curvaHora[hora] ?? 0.7;
-    const finDeSemana = dia === 0 || dia === 6 ? 1.12 : 1.0;
-    return clamp01(base * finDeSemana);
+    const base = CURVA_HORA[fecha.getHours()] ?? 0.7;
+    // El día de semana también sale medido, no de un 1.12 inventado.
+    const factorDia = CURVA_DIA_POR_INDICE[fecha.getDay()] ?? 1;
+    return clamp01(base * factorDia);
   }
 
   /**
@@ -105,6 +123,11 @@ export class CongestionService {
       PESOS.rechazoReciente * this.senalRechazo(sede.codigo) +
       PESOS.epidemiologico * this.presionEpidemiologica(fecha);
     return clamp01(c);
+  }
+
+  /** De dónde salió la curva. Lo pinta el panel de "por qué". */
+  procedenciaDemanda() {
+    return DEMANDA_META;
   }
 
   /** Desglose para el panel de "por qué" — se pinta al abrir una tarjeta. */

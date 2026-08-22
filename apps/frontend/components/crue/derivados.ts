@@ -11,7 +11,16 @@
  * es el único lugar que cambia.
  */
 
-import type { Caso, CongestionSede, Handshake } from "@/lib/types";
+import type { Caso, CasoPublico, CongestionSede, Handshake } from "@/lib/types";
+
+/**
+ * Caso como lo sirve GET /estado: la vista pública, más los campos sensibles
+ * (dictado crudo y origen del paciente) como opcionales. Core los omite a
+ * propósito (lista blanca en estado.service.ts); si vuelven algún día tras
+ * la sesión, la consola los pinta sin tocar nada más.
+ */
+export type CasoConsola = CasoPublico &
+  Partial<Pick<Caso, "textoCrudo" | "origen">>;
 
 /** Cuenta regresiva visual del handshake. Core no marca timeout todavía. */
 export const TIMEOUT_HANDSHAKE_S = 45;
@@ -26,7 +35,7 @@ export const ETIQUETA_ESTADO: Record<EstadoCaso, string> = {
 };
 
 export interface CasoDerivado {
-  caso: Caso;
+  caso: CasoConsola;
   estado: EstadoCaso;
   /** Por qué está escalado; null si no lo está. */
   motivoEscalamiento: string | null;
@@ -42,7 +51,7 @@ export interface CasoDerivado {
 }
 
 export function derivarCasos(
-  casos: Caso[],
+  casos: CasoConsola[],
   handshakes: Handshake[],
   ahoraMs: number,
 ): CasoDerivado[] {

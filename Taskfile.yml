@@ -111,6 +111,25 @@ tasks:
     cmds:
       - node scripts/doctor.mjs
 
+  # --------------------------------------------------------------- data ---
+
+  datos:descargar:
+    desc: Download the Bogota REPS sources (17 MB, not committed).
+    cmds:
+      - python scripts/datos/descargar.py
+
+  datos:
+    desc: Rebuild data/procesado and the generated TypeScript from data/.
+    cmds:
+      # Solo stdlib de Python: no necesita el venv de ai-core ni pip install.
+      - python scripts/datos/construir.py
+
+  datos:catalogo:
+    desc: Regenerate data/CATALOGO.md only (fast, no transforms).
+    cmds:
+      - python -c "import sys; sys.path.insert(0, 'scripts/datos'); import catalogar; catalogar.construir()"
+      - echo "data/CATALOGO.md actualizado"
+
   # --------------------------------------------------------------- misc ---
 
   build:
