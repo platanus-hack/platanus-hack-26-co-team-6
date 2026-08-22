@@ -8,6 +8,7 @@ Regla de clon fresco: todo default vive aca como literal, no solo en .env.
    internos: este servicio les habla, ellos nunca hablan hacia afuera.
 """
 
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -51,6 +52,25 @@ class Settings(BaseSettings):
     twilio_auth_token: str = ""
     #: El "from". Acepta un Verified Caller ID; no hace falta comprar numero.
     twilio_phone_number: str = ""
+
+    # ── Idempotencia de webhooks ─────────────────────────────────
+    #: Postgres donde vive `webhook_recibido` (migración 0003). Es la MISMA
+    #: base de core: `voz` no tiene base propia y no la necesita.
+    #:
+    #: Vacía = deduplicación en memoria, que se pierde al reiniciar y NO se
+    #: comparte entre instancias. `GET /listo` lo dice en `deduplicacion.modo`.
+    #: Con dos instancias en Render y sin esta URL, un reintento de Meta
+    #: despacha dos ambulancias al mismo paciente.
+    #:
+    #: Acepta el nombre de core (`PULSO_ROUTING_DATABASE_URL`) para no pedir
+    #: dos veces la misma cadena, y uno propio por si algún día se separan.
+    webhook_database_url: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "PULSO_WEBHOOK_DATABASE_URL",
+            "PULSO_ROUTING_DATABASE_URL",
+        ),
+    )
 
     # ── Seguridad ────────────────────────────────────────────────
     #: Protege los endpoints que disparan acciones costosas (llamar por

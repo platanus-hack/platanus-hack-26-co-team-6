@@ -16,7 +16,8 @@ from ..canales import whatsapp
 from ..canales.modelos import MensajeEntrante
 from ..clientes import ai_core
 from ..despachador import despachar
-from ..sesiones import obtener, ya_procesado
+from ..sesiones import obtener
+from ..webhooks_recibidos import anotar_resultado, reclamar
 
 log = logging.getLogger(__name__)
 
@@ -46,6 +47,10 @@ async def recibir(request: Request, tareas: BackgroundTasks) -> dict[str, str]:
     Meta espera una respuesta rápida. Un triaje con LLM tarda segundos, y
     hacerlo dentro del request es la forma más fácil de que Meta lo dé por
     fallido y lo reintente — duplicando el traslado.
+
+    Cada mensaje se RECLAMA antes de encolarlo. El reclamo es un insert con
+    llave primaria: quien lo gana procesa, quien choca es un reintento de
+    Meta y no vuelve a tocar core. Ver `webhooks_recibidos`.
     """
     try:
         payload = await request.json()
@@ -59,17 +64,28 @@ async def recibir(request: Request, tareas: BackgroundTasks) -> dict[str, str]:
         log.exception("[voz] no pude normalizar el webhook")
         return {"status": "ignorado"}
 
+    duplicados = 0
     for m in mensajes:
-        if ya_procesado(m.id_externo):
-            log.info("[voz] mensaje repetido %s, ignorado", m.id_externo)
+        acuse = await reclamar("whatsapp", m.id_externo)
+        if acuse.duplicado:
+            duplicados += 1
             continue
         tareas.add_task(procesar, m)
 
-    return {"status": "ok", "mensajes": str(len(mensajes))}
+    return {
+        "status": "ok",
+        "mensajes": str(len(mensajes)),
+        "duplicados": str(duplicados),
+    }
 
 
 async def procesar(m: MensajeEntrante) -> None:
-    """Un mensaje entrante, de punta a punta. Nunca lanza."""
+    """Un mensaje entrante, de punta a punta. Nunca lanza.
+
+    Al terminar deja constancia de QUÉ pasó en `webhook_recibido.resultado`.
+    Sin eso, un reintento de Meta recibe un 200 mudo y no hay forma de saber
+    después si el mensaje original llegó a despachar algo o murió a mitad.
+    """
     try:
         if m.tipo == "audio" and m.id_media:
             audio, mime = await whatsapp.bajar_media(m.id_media)
@@ -84,17 +100,21 @@ async def procesar(m: MensajeEntrante) -> None:
             # Todavía no se usa la ubicación del paramédico como origen del
             # ruteo. Cuando se use, entra por aquí.
             await whatsapp.enviar_texto(m.de, "Ubicación recibida.")
+            await _anotar(m, {"estado": "procesado", "accion": "ubicacion"})
             return
         else:
             await whatsapp.enviar_texto(
                 m.de, "Solo entiendo texto y notas de voz por ahora."
             )
+            await _anotar(m, {"estado": "ignorado", "accion": "tipo_no_soportado"})
             return
 
         await despachar(m.de, decision["accion"], decision.get("argumentos") or {})
+        await _anotar(m, {"estado": "procesado", "accion": decision["accion"]})
 
     except Exception:
         log.exception("[voz] falló el procesamiento de %s", m.id_externo)
+        await _anotar(m, {"estado": "fallo"})
         try:
             await whatsapp.enviar_texto(
                 m.de,
@@ -102,6 +122,19 @@ async def procesar(m: MensajeEntrante) -> None:
             )
         except Exception:
             log.exception("[voz] tampoco pude avisar del fallo")
+
+
+async def _anotar(m: MensajeEntrante, resultado: dict[str, str]) -> None:
+    """El acuse nunca puede tumbar el procesamiento del mensaje.
+
+    ⚠️ SIN PII: `resultado` no lleva el dictado ni las coordenadas del
+       paciente. Es la misma lista blanca de `despojar()` en core, aplicada
+       aquí a mano porque este servicio no tiene ese guardián.
+    """
+    try:
+        await anotar_resultado("whatsapp", m.id_externo, resultado)
+    except Exception:
+        log.warning("[voz] no pude anotar el resultado de %s", m.id_externo)
 
 
 def _contexto(telefono: str) -> str | None:

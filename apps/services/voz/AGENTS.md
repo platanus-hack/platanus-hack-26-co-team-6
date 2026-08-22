@@ -7,19 +7,22 @@ Lee primero [`AGENTS.md` de la raíz](../../../AGENTS.md) y [`README.md`](README
 Twilio y Meta tienen que alcanzarlo. `core` y `ai-core` son internos: este servicio les habla, ellos
 nunca hablan hacia afuera. **Esa frontera es de seguridad y no se negocia.**
 
-## Los tres bugs abiertos
+## Los bugs abiertos
 
 | # | Bug | Consecuencia | Tarea |
 |---|---|---|---|
 | 1 | No se verifica `X-Hub-Signature-256` ni `X-Twilio-Signature` | Cualquiera inyecta un caso falso o dispara una llamada que cuesta dinero | [0.2](../../../docs/tareas/zaid.md#02--verificar-firma-de-whatsapp-y-twilio) |
 | 2 | El webhook tarda 4-8 s; Meta espera 2xx en ~3 s | **Meta ya está reintentando y nadie lo ha notado** | [0.3](../../../docs/tareas/neid.md#03--responder-el-webhook-en--3-s) |
-| 3 | No se deduplica por `wamid` | Con el #2: cada reintento crea un caso → **dos ambulancias al mismo paciente** | [0.4](../../../docs/tareas/juan.md#04--deduplicar-webhooks-por-wamid) |
+| ~~3~~ | ~~No se deduplica por `wamid`~~ | **Cerrado** por [0.4](../../../docs/tareas/juan.md#04--deduplicar-webhooks-por-wamid): `webhooks_recibidos.py` + migración `0003`. Sin `PULSO_WEBHOOK_DATABASE_URL` degrada a memoria y lo dice en `/listo`. | — |
 
 ## Reglas de un webhook de entrada
 
 1. **Firma contra el cuerpo CRUDO**, no contra el JSON re-serializado. El proveedor firma los bytes exactos.
 2. **Deduplica por el id del proveedor** (`wamid`, `update_id`, `CallSid`), **en base de datos**. En
    memoria no sirve: con dos instancias en Render, la deduplicación deja de existir.
+   Ya está hecho: `await reclamar(proveedor, id_externo)` de `webhooks_recibidos.py`. El candado es
+   el `insert ... on conflict do nothing` — no hay ventana entre consultar y marcar porque no hay
+   consulta. Un canal nuevo (Telegram, Twilio) lo llama igual y ya queda cubierto.
 3. **Responde 2xx en < 3 s** y procesa después. Meta reintenta con backoff hasta 7 días.
 4. **Nunca confíes en el contenido.**
 
@@ -43,5 +46,9 @@ aceptar un traslado. Lo cierra la [tarea 1.8](../../../docs/tareas/juan.md#18--t
 ```bash
 uv sync && uv run uvicorn app.main:app --port 8090 --reload
 uv run pytest
-curl localhost:8090/listo    # qué está realmente conectado
+curl localhost:8090/listo    # qué está realmente conectado (incl. deduplicacion.modo)
+curl localhost:8090/metrics  # pulso_webhook_duplicados_total{proveedor}
+
+# Los tests de deduplicación contra Postgres de verdad se saltan sin base:
+PULSO_TEST_DATABASE_URL=postgresql://localhost/pulso_test uv run pytest
 ```

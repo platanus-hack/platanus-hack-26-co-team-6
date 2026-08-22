@@ -39,6 +39,14 @@ services:
 
       # ── Secretos: se ponen a mano en el dashboard, NUNCA en este archivo ──
       # `sync: false` es justo eso: Render pide el valor y no lo versiona.
+
+      # Postgres de core, donde vive `webhook_recibido` (migración 0003).
+      # ⚠️ SIN ESTO LA DEDUPLICACIÓN DE WEBHOOKS ES EN MEMORIA, y en Render
+      #    basta con que el plan escale a dos instancias para que un reintento
+      #    de Meta despache DOS ambulancias al mismo paciente. `GET /listo`
+      #    responde `deduplicacion.modo` — míralo después de cada deploy.
+      - key: PULSO_WEBHOOK_DATABASE_URL
+        sync: false
       - key: WHATSAPP_VERIFY_TOKEN
         sync: false
       - key: WHATSAPP_TOKEN
