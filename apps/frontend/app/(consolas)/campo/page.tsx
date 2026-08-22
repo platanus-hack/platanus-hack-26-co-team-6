@@ -3,10 +3,12 @@
 /**
  * /campo — CARRIL DE JUAN
  *
- * Esta pantalla YA CORRE end-to-end: dictar → triage → match → despachar
- * → ver la aceptación llegar. Es fea a propósito. Tu trabajo, Juan, no es
- * hacerla desde cero: es hacerla ver como algo que un paramédico usaría a
- * las 3 de la mañana con guantes puestos, y meterle el mapa.
+ * Dictar → triage → match → despachar → ver la aceptación llegar.
+ *
+ * Esta página quedó como ORQUESTADOR: maneja el flujo (las cinco fases), el
+ * cronómetro y el dictado por voz. Todo lo que se pinta vive en
+ * components/campo/. Si vas a cambiar cómo se ve algo, es allá; si vas a
+ * cambiar cuándo pasa algo, es acá.
  *
  * Lo que NO debes romper (lo consumen los otros tres):
  *   - los contratos de core: POST /triage, /match, /dispatch (ver lib/api.ts)
@@ -15,11 +17,16 @@
  * Ver docs/juan-frontend.md para tu lista de tareas.
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { Caso, Candidato, Handshake } from "@/lib/types";
-import { DICTADOS_DEMO } from "@/lib/demo";
-import { CASOS_REALES, type CasoReal } from "@/lib/casos-reales.generado";
-import { nombresServicios, ETIQUETA_TRIAGE, esHoraDorada } from "@/lib/presentacion";
+import type { CasoReal } from "@/lib/casos-reales.generado";
+import { CASOS_REALES } from "@/lib/casos-reales.generado";
+import { useGeolocalizacion } from "@/lib/useGeolocalizacion";
+import { useDictadoVoz } from "@/lib/useDictadoVoz";
+import { Cabecera } from "@/components/campo/Cabecera";
+import { PanelDictado } from "@/components/campo/PanelDictado";
+import { TarjetaCaso } from "@/components/campo/TarjetaCaso";
+import { TarjetaCandidato } from "@/components/campo/TarjetaCandidato";
 import * as api from "@/lib/api";
 
 type Fase = "dictado" | "analizando" | "ranking" | "esperando" | "resuelto";
@@ -33,20 +40,20 @@ export default function Campo() {
   const [handshake, setHandshake] = useState<Handshake | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // ── Dónde está la ambulancia ───────────────────────────────────
+  const geo = useGeolocalizacion();
+
   // ── Incidente real del 123 ─────────────────────────────────────
   //
-  // Cuando el caso cargado viene de un incidente real, se guarda aquí para
-  // dos cosas: pintar su procedencia (número de incidente y fecha, que es lo
-  // que lo hace verificable) y rutear DESDE su localidad real en vez de desde
-  // ORIGEN_DEMO. Una ambulancia que sale de Usme no ve el mismo ranking que
-  // una que sale del centro, y esa diferencia es justo lo que el producto hace.
+  // Cuando el caso viene de un incidente real se guarda aquí para pintar su
+  // procedencia y, sobre todo, para rutear DESDE la localidad donde ocurrió.
   const [casoReal, setCasoReal] = useState<CasoReal | null>(null);
   const [indiceReal, setIndiceReal] = useState(0);
 
   /**
    * Avanza al siguiente incidente real. Cíclico y no aleatorio a propósito:
-   * el demo tiene que ser determinista (ver NEXT_PUBLIC_MODO_DEMO), y elegir
-   * al azar durante el render rompería la hidratación de la página estática.
+   * el demo tiene que ser determinista, y elegir al azar durante el render
+   * rompería la hidratación de la página estática.
    */
   function cargarCasoReal() {
     const c = CASOS_REALES[indiceReal % CASOS_REALES.length];
@@ -71,40 +78,15 @@ export default function Campo() {
     return () => clearInterval(id);
   }, [t0, fase]);
 
-  // ── Dictado por voz (Web Speech API) ───────────────────────────
-  const [escuchando, setEscuchando] = useState(false);
-  const recRef = useRef<any>(null);
-
-  const alternarMicrofono = useCallback(() => {
-    // Web Speech API no está en las typings del DOM: va con any a propósito.
-    const SR =
-      (window as any).SpeechRecognition ?? (window as any).webkitSpeechRecognition;
-    if (!SR) {
-      setError("Este navegador no soporta dictado por voz. Usa Chrome, o escribe.");
-      return;
-    }
-    if (escuchando) {
-      recRef.current?.stop();
-      setEscuchando(false);
-      return;
-    }
-    const rec = new SR();
-    rec.lang = "es-CO";
-    rec.continuous = true;
-    rec.interimResults = true;
-    rec.onresult = (e: any) => {
-      let final = "";
-      for (let i = e.resultIndex; i < e.results.length; i++) {
-        if (e.results[i].isFinal) final += e.results[i][0].transcript;
-      }
-      if (final) setTexto((t) => (t + " " + final).trim());
-    };
-    rec.onerror = () => setEscuchando(false);
-    rec.onend = () => setEscuchando(false);
-    rec.start();
-    recRef.current = rec;
-    setEscuchando(true);
-  }, [escuchando]);
+  // ── Dictado por voz ────────────────────────────────────────────
+  //
+  // La Web Speech API vive tipada en useDictadoVoz. Aqui solo se conecta con
+  // el textarea y se avisa si el navegador no la soporta.
+  const anexarTranscrito = useCallback(
+    (fragmento: string) => setTexto((t) => (t + " " + fragmento).trim()),
+    [],
+  );
+  const voz = useDictadoVoz(anexarTranscrito);
 
   // ── Flujo ──────────────────────────────────────────────────────
 
@@ -113,14 +95,15 @@ export default function Campo() {
     setFase("analizando");
     setT0(Date.now());
     try {
-      // Si el caso salió de un incidente real, la ambulancia arranca donde
-      // arrancó de verdad. Sin esto todo se rutea desde ORIGEN_DEMO y el
-      // ranking sale igual para los 32 casos, que es justo lo contrario de
-      // lo que queremos mostrar.
-      const { caso: c } = await api.triage({
-        texto,
-        origen: casoReal?.origen ?? undefined,
-      });
+      // Prioridad del origen:
+      //   1. el incidente real, si el caso salió de uno
+      //   2. el GPS de la unidad
+      //   3. undefined → core usa ORIGEN_DEMO
+      // Sin esto todo se rutea desde el mismo punto y el ranking sale igual
+      // salgas de donde salgas, que es lo contrario de lo que hace PULSO.
+      const origen = casoReal?.origen ?? geo.origen ?? undefined;
+
+      const { caso: c } = await api.triage({ texto, origen });
       setCaso(c);
 
       const m = await api.match({ caso: c, limite: 5 });
@@ -171,6 +154,7 @@ export default function Campo() {
     setCaso(null);
     setCandidatos([]);
     setHandshake(null);
+    setCasoReal(null);
     setT0(null);
     setTranscurrido(0);
     setFase("dictado");
@@ -178,162 +162,48 @@ export default function Campo() {
 
   // ── Render ─────────────────────────────────────────────────────
 
+  const sedeAceptante = candidatos.find(
+    (c) => c.sede.codigo === handshake?.sedeCodigo,
+  )?.sede.nombre;
+
   return (
     <main className="min-h-screen max-w-lg mx-auto p-4 pb-24">
-      <header className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <span className="text-2xl">🫀</span>
-          <span className="font-bold text-lg">PULSO</span>
-          <span className="text-xs text-[color:var(--color-texto-tenue)]">campo</span>
-        </div>
-        {t0 !== null && (
-          <div className="text-right tabular">
-            <div
-              className={`text-2xl font-bold ${
-                transcurrido > 90 ? "text-[color:var(--color-critico)]" : ""
-              }`}
-            >
-              {transcurrido.toFixed(1)}s
-            </div>
-            <div className="text-[10px] text-[color:var(--color-texto-tenue)] uppercase tracking-wide">
-              hora dorada
-            </div>
-          </div>
-        )}
-      </header>
+      <Cabecera
+        transcurrido={transcurrido}
+        corriendo={t0 !== null}
+        estadoGeo={geo.estado}
+        precisionM={geo.precisionM}
+        onReubicar={geo.ubicar}
+      />
 
       {error && (
-        <div className="mb-4 p-3 rounded-lg bg-[color:var(--color-critico)]/15 border border-[color:var(--color-critico)]/40 text-sm">
+        <div
+          role="alert"
+          className="mb-4 p-3 rounded-lg bg-[color:var(--color-critico)]/15 border border-[color:var(--color-critico)]/40 text-sm"
+        >
           {error}
         </div>
       )}
 
-      {/* ── Dictado ── */}
       {(fase === "dictado" || fase === "analizando") && (
-        <section className="space-y-3">
-          <textarea
-            value={texto}
-            onChange={(e) => setTexto(e.target.value)}
-            placeholder="Dicta o escribe el caso. Ej: masculino de 54 años, dolor precordial opresivo, supra ST en DII DIII aVF, hemodinámicamente inestable."
-            rows={7}
-            className="w-full p-4 rounded-xl bg-[color:var(--color-superficie)]
-                       border border-[color:var(--color-borde)] text-base leading-relaxed
-                       focus:outline-none focus:border-[color:var(--color-info)]"
-          />
-
-          <div className="flex gap-2">
-            <button
-              onClick={alternarMicrofono}
-              className={`flex-1 rounded-xl font-semibold border transition-colors ${
-                escuchando
-                  ? "bg-[color:var(--color-critico)] border-transparent latido"
-                  : "bg-[color:var(--color-superficie)] border-[color:var(--color-borde)]"
-              }`}
-            >
-              {escuchando ? "⏹ Detener" : "🎙 Dictar"}
-            </button>
-            <button
-              onClick={analizar}
-              disabled={texto.trim().length < 10 || fase === "analizando"}
-              className="flex-[2] rounded-xl font-semibold bg-[color:var(--color-info)]
-                         text-[#04121f] disabled:opacity-40"
-            >
-              {fase === "analizando" ? "Analizando…" : "Analizar y rutear"}
-            </button>
-          </div>
-
-          <div className="pt-4">
-            <p className="text-xs text-[color:var(--color-texto-tenue)] mb-2 uppercase tracking-wide">
-              Casos de prueba
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {DICTADOS_DEMO.map((d) => (
-                <button
-                  key={d.etiqueta}
-                  onClick={() => cargarDictado(d.texto)}
-                  className="px-3 py-2 text-xs rounded-lg bg-[color:var(--color-superficie)]
-                             border border-[color:var(--color-borde)]"
-                >
-                  {d.etiqueta}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* ── Incidentes reales del 123 ──
-              La respuesta a "¿esto solo funciona con sus tres ejemplos?" */}
-          <div className="pt-2">
-            <button
-              onClick={cargarCasoReal}
-              className="w-full px-3 py-3 text-sm rounded-xl text-left
-                         bg-[color:var(--color-superficie)]
-                         border border-dashed border-[color:var(--color-borde)]"
-            >
-              <span className="font-semibold">🗂 Incidente real del 123</span>
-              <span className="text-[color:var(--color-texto-tenue)]">
-                {" "}
-                · {CASOS_REALES.length} casos de Bogotá, junio 2026
-              </span>
-            </button>
-
-            {casoReal && (
-              <p className="mt-2 text-[11px] leading-relaxed text-[color:var(--color-texto-tenue)]">
-                <span className="tabular">{casoReal.incidente}</span> ·{" "}
-                {casoReal.localidad ?? "localidad no referida"} ·{" "}
-                {new Date(casoReal.fecha).toLocaleString("es-CO", {
-                  day: "numeric",
-                  month: "short",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}{" "}
-                · prioridad {casoReal.triage} en el CRUE
-                <br />
-                Incidente real. El texto del dictado es una plantilla: el 123
-                publica los campos, no la narrativa clínica.
-              </p>
-            )}
-          </div>
-        </section>
+        <PanelDictado
+          texto={texto}
+          onTexto={setTexto}
+          onDictadoDemo={cargarDictado}
+          onCasoReal={cargarCasoReal}
+          casoReal={casoReal}
+          escuchando={voz.escuchando}
+          onMicrofono={voz.alternar}
+          vozSoportada={voz.soportado}
+          onAnalizar={analizar}
+          analizando={fase === "analizando"}
+        />
       )}
 
-      {/* ── Caso extraído ── */}
       {caso && fase !== "dictado" && fase !== "analizando" && (
-        <section
-          className={`mb-4 p-4 rounded-xl border ${
-            esHoraDorada(caso.triage)
-              ? "border-[color:var(--color-critico)]/50 bg-[color:var(--color-critico)]/10"
-              : "border-[color:var(--color-borde)] bg-[color:var(--color-superficie)]"
-          }`}
-        >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-bold">
-              Triage {ETIQUETA_TRIAGE[caso.triage]}
-            </span>
-            <span className="text-xs text-[color:var(--color-texto-tenue)]">
-              {caso.tipoMovil} · confianza {(caso.confianza * 100).toFixed(0)}%
-            </span>
-          </div>
-          <p className="text-sm mb-2">{caso.resumen}</p>
-          <dl className="text-xs space-y-1 text-[color:var(--color-texto-tenue)]">
-            <div>
-              <span className="font-semibold">Dx:</span> {caso.dxDescripcion}
-              {caso.dxCie10 && ` (${caso.dxCie10})`}
-            </div>
-            <div>
-              <span className="font-semibold">Requiere:</span>{" "}
-              {nombresServicios(caso.serviciosRequeridos)}
-            </div>
-            {caso.signosAlarma.length > 0 && (
-              <div>
-                <span className="font-semibold">Alarma:</span>{" "}
-                {caso.signosAlarma.join(" · ")}
-              </div>
-            )}
-          </dl>
-        </section>
+        <TarjetaCaso caso={caso} />
       )}
 
-      {/* ── Ranking ── */}
       {fase === "ranking" && (
         <section>
           <p className="text-xs text-[color:var(--color-texto-tenue)] mb-3">
@@ -342,16 +212,21 @@ export default function Campo() {
           </p>
           <div className="space-y-2">
             {candidatos.map((c) => (
-              <TarjetaCandidato key={c.sede.codigo} c={c} onDespachar={despachar} />
+              <TarjetaCandidato
+                key={c.sede.codigo}
+                candidato={c}
+                onDespachar={despachar}
+              />
             ))}
           </div>
         </section>
       )}
 
-      {/* ── Esperando respuesta ── */}
       {fase === "esperando" && handshake && (
         <section className="p-6 rounded-xl border border-[color:var(--color-borde)] bg-[color:var(--color-superficie)] text-center">
-          <div className="text-4xl mb-3 latido">📲</div>
+          <div className="text-4xl mb-3 latido" aria-hidden>
+            📲
+          </div>
           <p className="font-semibold">Solicitud enviada</p>
           <p className="text-sm text-[color:var(--color-texto-tenue)] mt-1">
             Esperando confirmación del jefe de urgencias…
@@ -359,13 +234,14 @@ export default function Campo() {
         </section>
       )}
 
-      {/* ── Resuelto ── */}
       {fase === "resuelto" && handshake && (
         <section className="p-6 rounded-xl border border-[color:var(--color-estable)]/50 bg-[color:var(--color-estable)]/10 text-center">
-          <div className="text-4xl mb-3">✅</div>
+          <div className="text-4xl mb-3" aria-hidden>
+            ✅
+          </div>
           <p className="text-xl font-bold">Traslado aceptado</p>
           <p className="text-sm text-[color:var(--color-texto-tenue)] mt-1">
-            {candidatos.find((c) => c.sede.codigo === handshake.sedeCodigo)?.sede.nombre}
+            {sedeAceptante}
           </p>
           <p className="mt-4 text-3xl font-bold tabular">{transcurrido.toFixed(0)}s</p>
           <p className="text-xs text-[color:var(--color-texto-tenue)]">
@@ -373,96 +249,12 @@ export default function Campo() {
           </p>
           <button
             onClick={reiniciar}
-            className="mt-6 px-6 rounded-xl border border-[color:var(--color-borde)]"
+            className="mt-6 px-6 min-h-12 rounded-xl border border-[color:var(--color-borde)]"
           >
             Nuevo caso
           </button>
         </section>
       )}
     </main>
-  );
-}
-
-function TarjetaCandidato({
-  c,
-  onDespachar,
-}: {
-  c: Candidato;
-  onDespachar: (c: Candidato) => void;
-}) {
-  const descartada = c.motivoDescarte !== null;
-
-  return (
-    <article
-      className={`p-4 rounded-xl border ${
-        descartada
-          ? "border-[color:var(--color-borde)] bg-transparent opacity-50"
-          : c.rank === 1
-            ? "border-[color:var(--color-estable)]/60 bg-[color:var(--color-superficie-alta)]"
-            : "border-[color:var(--color-borde)] bg-[color:var(--color-superficie)]"
-      }`}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            {!descartada && (
-              <span className="text-xs font-bold px-1.5 py-0.5 rounded bg-[color:var(--color-info)] text-[#04121f]">
-                #{c.rank}
-              </span>
-            )}
-            <h3 className="font-semibold truncate">{c.sede.nombre}</h3>
-          </div>
-          <p className="text-xs text-[color:var(--color-texto-tenue)] mt-0.5">
-            {c.sede.localidad} · {c.distKm} km
-          </p>
-        </div>
-        <div className="text-right shrink-0">
-          <div className="text-2xl font-bold tabular">{Math.round(c.etaMin)}</div>
-          <div className="text-[10px] text-[color:var(--color-texto-tenue)]">min ruta</div>
-        </div>
-      </div>
-
-      {descartada ? (
-        <p className="mt-3 text-xs text-[color:var(--color-alerta)]">
-          ⛔ {c.motivoDescarte}
-        </p>
-      ) : (
-        <>
-          {/* El desglose en minutos es el argumento del producto: que se vea. */}
-          <div className="mt-3 flex gap-3 text-[11px] text-[color:var(--color-texto-tenue)] tabular">
-            <span>ruta {Math.round(c.desglose.ruta)}′</span>
-            <span>rechazo +{Math.round(c.desglose.riesgoRechazo)}′</span>
-            <span>espera +{Math.round(c.desglose.espera)}′</span>
-            <span className="ml-auto font-semibold text-[color:var(--color-texto)]">
-              = {Math.round(c.score)}′
-            </span>
-          </div>
-          <div className="mt-2 flex items-center gap-2 text-[11px]">
-            <span className="text-[color:var(--color-texto-tenue)]">congestión</span>
-            <div className="flex-1 h-1.5 rounded-full bg-[color:var(--color-borde)] overflow-hidden">
-              <div
-                className="h-full rounded-full"
-                style={{
-                  width: `${c.congestion * 100}%`,
-                  background:
-                    c.congestion > 0.85
-                      ? "var(--color-critico)"
-                      : c.congestion > 0.7
-                        ? "var(--color-alerta)"
-                        : "var(--color-estable)",
-                }}
-              />
-            </div>
-            <span className="tabular">{Math.round(c.pAceptacion * 100)}% acepta</span>
-          </div>
-          <button
-            onClick={() => onDespachar(c)}
-            className="mt-3 w-full rounded-lg font-semibold bg-[color:var(--color-estable)] text-[#04231d]"
-          >
-            Despachar aquí
-          </button>
-        </>
-      )}
-    </article>
   );
 }
