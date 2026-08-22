@@ -59,11 +59,15 @@ export class DispatchService {
       latenciaS: null,
     };
 
-    this.almacen.guardarHandshake(handshake);
-
     const [eta] = await this.eta.matriz(caso.origen, [
       { codigo: sede.codigo, coord: sede.coord },
     ]);
+
+    // El ETA se calculaba, se mostraba, y se botaba. Guardarlo es lo que
+    // permite despues saber si el traslado se esta demorando: sin linea
+    // base no hay demora que detectar.
+    handshake.etaMinAlDespachar = eta?.etaMin ?? null;
+    this.almacen.guardarHandshake(handshake);
     const envio = await this.canales.notificar(
       handshake,
       caso,

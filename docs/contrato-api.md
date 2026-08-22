@@ -26,6 +26,9 @@ Si necesitas un campo nuevo: **agrégalo opcional** (`campo?: tipo`). Así nadie
 | `Candidato`, `DesgloseScore` | Zaid (ETA) + Neid (score) | Juan |
 | `Handshake` | Sebas — `/dispatch` | Juan, Sebas |
 
+Nota: `apps/frontend/lib/types.ts` es un espejo manual de `contracts/types.ts`.
+Un campo nuevo hay que agregarlo en los dos o el runtime miente aunque el build pase.
+
 ---
 
 ## Todas las rutas exigen sesión
@@ -79,7 +82,9 @@ Una sede que ya rechazó **este** caso no vuelve a aparecer.
 
 Dispara la notificación. Si el canal falla, cae al siguiente. **Nunca devuelve "no se pudo notificar"** — la consola web siempre está.
 
-El `Handshake` que vuelve trae **`expiraEn`**: el instante en que esta solicitud vence y pasa a `timeout`. Lo sella el servidor (`enviadoEn + HANDSHAKE_TIMEOUT_S`, default 45s) y viaja al cliente para que el cronómetro de `/campo` cuente contra el mismo reloj que core. **No inventes el plazo en el front** — la barra llegaría a cero mientras el servidor sigue esperando.
+El `Handshake` que vuelve trae **`expiraEn`**: el instante en que esta solicitud vence y pasa a `timeout`. Lo sella el servidor (`enviadoEn + HANDSHAKE_TIMEOUT_S`, default 45s) y quien lo hace cumplir es [`VigilanteService`](../apps/backend/core/src/vigilante/vigilante.service.ts), que además re-rutea solo al siguiente candidato. Viaja al cliente para que el cronómetro de `/campo` cuente contra el mismo reloj que core. **No inventes el plazo en el front** — la barra llegaría a cero mientras el servidor sigue esperando.
+
+Cuando una sede deja vencer la solicitud, eso **sí** cuenta como rechazo para su `P(aceptación)`. Es una decisión discutida: no sabemos si habrían aceptado, pero si el silencio no se registra, una sede que nunca contesta sigue saliendo #1 recomendada para siempre.
 
 ### `POST /handshake/respond` — Sebas ⭐
 
@@ -117,22 +122,16 @@ El caso pasa a un regulador humano y aparece en `GET /estado`. Es lo que `/campo
 
 En qué modo corre cada integración ahora mismo. Existe porque la degradación de la tabla de abajo era **invisible**: un ETA estimado por regla de tres se pintaba idéntico a uno de Mapbox con tráfico real. Lo consume la barra persistente de `/campo` para poder ser honesta. No devuelve credenciales ni URLs, solo el modo.
 
-### `POST /voz/token` y `POST /voz/transcribir` — Juan
+### Voz: vive en `ai-core`, no en core
 
-```ts
-POST /voz/token       ← { token, expiraEn, modelo, idioma }        // 503 si no aplica
-POST /voz/transcribir → audio binario + su Content-Type real
-                      ← { texto, confianza, duracionS }
-```
+La transcripción del dictado la sirve `POST /v1/transcribir` de
+[`ai-core`](../apps/backend/ai-core/app/routers/transcribir.py), con ElevenLabs
+por defecto y Deepgram como plan B. Las credenciales viven **solo** en
+`apps/backend/ai-core/.env` — ni core ni el frontend las tienen.
 
-Transcripción del dictado con Deepgram, para los navegadores donde la Web Speech API no existe (**Safari/iOS**, que es la mitad de las ambulancias). Hay dos caminos porque no toda API key sirve para el primero:
-
-- **Token efímero** — core cambia su key por una credencial de 5 minutos y el navegador transcribe en vivo. Requiere una key con permiso de crear credenciales; una key de miembro devuelve 403 y core cae sola al otro camino.
-- **Proxy** — el navegador manda el audio y core lo transcribe. Funciona con cualquier key, puntúa mejor, y es **el único que sobrevive a una zona muerta**: el audio se guarda local y se reintenta.
-
-`GET /capacidades` dice cuál quedó activo (`voz: "deepgram-streaming" | "deepgram-servidor" | "navegador"`).
-
-⚠️ **La API key nunca llega al navegador**, ni siquiera como `NEXT_PUBLIC_`. Ese es el motivo de que exista este par de rutas en vez de que el front hable con Deepgram.
+Importa porque la Web Speech API del navegador **no existe en Safari/iOS**, y
+ahí el paramédico se queda sin dictado. `GET /capacidades` dice cuál está
+activo (`voz: "ai-core" | "navegador"`).
 
 ### `GET /estado?casoId=…`
 
@@ -171,7 +170,7 @@ Si rompes uno de estos, el demo miente:
 | Supabase | 14 sedes semilla de [`apps/backend/core/src/sedes/semillas.ts`](../apps/backend/core/src/sedes/semillas.ts) |
 | `NEXT_PUBLIC_MAPBOX_TOKEN` | ETA estimado por distancia (22 km/h efectivos) |
 | `TELEGRAM_BOT_TOKEN` | La tarjeta se imprime en la consola del servidor |
-| `DEEPGRAM_API_KEY` | El dictado usa la Web Speech API del navegador (y no existe en Safari/iOS) |
+| Credenciales de voz en ai-core | El dictado usa la Web Speech API del navegador (y no existe en Safari/iOS) |
 
 **Ahora se puede saber en qué modo está cada una**: `GET /capacidades`. Antes esta tabla describía una degradación silenciosa — la consola pintaba el número estimado igual que el real.
 
@@ -185,3 +184,85 @@ Si rompes uno de estos, el demo miente:
 - **Sin tildes en nombres de identificadores y comentarios de código.** Con tildes en todo lo que ve el usuario.
 - Errores: siempre `{ error: string, detalle?: string }`.
 - Timestamps: ISO 8601 en string. Nada de `Date` cruzando la red.
+
+---
+
+## Los servicios de `apps/backend` (agregado H+)
+
+**Ningún doc mencionaba esto y es la mitad del repo.** El scaffold de
+`openspec/changes/scaffold-backend-services/` creó dos servicios que las cinco
+rutas de arriba ignoran:
+
+```
+apps/backend/core/      NestJS  :3001   gateway. Único origen que ve el navegador.
+apps/backend/ai-core/   FastAPI :8000   IA. Interno, sin CORS. Aquí van las API keys.
+```
+
+La topología es `frontend → core → ai-core`. **La costura ya está conectada
+para el triaje**: `POST /triage` de core intenta resolver en ai-core y, si no
+puede, resuelve local.
+
+```
+POST /triage → ai-core (Claude) → Claude local en core → heurística
+               solo si AI_CORE_BASE_URL está puesta
+```
+
+Sin `AI_CORE_BASE_URL`, core resuelve todo local y el comportamiento es
+idéntico al de antes. Con ella puesta, si ai-core se cae el endpoint responde
+igual: **la garantía de "nunca falla por falta de credencial" ahora también
+cubre "nunca falla porque ai-core esté caído"**, y está bajo test.
+
+`GET /health/ai-core` prueba la costura sin tocar la liveness de core.
+
+### Lo que ya expone ai-core
+
+| Ruta | Equivale a | Estado |
+|---|---|---|
+| `GET /health` | — | ✅ |
+| `POST /v1/triage` | `/api/triage` | ✅ paridad completa |
+| `POST /v1/score` | el **paso 3** de `/api/match` | ✅ filtro duro + ranking |
+
+Los cuerpos son **los mismos tipos de `types.ts`, en camelCase**, a propósito:
+migrar una ruta del frontend a ai-core no debe tocar un solo tipo de TypeScript.
+
+**Dos campos nuevos en `TriageResponse`, los dos opcionales:**
+
+- `motor?: "claude" | "heuristica"` — qué produjo la extracción. Sin él, la
+  única pista de que estabas viendo la heurística era `confianza == 0.35`
+  exacto, y eso se pasa por alto justo cuando importa.
+- `via?: "core" | "ai-core"` — dónde corrió.
+
+**`POST /v1/score` no está conectado.** El scoring del demo corre en core
+(`ScoringService`) porque necesita el estado de `AlmacenService`; mandarlo
+afuera obligaría a serializar señales de ~60 sedes en cada `/match` sin ganar
+nada — el scoring es aritmética, no IA. La versión de ai-core sirve para probar
+el modelo aislado y de forma reproducible (fija `ahora` y da el mismo ranking).
+
+### `senales` — lo que ai-core necesita para aprender
+
+ai-core **no tiene base de datos** por diseño. La historia de cada sede viaja
+en el request:
+
+```ts
+senales: {
+  [codigoSede: string]: {
+    aceptados: number;              // handshakes aceptados
+    rechazados: number;             // handshakes rechazados
+    rechazosRecientes: number;      // en las últimas 6h ← la señal viva
+    latenciasRespuestaMin: number[];// handshake.latencia_s / 60
+  }
+}
+```
+
+Todo es opcional: una sede sin señales corre con su prior estructural del REPS
+y el motor funciona igual. **Pero sin señales el sistema no aprende**, que es
+la tesis del producto — ver la nota en [zaid-backend.md](zaid-backend.md).
+
+### Correrlo
+
+```bash
+cd apps/backend/ai-core
+uv sync
+uv run fastapi dev app/main.py    # :8000
+uv run pytest                      # 84 tests, sin red
+```

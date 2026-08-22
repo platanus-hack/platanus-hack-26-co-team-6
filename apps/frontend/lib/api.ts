@@ -26,8 +26,6 @@ import type {
   MotivoEscalamiento,
   RespondResponse,
   TipoMovil,
-  TokenVozResponse,
-  TranscribirResponse,
   TriageResponse,
   Unidad,
 } from "./types";
@@ -171,51 +169,6 @@ export function atenderEscalamiento(cuerpo: {
 /** En qué modo corre cada integración. Lo lee la barra persistente. */
 export function capacidades(): Promise<Capacidades> {
   return pedir<Capacidades>("/capacidades", { cache: "no-store" });
-}
-
-/**
- * Credencial efímera para transcribir con Deepgram desde el navegador.
- *
- * Lanza ErrorApi con status 503 si core no tiene DEEPGRAM_API_KEY. Eso NO es
- * un error que mostrar: significa "no hay STT de servidor", y quien llame debe
- * caer a la Web Speech API sin decir nada.
- */
-export function tokenVoz(): Promise<TokenVozResponse> {
-  return pedir<TokenVozResponse>("/voz/token", { method: "POST" });
-}
-
-/**
- * Manda un audio grabado y devuelve lo que se entendió.
- *
- * Es el camino que funciona en Safari/iOS, donde la Web Speech API no existe,
- * y el único que sobrevive a una zona muerta: el `Blob` se puede guardar y
- * reintentar cuando vuelva la señal.
- *
- * No pasa por `pedir`: el cuerpo es binario, así que no lleva
- * `Content-Type: application/json` — el tipo real del audio ES el que le dice
- * a Deepgram cómo decodificarlo.
- */
-export async function transcribir(audio: Blob): Promise<TranscribirResponse> {
-  const res = await fetch(`${API}/voz/transcribir`, {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": audio.type || "audio/webm" },
-    body: audio,
-  });
-
-  if (res.status === 401) {
-    alExpirar?.();
-    throw new ErrorApi("Sesión expirada", 401);
-  }
-  if (!res.ok) {
-    const detalle = await res
-      .json()
-      .then((j) => (Array.isArray(j?.message) ? j.message.join(", ") : j?.message))
-      .catch(() => null);
-    throw new ErrorApi(detalle ?? `core respondió ${res.status}`, res.status);
-  }
-
-  return res.json() as Promise<TranscribirResponse>;
 }
 
 /**

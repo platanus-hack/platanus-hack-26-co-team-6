@@ -2,10 +2,10 @@
  * Qué puede hacer el sistema AHORA MISMO.
  *
  * ── POR QUÉ ES NECESARIO ──────────────────────────────────────────
- * Todo core degrada solo cuando falta una credencial: sin ANTHROPIC_API_KEY
- * el triage cae a palabras clave, sin MAPBOX_TOKEN el ETA se estima por regla
- * de tres, sin TELEGRAM_BOT_TOKEN el handshake se imprime en un log. Esa
- * regla mantiene al equipo trabajando sin bloquearse, y es buena.
+ * Todo degrada solo cuando falta una credencial: sin ai-core el triage cae a
+ * palabras clave, sin MAPBOX_TOKEN el ETA se estima por regla de tres, sin
+ * TELEGRAM_BOT_TOKEN el handshake se imprime en un log. Esa regla mantiene al
+ * equipo trabajando sin bloquearse, y es buena.
  *
  * El problema es que hasta ahora esa degradación era INVISIBLE hacia afuera.
  * La consola pintaba "8 min" con la misma tipografía viniera de Mapbox con
@@ -25,7 +25,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Capacidades } from '../contracts/types';
 import { SupabaseService } from '../sedes/supabase.service';
-import { VozService } from '../voz/voz.service';
+import { AiCoreClient } from '../ai-core/ai-core.client';
 import { handshakeTimeoutS } from '../common/plazos';
 
 @Injectable()
@@ -33,16 +33,21 @@ export class CapacidadesService {
   constructor(
     private readonly config: ConfigService,
     private readonly supabase: SupabaseService,
-    private readonly voz: VozService,
+    private readonly aiCore: AiCoreClient,
   ) {}
 
-  async actual(): Promise<Capacidades> {
+  actual(): Capacidades {
+    // La IA y la transcripción viven las dos en ai-core, así que las dos
+    // dependen de la misma costura. Se reportan por separado igualmente
+    // porque para /campo son decisiones distintas: sin IA el paramédico
+    // escribe el caso a mano; sin STT lo dicta con el reconocedor del
+    // navegador, que en Safari/iOS no existe.
+    const conAiCore = this.aiCore.configurado();
+
     return {
-      ia: this.config.get<string>('ANTHROPIC_API_KEY') ? 'llm' : 'heuristico',
+      ia: conAiCore ? 'llm' : 'heuristico',
       ruteo: this.config.get<string>('MAPBOX_TOKEN') ? 'trafico' : 'estimado',
-      // Async porque la primera vez se prueba contra Deepgram qué permisos
-      // tiene la key. Después sale de caché.
-      voz: await this.voz.modo(),
+      voz: conAiCore ? 'ai-core' : 'navegador',
       canal: this.canal(),
       datos: this.supabase.disponible() ? 'supabase' : 'semillas',
       handshakeTimeoutS: handshakeTimeoutS(this.config),

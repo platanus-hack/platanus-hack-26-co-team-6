@@ -127,6 +127,11 @@ export interface ExtraccionClinica {
 
 export interface Caso extends ExtraccionClinica {
   id: string;
+  /**
+   * Telefono desde el que se reporto, si entro por WhatsApp. Es lo que
+   * permite avisarle al paramedico cuando el hospital responde.
+   */
+  telefonoReporta?: string | null;
   /** El dictado literal, sin tocar. Se conserva para auditoría. */
   textoCrudo: string;
   origen: Coordenada;
@@ -227,6 +232,13 @@ export interface Handshake {
   expiraEn: string;
   respondidoEn: string | null;
   latenciaS: number | null;
+  /**
+   * ETA en minutos al momento de despachar. Es la LINEA BASE contra la que
+   * se mide si el traslado se esta demorando.
+   */
+  etaMinAlDespachar?: number | null;
+  /** Ya se disparo la llamada de seguimiento por demora. */
+  demoraAvisada?: boolean;
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -283,12 +295,11 @@ export interface Capacidades {
   /** trafico = Mapbox Matrix. estimado = distancia / velocidad media. */
   ruteo: "trafico" | "estimado";
   /**
-   * De dónde sale la transcripción.
-   *  deepgram-streaming  el navegador transcribe en vivo con un token efímero
-   *  deepgram-servidor   el navegador graba y core transcribe (proxy)
-   *  navegador           Web Speech API — no existe en Safari/iOS
+   * De dónde sale la transcripción del dictado.
+   *  ai-core     el audio se manda al servicio de IA (POST /v1/transcribir)
+   *  navegador   Web Speech API — NO existe en Safari/iOS, ahí no hay dictado
    */
-  voz: "deepgram-streaming" | "deepgram-servidor" | "navegador";
+  voz: "ai-core" | "navegador";
   /** Canal por el que sale el handshake si no se pide otro. */
   canal: CanalHandshake;
   /** supabase = catálogo REPS en DB. semillas = catálogo compilado. */
@@ -307,6 +318,14 @@ export interface Capacidades {
 export interface TriageResponse {
   caso: Caso;
   latenciaMs: number;
+  /**
+   * Qué produjo la extracción. Opcional para no romper a nadie.
+   * Antes la única pista de que estabas viendo la heurística era
+   * `confianza === 0.35` exacto, y eso se pasa por alto justo cuando importa.
+   */
+  motor?: "claude" | "heuristica";
+  /** Dónde corrió. `ai-core` solo aparece si AI_CORE_BASE_URL está puesta. */
+  via?: "core" | "ai-core";
 }
 
 /** POST {API}/match */
@@ -346,37 +365,6 @@ export interface EscalarResponse {
 /** POST {API}/escalamiento/atender */
 export interface AtenderEscalamientoResponse {
   escalamiento: Escalamiento;
-}
-
-/**
- * POST {API}/voz/token — credencial efímera de Deepgram.
- *
- * La API key maestra vive en core y nunca llega al navegador; esto es un token
- * de vida corta que, si se filtra, caduca solo.
- */
-export interface TokenVozResponse {
-  token: string;
-  /** ISO 8601. Cuándo el token deja de servir. */
-  expiraEn: string;
-  modelo: string;
-  idioma: string;
-}
-
-/**
- * POST {API}/voz/transcribir — audio grabado → texto.
- *
- * El cuerpo es el audio BINARIO (no JSON, no base64) con su Content-Type real.
- */
-export interface TranscribirResponse {
-  texto: string;
-  /**
-   * 0..1 — qué tan seguro está el reconocedor de haber OÍDO bien.
-   *
-   * No confundir con `Caso.confianza`, que mide qué tan seguro está el parser
-   * clínico del DIAGNÓSTICO. Se puede oír perfecto un dictado ambiguo.
-   */
-  confianza: number;
-  duracionS: number;
 }
 
 export interface CongestionSede {

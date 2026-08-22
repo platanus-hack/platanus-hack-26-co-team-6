@@ -5,11 +5,17 @@
  * `extraccionHeuristica`). Es tosco pero suficiente para que el resto del
  * equipo trabaje sin depender de nadie.
  *
- * ⚠️ NOTA DE ARQUITECTURA: esto vive en core y sigue siendo TypeScript porque
- *    la mudanza desde Next fue un port, no una reescritura. El destino natural
- *    a mediano plazo es apps/backend/ai-core (FastAPI), que ya existe y es el
- *    servicio de IA declarado. Mover esto allá SÍ es una reescritura a Python:
- *    decisión de producto, no de refactor.
+ * ⚠️ NOTA DE ARQUITECTURA: la reescritura a Python ya existe y corre en
+ *    apps/backend/ai-core. Este servicio la intenta PRIMERO cuando
+ *    `AI_CORE_BASE_URL` está configurada, y si no está —o si ai-core no
+ *    responde— resuelve localmente igual que antes. Es opt-in: sin esa
+ *    variable, el comportamiento es idéntico al de hoy.
+ *
+ *    La cascada completa, y `motor`/`via` en la respuesta dicen cuál corrió:
+ *      ai-core (Claude)  →  Claude local  →  heurística por palabras clave
+ *
+ *    El endpoint NUNCA falla por falta de credencial ni porque ai-core esté
+ *    caído. Esa garantía es del contrato y no se negocia.
  */
 
 import { Injectable, Logger } from '@nestjs/common';
@@ -31,7 +37,9 @@ import {
 } from '../catalogo/servicios-reps';
 import { ORIGEN_DEMO } from '../sedes/semillas';
 import { AlmacenService } from '../almacen/almacen.service';
+import { AiCoreClient } from '../ai-core/ai-core.client';
 import { extraccionHeuristica } from './triage-heuristico';
+import type { AiCoreTriageResponse } from '../ai-core/ai-core.types';
 
 // ─────────────────────────────────────────────────────────────────
 // Esquema que Claude debe llenar. Espeja ExtraccionClinica en contracts.
@@ -116,25 +124,52 @@ export class TriageService {
   constructor(
     private readonly config: ConfigService,
     private readonly almacen: AlmacenService,
+    private readonly aiCore: AiCoreClient,
   ) {}
 
   async procesar(cuerpo: TriageRequest, texto: string): Promise<TriageResponse> {
     const t0 = Date.now();
 
+    const desdeAiCore = await this.intentarAiCore(cuerpo, texto);
+    if (desdeAiCore) {
+      // ai-core no sabe de telefonos: el canal es de core. Se lo pegamos aca
+      // o el bucle no se cierra para los casos que entran por WhatsApp.
+      const caso = {
+        ...desdeAiCore.caso,
+        telefonoReporta: cuerpo.telefonoReporta ?? null,
+      };
+      this.almacen.guardarCaso(caso);
+      return {
+        caso,
+        latenciaMs: Date.now() - t0,
+        motor: desdeAiCore.motor,
+        via: 'ai-core',
+      };
+    }
+
     let extraccion: ExtraccionClinica;
+    let motor: 'claude' | 'heuristica';
     try {
-      extraccion = this.config.get<string>('ANTHROPIC_API_KEY')
-        ? await this.extraerConClaude(texto)
-        : extraccionHeuristica(texto);
+      if (this.config.get<string>('ANTHROPIC_API_KEY')) {
+        extraccion = await this.extraerConClaude(texto);
+        motor = 'claude';
+      } else {
+        extraccion = extraccionHeuristica(texto);
+        motor = 'heuristica';
+      }
     } catch (e) {
       this.log.error(`triage falló, usando heurística: ${String(e)}`);
       extraccion = extraccionHeuristica(texto);
+      motor = 'heuristica';
     }
 
     const caso: Caso = {
       ...extraccion,
       id: randomUUID(),
       textoCrudo: texto,
+      // Viaja desde el canal de WhatsApp hasta el Caso. Sin esto no hay
+      // a quien avisarle cuando el hospital responde.
+      telefonoReporta: cuerpo.telefonoReporta ?? null,
       origen: cuerpo.origen ?? ORIGEN_DEMO,
       // Si el paciente requiere médico a bordo, el móvil tiene que ser TAM.
       tipoMovil:
@@ -145,7 +180,40 @@ export class TriageService {
 
     this.almacen.guardarCaso(caso);
 
-    return { caso, latenciaMs: Date.now() - t0 };
+    return { caso, latenciaMs: Date.now() - t0, motor, via: 'core' };
+  }
+
+  /**
+   * Intenta resolver el triaje en ai-core. Devuelve null —sin lanzar— cuando
+   * hay que seguir con el camino local.
+   *
+   * Se cae al camino local en tres casos:
+   *   1. `AI_CORE_BASE_URL` no está configurada (el modo por defecto).
+   *   2. ai-core no respondió, tardó de más, o devolvió basura.
+   *   3. ai-core respondió pero con su heurística Y core sí tiene API key.
+   *      Este tercero importa: sin él, un ai-core sin credencial degradaría
+   *      en silencio un core que sí podía llamar a Claude.
+   */
+  private async intentarAiCore(
+    cuerpo: TriageRequest,
+    texto: string,
+  ): Promise<AiCoreTriageResponse | null> {
+    if (!this.aiCore.configurado()) return null;
+
+    try {
+      const res = await this.aiCore.triage({ ...cuerpo, texto });
+
+      if (res.motor === 'heuristica' && this.config.get<string>('ANTHROPIC_API_KEY')) {
+        this.log.warn(
+          'ai-core respondió con su heurística y core sí tiene API key — resolviendo local.',
+        );
+        return null;
+      }
+      return res;
+    } catch (e) {
+      this.log.warn(`ai-core no resolvió el triaje, sigo local: ${String(e)}`);
+      return null;
+    }
   }
 
   private async extraerConClaude(texto: string): Promise<ExtraccionClinica> {

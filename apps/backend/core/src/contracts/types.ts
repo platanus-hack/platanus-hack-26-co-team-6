@@ -129,6 +129,12 @@ export interface ExtraccionClinica {
 
 export interface Caso extends ExtraccionClinica {
   id: string;
+  /**
+   * Telefono desde el que se reporto, si entro por WhatsApp. Es lo que
+   * permite avisarle al paramedico cuando el hospital responde: sin esto
+   * la confirmacion se queda en el servidor y el bucle no se cierra.
+   */
+  telefonoReporta?: string | null;
   /** El dictado literal, sin tocar. Se conserva para auditoria. */
   textoCrudo: string;
   origen: Coordenada;
@@ -231,6 +237,14 @@ export interface Handshake {
   expiraEn: string;
   respondidoEn: string | null;
   latenciaS: number | null;
+  /**
+   * ETA en minutos al momento de despachar. Es la LINEA BASE contra la que
+   * se mide si el traslado se esta demorando. Sin esto no hay con que
+   * comparar y la deteccion de demoras no puede existir.
+   */
+  etaMinAlDespachar?: number | null;
+  /** Ya se disparo la llamada de seguimiento por demora. Evita repetirla. */
+  demoraAvisada?: boolean;
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -291,12 +305,11 @@ export interface Capacidades {
   /** trafico = Mapbox Matrix. estimado = distancia / velocidad media. */
   ruteo: 'trafico' | 'estimado';
   /**
-   * De donde sale la transcripcion.
-   *  deepgram-streaming  el navegador transcribe en vivo con un token efimero
-   *  deepgram-servidor   el navegador graba y core transcribe (proxy)
-   *  navegador           Web Speech API — no existe en Safari/iOS
+   * De donde sale la transcripcion del dictado.
+   *  ai-core     el audio se manda a POST /v1/transcribir del servicio de IA
+   *  navegador   Web Speech API — NO existe en Safari/iOS, ahi no hay dictado
    */
-  voz: 'deepgram-streaming' | 'deepgram-servidor' | 'navegador';
+  voz: 'ai-core' | 'navegador';
   /** Canal por el que sale el handshake si no se pide otro. */
   canal: CanalHandshake;
   /** supabase = catalogo REPS en DB. semillas = catalogo compilado. */
@@ -318,10 +331,20 @@ export interface TriageRequest {
   tipoMovil?: TipoMovil;
   /** Movil que atiende. Se guarda en el caso y viaja al CRUE. */
   unidad?: Unidad;
+  /** Quien reporta, si entro por WhatsApp. Viaja hasta el Caso. */
+  telefonoReporta?: string | null;
 }
 export interface TriageResponse {
   caso: Caso;
   latenciaMs: number;
+  /**
+   * Qué produjo la extracción. Opcional para no romper a nadie.
+   * Antes la única pista de que estabas viendo la heurística era
+   * `confianza === 0.35` exacto, y eso se pasa por alto justo cuando importa.
+   */
+  motor?: "claude" | "heuristica";
+  /** Dónde corrió. `ai-core` solo aparece si AI_CORE_BASE_URL está puesta. */
+  via?: "core" | "ai-core";
 }
 
 /** POST /api/match — Zaid */
@@ -391,41 +414,6 @@ export interface AtenderEscalamientoRequest {
 }
 export interface AtenderEscalamientoResponse {
   escalamiento: Escalamiento;
-}
-
-/**
- * POST /api/voz/token — credencial efimera de Deepgram para el navegador.
- *
- * La API key maestra NUNCA sale de core. El navegador recibe un token que
- * vence en minutos, y si se filtra caduca solo. Ver VozService.
- */
-export interface TokenVozResponse {
-  token: string;
-  /** ISO 8601. Cuando el token deja de servir. */
-  expiraEn: string;
-  /** Modelo de STT que el cliente debe pedir. */
-  modelo: string;
-  /** Idioma que el cliente debe pedir. */
-  idioma: string;
-}
-
-/**
- * POST /api/voz/transcribir — audio grabado → texto.
- *
- * El cuerpo de la peticion es el audio BINARIO (no JSON, no base64) con su
- * Content-Type real. Ver voz.controller.ts.
- */
-export interface TranscribirResponse {
-  texto: string;
-  /**
-   * 0..1 — que tan seguro esta el reconocedor de haber OIDO bien.
-   *
-   * No confundir con `Caso.confianza`, que mide que tan seguro esta el parser
-   * clinico del DIAGNOSTICO. Se puede oir perfecto un dictado ambiguo.
-   */
-  confianza: number;
-  /** Cuanto tardo la transcripcion. Para medir si el flujo aguanta el pitch. */
-  duracionS: number;
 }
 
 /** Forma de error uniforme. Todas las rutas la devuelven igual. */

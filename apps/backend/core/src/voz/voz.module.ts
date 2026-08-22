@@ -1,11 +1,8 @@
 import { Module } from '@nestjs/common';
-import { VozController } from './voz.controller';
-import { VozService } from './voz.service';
+import { VozClient } from './voz.client';
 
 @Module({
-  controllers: [VozController],
-  providers: [VozService],
-  // CapacidadesService pregunta si la transcripción de servidor está activa.
-  exports: [VozService],
+  providers: [VozClient],
+  exports: [VozClient],
 })
 export class VozModule {}

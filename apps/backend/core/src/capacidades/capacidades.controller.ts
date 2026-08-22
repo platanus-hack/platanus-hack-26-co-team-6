@@ -14,7 +14,7 @@ export class CapacidadesController {
   constructor(private readonly capacidades: CapacidadesService) {}
 
   @Get()
-  async actual(): Promise<Capacidades> {
+  actual(): Capacidades {
     return this.capacidades.actual();
   }
 }

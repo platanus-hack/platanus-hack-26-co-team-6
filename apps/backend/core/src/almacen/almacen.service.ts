@@ -33,6 +33,8 @@ export class AlmacenService {
   private readonly historial = new Map<string, Historial>();
   /** sedeCodigo → timestamps ISO de rechazos, para la ventana de 6h */
   private readonly rechazosRecientes = new Map<string, string[]>();
+  /** sedeCodigo → segundos que tardó en responder cada handshake */
+  private readonly latenciasRespuesta = new Map<string, number[]>();
 
   // ── Casos ──────────────────────────────────────────────────────
 
@@ -63,7 +65,6 @@ export class AlmacenService {
   }
 
   listarHandshakes(casoId?: string): Handshake[] {
-    this.expirarVencidos();
     const todos = [...this.handshakes.values()];
     const filtrados = casoId ? todos.filter((h) => h.casoId === casoId) : todos;
     return filtrados.sort((a, b) => b.enviadoEn.localeCompare(a.enviadoEn));
@@ -74,60 +75,10 @@ export class AlmacenService {
     return this.listarHandshakes().filter((h) => h.estado === 'enviado');
   }
 
-  /**
-   * Pasa a 'timeout' toda solicitud que ya vencio.
-   *
-   * ── POR QUE UN BARRIDO PEREZOSO Y NO UN CRON ──────────────────
-   * Un `setInterval` (o @nestjs/schedule, que ni siquiera esta instalado)
-   * exigiria un temporizador vivo por proceso para un estado que solo importa
-   * cuando alguien pregunta. Las tres consolas ya hacen polling cada 1.5-2s,
-   * asi que barrer al leer da la misma latencia observable sin un reloj de
-   * fondo que ademas mantendria el proceso despierto.
-   *
-   * El precio honesto: si NADIE consulta, el vencimiento no ocurre. Da igual
-   * — un timeout que nadie observa no cambia ninguna decision, y en cuanto
-   * alguien lee, ya esta aplicado.
-   *
-   * Idempotente por construccion: solo toca los que estan en 'enviado', y al
-   * tocarlos deja de verlos. Por eso se puede llamar en cada lectura sin
-   * duplicar la senal al modelo.
-   */
-  expirarVencidos(ahora = Date.now()): Handshake[] {
-    const vencidos: Handshake[] = [];
-
-    for (const h of this.handshakes.values()) {
-      if (h.estado !== 'enviado') continue;
-      if (new Date(h.expiraEn).getTime() > ahora) continue;
-
-      const expirado: Handshake = {
-        ...h,
-        estado: 'timeout',
-        respondidoEn: null,
-        latenciaS: null,
-      };
-      this.handshakes.set(h.id, expirado);
-      vencidos.push(expirado);
-
-      // ⚠️ UN SILENCIO CUENTA COMO RECHAZO.
-      //
-      // No es lo mismo que un "no" explicito, pero tampoco es informacion
-      // vacia: un servicio de urgencias que no contesta en el plazo esta
-      // saturado, ocupado o no esta mirando el canal — y para el paramedico
-      // que espera, las tres cosas significan lo mismo. Dejarlo sin registrar
-      // haria que una sede que nunca responde conservara P(aceptacion) alta
-      // para siempre y siguiera saliendo #1 en el ranking.
-      //
-      // MatchService ya trataba 'timeout' igual que 'rechazado' al excluir
-      // sedes de un caso (ver match.service.ts): esto solo cierra el circuito
-      // que el resto del sistema ya asumia cerrado.
-      this.registrarRespuesta(h.sedeCodigo, 'rechazado');
-      this.log.warn(
-        `handshake ${h.id} → timeout · ${h.sedeCodigo} no respondio`,
-      );
-    }
-
-    return vencidos;
-  }
+  // Aquí vivió un barrido perezoso que vencía solicitudes al leerlas. Lo
+  // reemplaza VigilanteService, que hace lo mismo con un @Interval y además
+  // re-rutea al siguiente candidato. Dos mecanismos venciendo el mismo
+  // handshake es peor que cualquiera de los dos por separado.
 
   // ── Escalamientos al CRUE ──────────────────────────────────────
 
@@ -163,6 +114,7 @@ export class AlmacenService {
   registrarRespuesta(
     sedeCodigo: string,
     decision: 'aceptado' | 'rechazado',
+    latenciaS?: number | null,
   ): void {
     const h = this.historial.get(sedeCodigo) ?? { aceptados: 0, rechazados: 0 };
     if (decision === 'aceptado') h.aceptados += 1;
@@ -174,6 +126,19 @@ export class AlmacenService {
       lista.push(new Date().toISOString());
       this.rechazosRecientes.set(sedeCodigo, lista);
     }
+
+    // Cuánto tardó en contestar es la mitad medible del costo de rebotarla.
+    // Ver penalizacionRebote() en scoring.service.ts.
+    if (typeof latenciaS === 'number' && latenciaS >= 0) {
+      const lista = this.latenciasRespuesta.get(sedeCodigo) ?? [];
+      lista.push(latenciaS);
+      this.latenciasRespuesta.set(sedeCodigo, lista);
+    }
+  }
+
+  /** Minutos que esta sede ha tardado en responder handshakes anteriores. */
+  latenciasRespuestaMin(sedeCodigo: string): number[] {
+    return (this.latenciasRespuesta.get(sedeCodigo) ?? []).map((s) => s / 60);
   }
 
   historialSede(sedeCodigo: string): Historial {
@@ -194,5 +159,6 @@ export class AlmacenService {
     this.escalamientos.clear();
     this.historial.clear();
     this.rechazosRecientes.clear();
+    this.latenciasRespuesta.clear();
   }
 }
