@@ -1,0 +1,6 @@
+import type { CaseRoutingState, HandshakeRoutingState, PulsoErrorEnvelope } from '../contracts/types';
+const cases: Record<CaseRoutingState, CaseRoutingState[]> = { validated: ['requires_human_review', 'ready_for_matching'], requires_human_review: ['ready_for_matching'], ready_for_matching: ['matching', 'escalated_to_crue'], matching: ['dispatched', 'escalated_to_crue'], escalated_to_crue: ['closed'], dispatched: ['closed'], closed: [] };
+const handshakes: Record<HandshakeRoutingState, HandshakeRoutingState[]> = { pending: ['accepted', 'rejected', 'timed_out'], accepted: [], rejected: [], timed_out: [] };
+const reject = <State extends string>(state: State, message: string): { ok: false; state: State; error: PulsoErrorEnvelope } => ({ ok: false, state, error: { error: { code: 'PULSO_ILLEGAL_TRANSITION', message, retryable: false } } });
+export const transitionCase = (from: CaseRoutingState, to: CaseRoutingState) => cases[from].includes(to) ? { ok: true as const, state: to } : reject(from, 'Illegal case transition');
+export const transitionHandshake = (from: HandshakeRoutingState, to: HandshakeRoutingState) => handshakes[from].includes(to) ? { ok: true as const, state: to } : reject(from, 'Illegal handshake transition');

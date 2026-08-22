@@ -7,13 +7,18 @@
 import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import type { TriageRequest, TriageResponse } from '../contracts/types';
 import { TriageService } from './triage.service';
+import { PulsoError } from '../common/pulso-error.filter';
+import { RoutingService } from '../routing/routing.service';
 
 /** Debajo de esto no hay dictado, hay ruido. */
 const MIN_CARACTERES = 10;
 
 @Controller('triage')
 export class TriageController {
-  constructor(private readonly triage: TriageService) {}
+  constructor(
+    private readonly triage: TriageService,
+    private readonly routing: RoutingService,
+  ) {}
 
   @Post()
   async procesar(@Body() cuerpo: TriageRequest): Promise<TriageResponse> {
@@ -23,6 +28,14 @@ export class TriageController {
         `Dictado demasiado corto. Mínimo ${MIN_CARACTERES} caracteres.`,
       );
     }
-    return this.triage.procesar(cuerpo, texto);
+    const result = await this.triage.procesar(cuerpo, texto);
+    const clinical = this.routing.assess(result.caso);
+    if (clinical.state !== 'ready_for_matching')
+      throw new PulsoError(
+        clinical.reasons[0] as
+          'PULSO_LOW_CONFIDENCE' | 'PULSO_INCONSISTENT_TRIAGE',
+        'Clinical review is required before matching',
+      );
+    return result;
   }
 }

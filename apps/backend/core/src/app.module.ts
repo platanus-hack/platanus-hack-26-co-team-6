@@ -1,3 +1,4 @@
+import { APP_FILTER } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -17,6 +18,8 @@ import { DispatchModule } from './dispatch/dispatch.module';
 import { EstadoModule } from './estado/estado.module';
 import { TriageModule } from './triage/triage.module';
 import { TelegramModule } from './telegram/telegram.module';
+import { PulsoErrorFilter } from './common/pulso-error.filter';
+import { RoutingModule } from './routing/routing.module';
 import { EscalamientoModule } from './escalamiento/escalamiento.module';
 import { CapacidadesModule } from './capacidades/capacidades.module';
 
@@ -26,6 +29,7 @@ import { CapacidadesModule } from './capacidades/capacidades.module';
     // módulo. Sin esto, `apps/backend/core/.env` no lo lee nadie y las
     // credenciales fallan en silencio.
     ConfigModule.forRoot({ isGlobal: true }),
+    RoutingModule,
 
     // Habilita @Interval. Sin esto el vigilante no corre y nadie mira el reloj.
     ScheduleModule.forRoot(),
@@ -66,5 +70,6 @@ import { CapacidadesModule } from './capacidades/capacidades.module';
     VigilanteModule,
   ],
   controllers: [HealthController],
+  providers: [{ provide: APP_FILTER, useClass: PulsoErrorFilter }],
 })
 export class AppModule {}

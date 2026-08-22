@@ -29,6 +29,7 @@ import {
 } from '../catalogo/servicios-reps';
 import { AlmacenService } from '../almacen/almacen.service';
 import { CongestionService } from './congestion.service';
+import { compareMinuteCost } from './ranking-policy';
 
 // ─────────────────────────────────────────────────────────────────
 // Constantes. Cada una tiene una justificación que se puede defender.
@@ -238,7 +239,7 @@ export class ScoringService {
 
     const viables = evaluados
       .filter((c) => c.motivoDescarte === null)
-      .sort((a, b) => a.score - b.score)
+      .sort((a, b) => compareMinuteCost({ codigo: a.sede.codigo, totalMinutes: a.score, etaMin: a.etaMin }, { codigo: b.sede.codigo, totalMinutes: b.score, etaMin: b.etaMin }))
       .slice(0, limite)
       .map((c, i) => ({ ...c, rank: i + 1 }));
 

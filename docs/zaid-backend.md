@@ -95,23 +95,26 @@ No tienes que migrar nada. Esto ya corre y está verificado end-to-end:
 
 ### Bloque 1 · H2–H10 — datos reales en la mesa
 
-- [ ] **Crear el proyecto en Supabase** y correr `0001_init.sql` completo en el SQL Editor. Llenar `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY` en `apps/backend/core/.env`.
-- [ ] **Correr el ETL:**
+- [ ] **Crear el proyecto en Supabase** y llenar `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` y `SUPABASE_DB_URL` en `apps/backend/core/.env`. La URL de PostgreSQL debe ser directa o session pooler en el puerto `5432`; no uses el transaction pooler `6543`.
+- [ ] **Aplicar el esquema de forma registrada:**
+  ```bash
+  task migrate
+  task migrate:status
+  ```
+  `task migrate` aplica cada archivo de `supabase/migrations/` en su propia transacción. La segunda ejecución es segura y debe decir `Sin migraciones pendientes`. `task migrate:status` también detecta si alguien editó una migración ya aplicada.
+- [ ] **Para cargar datos reales, correr el ETL:**
   ```bash
   cd scripts/etl
   pip install -r requirements.txt
   python extraer_reps.py
   ```
   Produce `salida/sedes.csv`, `salida/capacidad.csv` y `salida/reporte.txt`. **Lee el reporte.**
-- [ ] **Cargar los CSV** a Supabase (Table Editor → Import CSV). `sede.geom` no sale del CSV: después de importar `lat`/`lng` a columnas temporales, corre:
-  ```sql
-  update sede set geom = st_makepoint(lng, lat)::geography where geom is null;
+- [ ] **Sembrar y verificar:**
+  ```bash
+  task migrate:seed FUENTE=csv
+  task migrate:verify
   ```
-- [ ] 🔴 **PINTAR TODAS LAS SEDES EN UN MAPA Y MIRARLAS CON LOS OJOS.** No es opcional. Si hay un punto en el Amazonas, en el mar, o en la mitad de los Cerros, el geocoder mintió. Un mapa con puntos absurdos hunde el demo más rápido que no tener mapa.
-  ```sql
-  select nombre, st_y(geom::geometry) lat, st_x(geom::geometry) lng from sede;
-  ```
-  Pégalo en geojson.io o similar.
+  La siembra carga `sede`, `servicio_sede` (si existe `salida/servicios.csv`) y `capacidad_sede`; calcula `geom` durante el insert y se puede repetir sin duplicar datos. La verificación falla si hay coordenadas fuera de Bogotá, `geom` nulos, faltan urgencias o hemodinamia, o la RPC `sedes_cercanas` no devuelve filas.
 - [ ] **Arreglar las que fallaron** agregándolas a `COORDS_MANUALES` en el ETL. Ya hay 12 clínicas grandes ahí verificadas a mano.
 
 ### Bloque 2 · el problema de `servicio_sede`
