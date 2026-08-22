@@ -165,3 +165,59 @@ Y ojo con la honestidad, que es tu marca en este pitch: los 22 min y los 25 de
 espera en puerta **siguen siendo juicio informado, no medición colombiana
 publicada**. Si te preguntan, dilo así — son parámetros calibrables, no
 verdades. Eso genera confianza; fingir precisión la destruye.
+
+
+---
+
+## El flujo de WhatsApp de entrada (idea nueva, H+)
+
+La idea: el paramédico llega a la escena, reporta por WhatsApp (texto o nota de
+voz), y PULSO le responde con el hospital y la ubicación para navegar.
+
+**ai-core ya tiene su mitad lista.** `POST /v1/triage` acepta `audioBase64` y
+hace transcripción + extracción en una sola llamada, con Deepgram o ElevenLabs
+detrás. Falta la mitad tuya: el webhook de entrada y el mensaje de respuesta.
+
+### Tres cosas, en orden de rendimiento
+
+**1. Mensaje de ubicación nativo — hazlo aunque no hagas lo demás.**
+WhatsApp tiene un tipo de mensaje `location`: le mandas
+`{latitude, longitude, name, address}` y en el celular sale una tarjeta de mapa
+con botón de navegar que abre Google Maps o Waze. **No es un link, es una
+tarjeta.** `sede.coord` ya trae lat/lng desde PostGIS. Son ~15 líneas en
+`canales.service.ts` y en el escenario se ve muy bien.
+
+**2. Webhook de entrada, sólo texto.** Hoy WhatsApp es sólo de salida. Lo de
+entrada es el mismo patrón del webhook de Telegram que ya tienes.
+
+**3. Audio.** Llega como un `media_id`: hay que hacer un GET autenticado a la
+API de Meta para bajar el `.ogg` y recién ahí mandárselo a ai-core en base64.
+Dos saltos extra antes de que empiece el triaje.
+
+### La ventana de 24h juega a tu favor aquí
+
+Tu doc la trata como truco de demo. En este flujo **el paramédico escribe
+primero**, así que la ventana se abre legítimamente y la respuesta con el
+hospital y la ubicación **no necesita plantilla aprobada**. Es una ventaja real
+de que el flujo sea de entrada, no un parche.
+
+Ojo con el otro lado: la llamada de seguimiento horas después ya cae fuera de
+la ventana. Ahí una llamada de voz (Twilio) sí se justifica, porque esquiva el
+problema entero.
+
+### La parte que yo no construiría
+
+Cobertura de flota y reposicionamiento de ambulancias. Dos razones, y la
+segunda es tuya:
+
+1. No hay entidad de móvil en el repo, ni demanda histórica por zona, ni viajes
+   de los cuales sacar un q10/q90. Al momento del pitch habría cero datos.
+2. **Debilita tu mejor respuesta legal.** Reposicionar ambulancias por la ciudad
+   *es* la función operativa del CRUE (Res. 1220/2010). Hoy dices "PULSO
+   propone, el CRUE regula" y es limpio. Si el sistema mueve flota, deja de
+   serlo.
+
+Hay una versión que no cruza la línea: **PULSO no asigna, le muestra al CRUE la
+cobertura.** `/crue` ya existe justo para eso. Y como cierre del pitch: *"hoy
+PULSO elige el destino; el mismo motor, con la flota conectada, elige también
+qué ambulancia y desde dónde."* Una frase, no un sprint.

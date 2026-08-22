@@ -24,5 +24,28 @@ class Settings(BaseSettings):
     # y volver a medir — el pitch aguanta 2s mas, no aguanta un error en vivo.
     esfuerzo_triage: str = "low"
 
+    # ── Transcripcion (STT) ──────────────────────────────────────
+    # Claude NO recibe audio: toma texto, imagenes y PDFs. Una nota de voz
+    # de WhatsApp necesita este paso antes del triaje.
+    #
+    # "auto" = usa el proveedor que tenga credencial (Deepgram primero, que
+    # es el mas rapido). "deepgram" | "elevenlabs" lo fuerzan.
+    stt_proveedor: str = "auto"
+
+    deepgram_api_key: str = ""
+    elevenlabs_api_key: str = ""
+
+    # nova-3 es el modelo actual de Deepgram; scribe_v2 el de ElevenLabs.
+    stt_modelo_deepgram: str = "nova-3"
+    stt_modelo_elevenlabs: str = "scribe_v2"
+
+    # es = espanol. El dictado es en espanol colombiano; fijarlo evita que el
+    # modelo dude con la jerga clinica y mejora la latencia.
+    stt_idioma: str = "es"
+
+    # Un dictado de ambulancia dura segundos. Si la transcripcion no vuelve
+    # en 20s, algo esta mal y es mejor fallar rapido que colgar el triaje.
+    stt_timeout_s: float = 20.0
+
 
 settings = Settings()

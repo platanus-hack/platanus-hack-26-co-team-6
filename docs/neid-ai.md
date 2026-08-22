@@ -87,6 +87,48 @@ gana por mucho, no hay nada que defender en el pitch.
 
 ---
 
+## Audio: el paso que Claude no puede dar
+
+**La API de Claude no recibe audio.** Toma texto, imágenes y PDFs. Una nota de
+voz de WhatsApp necesita transcripción antes de que el parser vea nada, y eso
+es un servicio aparte.
+
+ai-core ya tiene la costura, con los dos proveedores detrás de la misma
+interfaz:
+
+| Proveedor | Cómo | El detalle que rompe la integración |
+|---|---|---|
+| Deepgram (`nova-3`) | `POST /v1/listen`, bytes crudos | `Authorization: Token <key>` — **"Token", no "Bearer"** |
+| ElevenLabs (`scribe_v2`) | `POST /v1/speech-to-text`, multipart | header `xi-api-key` — **no** Authorization |
+
+Cambiar de uno a otro es `STT_PROVEEDOR` en `.env`, no un refactor. En `auto`
+prefiere Deepgram porque en dictados cortos es el más rápido, y aquí la
+latencia se paga en el número del pitch.
+
+```bash
+curl localhost:8000/v1/stt      # ¿qué proveedor correría ahora?
+curl -F archivo=@nota.ogg localhost:8000/v1/transcribir/archivo
+```
+
+⚠️ **Rompe el patrón de degradación del proyecto, y hay que saberlo.** Todo lo
+demás cae con gracia cuando falta una credencial: el triaje tiene su
+heurística, el ETA su estimación por distancia, el handshake su consola. Esto
+no tiene a dónde caer — sin proveedor no hay texto, y sin texto no hay triaje.
+Por eso devuelve **503 explícito** en vez de fingir que funcionó.
+
+**Para el demo eso casi no importa:** la PWA transcribe con Web Speech API en
+el navegador — gratis, instantáneo, sin dependencias. Esta costura sólo hace
+falta para el audio que entra por WhatsApp.
+
+`POST /v1/triage` acepta `audioBase64` y hace STT + extracción en **una sola
+llamada**. Si mandas texto y audio a la vez, gana el texto: quien ya
+transcribió sabe algo que nosotros no, y así no se paga el STT dos veces.
+
+Cuando una extracción salga rara en un ensayo, mira `transcripcion.texto`
+**antes** de culpar al prompt. La mitad de las veces el STT oyó mal.
+
+---
+
 ## El rebote ahora se aprende por sede
 
 `PENALIZACION_REBOTE = 22` era una constante global para todos los hospitales

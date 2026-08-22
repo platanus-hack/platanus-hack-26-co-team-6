@@ -98,10 +98,36 @@ class Caso(ExtraccionClinica):
     creado_en: str  # ISO 8601
 
 
-class TriageRequest(ModeloCable):
+class Transcripcion(ModeloCable):
+    """Lo que devolvió el proveedor de STT.
+
+    `proveedor` viaja a propósito: si mañana el triaje empieza a fallar con los
+    audios, lo primero que hay que saber es quién transcribió.
+    """
+
     texto: str
+    proveedor: Literal["deepgram", "elevenlabs"]
+    latencia_ms: int
+    idioma: str | None = None
+
+
+class TranscribirRequest(ModeloCable):
+    #: Bytes del audio en base64. Es lo que manda `core` después de bajar el
+    #: media de WhatsApp — el navegador nunca habla con ai-core.
+    audio_base64: str
+    #: WhatsApp entrega notas de voz como audio/ogg (opus); la PWA, audio/webm.
+    audio_mime: str = "audio/ogg"
+
+
+class TriageRequest(ModeloCable):
+    #: El dictado ya transcrito. Si viene vacío y hay audio, se transcribe.
+    texto: str = ""
     origen: Coordenada | None = None
     tipo_movil: TipoMovil | None = None
+    #: Camino de audio: una sola llamada hace STT + extracción. Es lo que
+    #: conviene para WhatsApp, que paga latencia por cada salto.
+    audio_base64: str | None = None
+    audio_mime: str = "audio/ogg"
 
 
 class TriageResponse(ModeloCable):
@@ -111,6 +137,10 @@ class TriageResponse(ModeloCable):
     # necesitabamos: `confianza == 0.35` era la unica pista de que estabas
     # viendo la heuristica y no a Claude.
     motor: Literal["claude", "heuristica"]
+    #: Presente solo si el dictado entró como audio. Trae el texto que de
+    #: verdad leyó el parser — cuando una extracción salga rara, lo primero
+    #: que hay que mirar es si el STT oyó bien.
+    transcripcion: Transcripcion | None = None
 
 
 # ─────────────────────────────────────────────────────────────────

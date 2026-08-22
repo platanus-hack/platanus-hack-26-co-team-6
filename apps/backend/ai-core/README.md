@@ -14,7 +14,11 @@ uv run pytest                      # 52 tests, sin red
 | Ruta | Qué hace |
 |---|---|
 | `GET /health` | Liveness. No toca nada aguas abajo. |
-| `POST /v1/triage` | Dictado en crudo → entidades clínicas estructuradas. |
+| `POST /v1/triage` | Dictado (texto **o audio**) → entidades clínicas estructuradas. |
+| `POST /v1/score` | Filtro duro + ranking en minutos. Sin estado. |
+| `POST /v1/transcribir` | Audio → texto. Deepgram o ElevenLabs. |
+| `POST /v1/transcribir/archivo` | Lo mismo, con `curl -F`. Para probar a mano. |
+| `GET /v1/stt` | Qué proveedor de STT correría ahora mismo. |
 
 ```bash
 curl -s -X POST localhost:8000/v1/triage -H "Content-Type: application/json" \
@@ -38,6 +42,39 @@ cuando importa.
 filtran contra `SERVICIOS_SELECCIONABLES`. Un código alucinado no da error:
 simplemente ninguna sede lo tiene y el ranking sale **vacío**. Es el fallo más
 caro del sistema y el más silencioso.
+
+## Audio: el paso que Claude no puede dar
+
+La API de Claude recibe texto, imágenes y PDFs — **no audio**. Una nota de voz
+de WhatsApp necesita transcripción antes de que el parser vea nada.
+
+Dos proveedores detrás de la misma interfaz; cambiar es una variable de
+entorno, no un refactor:
+
+| Proveedor | Endpoint | Autenticación |
+|---|---|---|
+| Deepgram | `POST /v1/listen`, bytes crudos | `Authorization: Token <key>` — **"Token", no "Bearer"** |
+| ElevenLabs | `POST /v1/speech-to-text`, multipart | header `xi-api-key` — **no** Authorization |
+
+Esos dos detalles de auth son los errores de integración más comunes con estas
+APIs y están cubiertos por tests.
+
+```bash
+curl localhost:8000/v1/stt                       # ¿hay proveedor?
+curl -F archivo=@nota.ogg localhost:8000/v1/transcribir/archivo
+```
+
+⚠️ **Aquí no hay heurística a la que caer.** Todo el resto de PULSO degrada con
+gracia cuando falta una credencial; esto no puede — sin proveedor no hay texto,
+y sin texto no hay triaje. Por eso devuelve **503 explícito** en vez de fingir.
+
+Corolario para el demo: **el dictado desde la PWA usa Web Speech API en el
+navegador** — gratis, instantáneo y sin dependencias. Esto sólo hace falta para
+el audio que entra por WhatsApp.
+
+`POST /v1/triage` acepta `audioBase64` y hace STT + extracción en **una sola
+llamada**, porque WhatsApp ya paga suficientes saltos de red. Si mandas `texto`
+y audio a la vez, gana el texto: quien ya transcribió sabe algo que nosotros no.
 
 ## El contrato es camelCase a propósito
 

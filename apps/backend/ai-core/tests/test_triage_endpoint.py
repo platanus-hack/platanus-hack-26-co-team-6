@@ -58,8 +58,12 @@ def test_espacios_no_cuentan_como_dictado():
     assert client.post("/v1/triage", json={"texto": "   dolor   "}).status_code == 400
 
 
-def test_falta_texto_es_422():
-    assert client.post("/v1/triage", json={}).status_code == 422
+def test_sin_texto_ni_audio_es_400_con_mensaje_util():
+    # Cambió de 422 a 400 cuando `texto` dejó de ser obligatorio: ahora existe
+    # el camino de audio. El mensaje tiene que decir cuál de los dos falta.
+    r = client.post("/v1/triage", json={})
+    assert r.status_code == 400
+    assert "audioBase64" in r.json()["detail"]
 
 
 def test_medico_a_bordo_obliga_movil_tam():
