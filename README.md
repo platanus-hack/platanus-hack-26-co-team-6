@@ -83,6 +83,22 @@ Se entra una vez en `/entrar` y la sesión dura 12 horas — no molesta durante 
 
 ---
 
+## 📚 Documentación
+
+**Plan vigente** (leer en orden): [I · diagnóstico](docs/pulso-agente-campo-y-roles.md) → [II · plataforma y trámites](docs/pulso-plataforma-afiliacion-y-tramites.md) → [III · plan maestro de producción](docs/pulso-produccion-plan-maestro.md) → [IV · multitenancy y login](docs/multitenancy-y-autenticacion.md)
+
+**Tareas**: [64 tareas, 16 por persona](docs/tareas/) — [Juan](docs/tareas/juan.md) · [Zaid](docs/tareas/zaid.md) · [Neid](docs/tareas/neid.md) · [Sebas](docs/tareas/sebas.md)
+
+**Referencia**: [contrato-api.md](docs/contrato-api.md) (es ley) · [validaciones de negocio](docs/PULSO-validaciones-backend.md) · [índice completo](docs/README.md)
+
+> ⚠️ **Lo que cambió el 22 de agosto de 2026.** Colombia opera el modelo **IHCE** desde el 15 de abril
+> de 2026: la Res. 1888 de 2025 obliga a todo prestador activo en REPS a intercambiar el **RDA (Resumen
+> Digital de Atención)** en **HL7 FHIR R4**, y **el plazo ya venció**. PULSO ya produce en la escena
+> buena parte del contenido de un RDA de urgencias. Detalle en
+> [plan maestro §0](docs/pulso-produccion-plan-maestro.md#0-el-hallazgo-que-reordena-el-producto).
+
+---
+
 ## 🎯 El problema
 
 En Colombia y América Latina, el proceso de **Referencia y Contrarreferencia (SIRC)** durante una emergencia crítica (ACV, infarto, politraumatismo) sufre de una asimetría de información mortal:

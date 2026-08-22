@@ -1,5 +1,8 @@
 # Neid · AI / LLM
 
+> 📌 **Documento de la hackathon (ago 2026).** Conserva contexto útil, pero **algunas rutas de archivo ya cambiaron**.
+> El plan vigente está en [`docs/README.md`](README.md) y las tareas en [`docs/tareas/neid.md`](tareas/neid.md).
+
 > Tú tienes las dos piezas que el jurado va a interrogar: el parser
 > clínico (¿de verdad entiende medicina?) y el motor de inferencia
 > (¿de dónde sacan la ocupación?). Prepara las dos respuestas.

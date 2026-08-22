@@ -1,5 +1,8 @@
 # Zaid · Backend / Datos
 
+> 📌 **Documento de la hackathon (ago 2026).** Conserva contexto útil, pero **algunas rutas de archivo ya cambiaron**.
+> El plan vigente está en [`docs/README.md`](README.md) y las tareas en [`docs/tareas/zaid.md`](tareas/zaid.md).
+
 > Tú conviertes 16.181 filas del REPS en ~60 sedes de Bogotá que un
 > jurado puede señalar en un mapa y reconocer. Sin ti, PULSO es una demo
 > con datos inventados — y eso se nota en 10 segundos.

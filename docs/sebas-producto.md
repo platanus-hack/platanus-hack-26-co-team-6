@@ -1,5 +1,8 @@
 # Sebas · Producto / Pitch / Dominio
 
+> 📌 **Documento de la hackathon (ago 2026).** Conserva contexto útil, pero **algunas rutas de archivo ya cambiaron**.
+> El plan vigente está en [`docs/README.md`](README.md) y las tareas en [`docs/tareas/sebas.md`](tareas/sebas.md).
+
 > **En Platanus se gana con el pitch, no con el commit count.**
 > Tu carril es el más subestimado del equipo y probablemente el que decide
 > el resultado. No te metas al motor: los otros tres ya lo tienen.

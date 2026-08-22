@@ -167,3 +167,24 @@ por mucho, no hay nada que defender en el pitch.
 | `app/schemas.py` | El contrato. Espeja `types.ts` |
 | `app/routers/triage.py` | `POST /v1/triage` |
 | `evals/corpus.py` | Los 14 dictados y qué debe cumplir cada uno |
+
+---
+
+## Plan y tareas
+
+Documentación vigente en [`docs/`](../../../docs/README.md). Lo que toca a este servicio:
+
+| Qué | Estado | Tarea |
+|---|---|---|
+| **El prompt clínico existe dos veces** (aquí y en `core/src/triage/triage.service.ts`, idéntico carácter por carácter) | 🔴 Divergen en silencio si tocas uno solo | [0.5](../../../docs/tareas/neid.md#05--un-solo-prompt-clínico) |
+| **Ningún código abre `agente/prompts/*.txt`** — son especificaciones para agentes de ElevenLabs que nadie ha creado | 🔴 Bloqueado en decidir ElevenLabs vs Deepgram | [neid-faltantes.md](../../../docs/neid-faltantes.md) |
+| **La versión del prompt no se registra** en ningún lado | 🔴 No se puede saber con qué prompt se extrajo un caso viejo | [3.12](../../../docs/tareas/neid.md#312--versionar-el-prompt-clínico) |
+| Generador de **SBAR** para el paquete de prearribo | 🆕 | [4.2](../../../docs/tareas/neid.md#42--generador-de-sbar) |
+| Trazas propagadas desde core (`traceparent`) | 🆕 | [5.3](../../../docs/tareas/juan.md#53--opentelemetry--pino-con-redacción-de-pii) |
+
+### La frontera de este servicio
+
+**`ai-core` no tiene base de datos y no debe tenerla.** Decide, no ejecuta: quien ejecuta es `core`,
+que sí sabe de qué caso se trata. Y **concentra las credenciales de los proveedores de IA** — por eso
+es interno y por eso no debe quedar expuesto ni siquiera en trazas: *saber que el ruteo es estimado no
+le sirve a un atacante; saber a qué host apunta, sí*.

@@ -1,5 +1,8 @@
 # Juan · Frontend / PWA
 
+> 📌 **Documento de la hackathon (ago 2026).** Conserva contexto útil, pero **algunas rutas de archivo ya cambiaron**.
+> El plan vigente está en [`docs/README.md`](README.md) y las tareas en [`docs/tareas/juan.md`](tareas/juan.md).
+
 > Tú haces la pantalla que el jurado va a mirar durante 3 minutos.
 > Si el motor es perfecto y la pantalla es confusa, perdemos.
 
