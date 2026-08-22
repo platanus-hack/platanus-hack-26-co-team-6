@@ -189,6 +189,8 @@ function checkMigrationEnv() {
       "missing — core can boot, but 'task migrate*' requires a direct/session port 5432 URL",
     );
   }
+}
+
 // ----------------------------------------------------------- security ---
 
 /** Reads KEY=value pairs out of a .env file. Returns {} when it is not there. */

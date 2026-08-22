@@ -34,10 +34,33 @@ const API =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://localhost:3001";
 
 /** Error de core con el mensaje que devolvió, no un "Failed to fetch" pelado. */
+/**
+ * Códigos de dominio que core devuelve con un 4xx.
+ *
+ * No son fallos técnicos: son decisiones del motor de ruteo que la pantalla
+ * tiene que saber contar. `PULSO_LOW_CONFIDENCE` no es "algo salió mal", es
+ * "el sistema no entendió lo suficiente como para mandar una ambulancia".
+ */
+export type CodigoError =
+  /** El parser no llegó a la confianza mínima. Lo arregla el dictado. */
+  | "PULSO_LOW_CONFIDENCE"
+  /** Triage y hallazgos no concuerdan. Lo arregla el dictado. */
+  | "PULSO_INCONSISTENT_TRIAGE"
+  /** Ninguna sede cumple el filtro duro. Esto sube al CRUE. */
+  | "PULSO_NO_ELIGIBLE_DESTINATION"
+  /** Se intentó despachar sin un ranking registrado antes. */
+  | "PULSO_INCOMPLETE_EVIDENCE"
+  /** Otra sede ya aceptó este caso. */
+  | "PULSO_DESTINATION_ALREADY_ACCEPTED"
+  /** La solicitud ya no está en un estado que admita esta acción. */
+  | "PULSO_ILLEGAL_TRANSITION";
+
 export class ErrorApi extends Error {
   constructor(
     message: string,
     readonly status: number,
+    /** Presente solo cuando core devolvió un error de dominio. */
+    readonly codigo?: CodigoError,
   ) {
     super(message);
     this.name = "ErrorApi";
@@ -68,12 +91,28 @@ async function pedir<T>(ruta: string, init?: RequestInit): Promise<T> {
   }
 
   if (!res.ok) {
-    // Nest devuelve { statusCode, message, error }. Si el body no es JSON
-    // (core caído, proxy en el medio), no queremos un throw de parseo encima.
-    const detalle = await res
-      .json()
-      .then((j) => (Array.isArray(j?.message) ? j.message.join(", ") : j?.message))
-      .catch(() => null);
+    // Core habla en DOS formatos de error y hay que entender los dos:
+    //
+    //   Nest        { statusCode, message, error }   validación, 404, 401
+    //   dominio     { error: { code, message } }     decisiones del ruteo
+    //
+    // Leer solo el primero era el motivo de que un caso bloqueado por baja
+    // confianza llegara a la pantalla como "core respondió 400": el mensaje
+    // venía anidado y nadie lo miraba.
+    const cuerpo = await res.json().catch(() => null);
+
+    const dominio = cuerpo?.error;
+    if (dominio?.code) {
+      throw new ErrorApi(
+        dominio.message ?? `core respondió ${res.status}`,
+        res.status,
+        dominio.code as CodigoError,
+      );
+    }
+
+    const detalle = Array.isArray(cuerpo?.message)
+      ? cuerpo.message.join(", ")
+      : cuerpo?.message;
     throw new ErrorApi(detalle ?? `core respondió ${res.status}`, res.status);
   }
 

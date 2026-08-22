@@ -28,8 +28,10 @@ import { Cabecera } from "@/components/campo/Cabecera";
 import { PanelDictado } from "@/components/campo/PanelDictado";
 import { TarjetaCaso } from "@/components/campo/TarjetaCaso";
 import { TarjetaCandidato } from "@/components/campo/TarjetaCandidato";
+import { RevisionRequerida } from "@/components/campo/RevisionRequerida";
 import { FotoCalle } from "@/components/mapa/FotoCalle";
 import * as api from "@/lib/api";
+import { ErrorApi, type CodigoError } from "@/lib/api";
 
 // mapbox-gl toca window al importarse: solo en el navegador.
 const MapaDespacho = dynamic(() => import("@/components/campo/MapaDespacho"), {
@@ -39,7 +41,14 @@ const MapaDespacho = dynamic(() => import("@/components/campo/MapaDespacho"), {
   ),
 });
 
-type Fase = "dictado" | "analizando" | "ranking" | "esperando" | "resuelto";
+type Fase =
+  | "dictado"
+  | "analizando"
+  | "ranking"
+  | "esperando"
+  | "resuelto"
+  /** El motor se negó a rutear. No es un error: es una decisión suya. */
+  | "revision";
 
 export default function Campo() {
   const [texto, setTexto] = useState("");
@@ -49,6 +58,9 @@ export default function Campo() {
   const [meta, setMeta] = useState({ evaluadas: 0, compatibles: 0 });
   const [handshake, setHandshake] = useState<Handshake | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [bloqueo, setBloqueo] = useState<{ codigo: CodigoError; detalle: string } | null>(
+    null,
+  );
   const [ubicacionDemo, setUbicacionDemo] = useState(false);
 
   // ── Dónde está la ambulancia ───────────────────────────────────
@@ -72,12 +84,14 @@ export default function Campo() {
     setCasoReal(c);
     setIndiceReal((i) => i + 1);
     setError(null);
+    setBloqueo(null);
   }
 
   function cargarDictado(t: string) {
     setTexto(t);
     setCasoReal(null);
     setError(null);
+    setBloqueo(null);
   }
 
   // ── Cronómetro de hora dorada ──────────────────────────────────
@@ -123,6 +137,13 @@ export default function Campo() {
       setMeta({ evaluadas: m.evaluadas, compatibles: m.compatibles });
       setFase("ranking");
     } catch (e) {
+      // Un rechazo del motor de ruteo NO es un fallo técnico: tiene su propia
+      // pantalla, porque el paramédico puede hacer algo distinto en cada caso.
+      if (e instanceof ErrorApi && e.codigo) {
+        setBloqueo({ codigo: e.codigo, detalle: e.message });
+        setFase("revision");
+        return;
+      }
       setError(e instanceof Error ? e.message : "Error inesperado");
       setFase("dictado");
     }
@@ -167,6 +188,7 @@ export default function Campo() {
     setCandidatos([]);
     setHandshake(null);
     setCasoReal(null);
+    setBloqueo(null);
     setT0(null);
     setTranscurrido(0);
     setUbicacionDemo(false);
@@ -214,7 +236,19 @@ export default function Campo() {
         />
       )}
 
-      {caso && fase !== "dictado" && fase !== "analizando" && (
+      {fase === "revision" && bloqueo && (
+        <RevisionRequerida
+          codigo={bloqueo.codigo}
+          detalle={bloqueo.detalle}
+          onVolver={() => {
+            setBloqueo(null);
+            setT0(null);
+            setFase("dictado");
+          }}
+        />
+      )}
+
+      {caso && fase !== "dictado" && fase !== "analizando" && fase !== "revision" && (
         <TarjetaCaso caso={caso} />
       )}
 

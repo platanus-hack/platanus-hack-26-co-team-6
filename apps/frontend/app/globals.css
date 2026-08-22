@@ -57,3 +57,28 @@ button,
 .latido {
   animation: pulso-latido 1.4s ease-in-out infinite;
 }
+
+/*
+ * Movimiento reducido.
+ *
+ * El latido marca lo que está vivo o venciendo, así que no se puede quitar sin
+ * más: se sustituye por opacidad fija, que dice lo mismo sin parpadear. Va
+ * aquí y no en cada componente porque es una decisión del sistema.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .latido {
+    animation: none;
+    opacity: 0.7;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Foco visible. En una consola se navega con teclado más de lo que parece. */
+:focus-visible {
+  outline: 2px solid var(--color-info);
+  outline-offset: 2px;
+}

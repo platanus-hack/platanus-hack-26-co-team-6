@@ -17,6 +17,9 @@ const caso = (id = 'case-1', confianza = 0.9) => ({
   confianza,
   origen: { lat: 4.6, lng: -74.1 },
   tipoMovil: 'TAM' as const,
+  // null, no una unidad de mentira: el ruteo no debe depender de que /campo
+  // haya declarado el móvil, y una fixture con valor lo escondería.
+  unidad: null,
   creadoEn: '2026-01-01T00:00:00.000Z',
 });
 const candidate = (codigo = 'DEST-1') => ({
@@ -52,7 +55,9 @@ describe('RoutingService', () => {
     });
     await expect(
       service.match(caso('review-case', 0.2), [candidate()]),
-    ).resolves.toMatchObject({ error: { error: { code: 'PULSO_LOW_CONFIDENCE' } } });
+    ).resolves.toMatchObject({
+      error: { error: { code: 'PULSO_LOW_CONFIDENCE' } },
+    });
   });
 
   it('escalates an empty viable ranking and blocks dispatch without complete evidence', async () => {
@@ -91,10 +96,16 @@ describe('RoutingService', () => {
     const store = new MemoryRoutingStore();
     const first = new RoutingService(store);
     await first.match(caso(), [candidate()]);
-    expect(await new RoutingService(store).dispatch('case-1', 'DEST-1')).toMatchObject({
+    expect(
+      await new RoutingService(store).dispatch('case-1', 'DEST-1'),
+    ).toMatchObject({
       evidence: { selectedDestination: 'DEST-1' },
     });
-    await first.match(caso('crue-case'), [{ ...candidate(), motivoDescarte: 'No beds' }]);
-    await expect(store.decision('crue-case')).resolves.toMatchObject({ state: 'escalated_to_crue' });
+    await first.match(caso('crue-case'), [
+      { ...candidate(), motivoDescarte: 'No beds' },
+    ]);
+    await expect(store.decision('crue-case')).resolves.toMatchObject({
+      state: 'escalated_to_crue',
+    });
   });
 });

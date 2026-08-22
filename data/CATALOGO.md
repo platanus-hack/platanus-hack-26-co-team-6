@@ -25,7 +25,9 @@ Produce: `sedes.json`
 
 cobertura **bogota** · 2900 filas · encoding `utf-8-sig` · 2500 KB
 
-> Corte REPS jul-2020. YA NO ALIMENTA sedes.json: se uso para sacar el codigo y resulto ser el del PRESTADOR, no el de la sede — colapsaba 9 sedes en un codigo. Ese trabajo ahora lo hace reps_bogota/sedes.json. Se conserva porque es el unico universo geolocalizado de las 2900 IPS de Bogota, util si algun dia se sale de urgencias.
+Produce: `casos-demo.json`
+
+> Corte REPS jul-2020. YA NO ALIMENTA sedes.json: se uso para sacar el codigo y resulto ser el del PRESTADOR, no el de la sede — colapsaba 9 sedes en un codigo. Ese trabajo ahora lo hace reps_bogota/sedes.json. Se conserva porque es el unico universo geolocalizado de las 2900 IPS de Bogota. Hoy alimenta casos-demo.json: da el centroide de las localidades que no tienen ninguna IPS de urgencias (La Candelaria).
 
 ### `llamadas_123/llamadas123.csv`
 
