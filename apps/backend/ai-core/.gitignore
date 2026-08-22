@@ -1,0 +1,17 @@
+# Virtual environment — recreate with `uv sync`
+.venv/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Test and tool caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Local environment overrides
+.env
+.env.local
+
+# NOTE: uv.lock is intentionally NOT ignored. Commit it for reproducible installs.
