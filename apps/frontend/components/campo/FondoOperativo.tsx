@@ -37,7 +37,7 @@ export function FondoOperativo() {
           className="absolute inset-0"
           style={{
             backgroundImage:
-              "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,43,39,0.10), transparent 70%)",
+              "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,43,39,0.18), transparent 70%)",
           }}
         />
       ) : (
@@ -45,18 +45,21 @@ export function FondoOperativo() {
           color1="#ff2b27"
           color2="#ec070a"
           color3="#FFFFFF"
-          speed={0.45}
-          threadCount={3}
+          speed={0.5}
+          threadCount={4}
           frequency={4}
-          spread={0.22}
+          spread={0.24}
           taper={1.0}
           position={0.5}
           fanMode="center"
-          glow={0.018}
-          falloff={0.45}
+          glow={0.026}
+          falloff={0.42}
           thickness={1.1}
-          brightness={0.22}
-          opacity={0.4}
+          // Subido desde 0.22/0.4: el efecto se perdía casi entero contra el
+          // fondo. Estos dos números son los únicos que gobiernan la
+          // intensidad; si vuelve a competir con el texto clínico, se bajan.
+          brightness={0.42}
+          opacity={0.72}
           mirror
           shimmer={false}
           grain={false}

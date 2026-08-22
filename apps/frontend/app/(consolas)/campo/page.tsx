@@ -54,6 +54,13 @@ const MapaDespacho = dynamic(() => import("@/components/campo/MapaDespacho"), {
   ),
 });
 
+const MapaUnidad = dynamic(() => import("@/components/campo/MapaUnidad"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-56 rounded-[1.75rem] bg-[color:var(--color-superficie)] border border-[color:var(--color-borde)] latido" />
+  ),
+});
+
 type Fase =
   | "inicio"
   | "captura"
@@ -330,14 +337,27 @@ export default function Campo() {
         )}
 
         {fase === "inicio" && (
-          <PantallaInicio
-            casos={activos}
-            onNuevo={nuevoCaso}
-            // Reabrir un caso previo todavía no restaura su punto exacto del
-            // flujo — eso llega con §1 completo. Por ahora lleva a la captura,
-            // que es donde el paramédico puede actuar.
-            onAbrir={() => setFase("captura")}
-          />
+          <>
+            <PantallaInicio
+              casos={activos}
+              onNuevo={nuevoCaso}
+              // Reabrir un caso previo todavía no restaura su punto exacto del
+              // flujo — eso llega con §1 completo. Por ahora lleva a la captura,
+              // que es donde el paramédico puede actuar.
+              onAbrir={() => setFase("captura")}
+            />
+
+            {/* Dónde está la unidad, en vivo. Va al final y no arriba a
+                propósito: es contexto, no la acción. Lo primero que tiene que
+                encontrar el pulgar sigue siendo el botón de caso nuevo. */}
+            <section className="mt-6">
+              <MapaUnidad
+                posicion={geo.origen}
+                estado={geo.estado}
+                precisionM={geo.precisionM}
+              />
+            </section>
+          </>
         )}
 
         {(fase === "captura" || fase === "analizando") && (
@@ -350,6 +370,9 @@ export default function Campo() {
             escuchando={voz.escuchando}
             onMicrofono={voz.alternar}
             vozSoportada={voz.soportado}
+            falloDictado={voz.fallo}
+            parcial={voz.parcial}
+            medidorRef={voz.medidorRef}
             onAnalizar={analizar}
             analizando={fase === "analizando"}
             sinSenal={sinSenal}

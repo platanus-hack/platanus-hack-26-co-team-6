@@ -28,18 +28,33 @@ const QUIETO_MS = 4000;
 export function OrbeVoz({
   estado = "inactivo",
   tam = "min(48vw, 15rem)",
-  refExterna,
+  medidorRef,
 }: {
   estado?: EstadoOrbe;
   /** Cualquier medida CSS. En campo se quiere grande: se toca con guantes. */
   tam?: string;
-  /** Lo usa useNivelVoz para escribir `--nivel-voz` sin pasar por React. */
-  refExterna?: React.RefObject<HTMLDivElement | null>;
+  /**
+   * Buzón donde `useDictadoVoz` deja el nodo al que escribir `--nivel-voz`.
+   *
+   * El volumen del micrófono se mide 60 veces por segundo; pasarlo por props
+   * significaría 60 renders por segundo de toda la consola para mover un
+   * `scale`. Así el hook escribe en el DOM y React no se entera.
+   */
+  medidorRef?: React.MutableRefObject<HTMLElement | null>;
 }) {
-  const propio = useRef<HTMLDivElement>(null);
-  const envoltura = refExterna ?? propio;
+  const envoltura = useRef<HTMLDivElement>(null);
   const temporizador = useRef<number | null>(null);
   const [guina, setGuina] = useState(false);
+
+  // Publicar el nodo para el hook, y retirarlo al desmontar: si no, el hook
+  // seguiría escribiendo en un elemento que ya no está en el documento.
+  useEffect(() => {
+    if (!medidorRef) return;
+    medidorRef.current = envoltura.current;
+    return () => {
+      medidorRef.current = null;
+    };
+  }, [medidorRef]);
 
   // Los ojos siguen el puntero. En un teléfono esto no ocurre nunca —el dedo
   // no genera `pointermove` continuo—, así que en campo el orbe mira solo. No
