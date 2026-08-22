@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+/*
+ * PULSO — tokens de diseño.
+ * Dueño: Sebas. Juan los consume, no los redefine.
+ *
+ * Criterio: esto se ve en un celular, dentro de una ambulancia en
+ * movimiento, posiblemente de noche. Alto contraste, texto grande,
+ * áreas táctiles generosas. Nada de gris sobre gris.
+ */
+
+@theme {
+  --color-fondo: #0a0e14;
+  --color-superficie: #131a24;
+  --color-superficie-alta: #1c2530;
+  --color-borde: #2a3543;
+
+  --color-texto: #e8eef5;
+  --color-texto-tenue: #8b9bb0;
+
+  /* Semáforo clínico */
+  --color-critico: #ff3b47;
+  --color-alerta: #ff9f1c;
+  --color-estable: #2ec4a6;
+  --color-info: #4b9fff;
+
+  --color-marca: #ff3b47;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  -webkit-font-smoothing: antialiased;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Áreas táctiles: guantes, movimiento, prisa. Mínimo 44px. */
+button,
+[role="button"] {
+  min-height: 44px;
+}
+
+/* Números que se leen de un vistazo (ETA, cronómetro, score). */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes pulso-latido {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.latido {
+  animation: pulso-latido 1.4s ease-in-out infinite;
+}
