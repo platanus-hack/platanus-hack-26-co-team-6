@@ -314,32 +314,11 @@ export default function MapaDespacho({
         </span>
       )}
 
+      {/* El marcador de la unidad (.mapa-origen*) vive en globals.css: lo
+          comparte con MapaUnidad, y estos estilos solo existían mientras este
+          componente estuviese montado. Aquí se quedan los pines de sede, que
+          son exclusivos del ranking. */}
       <style>{`
-        .mapa-origen {
-          position: relative;
-          width: 22px;
-          height: 22px;
-        }
-        .mapa-origen-punto {
-          position: absolute;
-          inset: 5px;
-          border-radius: 9999px;
-          background: #ff3b47;
-          border: 2px solid #fff;
-          box-shadow: 0 0 10px rgba(255, 59, 71, 0.9);
-        }
-        .mapa-origen-anillo {
-          position: absolute;
-          inset: 0;
-          border-radius: 9999px;
-          border: 2px solid rgba(255, 59, 71, 0.85);
-          animation: mapa-latido-anillo 2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
-        }
-        .mapa-origen-anillo-2 { animation-delay: 1s; }
-        @keyframes mapa-latido-anillo {
-          0% { transform: scale(0.55); opacity: 0.9; }
-          100% { transform: scale(2.4); opacity: 0; }
-        }
         .mapa-pin {
           padding: 4px 10px;
           border-radius: 9999px;

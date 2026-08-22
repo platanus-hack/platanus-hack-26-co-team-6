@@ -28,18 +28,29 @@ task dev       # levanta frontend + core + ai-core a la vez
 Para cambiar puertos en una corrida: `task dev PORT_CORE=3005`.
 
 <details>
-<summary><b>Sin Task (solo el frontend)</b></summary>
+<summary><b>Sin Task, a mano</b></summary>
+
+Hacen falta **al menos** frontend y core: desde que el backend salió de Next,
+el frontend no tiene API propia y las consolas no cargan sin core.
 
 ```bash
-cd apps/frontend
-pnpm install
-cp env.example .env.local           # PowerShell: copy env.example .env.local
-pnpm dev
+# terminal 1 — core (:3001)
+cd apps/backend/core && pnpm install && cp env.example .env && pnpm start:dev
+
+# terminal 2 — frontend (:3000)
+cd apps/frontend && pnpm install && cp env.example .env.local && pnpm dev
+
+# terminal 3 — ai-core (:8000), opcional: sin él el triage cae a la heurística
+cd apps/backend/ai-core && uv sync && uv run uvicorn app.main:app --port 8000
 ```
+
+⚠️ `AI_CORE_BASE_URL` en `core/.env` tiene que apuntar al puerto donde
+realmente escucha ai-core (**8000**). Si no coinciden, todo lo que pasa por él
+falla con un `fetch failed` que no explica nada.
 
 </details>
 
-Abre <http://localhost:3000>. **Funciona sin ninguna credencial**: sin Supabase usa 14 sedes semilla, sin Mapbox estima el ETA por distancia, sin API key de Claude usa un extractor por palabras clave. Cada credencial que agregues mejora una pieza sin romper nada.
+Abre <http://localhost:3000>. **Funciona sin ninguna credencial**: sin Supabase usa sedes semilla, sin Mapbox estima el ETA por distancia, sin API key de Claude usa un extractor por palabras clave, y sin proveedor de voz el dictado usa el del navegador. Cada credencial que agregues mejora una pieza sin romper nada — y `GET /capacidades` te dice en cuál estás.
 
 Para el demo se abren **dos pantallas a la vez**: `/campo` en el celular y `/hospital` en el portátil.
 
@@ -115,10 +126,10 @@ Cada handshake es una observación etiquetada. **La red se entrena sola.**
 
 PULSO es un orquestador inteligente que conecta al personal de campo (paramédico en ambulancia / IPS primaria) con el receptor hospitalario óptimo, eliminando la intermediación burocrática manual. Cuatro piezas:
 
-1. **🎙️ Voice/Text Clinical Parser (`/api/triage`).** El paramédico dicta: *"Masculino 54 años, dolor precordial opresivo, supra ST en DII-DIII-aVF, hemodinámicamente inestable"*. Claude (structured output) extrae: diagnóstico probable **CIE-10 `I21.1`**, **triage II** (Res. 5596/2015), servicios mandatorios **`743` hemodinamia + `110` UCI adultos**, complejidad requerida y si obliga móvil **TAM**.
+1. **🎙️ Voice/Text Clinical Parser (`POST /triage`).** El paramédico dicta: *"Masculino 54 años, dolor precordial opresivo, supra ST en DII-DIII-aVF, hemodinámicamente inestable"*. Claude (structured output) extrae: diagnóstico probable **CIE-10 `I21.1`**, **triage II** (Res. 5596/2015), servicios mandatorios **`743` hemodinamia + `110` UCI adultos**, complejidad requerida y si obliga móvil **TAM**.
 2. **📊 Ingestion Engine de datos abiertos (REPS).** ETL sobre el Registro Especial de Prestadores: 16.181 sedes de Bogotá con servicios habilitados, geocodificadas a PostGIS.
-3. **🧮 Dynamic Matching & Scoring Engine (`/api/match`).** PostGIS filtra por radio → Mapbox Matrix da ETA con tráfico real → filtro duro + score **en minutos** (ver abajo).
-4. **📲 One-Tap Handshake (`/api/dispatch` + `/api/handshake/respond`).** Alerta instantánea vía Telegram / WhatsApp interactivo al jefe de urgencias con dos botones: `[Aceptar]` / `[Rechazar]`. La respuesta actualiza `P(aceptación)` y la congestión de la sede, y re-rutea al siguiente.
+3. **🧮 Dynamic Matching & Scoring Engine (`POST /match`).** PostGIS filtra por radio → Mapbox Matrix da ETA con tráfico real → filtro duro + score **en minutos** (ver abajo).
+4. **📲 One-Tap Handshake (`POST /dispatch` + `POST /handshake/respond`).** Alerta instantánea vía Telegram / WhatsApp interactivo al jefe de urgencias con dos botones: `[Aceptar]` / `[Rechazar]`. La respuesta actualiza `P(aceptación)` y la congestión de la sede, y re-rutea al siguiente.
 
 ```
    apps/frontend :3000          apps/backend/core :3001
@@ -174,9 +185,29 @@ Una sede sin hemodinamia no es "peor opción": **es no-opción**. Ver una clíni
 |---|---|---|
 | `/` | Cualquiera | Landing. La única ruta pública. |
 | `/entrar` | El equipo de turno | Contraseña compartida → cookie de sesión. Las tres consolas de abajo pasan por aquí. |
-| `/campo` | Paramédico (celular) | Dictado → caso estructurado → ranking → despacho → confirmación. El cronómetro de hora dorada vive aquí. |
+| `/campo` | Paramédico (celular) | Dictado → caso estructurado → ranking → despacho → navegación. El cronómetro de hora dorada vive aquí. |
 | `/hospital` | Jefe de urgencias | Consola de handshake: aceptar / rechazar con motivo. En **triage I no ofrece rechazo** (escala al CRUE). |
-| `/crue` | Regulador | Vista de supervisión: casos, handshakes y estado de la red. **PULSO propone; el CRUE regula.** |
+| `/crue` | Regulador | Geovisor: mapa a pantalla completa, ficha por sede, bandeja de alertas y registro auditable. **PULSO propone; el CRUE regula.** |
+
+#### Dentro de `/campo`
+
+La consola se usa de pie, con guantes, dentro de un vehículo en movimiento y
+posiblemente de noche. Cada decisión de esa pantalla sale de ahí:
+
+- **Barra persistente** — unidad, conectividad, GPS y estado de las
+  integraciones. La conectividad domina porque de ella dependen las demás: un
+  ranking calculado hace cuatro minutos, en un túnel, es una mentira
+  peligrosa. Va con punto **y** palabra, nunca solo color.
+- **Dictado en cualquier navegador** — Web Speech API donde existe; donde no
+  (Firefox, Safari/iOS), se graba y transcribe en el servidor vía ai-core. El
+  segundo camino además sobrevive a una zona muerta: el audio se guarda y se
+  reintenta. El textarea nunca desaparece.
+- **Orbe de voz** que reacciona al **volumen real** del micrófono, no al
+  estado. Un asistente que se ve igual con alguien gritando que en silencio
+  delata que la animación es decorativa.
+- **Mapa de la unidad en vivo** (`watchPosition`) y, al aceptar, **ruta con
+  maniobras en español** — más el desglose de por qué se eligió *ese*
+  hospital, que es la duda que aparece en camino: "había uno más cerca".
 
 ---
 
@@ -257,7 +288,7 @@ Esto es lo que separa un proyecto de hackathon de uno que un médico toma en ser
 - **Res. 5596/2015** — triage de 5 niveles. I: inmediato · II: ≤30 min · III: ≤120 · IV: ≤240 · V: ≤360. El parser emite este número.
 - **Res. 3100/2019** — habilitación de servicios, y los móviles **TAB** (básico) vs **TAM** (medicalizado). El tipo de móvil es un **filtro duro**: un TAB no traslada un paciente que requiere ventilación.
 - **Res. 1220/2010** — el **CRUE** tiene la potestad regulatoria. **PULSO propone; el CRUE regula.** No lo reemplazamos: legalmente no se puede, y decir lo contrario en el pitch es un autogol.
-- **Ley 1751/2015** — las urgencias se atienden sin autorización previa. Por eso el botón "Rechazar" **no es un derecho a negar atención**: es una *declaración de capacidad*, queda auditada con timestamp, y en triage I ni siquiera se ofrece. Esa regla está implementada en [`apps/frontend/app/hospital/page.tsx`](apps/frontend/app/hospital/page.tsx).
+- **Ley 1751/2015** — las urgencias se atienden sin autorización previa. Por eso el botón "Rechazar" **no es un derecho a negar atención**: es una *declaración de capacidad*, queda auditada con timestamp, y en triage I ni siquiera se ofrece. Esa regla está implementada en [`apps/frontend/app/(consolas)/hospital/page.tsx`](apps/frontend/app/(consolas)/hospital/page.tsx).
 
 ---
 
@@ -275,7 +306,7 @@ Esto es lo que separa un proyecto de hackathon de uno que un médico toma en ser
 | Capa | Tecnología |
 |---|---|
 | Frontend / PWA | **Next.js 16 (App Router) + Tailwind CSS v4** — optimizado para uso táctil en ambulancia (dark, alto contraste, áreas ≥44px) |
-| API del MVP | Next.js API Routes (`/api/triage`, `/api/match`, `/api/dispatch`, `/api/handshake/respond`, `/api/estado`) |
+| API | NestJS en `core` :3001 — `/triage` `/match` `/dispatch` `/handshake/respond` `/estado` `/escalamiento` `/ruta` `/voz/transcribir` `/capacidades`. Todas exigen sesión salvo `/health` y el webhook. |
 | AI / NLP | **Claude (Anthropic SDK)** con structured output a esquema clínico; fallback heurístico por palabras clave sin credencial |
 | Geo & Routing | **Mapbox** Matrix + Directions (`driving-traffic`); fallback por distancia haversine a 22 km/h efectivos |
 | Datos | **PostgreSQL + PostGIS** (Supabase) · ETL Python del REPS ([`scripts/etl/extraer_reps.py`](scripts/etl/extraer_reps.py)) · 14 sedes semilla como fallback |
@@ -285,30 +316,50 @@ Esto es lo que separa un proyecto de hackathon de uno que un médico toma en ser
 ### Estructura del repo
 
 ```
-apps/frontend/          ← la app (pantallas + API + lib). El MVP entero vive aquí.
-  app/campo/            ← pantalla del paramédico (Juan)
-  app/hospital/         ← consola del jefe de urgencias (Sebas)
-  app/crue/             ← vista del regulador (Zaid)
-  app/api/              ← triage · match · dispatch · handshake · estado · webhook
-  lib/types.ts          ← ⭐ EL CONTRATO. Ver regla abajo.
-  lib/                  ← scoring, congestión, mapbox, canales, mocks, almacén
-apps/backend/core/      ← scaffold NestJS (post-MVP)
-apps/backend/ai-core/   ← scaffold FastAPI (post-MVP)
-supabase/migrations/    ← esquema PostGIS
-scripts/etl/            ← extractor del REPS (Python)
-docs/                   ← guía por carril + contrato de API
+apps/frontend/            ← las pantallas. Ya NO tiene API: pinta lo que core le da.
+  app/(consolas)/campo/   ← pantalla del paramédico (Juan)
+  app/(consolas)/hospital/← consola del jefe de urgencias (Sebas)
+  app/(consolas)/crue/    ← vista del regulador (Zaid)
+  components/campo/       ← barra persistente, orbe de voz, mapas, ruta
+  lib/types.ts            ← ⭐ ESPEJO DEL CONTRATO. Ver regla abajo.
+  lib/api.ts              ← el único sitio que habla con core
+
+apps/backend/core/        ← NestJS :3001. Dueño de la sesión y de todo el estado.
+  src/triage|match|dispatch|handshake|estado/   el flujo
+  src/escalamiento/       cuando el ruteo no cierra → tablero del CRUE
+  src/vigilante/          vence solicitudes, re-rutea y detecta demoras
+  src/eta/                ETA con tráfico + ruta con maniobras (Mapbox)
+  src/voz/                dictado entrante (→ai-core) y avisos salientes
+  src/capacidades/        en qué modo corre cada integración
+  src/contracts/types.ts  ⭐ EL CONTRATO. Es ley.
+
+apps/backend/ai-core/     ← FastAPI :8000. Interno, sin CORS: solo core le habla.
+                             parser clínico, scoring y transcripción (STT/TTS)
+supabase/migrations/      ← esquema PostGIS
+scripts/datos/            ← pipeline de datos abiertos (Python)
+docs/                     ← guía por carril + contrato de API
 ```
+
+⚠️ **`apps/frontend/app/api/` ya no existe.** El backend salió de Next a
+`core` — entre otras cosas porque la service role de Supabase y las llaves de
+Mapbox y Anthropic no pueden vivir en un bundle que se descarga el navegador.
 
 ### Degradación: nadie se bloquea por una credencial
 
 | Falta | Qué pasa |
 |---|---|
-| `ANTHROPIC_API_KEY` | Extractor heurístico por palabras clave (confianza 0.35, la UI lo marca) |
-| Supabase | 14 sedes semilla de [`apps/frontend/lib/mock.ts`](apps/frontend/lib/mock.ts) |
-| `NEXT_PUBLIC_MAPBOX_TOKEN` | ETA estimado por distancia (22 km/h efectivos) |
+| `ANTHROPIC_API_KEY` (en ai-core) | Extractor heurístico por palabras clave (confianza 0.35, la UI lo marca) |
+| Supabase | Sedes semilla de [`apps/backend/core/src/sedes/semillas.ts`](apps/backend/core/src/sedes/semillas.ts) |
+| `MAPBOX_TOKEN` (en core) | ETA estimado por distancia (22 km/h efectivos) y sin ruta que trazar |
+| `DEEPGRAM_API_KEY` / `ELEVENLABS_API_KEY` (en ai-core) | El dictado usa la Web Speech API del navegador — que **no existe en Firefox ni en Safari/iOS** |
 | `TELEGRAM_BOT_TOKEN` | La tarjeta se imprime en la consola del servidor |
 
 **Esto es a propósito y no se debe "arreglar".** Es lo que permite que los cuatro trabajen en paralelo desde la hora cero.
+
+Pero degradar en silencio sí era un problema: un ETA calculado por regla de
+tres se pintaba idéntico a uno con tráfico real, y nadie podía saberlo.
+**`GET /capacidades`** dice en qué modo corre cada pieza, y la barra de
+`/campo` lo muestra — solo lo que está degradado, para que no sea ruido.
 
 ---
 
@@ -350,27 +401,48 @@ Cuatro carriles que no se bloquean entre sí. **Cada quien lee su README y arran
 ## ✅ Verificación
 
 ```bash
-cd apps/frontend
-pnpm typecheck           # debe pasar limpio
-pnpm build               # debe pasar limpio
+cd apps/frontend && pnpm typecheck && pnpm build    # ambos limpios
+cd apps/backend/core && pnpm test                   # los suites de persistence/
+                                                    # y migration/ piden un
+                                                    # PostgreSQL de pruebas
 ```
 
 Prueba de humo del flujo completo (con el dev server corriendo):
 
 ```bash
+# ⚠️ core exige sesión en TODO salvo /health. Sin la cookie, todo da 401.
+curl -s -c /tmp/pulso.txt -X POST localhost:3001/auth/login \
+  -H "Content-Type: application/json" -d '{"password":"<OPERADOR_PASSWORD>"}'
+
+# 0. ¿en qué modo está corriendo el sistema?
+curl -s -b /tmp/pulso.txt localhost:3001/capacidades
+#    ruteo "estimado" = sin MAPBOX_TOKEN, los ETA son regla de tres
+#    ia "heuristico"  = sin ai-core alcanzable, extracción por palabras clave
+
 # 1. dictado → caso estructurado
-curl -s -X POST localhost:3001/triage -H "Content-Type: application/json" \
+curl -s -b /tmp/pulso.txt -X POST localhost:3001/triage \
+  -H "Content-Type: application/json" \
   -d '{"texto":"Masculino 54 anos, dolor precordial opresivo, supra ST en DII DIII aVF, inestable."}'
 
 # 2. caso → ranking  (pasar el objeto `caso` completo de la respuesta anterior)
-curl -s -X POST localhost:3001/match -H "Content-Type: application/json" \
-  -d '{"caso": <el caso>, "limite": 5}'
+curl -s -b /tmp/pulso.txt -X POST localhost:3001/match \
+  -H "Content-Type: application/json" -d '{"caso": <el caso>, "limite": 5}'
+
+# 3. ruta hasta la sede elegida, con maniobras en español
+curl -s -b /tmp/pulso.txt -X POST localhost:3001/ruta \
+  -H "Content-Type: application/json" \
+  -d '{"origen":{"lat":4.6097,"lng":-74.0817},"sedeCodigo":"<código>"}'
 ```
 
 **Lo que debe pasar** (assert duro, no "se ve bien"):
 - Un caso de IAM devuelve **solo** sedes con `743` en el ranking.
 - Las sedes sin `743` aparecen con `motivoDescarte` lleno, aunque estén más cerca.
 - Tras rechazar, esa sede **desaparece** del ranking de ese caso y sube el #2.
+- Si nadie contesta en `HANDSHAKE_TIMEOUT_S`, la solicitud pasa a `timeout`
+  sola y el vigilante re-rutea al siguiente candidato **sin que nadie toque
+  nada**. Si se agotan, aparece un escalamiento en `GET /estado`.
+- Aceptar una solicitud ya vencida devuelve `aplicada: false` y **no** revive
+  el traslado: el paciente ya va camino a otra sede.
 - Los ETA son plausibles: nada de 3 minutos de la Plaza de Bolívar a Kennedy.
 
 **Antes del pitch, ≥3 veces:** dictar en el teléfono real → ranking → despachar → el celular del "jefe de urgencias" vibra → aceptar → confirmación. Cronometrar. **Debe cerrar bajo 90 segundos.**

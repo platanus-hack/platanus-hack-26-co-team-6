@@ -25,7 +25,9 @@ import type {
   MatchResponse,
   MotivoEscalamiento,
   RespondResponse,
+  RutaResponse,
   TipoMovil,
+  TranscribirResponse,
   TriageResponse,
   Unidad,
 } from "./types";
@@ -208,6 +210,58 @@ export function atenderEscalamiento(cuerpo: {
 /** En qué modo corre cada integración. Lo lee la barra persistente. */
 export function capacidades(): Promise<Capacidades> {
   return pedir<Capacidades>("/capacidades", { cache: "no-store" });
+}
+
+/**
+ * Manda un audio grabado y devuelve lo que se entendió.
+ *
+ * Es el camino del dictado para los navegadores SIN Web Speech API — Firefox
+ * y Safari/iOS, que no son casos raros. También es el único que sobrevive a
+ * una zona muerta: el Blob se puede guardar y reintentar.
+ *
+ * No pasa por `pedir`: el cuerpo es binario, así que no lleva
+ * `Content-Type: application/json` — el tipo real del audio ES lo que le dice
+ * al proveedor cómo decodificarlo.
+ */
+export async function transcribir(audio: Blob): Promise<TranscribirResponse> {
+  const res = await fetch(`${API}/voz/transcribir`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": audio.type || "audio/webm" },
+    body: audio,
+  });
+
+  if (res.status === 401) {
+    alExpirar?.();
+    throw new ErrorApi("Sesión expirada", 401);
+  }
+  if (!res.ok) {
+    const detalle = await res
+      .json()
+      .then((j) => (Array.isArray(j?.message) ? j.message.join(", ") : j?.message))
+      .catch(() => null);
+    throw new ErrorApi(detalle ?? `core respondió ${res.status}`, res.status);
+  }
+
+  return res.json() as Promise<TranscribirResponse>;
+}
+
+/**
+ * Cómo llegar a la sede aceptada: geometría para el mapa y maniobras en
+ * español para quien conduce.
+ *
+ * Lanza ErrorApi 503 si core no tiene MAPBOX_TOKEN. Eso no es un error que
+ * mostrar en rojo: significa "no puedo trazar la ruta", y quien llame debe
+ * ofrecer abrir la navegación del teléfono.
+ */
+export function ruta(cuerpo: {
+  origen: Coordenada;
+  sedeCodigo: string;
+}): Promise<RutaResponse> {
+  return pedir<RutaResponse>("/ruta", {
+    method: "POST",
+    body: JSON.stringify(cuerpo),
+  });
 }
 
 /**

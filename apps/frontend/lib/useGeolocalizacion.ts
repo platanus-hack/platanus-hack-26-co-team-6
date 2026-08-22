@@ -42,7 +42,11 @@ const enBogota = ({ lat, lng }: Coordenada) =>
 const OPCIONES: PositionOptions = {
   enableHighAccuracy: true,
   timeout: 10_000,
-  maximumAge: 60_000,
+  // 0 y no 60_000: con `watchPosition` este valor es la antigüedad máxima que
+  // aceptamos de la caché del navegador, y a 60 km/h un minuto son mil metros.
+  // El punto del seguimiento en vivo es que el mapa diga dónde está la unidad,
+  // no dónde estaba.
+  maximumAge: 0,
 };
 
 export const MENSAJE_GEO: Record<EstadoGeo, string> = {
@@ -91,13 +95,21 @@ export function useGeolocalizacion() {
     navigator.geolocation.getCurrentPosition(alUbicar, alFallar, OPCIONES);
   }, [alUbicar, alFallar]);
 
-  // Se pide al montar: el paramédico abre la app para usarla, no para
-  // configurarla, y el GPS tarda segundos en enganchar.
+  // Se sigue en vivo mientras la consola está abierta: el paramédico abre la
+  // app para usarla, no para configurarla, y el GPS tarda segundos en
+  // enganchar.
+  //
+  // ── watchPosition, no getCurrentPosition ────────────────────────
+  // Una ambulancia se mueve. Una sola lectura al montar deja el mapa marcando
+  // dónde ESTABA la unidad cuando se abrió la pantalla, que a los dos minutos
+  // es una mentira de varios kilómetros. `watchPosition` entrega cada arreglo
+  // nuevo del GPS y no cuesta más batería que una lectura repetida: el chip ya
+  // está encendido mientras haya un observador.
   //
   // El efecto NO llama a `ubicar()`: esa función arranca poniendo el estado en
   // "pidiendo", y un setState síncrono dentro de un efecto encadena renders.
-  // Aquí el estado ya ES "pidiendo", así que solo hay que disparar la llamada
-  // al navegador y dejar que sus callbacks —asíncronos— resuelvan.
+  // Aquí el estado ya ES "pidiendo", así que solo hay que suscribirse y dejar
+  // que sus callbacks —asíncronos— resuelvan.
   useEffect(() => {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
       // Un navegador sin geolocalización no tiene forma de avisarnos por
@@ -107,7 +119,11 @@ export function useGeolocalizacion() {
       queueMicrotask(() => setEstado("no-soportado"));
       return;
     }
-    navigator.geolocation.getCurrentPosition(alUbicar, alFallar, OPCIONES);
+
+    const id = navigator.geolocation.watchPosition(alUbicar, alFallar, OPCIONES);
+    // Soltar el observador es obligatorio: si no, el GPS sigue encendido
+    // después de salir de la consola y se come la batería del turno.
+    return () => navigator.geolocation.clearWatch(id);
   }, [alUbicar, alFallar]);
 
   return { origen, estado, precisionM, ubicar };
