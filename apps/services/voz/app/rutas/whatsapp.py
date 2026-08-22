@@ -8,11 +8,21 @@
    Un 500 aquí no te avisa de un bug — te deja sin canal a mitad del demo.
 """
 
+import json
 import logging
 
-from fastapi import APIRouter, BackgroundTasks, Query, Request, Response
+from fastapi import (
+    APIRouter,
+    BackgroundTasks,
+    HTTPException,
+    Query,
+    Request,
+    Response,
+)
 
 from ..canales import whatsapp
+from ..canales import firma as firma_webhook
+from ..canales.firma import FirmaInvalida
 from ..canales.modelos import MensajeEntrante
 from ..clientes import ai_core
 from ..despachador import despachar
@@ -25,7 +35,7 @@ router = APIRouter(prefix="/webhooks", tags=["whatsapp"])
 
 
 @router.get("/whatsapp")
-def verificar(
+def verificar_registro(
     modo: str | None = Query(None, alias="hub.mode"),
     token: str | None = Query(None, alias="hub.verify_token"),
     reto: str | None = Query(None, alias="hub.challenge"),
@@ -52,8 +62,21 @@ async def recibir(request: Request, tareas: BackgroundTasks) -> dict[str, str]:
     llave primaria: quien lo gana procesa, quien choca es un reintento de
     Meta y no vuelve a tocar core. Ver `webhooks_recibidos`.
     """
+    crudo = await request.body()
+
+    # La firma se verifica sobre el cuerpo CRUDO, antes de parsear. Sobre el
+    # JSON re-serializado no cuadraría: cualquier diferencia de espacios o de
+    # orden de claves cambia el hash.
     try:
-        payload = await request.json()
+        firma_webhook.verificar(crudo, request.headers)
+    except FirmaInvalida as e:
+        # 403 y no 200: aquí sí queremos que el emisor se entere. Un webhook
+        # legítimo nunca falla la firma; si falla, no es legítimo.
+        log.warning("[voz] webhook rechazado: %s", e)
+        raise HTTPException(status_code=403, detail="Firma inválida") from None
+
+    try:
+        payload = json.loads(crudo)
     except Exception:
         log.warning("[voz] webhook con cuerpo ilegible")
         return {"status": "ignorado"}
