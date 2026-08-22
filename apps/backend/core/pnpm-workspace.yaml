@@ -1,0 +1,4 @@
+# Matches the decision already made in apps/frontend/pnpm-workspace.yaml.
+# unrs-resolver ships a postinstall build script; it is not needed here.
+allowBuilds:
+  unrs-resolver: false

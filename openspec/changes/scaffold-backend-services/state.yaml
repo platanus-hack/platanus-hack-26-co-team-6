@@ -1,0 +1,105 @@
+schemaName: gentle-ai.sdd-state
+schemaVersion: 1
+
+changeName: scaffold-backend-services
+artifactStore: hybrid
+createdAt: "2026-08-22"
+
+session:
+  executionMode: auto
+  deliveryStrategy: ask-on-risk
+  reviewBudgetLines: 800
+  strictTdd: true
+  testCommand: ""
+
+phases:
+  explore:
+    status: complete
+    artifacts:
+      - openspec/changes/scaffold-backend-services/exploration.md
+    engramTopicKey: sdd/scaffold-backend-services/explore
+    notes: >-
+      Sub-agent returned partial because sdd-explore has no filesystem write tool.
+      The orchestrator materialized exploration.md from the persisted Engram
+      observation, so the phase is complete in both backends.
+  propose:
+    status: complete
+    artifacts:
+      - openspec/changes/scaffold-backend-services/proposal.md
+    engramTopicKey: sdd/scaffold-backend-services/proposal
+    notes: >-
+      All six decision forks closed. Three of them corrected the exploration:
+      apps/Backend must be deleted (NTFS treats it as the same directory as
+      apps/backend, orchestrator-verified); the port override must edit the
+      generated main.ts fallback, not just .env; and integration topology could
+      not be deferred to design because CORS placement is decided by scaffolding.
+  spec:
+    status: complete
+    artifacts:
+      - openspec/changes/scaffold-backend-services/specs/backend-service-baseline/spec.md
+    engramTopicKey: sdd/scaffold-backend-services/spec
+    notes: >-
+      Seven verifiable requirements. Two contracts were pinned here that the
+      proposal left loose: the health response is exactly HTTP 200 with
+      {"status": "ok"}, and repository hygiene is verified through git ls-files
+      rather than a CI check, since no CI exists. CORS is stated as an observable
+      response property; design names the NestJS mechanism.
+  design:
+    status: in-progress
+    artifacts:
+      - openspec/changes/scaffold-backend-services/design.md
+    engramTopicKey: sdd/scaffold-backend-services/design
+    owns:
+      - core -> ai-core contract shape
+      - error and timeout behavior
+      - environment variable naming and config loading
+      - directory structure inside each service
+      - local boot and run story on Windows
+  tasks:
+    status: pending
+    engramTopicKey: sdd/scaffold-backend-services/tasks
+  apply:
+    status: pending
+    engramTopicKey: sdd/scaffold-backend-services/apply-progress
+  verify:
+    status: pending
+    engramTopicKey: sdd/scaffold-backend-services/verify-report
+  archive:
+    status: pending
+    engramTopicKey: sdd/scaffold-backend-services/archive-report
+
+nextRecommended: spec
+blockedReasons: []
+
+# Raised by sdd-propose, must be resolved by the orchestrator before sdd-apply.
+pendingDecisions:
+  - id: chained-pr-split
+    raisedBy: propose
+    dueBefore: apply
+    summary: >-
+      Authored volume is 150-250 lines (within the 800 budget), but the raw diff
+      reads 6,000-10,000 lines once pnpm-lock.yaml and uv.lock are counted.
+      Proposal recommends two chained PRs (core, then ai-core). delivery_strategy
+      is ask-on-risk, so this needs a user decision at the tasks -> apply boundary.
+
+# Orchestrator-verified repository facts at change creation time.
+baseline:
+  branch: main
+  trackedFiles: 4
+  trackedFileList:
+    - README.md
+    - platanus-hack-project.jsonc
+    - project-description.md
+    - project-logo.png
+  untracked:
+    - apps/          # includes apps/frontend — never committed
+    - openspec/
+    - .codegraph/
+    - .gitignore
+  toolchain:
+    node: 24.18.0
+    pnpm: 11.18.0
+    nestCli: 11.0.24
+    python: 3.14.6
+    uv: 0.11.32
+    docker: 29.6.2
