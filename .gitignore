@@ -1,2 +1,17 @@
+node_modules/
+.next/
+out/
+build/
+.env
+.env.local
+.env*.local
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+.vercel
+.claude/settings.local.json
+scripts/etl/.venv/
+scripts/etl/__pycache__/
+scripts/etl/salida/
 # SDD / Atlas local tooling cache (skill registry index) — not shared, regenerated locally
 .atl/
