@@ -3,6 +3,7 @@
 import pytest
 from fastapi.testclient import TestClient
 
+from app import metricas, webhooks_recibidos
 from app.config import settings
 from app.main import app
 from app.sesiones import reiniciar
@@ -13,6 +14,9 @@ client = TestClient(app)
 @pytest.fixture(autouse=True)
 def entorno(monkeypatch):
     reiniciar()
+    webhooks_recibidos.reiniciar()
+    metricas.reiniciar()
+    monkeypatch.setattr(settings, "webhook_database_url", "")
     monkeypatch.setattr(settings, "whatsapp_verify_token", "secreto-del-demo")
     monkeypatch.setattr(settings, "whatsapp_token", "")
     monkeypatch.setattr(settings, "secreto_endpoint", "")
@@ -255,7 +259,7 @@ def test_si_la_llamada_falla_no_se_pierde_el_aviso(monkeypatch):
 # ── Autenticación contra core ────────────────────────────────────
 
 
-def test_expira_en_se_interpreta_en_milisegundos(monkeypatch):
+async def test_expira_en_se_interpreta_en_milisegundos(monkeypatch):
     # core lo arma con Date.now(): son MILISEGUNDOS. Tratarlo como segundos
     # lo pone en el año 57000 y el token no se renovaría jamás.
     import time as _t
@@ -276,25 +280,17 @@ def test_expira_en_se_interpreta_en_milisegundos(monkeypatch):
         async def post(self, *a, **kw):
             return ResFalsa()
 
-    import asyncio
-
-    tok = asyncio.get_event_loop().run_until_complete(
-        cliente_core._token_valido(ClienteFalso())
-    )
+    tok = await cliente_core._token_valido(ClienteFalso())
     assert tok == "tok-1"
     # Dentro de la hora siguiente, no del año 57000.
     assert _t.time() < cliente_core._expira_en < _t.time() + 7200
     cliente_core._invalidar()
 
 
-def test_sin_password_no_manda_authorization(monkeypatch):
+async def test_sin_password_no_manda_authorization(monkeypatch):
     from app.clientes import core as cliente_core
 
     monkeypatch.setattr(settings, "core_password", "")
     cliente_core._invalidar()
 
-    import asyncio
-
-    assert asyncio.get_event_loop().run_until_complete(
-        cliente_core._token_valido(None)
-    ) is None
+    assert await cliente_core._token_valido(None) is None

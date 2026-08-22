@@ -1,0 +1,42 @@
+# CI mínimo de PULSO.
+#
+# Hoy verifica UNA cosa: que el espejo de tipos no se haya divergido
+# (tarea 0.7). Es deliberadamente pequeño — cada carril que quiera su
+# verificación agrega un job aquí, no un workflow nuevo.
+#
+# Por qué esta primero: `apps/frontend/lib/types.ts` es un espejo manual de
+# `apps/backend/core/src/contracts/types.ts`. Cambiar uno solo COMPILA en los
+# dos lados. No rompe el build, rompe el runtime — el deploy sale verde y el
+# campo se entera en vivo.
+
+name: verificaciones
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  espejo-de-tipos:
+    name: El espejo de tipos sigue siendo un espejo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # 24: el verificador es .mts y corre con el type stripping nativo,
+          # sin tsx ni ts-node. Node 24 también trae `node --test`.
+          node-version: '24'
+          cache: npm
+
+      # El verificador solo necesita `typescript`, que ya está en las
+      # devDependencies de la raíz. `--ignore-scripts`: nada de postinstall
+      # en CI.
+      - run: npm ci --ignore-scripts
+
+      - name: Los tests del verificador
+        run: npm run test:tipos
+
+      - name: El espejo coincide
+        run: npm run verificar:tipos

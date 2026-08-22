@@ -13,6 +13,10 @@
  *  Si esto empieza a doler, la salida es un paquete compartido en el
  *  workspace, no seguir copiando a mano.
  *
+ *  Y ya no depende de la memoria de nadie: `node scripts/verificar-tipos.mts`
+ *  compara la estructura de los dos archivos y falla nombrando el tipo que
+ *  divergió. Corre en CI y antes de `task build`.
+ *
  *  Dueños:
  *    Caso / ExtraccionClinica  → Neid  (los produce POST /triage)
  *    Sede / Candidato          → Zaid  (los produce POST /match)

@@ -1,5 +1,8 @@
 # Zaid + Neyl · Cobertura de flota
 
+> 📌 **Documento de la hackathon (ago 2026).** Conserva contexto útil, pero **algunas rutas de archivo ya cambiaron**.
+> El plan vigente está en [`docs/README.md`](README.md) y las tareas en [`docs/tareas/zaid.md`](tareas/zaid.md).
+
 > Doc compartido. Lo que hay, lo que falta, y quién lo tiene.
 > Complementa [neid-ai.md](neid-ai.md), [zaid-backend.md](zaid-backend.md) y
 > [neid-faltantes.md](neid-faltantes.md).

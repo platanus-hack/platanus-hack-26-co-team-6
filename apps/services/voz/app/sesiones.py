@@ -11,6 +11,11 @@ saber cual es SU caso, y eso no viene en el mensaje.
 
    El arreglo de verdad es que core lo guarde en Supabase junto al caso
    (`caso.telefono_reporta`). Mientras tanto, esto y un aviso honesto.
+
+La idempotencia del webhook YA NO vive aquí: se mudó a `webhooks_recibidos`,
+que la guarda en Postgres. Estaba junto a las sesiones por cercanía, pero son
+dos problemas distintos — la sesión se puede perder al reiniciar sin que muera
+nadie; un mensaje deduplicado dos veces despacha dos ambulancias.
 """
 
 from dataclasses import dataclass, field
@@ -32,10 +37,6 @@ class Sesion:
 
 
 _sesiones: dict[str, Sesion] = {}
-#: Ids de mensaje ya procesados. WhatsApp reintenta los webhooks: sin esto un
-#: solo reporte dispara dos traslados.
-_vistos: set[str] = set()
-_MAX_VISTOS = 2000
 
 
 def obtener(telefono: str) -> Sesion:
@@ -49,19 +50,6 @@ def guardar(sesion: Sesion) -> None:
     _sesiones[sesion.telefono] = sesion
 
 
-def ya_procesado(id_externo: str) -> bool:
-    """True si este mensaje ya se atendió. Idempotencia del webhook."""
-    if not id_externo:
-        return False
-    if id_externo in _vistos:
-        return True
-    if len(_vistos) >= _MAX_VISTOS:
-        _vistos.clear()  # cota simple; el demo no necesita LRU
-    _vistos.add(id_externo)
-    return False
-
-
 def reiniciar() -> None:
     """Sólo para tests y para dejar limpio antes del pitch."""
     _sesiones.clear()
-    _vistos.clear()
