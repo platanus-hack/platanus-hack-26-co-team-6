@@ -30,6 +30,7 @@ export interface ResultadoEta {
   distKm: number;
   /** true si vino de Mapbox, false si es la estimación por distancia. */
   conTrafico: boolean;
+  provenance: 'mapbox' | 'haversine_fallback';
 }
 
 export interface DestinoEta {
@@ -100,6 +101,7 @@ export class EtaService {
           etaMin: redondear(seg / 60),
           distKm: redondear(met != null ? met / 1000 : d.distKm),
           conTrafico: true,
+          provenance: 'mapbox',
         };
       });
     } catch (e) {
@@ -140,9 +142,12 @@ export class EtaService {
       etaMin: estimarMinutos(distKm),
       distKm: redondear(distKm),
       conTrafico: false,
+      provenance: 'haversine_fallback',
     };
   }
 }
+
+export const selectEtaEstimate = (primaryMinutes: number | null, fallbackMinutes: number) => primaryMinutes == null ? { etaMin: fallbackMinutes, provenance: 'haversine_fallback' as const } : { etaMin: primaryMinutes, provenance: 'mapbox' as const };
 
 /** Factor 1.35 por el trazado real de calles vs. línea recta en Bogotá. */
 function estimarMinutos(distKm: number): number {

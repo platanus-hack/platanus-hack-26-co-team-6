@@ -1,3 +1,4 @@
+import { APP_FILTER } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { HealthController } from './health/health.controller';
@@ -12,6 +13,8 @@ import { DispatchModule } from './dispatch/dispatch.module';
 import { EstadoModule } from './estado/estado.module';
 import { TriageModule } from './triage/triage.module';
 import { TelegramModule } from './telegram/telegram.module';
+import { PulsoErrorFilter } from './common/pulso-error.filter';
+import { RoutingModule } from './routing/routing.module';
 
 @Module({
   imports: [
@@ -19,6 +22,7 @@ import { TelegramModule } from './telegram/telegram.module';
     // módulo. Sin esto, `apps/backend/core/.env` no lo lee nadie y las
     // credenciales fallan en silencio.
     ConfigModule.forRoot({ isGlobal: true }),
+    RoutingModule,
 
     // Estado de sesión (@Global): casos, handshakes e historial de aceptación.
     AlmacenModule,
@@ -38,5 +42,6 @@ import { TelegramModule } from './telegram/telegram.module';
     TelegramModule,
   ],
   controllers: [HealthController],
+  providers: [{ provide: APP_FILTER, useClass: PulsoErrorFilter }],
 })
 export class AppModule {}

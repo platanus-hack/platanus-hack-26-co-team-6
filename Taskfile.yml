@@ -111,6 +111,34 @@ tasks:
     cmds:
       - node scripts/doctor.mjs
 
+  # ----------------------------------------------------------- migrations ---
+
+  migrate:
+    desc: Apply pending PostgreSQL migrations.
+    dir: "{{.CORE}}"
+    cmds:
+      - pnpm run migrate -- up
+
+  migrate:seed:
+    desc: Seed PostgreSQL (FUENTE=semillas or FUENTE=csv).
+    dir: "{{.CORE}}"
+    vars:
+      FUENTE: '{{.FUENTE | default "semillas"}}'
+    cmds:
+      - pnpm run migrate -- seed --fuente={{.FUENTE}}
+
+  migrate:status:
+    desc: Show applied, pending and modified migrations.
+    dir: "{{.CORE}}"
+    cmds:
+      - pnpm run migrate -- status
+
+  migrate:verify:
+    desc: Verify migrated data and the nearby-facilities RPC.
+    dir: "{{.CORE}}"
+    cmds:
+      - pnpm run migrate -- verify
+
   # --------------------------------------------------------------- misc ---
 
   build:

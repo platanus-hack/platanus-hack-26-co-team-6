@@ -244,3 +244,19 @@ export interface ErrorApi {
   error: string;
   detalle?: string;
 }
+
+export type PulsoCode =
+  | 'PULSO_INVALID_INPUT'
+  | 'PULSO_LOW_CONFIDENCE'
+  | 'PULSO_INCONSISTENT_TRIAGE'
+  | 'PULSO_NO_ELIGIBLE_DESTINATION'
+  | 'PULSO_ILLEGAL_TRANSITION'
+  | 'PULSO_INCOMPLETE_EVIDENCE'
+  | 'PULSO_IDEMPOTENCY_CONFLICT'
+  | 'PULSO_DESTINATION_ALREADY_ACCEPTED'
+  | 'PULSO_INTERNAL';
+export type CaseRoutingState = 'validated' | 'requires_human_review' | 'ready_for_matching' | 'matching' | 'escalated_to_crue' | 'dispatched' | 'closed';
+export type HandshakeRoutingState = 'pending' | 'accepted' | 'rejected' | 'timed_out';
+export interface PulsoErrorEnvelope { error: { code: PulsoCode; message: string; details?: unknown; retryable: boolean } }
+export interface IdempotencyInput { idempotencyKey: string }
+export interface RoutingDecisionEvidence { caseId: string; modelVersion: string; configVersion: string; inputs: unknown; candidates: unknown[]; selectedDestination: string; etaProvenance: 'mapbox' | 'haversine_fallback'; minuteBreakdown: Record<string, number>; fingerprint: string }

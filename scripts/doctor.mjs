@@ -170,6 +170,27 @@ function checkEnvFiles() {
   }
 }
 
+function checkMigrationEnv() {
+  const envPath = join(CORE, ".env");
+  let dbUrl = process.env.SUPABASE_DB_URL?.trim();
+
+  if (!dbUrl && existsSync(envPath)) {
+    const match = readFileSync(envPath, "utf8").match(
+      /^\s*(?:export\s+)?SUPABASE_DB_URL\s*=\s*(.*)\s*$/m,
+    );
+    dbUrl = match?.[1]?.trim().replace(/^(['"])(.*)\1$/, "$2");
+  }
+
+  if (dbUrl) {
+    pass("env: SUPABASE_DB_URL", "defined for migration commands");
+  } else {
+    warn(
+      "env: SUPABASE_DB_URL",
+      "missing — core can boot, but 'task migrate*' requires a direct/session port 5432 URL",
+    );
+  }
+}
+
 // -------------------------------------------------------------- ports ---
 
 async function checkPorts() {
@@ -240,5 +261,6 @@ checkNodeDeps("frontend deps", FRONTEND, "next");
 checkNodeDeps("core deps", CORE, "@nestjs/core");
 checkVenv();
 checkEnvFiles();
+checkMigrationEnv();
 await checkPorts();
 report();
