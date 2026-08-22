@@ -78,3 +78,27 @@ Checklist antes de decir "listo":
 **El polling y el hot-reload.** El estado vive en memoria del servidor (`apps/backend/core/src/almacen/almacen.service.ts`). Si guardas un archivo mientras el dev server corre, Next recarga el módulo y **puedes perder los casos**. Está enganchado a `globalThis` para mitigarlo, pero si algo desaparece raro, esa es la razón. No es un bug tuyo.
 
 **`opacity` sobre tarjetas descartadas.** Cuidado con bajar tanto el contraste que en el proyector no se lea el motivo del descarte. Ese texto es un argumento del pitch.
+
+---
+
+## Nota de Neid (H+): dónde vive el motor ahora
+
+Nada de tu contrato cambia — `Candidato`, `DesgloseScore`, `motivoDescarte` y
+las descartadas en gris siguen idénticas. Esto es solo para que no te
+sorprenda si abres el backend.
+
+El motor de scoring y congestión ahora también existe en
+`apps/backend/ai-core` (`POST /v1/score`), portado a Python. `/api/match` sigue
+funcionando igual que hoy; la versión de ai-core es la que usaremos si movemos
+el cálculo fuera del frontend. **Tú no tienes que hacer nada.**
+
+Dos cosas que sí te pueden servir:
+
+- **El score es reproducible.** `/v1/score` acepta un campo `ahora` (ISO): con
+  él fijo, el mismo request da exactamente el mismo ranking. Sirve para
+  `NEXT_PUBLIC_MODO_DEMO` y para grabar el video de respaldo sin que la curva
+  horaria te cambie los números entre tomas.
+- **El desglose de congestión** (ocupación base, horario, rechazo reciente,
+  epidemiológico) está disponible por separado si quieres pintar el panel de
+  "por qué" al abrir una tarjeta. Está en `app/congestion.py`,
+  `desglose_congestion()`. Si lo quieres expuesto por HTTP, dime y lo saco.

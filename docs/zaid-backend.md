@@ -176,3 +176,76 @@ Asserts duros (no "se ve bien"):
 **Dos backends vivos a la vez.** Ya no aplica: las rutas viejas del front están borradas y devuelven 404. Si alguien reintroduce un `app/api/*` "para probar rápido", vuelve el problema — arreglas un bug en uno y lo pruebas en el otro.
 
 **El `.env` correcto.** Ahora hay tres: `apps/frontend/.env.local`, `apps/backend/core/.env` y `apps/backend/ai-core/.env`. `SUPABASE_SERVICE_ROLE_KEY` va en el de **core** y en ningún otro. Esa llave se salta RLS: si termina en el bundle del front, la regalaste.
+
+---
+
+## Hallazgos de Neid, revisados después de tu refactor
+
+Los levanté antes de tu mudanza a NestJS. **Uno lo arreglaste tú sin saberlo;
+los otros dos siguen abiertos y son tuyos.**
+
+### ✅ Resuelto por el refactor: el riesgo de Vercel
+
+Cuando el estado vivía en `apps/frontend/lib/almacen.ts`, el comentario decía
+*"para el demo da igual: una sola sesión, un solo proceso"* — y eso **no se
+cumple en Vercel**, donde el webhook de Telegram y el polling de `/campo`
+pueden caer en instancias serverless distintas. El jefe de urgencias acepta y
+la pantalla del paramédico no se entera. Es el momento 1:30 del guion.
+
+Con `AlmacenService` dentro de un proceso Nest largo eso deja de aplicar, y
+por eso pudiste quitar el truco de `globalThis`. **El riesgo solo vuelve si
+core termina desplegado en serverless** — si lo mandas a Vercel Functions en
+vez de a un contenedor, vuelve tal cual.
+
+### 🔴 Abierto: los handshakes siguen sin escribirse en Supabase
+
+Lo único que toca la base es la RPC `sedes_cercanas` en `sedes.service.ts`.
+`AlmacenService` sigue siendo memoria pura: `caso` y `handshake` nunca reciben
+un `insert`.
+
+El README llama a la tabla `handshake` *"el dataset que se auto-etiqueta — el
+activo del producto"*. Hoy ese activo se borra al reiniciar core. Si el jurado
+pregunta *"¿dónde queda ese dataset que dicen que se entrena solo?"*, la
+respuesta honesta es "en RAM".
+
+Las tablas ya están con sus índices. Son dos `insert` y un `select`, no un
+refactor. Y desbloquea lo de abajo.
+
+### 🔴 Abierto: nadie escribe el estado `timeout`
+
+`EstadoHandshake` lo incluye y `match.service.ts:53` lo lee para no volver a
+ofrecer una sede que no contestó. **Pero ningún código lo asigna nunca.** Un
+hospital que no responde deja el caso colgado para siempre. Está anotado
+también en [sebas-producto.md](sebas-producto.md), porque el escalamiento es
+de su carril.
+
+---
+
+## Lo que cambié en tu código (rama `feat/ai-core-integracion`)
+
+Tres cosas, todas aditivas. Revísalas antes de mezclar.
+
+**1. La penalización de rebote ahora se calibra por sede.**
+`PENALIZACION_REBOTE = 22` era global. Ahora se descompone en la mitad
+observable (lo que **esa sede** tarda en contestar, que ya calculabas en
+`handshake.service.ts` como `latenciaS`) más el sobrecosto fijo de descargar y
+re-rutear. Con cero handshakes devuelve exactamente 22 — el número del pitch no
+se mueve. Toqué `scoring.service.ts`, `almacen.service.ts` (guarda la latencia)
+y `handshake.service.ts` (se la pasa).
+
+**2. `core` ya puede hablarle a `ai-core`.** Agregué `AiCoreClient` siguiendo
+el `design.md` del scaffold, y `TriageService` lo intenta primero **solo si
+`AI_CORE_BASE_URL` está configurada**. Si no está, o si ai-core no responde,
+sigue exactamente el camino de hoy. Es opt-in: por defecto no cambia nada.
+
+**3. `motor` y `via` en `TriageResponse`**, ambos opcionales. `motor` dice si
+la extracción salió de Claude o de la heurística — antes la única pista era
+`confianza == 0.35` exacto. `via` dice si corrió en core o en ai-core.
+
+### Por qué el scoring se queda en core y no se va a ai-core
+
+Porque necesita el estado de `AlmacenService` (historial y rechazos por sede).
+Mandarlo a ai-core obligaría a serializar señales de ~60 sedes en cada
+`/match`, y no gana nada: el scoring es aritmética, no IA. Lo que sí tiene
+sentido en ai-core es el triaje, que es una llamada texto → JSON sin estado.
+

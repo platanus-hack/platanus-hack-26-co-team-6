@@ -104,3 +104,64 @@ No. La Ley 1751/2015 obliga a atender urgencias sin autorización previa. El bot
 No toques `apps/backend/core/src/scoring/scoring.service.ts`, `apps/backend/core/src/scoring/congestion.service.ts` ni el ETL. Están cubiertos. Cada hora que pasas ahí es una hora que no pasas en lo que realmente decide el resultado.
 
 Y protege esta lista con los dientes: **no se construye** auth real, historia clínica, FHIR completo, contrarreferencia, app nativa, multi-ciudad ni modelo entrenado. Cuando alguien del equipo proponga uno de esos a las 4 de la mañana, tu trabajo es decir que no.
+
+---
+
+## Hallazgos de Neid (H+)
+
+### 🔴 Nadie escribe el estado `timeout` — no hay escalamiento
+
+`EstadoHandshake` incluye `"timeout"`, y `/api/match` lo lee para no volver a
+ofrecer una sede que no contestó. **Pero ningún código lo asigna nunca.**
+Busqué en todo el repo: solo aparece en la definición del tipo y en ese filtro.
+
+O sea: si el jefe de urgencias no contesta, el caso se queda colgado para
+siempre y el paramédico se queda mirando una pantalla que dice "enviado".
+
+Es tu carril ([`apps/frontend/lib/handshake.ts`](../apps/frontend/lib/handshake.ts))
+y es barato: a los 60 s sin respuesta, marcar `timeout` y despachar al #2 del
+ranking. **Vale más para el demo que cualquier canal nuevo** — y de paso te da
+un momento fuerte que hoy no tienes: *"el hospital no contestó y el sistema
+siguió solo"*. Eso es exactamente lo que hoy hace un humano al teléfono.
+
+### La flota de ambulancias es tu slide de cierre, no código
+
+Salió una idea grande: modelar cada ambulancia como un móvil con tracking,
+recalcular cobertura por grilla al estilo Uber, detectar demoras con outliers
+(q10/q90) y llamar por voz con Twilio + ElevenLabs para preguntar la razón.
+
+**Nada de eso existe en el repo** — busqué "ambulancia", "móvil", "flota",
+"tracking": cero. `tipoMovil` es un string en el caso, nada más. Construirlo
+requiere entidad de móvil, máquina de estados, grilla, política de
+reposicionamiento y **demanda histórica por celda**, que tampoco tenemos. Y el
+q10/q90 necesita cientos de viajes: al momento del pitch habría cero.
+
+Dos razones más para no construirlo, y la segunda es tuya:
+
+1. Un stub de flota es exactamente lo que un jurado técnico caza. Dicho como
+   visión es fuerte; mostrado a medias, resta.
+2. **Debilita tu mejor respuesta legal.** Hoy dices *"PULSO propone, el CRUE
+   regula"* (Res. 1220/2010). Reposicionar ambulancias por la ciudad **es** la
+   función operativa del CRUE. En el momento en que el sistema mueve flota, esa
+   respuesta deja de ser limpia y te abres a la pregunta incómoda que hoy
+   tienes blindada.
+
+Mi recomendación: va en el cierre, después de los 45 min → 90 s. *"Hoy PULSO
+elige el destino. El mismo motor, con la flota conectada, elige también qué
+ambulancia y desde dónde."* Es una frase, no una sprint.
+
+### El motor ahora aprende el rebote por sede
+
+`PENALIZACION_REBOTE` era una constante global de 22 minutos para todos. Ahora
+se descompone en dos mitades: lo que **esa sede** tarda en contestar (medible
+desde cada handshake) más el sobrecosto fijo de descargar y re-rutear.
+
+Para el pitch: sin datos sigue dando exactamente 22 min, así que el número que
+ya ensayaste no cambia. Lo que cambia es que ahora puedes decir *"y ese 22 no
+es un supuesto congelado: cada handshake lo calibra por hospital"*. Detalle en
+[neid-ai.md](neid-ai.md).
+
+Y ojo con la honestidad, que es tu marca en este pitch: los 22 min y los 25 de
+espera en puerta **siguen siendo juicio informado, no medición colombiana
+publicada**. Si te preguntan, dilo así — son parámetros calibrables, no
+verdades. Eso genera confianza; fingir precisión la destruye.
