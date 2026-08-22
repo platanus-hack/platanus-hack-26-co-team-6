@@ -30,10 +30,10 @@ Mientras tanto: **Telegram es el canal primario del demo.** Inline keyboards, ce
 
 | Archivo | Qué es |
 |---|---|
-| [`app/hospital/page.tsx`](../app/hospital/page.tsx) | Consola del jefe de urgencias. Funciona. |
-| [`lib/canales.ts`](../lib/canales.ts) | Telegram + WhatsApp + el texto de la tarjeta. |
-| [`app/api/telegram/webhook/route.ts`](../app/api/telegram/webhook/route.ts) | Recibe los toques de los botones. |
-| [`app/globals.css`](../app/globals.css) | **Tú defines los tokens de diseño.** Juan los consume. |
+| [`apps/frontend/app/hospital/page.tsx`](../apps/frontend/app/hospital/page.tsx) | Consola del jefe de urgencias. Funciona. |
+| [`apps/frontend/lib/canales.ts`](../apps/frontend/lib/canales.ts) | Telegram + WhatsApp + el texto de la tarjeta. |
+| [`apps/frontend/app/api/telegram/webhook/route.ts`](../apps/frontend/app/api/telegram/webhook/route.ts) | Recibe los toques de los botones. |
+| [`apps/frontend/app/globals.css`](../apps/frontend/app/globals.css) | **Tú defines los tokens de diseño.** Juan los consume. |
 | `deck/` | Créalo. |
 
 ---
@@ -63,7 +63,7 @@ Mientras tanto: **Telegram es el canal primario del demo.** Inline keyboards, ce
 ### Bloque 3 · H20–H28 — el demo *es* el producto
 
 - [ ] **Modo demo determinista.** `NEXT_PUBLIC_MODO_DEMO=true`. Nada de aleatoriedad en vivo.
-- [ ] **Estado limpio antes de subir.** `reiniciarTodo()` en [`lib/almacen.ts`](../lib/almacen.ts) borra casos y handshakes. Si en el escenario aparecen 14 casos de las pruebas, se ve amateur. Ponle un botón escondido o un endpoint.
+- [ ] **Estado limpio antes de subir.** `reiniciarTodo()` en [`apps/frontend/lib/almacen.ts`](../apps/frontend/lib/almacen.ts) borra casos y handshakes. Si en el escenario aparecen 14 casos de las pruebas, se ve amateur. Ponle un botón escondido o un endpoint.
 - [ ] 🔴 **GRABAR EL VIDEO DE RESPALDO DEL DEMO COMPLETO.** El wifi del evento se cae. Siempre. Un video de 90 segundos te salva el pitch entero.
 - [ ] **Tres ensayos cronometrados.** Con los teléfonos reales, en la red del evento.
 
@@ -101,6 +101,6 @@ No. La Ley 1751/2015 obliga a atender urgencias sin autorización previa. El bot
 
 ## Lo que NO tienes que hacer
 
-No toques `lib/scoring.ts`, `lib/congestion.ts` ni el ETL. Están cubiertos. Cada hora que pasas ahí es una hora que no pasas en lo que realmente decide el resultado.
+No toques `apps/frontend/lib/scoring.ts`, `apps/frontend/lib/congestion.ts` ni el ETL. Están cubiertos. Cada hora que pasas ahí es una hora que no pasas en lo que realmente decide el resultado.
 
 Y protege esta lista con los dientes: **no se construye** auth real, historia clínica, FHIR completo, contrarreferencia, app nativa, multi-ciudad ni modelo entrenado. Cuando alguien del equipo proponga uno de esos a las 4 de la mañana, tu trabajo es decir que no.

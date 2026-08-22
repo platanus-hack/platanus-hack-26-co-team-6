@@ -11,9 +11,10 @@ Platanus Hack 26: Bogotá · Track 🚨 Emergencies · team-6
 ## Arranque rápido (5 minutos)
 
 ```bash
-npm install
-cp .env.example .env.local     # PowerShell: copy .env.example .env.local
-npm run dev
+cd apps/frontend
+pnpm install
+cp ../../.env.example .env.local     # PowerShell: copy ..\..\.env.example .env.local
+pnpm dev
 ```
 
 Abre <http://localhost:3000>. **Funciona sin ninguna credencial**: sin Supabase usa 14 sedes semilla, sin Mapbox estima el ETA por distancia, sin API key de Claude usa un extractor por palabras clave. Cada credencial que agregues mejora una pieza sin romper nada.
@@ -23,7 +24,7 @@ Para el demo se abren **dos pantallas a la vez**: `/campo` en el celular y `/hos
 <details>
 <summary><b>Trabajando con Live Share</b></summary>
 
-- **Solo el host corre `npm run dev`.** Live Share reenvía el puerto 3000 a todos.
+- **Solo el host corre `pnpm dev`.** Live Share reenvía el puerto 3000 a todos.
 - El `.env.local` vive **solo en la máquina del host**. Los demás no lo necesitan.
 - Si a alguien no le carga `localhost:3000`, que revise el panel de Live Share → *Shared Servers*.
 - ⚠️ **`node_modules` dentro de OneDrive es un problema conocido**: OneDrive intenta sincronizar 60.000 archivos y bloquea el build. Si ves errores raros de `EPERM` o el build se cuelga, click derecho en la carpeta `hackaton` → *Liberar espacio* / excluir de la sincronización.
@@ -107,7 +108,7 @@ sujeto a (filtro DURO, no ponderado):
 
 Una sede sin hemodinamia no es "peor opción": **es no-opción**. Ver una clínica a 10 minutos tachada en gris por no tener el servicio explica el producto entero sin decir una palabra.
 
-`P(aceptación)` es un posterior Beta-Bernoulli por sede que arranca en un prior estructural del REPS y se mueve con cada handshake. Ver [`lib/scoring.ts`](lib/scoring.ts) y [`lib/congestion.ts`](lib/congestion.ts).
+`P(aceptación)` es un posterior Beta-Bernoulli por sede que arranca en un prior estructural del REPS y se mueve con cada handshake. Ver [`apps/frontend/lib/scoring.ts`](apps/frontend/lib/scoring.ts) y [`apps/frontend/lib/congestion.ts`](apps/frontend/lib/congestion.ts).
 
 ---
 
@@ -148,7 +149,7 @@ Esto es lo que separa un proyecto de hackathon de uno que un médico toma en ser
 - **Res. 5596/2015** — triage de 5 niveles. I: inmediato · II: ≤30 min · III: ≤120 · IV: ≤240 · V: ≤360. El parser emite este número.
 - **Res. 3100/2019** — habilitación de servicios, y los móviles **TAB** (básico) vs **TAM** (medicalizado). El tipo de móvil es un **filtro duro**: un TAB no traslada un paciente que requiere ventilación.
 - **Res. 1220/2010** — el **CRUE** tiene la potestad regulatoria. **PULSO propone; el CRUE regula.** No lo reemplazamos: legalmente no se puede, y decir lo contrario en el pitch es un autogol.
-- **Ley 1751/2015** — las urgencias se atienden sin autorización previa. Por eso el botón "Rechazar" **no es un derecho a negar atención**: es una *declaración de capacidad*, queda auditada con timestamp, y en triage I ni siquiera se ofrece. Esa regla está implementada en [`app/hospital/page.tsx`](app/hospital/page.tsx).
+- **Ley 1751/2015** — las urgencias se atienden sin autorización previa. Por eso el botón "Rechazar" **no es un derecho a negar atención**: es una *declaración de capacidad*, queda auditada con timestamp, y en triage I ni siquiera se ofrece. Esa regla está implementada en [`apps/frontend/app/hospital/page.tsx`](apps/frontend/app/hospital/page.tsx).
 
 ---
 
@@ -167,7 +168,7 @@ Cuatro carriles que no se bloquean entre sí. **Cada quien lee su README y arran
 
 ### La regla que hace que esto funcione
 
-[`lib/types.ts`](lib/types.ts) **es ley**. Nadie cambia un tipo de ahí en silencio: se dice en voz alta antes de guardar. Un cambio silencioso rompe el trabajo de los otros tres sin que se enteren.
+[`apps/frontend/lib/types.ts`](apps/frontend/lib/types.ts) **es ley**. Nadie cambia un tipo de ahí en silencio: se dice en voz alta antes de guardar. Un cambio silencioso rompe el trabajo de los otros tres sin que se enteren.
 
 ---
 
@@ -189,8 +190,9 @@ Cuatro carriles que no se bloquean entre sí. **Cada quien lee su README y arran
 ## Verificación
 
 ```bash
-npm run typecheck        # debe pasar limpio
-npm run build            # debe pasar limpio
+cd apps/frontend
+pnpm typecheck           # debe pasar limpio
+pnpm build               # debe pasar limpio
 ```
 
 Prueba de humo del flujo completo (con el dev server corriendo):

@@ -2,13 +2,13 @@
 
 **Léelo antes de tocar nada.** Es corto a propósito.
 
-La fuente de verdad es [`lib/types.ts`](../lib/types.ts). Este documento explica el *porqué*; el código manda sobre el texto.
+La fuente de verdad es [`apps/frontend/lib/types.ts`](../apps/frontend/lib/types.ts). Este documento explica el *porqué*; el código manda sobre el texto.
 
 ---
 
 ## La regla
 
-> **Nadie cambia un tipo de `lib/types.ts` en silencio.**
+> **Nadie cambia un tipo de `apps/frontend/lib/types.ts` en silencio.**
 > Se dice en voz alta / en el chat **antes** de guardar.
 
 Un cambio silencioso ahí rompe el trabajo de los otros tres sin que se enteren, y lo descubren 40 minutos después. En una hackathon de 36 horas eso es catastrófico.
@@ -66,7 +66,7 @@ Dispara la notificación. Si el canal falla, cae al siguiente. **Nunca devuelve 
 ← { handshake: Handshake, congestionActualizada: number }
 ```
 
-**El endpoint más importante del producto.** Lo llaman dos clientes: la consola `/hospital` y el webhook de Telegram. Por eso la lógica vive en [`lib/handshake.ts`](../lib/handshake.ts) y no dentro del route.
+**El endpoint más importante del producto.** Lo llaman dos clientes: la consola `/hospital` y el webhook de Telegram. Por eso la lógica vive en [`apps/frontend/lib/handshake.ts`](../apps/frontend/lib/handshake.ts) y no dentro del route.
 
 Es **idempotente**: un doble toque en el celular no duplica la señal. En un demo en vivo esto pasa siempre.
 
@@ -82,7 +82,7 @@ Sí, polling y no WebSockets. Deliberado: funciona desde el minuto 0 sin configu
 
 Si rompes uno de estos, el demo miente:
 
-1. **El filtro de servicios es duro, no ponderado.** Una sede sin `743` jamás puede recibir un IAM con supra ST, así esté al lado. Vive en `serviciosFaltantes()` de [`lib/servicios-reps.ts`](../lib/servicios-reps.ts).
+1. **El filtro de servicios es duro, no ponderado.** Una sede sin `743` jamás puede recibir un IAM con supra ST, así esté al lado. Vive en `serviciosFaltantes()` de [`apps/frontend/lib/servicios-reps.ts`](../apps/frontend/lib/servicios-reps.ts).
 2. **Todo el score está en minutos.** Si agregas un término al score, tiene que ser en minutos y tienes que poder justificarlo ante un médico. Nada de constantes mágicas adimensionales.
 3. **Cada respuesta de un hospital se registra.** `registrarRespuesta()` alimenta `P(aceptación)` y la congestión. Si alguien hace un atajo que salte eso, el producto pierde su tesis.
 
@@ -93,7 +93,7 @@ Si rompes uno de estos, el demo miente:
 | Falta | Qué pasa |
 |---|---|
 | `ANTHROPIC_API_KEY` | Extractor heurístico por palabras clave |
-| Supabase | 14 sedes semilla de [`lib/mock.ts`](../lib/mock.ts) |
+| Supabase | 14 sedes semilla de [`apps/frontend/lib/mock.ts`](../apps/frontend/lib/mock.ts) |
 | `NEXT_PUBLIC_MAPBOX_TOKEN` | ETA estimado por distancia (22 km/h efectivos) |
 | `TELEGRAM_BOT_TOKEN` | La tarjeta se imprime en la consola del servidor |
 

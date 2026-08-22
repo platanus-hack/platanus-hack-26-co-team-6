@@ -8,7 +8,7 @@
 
 ## Tu punto de partida
 
-Todo corre ya sobre 14 sedes semilla de [`lib/mock.ts`](../lib/mock.ts). Tu trabajo es reemplazarlas por datos reales **sin que nadie más tenga que cambiar una línea**: la firma de `sedesCercanas()` no cambia.
+Todo corre ya sobre 14 sedes semilla de [`apps/frontend/lib/mock.ts`](../apps/frontend/lib/mock.ts). Tu trabajo es reemplazarlas por datos reales **sin que nadie más tenga que cambiar una línea**: la firma de `sedesCercanas()` no cambia.
 
 ## Tus archivos
 
@@ -16,9 +16,9 @@ Todo corre ya sobre 14 sedes semilla de [`lib/mock.ts`](../lib/mock.ts). Tu trab
 |---|---|
 | [`scripts/etl/extraer_reps.py`](../scripts/etl/extraer_reps.py) | ETL con la lógica y las trampas ya documentadas. **Léelo entero antes de correrlo.** |
 | [`supabase/migrations/0001_init.sql`](../supabase/migrations/0001_init.sql) | Esquema + la RPC `sedes_cercanas`. Pegar en el SQL Editor y correr. |
-| [`lib/db.ts`](../lib/db.ts) | Capa de acceso. Ya intenta la RPC y cae a mock si falla. |
-| [`app/api/match/route.ts`](../app/api/match/route.ts) | Orquesta candidatos + ETA + score. |
-| [`app/crue/page.tsx`](../app/crue/page.tsx) | Tablero del CRUE. Es la vitrina natural de tu capa de datos. |
+| [`apps/frontend/lib/db.ts`](../apps/frontend/lib/db.ts) | Capa de acceso. Ya intenta la RPC y cae a mock si falla. |
+| [`apps/frontend/app/api/match/route.ts`](../apps/frontend/app/api/match/route.ts) | Orquesta candidatos + ETA + score. |
+| [`apps/frontend/app/crue/page.tsx`](../apps/frontend/app/crue/page.tsx) | Tablero del CRUE. Es la vitrina natural de tu capa de datos. |
 
 ---
 
@@ -58,12 +58,12 @@ No hay un dataset nacional limpio en Socrata. Dos caminos:
 
 ### Bloque 3 · H10–H20 — que la query sea rápida y honesta
 
-- [ ] **Verificar que la RPC funciona.** En `lib/db.ts`, si `sedes_cercanas` falla, hace `console.warn` y sigue con mock — o sea, **puede estar rota y tú no enterarte**. Revisa la consola del servidor a propósito.
+- [ ] **Verificar que la RPC funciona.** En `apps/frontend/lib/db.ts`, si `sedes_cercanas` falla, hace `console.warn` y sigue con mock — o sea, **puede estar rota y tú no enterarte**. Revisa la consola del servidor a propósito.
   ```sql
   select codigo, nombre from sedes_cercanas(4.5981, -74.0758, 25000) limit 5;
   ```
 - [ ] **Confirmar que el índice GiST se usa:** `explain analyze` sobre esa query. Sin índice, con 16k filas, se nota.
-- [ ] **Mapbox Matrix.** Consigue el token y verifica que `matrizEta` devuelve `conTrafico: true`. El perfil `driving-traffic` acepta **pocas** coordenadas por llamada (`MAX_DESTINOS = 9` en [`lib/mapbox.ts`](../lib/mapbox.ts)). Si Mapbox devuelve 422, es eso: baja el número, no subas el límite.
+- [ ] **Mapbox Matrix.** Consigue el token y verifica que `matrizEta` devuelve `conTrafico: true`. El perfil `driving-traffic` acepta **pocas** coordenadas por llamada (`MAX_DESTINOS = 9` en [`apps/frontend/lib/mapbox.ts`](../apps/frontend/lib/mapbox.ts)). Si Mapbox devuelve 422, es eso: baja el número, no subas el límite.
 - [ ] **Sanidad de los ETA.** De la Plaza de Bolívar a Kennedy no son 3 minutos. Si ves tiempos absurdos, el problema es casi siempre lat/lng invertidos — **Mapbox espera `lng,lat`**, al revés de lo intuitivo.
 - [ ] **Pulir `/crue`.** Es la pantalla que responde "¿ustedes reemplazan al CRUE?" (no: PULSO propone, el CRUE regula) y donde se ve que la congestión se mueve sola con cada rechazo.
 
@@ -72,7 +72,7 @@ No hay un dataset nacional limpio en Socrata. Dos caminos:
 ## Cómo pruebas lo tuyo
 
 ```bash
-npm run dev
+pnpm dev
 curl -s -X POST localhost:3000/api/match -H "Content-Type: application/json" \
   -d '{"caso":{"id":"t","origen":{"lat":4.5981,"lng":-74.0758},"serviciosRequeridos":[743,110],"complejidadRequerida":"alta","tipoMovil":"TAM","requiereMedicoABordo":true,"triage":2,"resumen":"prueba","dxCie10":null,"dxDescripcion":"x","edad":54,"sexo":"M","signosAlarma":[],"confianza":1,"textoCrudo":"x","creadoEn":"2026-08-22T00:00:00Z"},"limite":5}'
 ```
@@ -94,6 +94,6 @@ Asserts duros (no "se ve bien"):
 
 **El dataset de ocupación está muerto.** `uwc4-gvg3` tiene una sola `fecha_corte`: 2022-11-30. **No es un bug del ETL.** Es un snapshot y se usa como *prior* estructural, no como ocupación de hoy. Y es la primera slide del pitch — no lo "arregles", explótalo.
 
-**`lib/db.ts` falla en silencio.** Si la RPC no existe o el nombre no coincide, hace `console.warn` y devuelve mock. Eso es bueno (nadie se bloquea) y peligroso (puedes creer que estás sobre datos reales cuando no). **Revisa la consola del servidor a propósito** cada vez que toques la DB.
+**`apps/frontend/lib/db.ts` falla en silencio.** Si la RPC no existe o el nombre no coincide, hace `console.warn` y devuelve mock. Eso es bueno (nadie se bloquea) y peligroso (puedes creer que estás sobre datos reales cuando no). **Revisa la consola del servidor a propósito** cada vez que toques la DB.
 
-**El nombre de la columna en la RPC.** El SQL devuelve `coord` como `jsonb` con `{lat, lng}` justamente para que TypeScript no tenga que mapear nada. Si cambias la forma de salida, se rompe `lib/db.ts` en silencio (llega un `any`).
+**El nombre de la columna en la RPC.** El SQL devuelve `coord` como `jsonb` con `{lat, lng}` justamente para que TypeScript no tenga que mapear nada. Si cambias la forma de salida, se rompe `apps/frontend/lib/db.ts` en silencio (llega un `any`).

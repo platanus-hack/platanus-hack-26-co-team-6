@@ -15,14 +15,14 @@ Es **fea a propósito**. Tu trabajo no es construirla desde cero: es convertirla
 
 | Archivo | Qué es |
 |---|---|
-| [`app/campo/page.tsx`](../app/campo/page.tsx) | **Tu pantalla principal.** Flujo completo funcionando. |
+| [`apps/frontend/app/campo/page.tsx`](../apps/frontend/app/campo/page.tsx) | **Tu pantalla principal.** Flujo completo funcionando. |
 | `components/` | Vacío. Créalo tú. |
-| [`app/globals.css`](../app/globals.css) | Tokens de diseño. Los define Sebas; tú los consumes. |
-| [`app/crue/page.tsx`](../app/crue/page.tsx) | De Zaid, pero si te sobra tiempo ayúdale. |
+| [`apps/frontend/app/globals.css`](../apps/frontend/app/globals.css) | Tokens de diseño. Los define Sebas; tú los consumes. |
+| [`apps/frontend/app/crue/page.tsx`](../apps/frontend/app/crue/page.tsx) | De Zaid, pero si te sobra tiempo ayúdale. |
 
 ## Lo que NO debes tocar
 
-- `lib/types.ts` sin avisar (ver [contrato-api.md](contrato-api.md))
+- `apps/frontend/lib/types.ts` sin avisar (ver [contrato-api.md](contrato-api.md))
 - Los contratos de `/api/triage`, `/api/match`, `/api/dispatch`
 - **El cronómetro.** El número que sale en el pitch sale de tu `transcurrido`. Puedes hacerlo más bonito; no puedes hacerlo mentir.
 
@@ -40,7 +40,7 @@ Es **fea a propósito**. Tu trabajo no es construirla desde cero: es convertirla
 
 ### Bloque 2 · H10–H20 — el mapa
 
-- [ ] **Mapbox GL JS en `/campo`.** Marcador de origen, marcadores de sedes coloreados por congestión, y la ruta al #1 dibujada. `lib/mapbox.ts` ya tiene `rutaHasta()` que devuelve el GeoJSON LineString — solo falta exponerlo por una ruta de API y pintarlo.
+- [ ] **Mapbox GL JS en `/campo`.** Marcador de origen, marcadores de sedes coloreados por congestión, y la ruta al #1 dibujada. `apps/frontend/lib/mapbox.ts` ya tiene `rutaHasta()` que devuelve el GeoJSON LineString — solo falta exponerlo por una ruta de API y pintarlo.
 - [ ] **Geolocalización real** del paramédico (`navigator.geolocation`) en vez de `ORIGEN_DEMO`. Con fallback: si el usuario niega el permiso, usar Plaza de Bolívar y no romperse.
 - [ ] **Estado del handshake en vivo.** Ahora hace polling cada 1.5s y funciona. Si sobra tiempo: Supabase Realtime. Si no sobra: **déjalo en polling**, en el demo se ve idéntico. No gastes 3 horas en esto.
 - [ ] **Modo TAB/TAM** — un selector. Cambia qué sedes son viables (filtro duro) y es un detalle de dominio que muy pocos equipos van a tener.
@@ -56,7 +56,7 @@ Es **fea a propósito**. Tu trabajo no es construirla desde cero: es convertirla
 ## Cómo pruebas lo tuyo
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Dos pestañas: `/campo` y `/hospital`. Despacha desde una, acepta en la otra.
@@ -75,6 +75,6 @@ Checklist antes de decir "listo":
 
 **Web Speech API.** Solo Chrome/Edge. Requiere HTTPS salvo en localhost. `continuous: true` se corta solo tras un rato de silencio — el `onend` ya lo maneja, no lo quites. En Safari/iOS no existe: el textarea **no es opcional**, es el plan B real.
 
-**El polling y el hot-reload.** El estado vive en memoria del servidor (`lib/almacen.ts`). Si guardas un archivo mientras el dev server corre, Next recarga el módulo y **puedes perder los casos**. Está enganchado a `globalThis` para mitigarlo, pero si algo desaparece raro, esa es la razón. No es un bug tuyo.
+**El polling y el hot-reload.** El estado vive en memoria del servidor (`apps/frontend/lib/almacen.ts`). Si guardas un archivo mientras el dev server corre, Next recarga el módulo y **puedes perder los casos**. Está enganchado a `globalThis` para mitigarlo, pero si algo desaparece raro, esa es la razón. No es un bug tuyo.
 
 **`opacity` sobre tarjetas descartadas.** Cuidado con bajar tanto el contraste que en el proyector no se lea el motivo del descarte. Ese texto es un argumento del pitch.
