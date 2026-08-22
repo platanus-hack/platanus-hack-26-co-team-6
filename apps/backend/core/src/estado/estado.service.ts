@@ -10,7 +10,7 @@
  */
 
 import { Injectable } from '@nestjs/common';
-import type { Caso, Handshake } from '../contracts/types';
+import type { Caso, Coordenada, Handshake } from '../contracts/types';
 import { AlmacenService } from '../almacen/almacen.service';
 import { SedesService } from '../sedes/sedes.service';
 import { CongestionService } from '../scoring/congestion.service';
@@ -22,6 +22,9 @@ export interface CongestionSede {
   etiqueta: 'baja' | 'media' | 'alta' | 'crítica';
   aceptados: number;
   rechazados: number;
+  /** Opcional (regla de contrato: campos nuevos siempre opcionales).
+   *  La consume el mapa de red de /crue. */
+  coord?: Coordenada;
 }
 
 export interface EstadoResponse {
@@ -55,6 +58,7 @@ export class EstadoService {
         etiqueta: this.congestion.etiqueta(c),
         aceptados: hist.aceptados,
         rechazados: hist.rechazados,
+        coord: s.coord,
       };
     });
 

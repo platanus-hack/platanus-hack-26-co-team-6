@@ -222,6 +222,8 @@ export interface CongestionSede {
   etiqueta: "baja" | "media" | "alta" | "crítica";
   aceptados: number;
   rechazados: number;
+  /** Opcional (campos nuevos siempre opcionales). La consume el mapa de /crue. */
+  coord?: Coordenada;
 }
 
 /** GET {API}/estado */

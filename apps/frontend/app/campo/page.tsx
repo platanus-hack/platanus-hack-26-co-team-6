@@ -16,10 +16,34 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { Caso, Candidato, Handshake } from "@/lib/types";
+import dynamic from "next/dynamic";
+import type { Caso, Candidato, Coordenada, Handshake } from "@/lib/types";
 import { DICTADOS_DEMO } from "@/lib/demo";
 import { nombresServicios, ETIQUETA_TRIAGE, esHoraDorada } from "@/lib/presentacion";
 import * as api from "@/lib/api";
+
+// mapbox-gl toca window al importarse: solo en el navegador.
+const MapaDespacho = dynamic(() => import("@/components/campo/MapaDespacho"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-72 rounded-[2rem] bg-[color:var(--color-superficie)] border border-[color:var(--color-borde)] latido" />
+  ),
+});
+
+/** Ubicación real del paramédico, o null (permiso negado / sin señal / timeout). */
+function obtenerUbicacion(): Promise<Coordenada | null> {
+  return new Promise((resolve) => {
+    if (typeof navigator === "undefined" || !("geolocation" in navigator)) {
+      resolve(null);
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (p) => resolve({ lat: p.coords.latitude, lng: p.coords.longitude }),
+      () => resolve(null),
+      { enableHighAccuracy: true, timeout: 2500, maximumAge: 60_000 },
+    );
+  });
+}
 
 type Fase = "dictado" | "analizando" | "ranking" | "esperando" | "resuelto";
 
@@ -31,6 +55,7 @@ export default function Campo() {
   const [meta, setMeta] = useState({ evaluadas: 0, compatibles: 0 });
   const [handshake, setHandshake] = useState<Handshake | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [ubicacionDemo, setUbicacionDemo] = useState(false);
 
   // ── Cronómetro de hora dorada ──────────────────────────────────
   const [t0, setT0] = useState<number | null>(null);
@@ -83,7 +108,15 @@ export default function Campo() {
     setFase("analizando");
     setT0(Date.now());
     try {
-      const { caso: c } = await api.triage({ texto });
+      // Geolocalización real con fallback: si no hay permiso o hay timeout,
+      // core usa su origen demo (Plaza de Bolívar) y la UI lo declara.
+      const ubicacion = await obtenerUbicacion();
+      setUbicacionDemo(ubicacion === null);
+
+      const { caso: c } = await api.triage({
+        texto,
+        ...(ubicacion ? { origen: ubicacion } : {}),
+      });
       setCaso(c);
 
       const m = await api.match({ caso: c, limite: 5 });
@@ -136,6 +169,7 @@ export default function Campo() {
     setHandshake(null);
     setT0(null);
     setTranscurrido(0);
+    setUbicacionDemo(false);
     setFase("dictado");
   }
 
@@ -261,6 +295,19 @@ export default function Campo() {
           </dl>
         </section>
       )}
+
+      {/* ── Mapa de despacho ── */}
+      {caso &&
+        (fase === "ranking" || fase === "esperando" || fase === "resuelto") && (
+          <section className="mb-4">
+            <MapaDespacho
+              origen={caso.origen}
+              candidatos={candidatos}
+              sedeSeleccionada={handshake?.sedeCodigo ?? null}
+              ubicacionDemo={ubicacionDemo}
+            />
+          </section>
+        )}
 
       {/* ── Ranking ── */}
       {fase === "ranking" && (
