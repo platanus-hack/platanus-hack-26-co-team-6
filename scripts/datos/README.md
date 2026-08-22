@@ -31,8 +31,9 @@ app consume. Es idempotente y solo usa la librería estándar de Python: sin
 
 Y genera el TypeScript que `core` importa:
 
-- `apps/backend/core/src/sedes/catalogo.generado.ts`
-- `apps/backend/core/src/scoring/demanda.generada.ts`
+- `apps/backend/core/src/sedes/catalogo.generado.ts` — las 84 sedes
+- `apps/backend/core/src/scoring/demanda.generada.ts` — la curva horaria
+- `apps/frontend/lib/casos-reales.generado.ts` — 32 incidentes reales para el selector de `/campo`
 
 > Los dos archivos `.generado.ts` **se commitean**. Así quien clona el repo
 > compila sin correr Python. Pero no se editan a mano: la siguiente corrida

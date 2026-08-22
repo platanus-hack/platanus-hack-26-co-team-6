@@ -147,6 +147,79 @@ export const DEMANDA_META = {{
     return ruta
 
 
+# Cuantos casos reales viajan al bundle del navegador. casos-demo.json tiene
+# 400 y pesa 197 KB: no hay razon para mandarlos todos a un telefono. Con 8 por
+# nivel de triage alcanza para que nadie vea el mismo dos veces en un demo.
+CASOS_POR_TRIAGE = 8
+
+
+def _ts_casos_reales() -> Path:
+    """
+    casos-demo.json -> un modulo delgado para el selector de /campo.
+
+    NO reemplaza a DICTADOS_DEMO. Los tres dictados escritos a mano son
+    clinicamente ricos (supra ST en DII-DIII-aVF, Glasgow 9, afasia de
+    expresion) y estan hechos para lucir el parser: esos son el guion.
+
+    Estos otros prueban algo distinto y que el guion no puede probar: que el
+    sistema come la mezcla REAL de patologias de Bogota, no cuatro casos
+    escogidos para quedar bonitos. Cuando el jurado pregunte "¿y esto solo
+    funciona con sus ejemplos?", la respuesta es tocar un boton y que salga el
+    incidente CRU-00286112-26 del 1 de junio a las 00:40.
+    """
+    datos = json.loads((SALIDA / "casos-demo.json").read_text(encoding="utf-8"))
+
+    por_nivel: dict[int, list] = {}
+    for c in datos["casos"]:
+        por_nivel.setdefault(c["triage"], []).append(c)
+
+    escogidos = []
+    for nivel in sorted(por_nivel):
+        grupo = por_nivel[nivel]
+        # Repartidos a lo largo del grupo para no llevarnos solo una hora ni
+        # una sola localidad.
+        paso = max(1, len(grupo) // CASOS_POR_TRIAGE)
+        escogidos.extend(grupo[::paso][:CASOS_POR_TRIAGE])
+
+    campos = ("incidente", "texto", "triage", "localidad", "fecha", "origen")
+    limpios = [{k: c.get(k) for k in campos} for c in escogidos]
+
+    cuerpo = (
+        CABECERA.format(
+            fecha=dt.date.today().isoformat(),
+            fuente=f"llamadas123.csv — {datos['total']} incidentes reales, muestra estratificada",
+        )
+        + """
+/** Un incidente real del 123. El `texto` es plantilla; el resto es el dato. */
+export interface CasoReal {
+  /** Numero de incidente del CRUE. Se pinta: es lo que lo hace verificable. */
+  incidente: string;
+  texto: string;
+  triage: number;
+  localidad: string | null;
+  fecha: string;
+  origen: { lat: number; lng: number } | null;
+}
+
+/**
+ * Muestra estratificada de incidentes reales del 123 de Bogota.
+ *
+ * ⚠️ Los campos del incidente son REALES: tipo, prioridad, edad, sexo,
+ *    localidad y hora salen del dato publicado. El campo `texto` es una
+ *    plantilla armada con esos campos, porque el 123 no publica la narrativa
+ *    clinica — seria dato personal de salud. Si alguien pregunta, esa es la
+ *    respuesta exacta.
+ */
+export const CASOS_REALES: CasoReal[] = """
+        + json.dumps(limpios, ensure_ascii=False, indent=2)
+        + ";\n"
+    )
+
+    ruta = RAIZ / "apps/frontend/lib/casos-reales.generado.ts"
+    ruta.write_text(cuerpo, encoding="utf-8")
+    return ruta
+
+
 # ── Orquestacion ──────────────────────────────────────────────────
 
 
@@ -197,7 +270,7 @@ def main() -> int:
 
     if not fallidos:
         print("  Generando TypeScript para core")
-        for ruta in (_ts_sedes(), _ts_demanda()):
+        for ruta in (_ts_sedes(), _ts_demanda(), _ts_casos_reales()):
             print(f"      {ruta.relative_to(RAIZ)}")
         print()
 

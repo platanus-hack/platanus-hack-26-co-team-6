@@ -18,7 +18,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 80 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 80 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -36,7 +36,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 5 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 5 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -54,7 +54,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 69 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Hombre de 69 anos, perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -72,7 +72,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 17 anos, paciente con patologia ginecobstétrica.",
+      "texto": "Mujer de 17 anos, patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
     {
@@ -90,7 +90,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 72 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 72 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -108,7 +108,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 34 anos, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Hombre de 34 anos, episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -126,7 +126,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 84 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 84 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -144,7 +144,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 18 anos, paciente con intoxicacion.",
+      "texto": "Hombre de 18 anos, intoxicacion.",
       "dictadoSintetico": true
     },
     {
@@ -162,7 +162,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 40 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 40 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -180,7 +180,7 @@
         "lng": -74.091912
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 42 anos, paciente con herida en miembro inferior, sangrado controlado.",
+      "texto": "Hombre de 42 anos, herida en miembro inferior, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -198,7 +198,7 @@
         "lng": -74.128836
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 50 anos, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Hombre de 50 anos, episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -216,7 +216,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 63 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 63 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -234,7 +234,7 @@
         "lng": -74.0595
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 32 anos, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Mujer de 32 anos, episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -252,7 +252,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en craneo, sangrado activo.",
+      "texto": "Paciente con herida en craneo, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -270,7 +270,7 @@
         "lng": -74.080642
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Paciente con perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -288,7 +288,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 61 anos, paciente con intento de suicidio.",
+      "texto": "Hombre de 61 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -306,7 +306,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 87 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Mujer de 87 anos, perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -324,7 +324,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con deficit neurologico focal subito.",
+      "texto": "Paciente con deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
     {
@@ -342,7 +342,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 95 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Mujer de 95 anos, perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -360,7 +360,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Paciente con perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -378,7 +378,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 33 anos, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Mujer de 33 anos, episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -396,7 +396,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 27 anos, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Mujer de 27 anos, episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -414,7 +414,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 30 anos, paciente con intento de suicidio.",
+      "texto": "Hombre de 30 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -432,7 +432,7 @@
         "lng": -74.128836
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 85 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Mujer de 85 anos, perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -450,7 +450,7 @@
         "lng": -74.0595
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 74 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Hombre de 74 anos, perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -468,7 +468,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -486,7 +486,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 38 anos, paciente con patologia ginecobstétrica.",
+      "texto": "Mujer de 38 anos, patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
     {
@@ -504,7 +504,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 57 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Mujer de 57 anos, perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -522,7 +522,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 33 anos, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Mujer de 33 anos, episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -540,7 +540,7 @@
         "lng": -74.038976
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 80 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 80 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -558,7 +558,7 @@
         "lng": -74.038976
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 80 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Mujer de 80 anos, perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -576,7 +576,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 31 anos, paciente con intento de suicidio.",
+      "texto": "Hombre de 31 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -594,7 +594,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 24 anos, paciente con patologia ginecobstétrica.",
+      "texto": "Mujer de 24 anos, patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
     {
@@ -612,7 +612,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 78 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 78 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -630,7 +630,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -648,7 +648,7 @@
         "lng": -74.0595
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 29 anos, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Mujer de 29 anos, episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -666,7 +666,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 38 anos, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Hombre de 38 anos, episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -684,7 +684,7 @@
         "lng": -74.080642
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Paciente con perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -702,7 +702,7 @@
         "lng": -74.070543
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 80 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 80 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -720,7 +720,7 @@
         "lng": -74.038976
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 47 anos, paciente con intento de suicidio.",
+      "texto": "Hombre de 47 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -738,7 +738,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 59 anos, paciente con dolor torácico.",
+      "texto": "Hombre de 59 anos, dolor toracico opresivo.",
       "dictadoSintetico": true
     },
     {
@@ -756,7 +756,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dolor torácico.",
+      "texto": "Paciente con dolor toracico opresivo.",
       "dictadoSintetico": true
     },
     {
@@ -774,7 +774,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 15 anos, paciente con intento de suicidio.",
+      "texto": "Mujer de 15 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -792,7 +792,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 76 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 76 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -810,7 +810,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -828,7 +828,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 50 anos, paciente con dolor torácico.",
+      "texto": "Hombre de 50 anos, dolor toracico opresivo.",
       "dictadoSintetico": true
     },
     {
@@ -846,7 +846,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con deficit neurologico focal subito.",
+      "texto": "Paciente con deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
     {
@@ -864,7 +864,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -882,7 +882,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -900,7 +900,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en region abdominal, sangrado abundante.",
+      "texto": "Paciente con herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -918,7 +918,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Paciente con perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -936,7 +936,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 34 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Hombre de 34 anos, perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -954,7 +954,7 @@
         "lng": -74.080642
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 83 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 83 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -972,7 +972,7 @@
         "lng": -74.128836
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 86 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 86 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -990,7 +990,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 59 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 59 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1008,7 +1008,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 78 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 78 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1026,7 +1026,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Paciente con perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -1044,7 +1044,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 32 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 32 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -1062,7 +1062,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 89 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Mujer de 89 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -1080,7 +1080,7 @@
         "lng": -74.070543
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 90 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 90 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1098,7 +1098,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 16 anos, paciente con intento de suicidio.",
+      "texto": "Hombre de 16 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -1116,7 +1116,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 81 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 81 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1134,7 +1134,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Paciente con perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -1152,7 +1152,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intento de suicidio.",
+      "texto": "Paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -1170,7 +1170,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dolor torácico.",
+      "texto": "Paciente con dolor toracico opresivo.",
       "dictadoSintetico": true
     },
     {
@@ -1188,7 +1188,7 @@
         "lng": -74.038976
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 20 anos, paciente con intoxicacion.",
+      "texto": "Mujer de 20 anos, intoxicacion.",
       "dictadoSintetico": true
     },
     {
@@ -1206,7 +1206,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 82 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 82 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1224,7 +1224,7 @@
         "lng": -74.080642
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 17 anos, paciente con intento de suicidio.",
+      "texto": "Mujer de 17 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -1242,7 +1242,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 76 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 76 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1260,7 +1260,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con deficit neurologico focal subito.",
+      "texto": "Paciente con deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
     {
@@ -1278,7 +1278,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 64 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Hombre de 64 anos, perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -1296,7 +1296,7 @@
         "lng": -74.066048
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -1314,7 +1314,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 93 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Hombre de 93 anos, perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -1332,7 +1332,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 62 anos, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Mujer de 62 anos, episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -1350,7 +1350,7 @@
         "lng": -74.038976
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intento de suicidio.",
+      "texto": "Paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -1368,7 +1368,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 13 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 13 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1386,7 +1386,7 @@
         "lng": -74.066048
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en torax, sangrado activo.",
+      "texto": "Paciente con herida en torax, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -1404,7 +1404,7 @@
         "lng": -74.0595
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 29 anos, paciente con intento de suicidio.",
+      "texto": "Hombre de 29 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -1422,7 +1422,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 40 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Hombre de 40 anos, perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -1440,7 +1440,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 56 anos, paciente con caida de altura.",
+      "texto": "Hombre de 56 anos, caida de altura.",
       "dictadoSintetico": true
     },
     {
@@ -1458,7 +1458,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 73 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 73 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1476,7 +1476,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 49 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Hombre de 49 anos, perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -1494,7 +1494,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 30 anos, paciente con intento de suicidio.",
+      "texto": "Mujer de 30 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -1512,7 +1512,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 60 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 60 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1530,7 +1530,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en torax, sangrado controlado.",
+      "texto": "Paciente con herida en torax, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -1548,7 +1548,7 @@
         "lng": -74.038976
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intento de suicidio.",
+      "texto": "Paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -1566,7 +1566,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 13 anos, paciente con intento de suicidio.",
+      "texto": "Mujer de 13 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -1584,7 +1584,7 @@
         "lng": -74.038976
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -1602,7 +1602,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intento de suicidio.",
+      "texto": "Paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -1620,7 +1620,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 75 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 75 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1638,7 +1638,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 44 anos, paciente con intento de suicidio.",
+      "texto": "Hombre de 44 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -1656,7 +1656,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 1 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 1 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1674,7 +1674,7 @@
         "lng": -74.0595
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 25 anos, paciente con violencia sexual.",
+      "texto": "Mujer de 25 anos, violencia sexual.",
       "dictadoSintetico": true
     },
     {
@@ -1692,7 +1692,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intento de suicidio.",
+      "texto": "Paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -1710,7 +1710,7 @@
         "lng": -74.038976
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con patologia ginecobstétrica.",
+      "texto": "Paciente con patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
     {
@@ -1728,7 +1728,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 73 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 73 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1746,7 +1746,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 73 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 73 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1764,7 +1764,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1782,7 +1782,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 68 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 68 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1800,7 +1800,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 81 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 81 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1818,7 +1818,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -1836,7 +1836,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 27 anos, paciente con intento de suicidio.",
+      "texto": "Mujer de 27 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -1854,7 +1854,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Paciente con perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -1872,7 +1872,7 @@
         "lng": -74.038976
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 83 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Mujer de 83 anos, perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -1890,7 +1890,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 75 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 75 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1908,7 +1908,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Paciente con perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -1926,7 +1926,7 @@
         "lng": -74.038976
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 30 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 30 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -1944,7 +1944,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 48 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 48 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -1962,7 +1962,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 37 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 37 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -1980,7 +1980,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 25 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Mujer de 25 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -1998,7 +1998,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con amenaza de suicidio.",
+      "texto": "Paciente con amenaza de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -2016,7 +2016,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 31 anos, paciente con herida en craneo, sangrado abundante.",
+      "texto": "Hombre de 31 anos, herida en craneo, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -2034,7 +2034,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con apoyo crue.",
+      "texto": "Paciente con apoyo crue.",
       "dictadoSintetico": true
     },
     {
@@ -2052,7 +2052,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 49 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 49 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -2070,7 +2070,7 @@
         "lng": -74.038976
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -2088,7 +2088,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intoxicacion.",
+      "texto": "Paciente con intoxicacion.",
       "dictadoSintetico": true
     },
     {
@@ -2106,7 +2106,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 88 anos, paciente con dolor torácico.",
+      "texto": "Hombre de 88 anos, dolor toracico opresivo.",
       "dictadoSintetico": true
     },
     {
@@ -2124,7 +2124,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en region abdominal, sangrado abundante.",
+      "texto": "Paciente con herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -2142,7 +2142,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 66 anos, paciente con herida en craneo, sangrado activo.",
+      "texto": "Hombre de 66 anos, herida en craneo, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -2160,7 +2160,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 95 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Mujer de 95 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -2178,7 +2178,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en torax, sangrado abundante.",
+      "texto": "Paciente con herida en torax, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -2196,7 +2196,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 28 anos, paciente con herida en miembro inferior, sangrado controlado.",
+      "texto": "Hombre de 28 anos, herida en miembro inferior, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -2214,7 +2214,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 82 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 82 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -2232,7 +2232,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 64 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 64 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -2250,7 +2250,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 16 anos, paciente con amenaza de suicidio.",
+      "texto": "Mujer de 16 anos, amenaza de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -2268,7 +2268,7 @@
         "lng": -74.091912
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 21 anos, paciente con intoxicacion.",
+      "texto": "Hombre de 21 anos, intoxicacion.",
       "dictadoSintetico": true
     },
     {
@@ -2286,7 +2286,7 @@
         "lng": -74.084229
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -2304,7 +2304,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -2322,7 +2322,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 66 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Mujer de 66 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -2340,7 +2340,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en region abdominal, sangrado activo.",
+      "texto": "Paciente con herida en region abdominal, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -2358,7 +2358,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con patologia ginecobstétrica.",
+      "texto": "Paciente con patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
     {
@@ -2376,7 +2376,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en torax, sangrado abundante.",
+      "texto": "Paciente con herida en torax, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -2394,7 +2394,7 @@
         "lng": -74.128836
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intento de suicidio.",
+      "texto": "Paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -2412,7 +2412,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 24 anos, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Hombre de 24 anos, episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -2430,7 +2430,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en craneo, sangrado controlado.",
+      "texto": "Paciente con herida en craneo, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -2448,7 +2448,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -2466,7 +2466,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en torax, sangrado controlado.",
+      "texto": "Paciente con herida en torax, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -2484,7 +2484,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 19 anos, paciente con intento de suicidio.",
+      "texto": "Hombre de 19 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -2502,7 +2502,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 34 anos, paciente con herida en torax, sangrado activo.",
+      "texto": "Hombre de 34 anos, herida en torax, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -2520,7 +2520,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 70 anos, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Hombre de 70 anos, episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -2538,7 +2538,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 70 anos, paciente con deficit neurologico focal subito.",
+      "texto": "Hombre de 70 anos, deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
     {
@@ -2556,7 +2556,7 @@
         "lng": -74.080642
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en region abdominal, sangrado abundante.",
+      "texto": "Paciente con herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -2574,7 +2574,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 90 anos, paciente con sangrado vaginal.",
+      "texto": "Mujer de 90 anos, sangrado vaginal.",
       "dictadoSintetico": true
     },
     {
@@ -2592,7 +2592,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 65 anos, paciente con caida de altura.",
+      "texto": "Hombre de 65 anos, caida de altura.",
       "dictadoSintetico": true
     },
     {
@@ -2610,7 +2610,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 29 anos, paciente con caida de altura.",
+      "texto": "Hombre de 29 anos, caida de altura.",
       "dictadoSintetico": true
     },
     {
@@ -2628,7 +2628,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 10 anos, paciente con herida en torax, sangrado abundante.",
+      "texto": "Mujer de 10 anos, herida en torax, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -2646,7 +2646,7 @@
         "lng": -74.084229
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 11 anos, paciente con violencia sexual.",
+      "texto": "Mujer de 11 anos, violencia sexual.",
       "dictadoSintetico": true
     },
     {
@@ -2664,7 +2664,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 31 anos, paciente con herida en miembro inferior, sangrado activo.",
+      "texto": "Hombre de 31 anos, herida en miembro inferior, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -2682,7 +2682,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 42 anos, paciente con herida en miembro inferior, sangrado activo.",
+      "texto": "Hombre de 42 anos, herida en miembro inferior, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -2700,7 +2700,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 45 anos, paciente con sangrado vaginal.",
+      "texto": "Mujer de 45 anos, sangrado vaginal.",
       "dictadoSintetico": true
     },
     {
@@ -2718,7 +2718,7 @@
         "lng": -74.080642
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 23 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 23 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -2736,7 +2736,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 72 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Mujer de 72 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -2754,7 +2754,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 86 anos, paciente con dolor torácico.",
+      "texto": "Mujer de 86 anos, dolor toracico opresivo.",
       "dictadoSintetico": true
     },
     {
@@ -2772,7 +2772,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 68 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 68 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -2790,7 +2790,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -2808,7 +2808,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 89 anos, paciente con herida en torax, sangrado activo.",
+      "texto": "Mujer de 89 anos, herida en torax, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -2826,7 +2826,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intoxicacion.",
+      "texto": "Paciente con intoxicacion.",
       "dictadoSintetico": true
     },
     {
@@ -2844,7 +2844,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 38 anos, paciente con herida en miembro inferior, sangrado controlado.",
+      "texto": "Mujer de 38 anos, herida en miembro inferior, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -2862,7 +2862,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 4 anos, paciente con herida en region abdominal, sangrado controlado.",
+      "texto": "Hombre de 4 anos, herida en region abdominal, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -2880,7 +2880,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 33 anos, paciente con patologia ginecobstétrica.",
+      "texto": "Mujer de 33 anos, patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
     {
@@ -2898,7 +2898,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 81 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Hombre de 81 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -2916,7 +2916,7 @@
         "lng": -74.084229
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en craneo, sangrado abundante.",
+      "texto": "Paciente con herida en craneo, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -2934,7 +2934,7 @@
         "lng": -74.128836
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "texto": "Paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -2952,7 +2952,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 84 anos, paciente con caida de altura.",
+      "texto": "Hombre de 84 anos, caida de altura.",
       "dictadoSintetico": true
     },
     {
@@ -2970,7 +2970,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 69 anos, paciente con herida en torax, sangrado controlado.",
+      "texto": "Hombre de 69 anos, herida en torax, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -2988,7 +2988,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 84 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 84 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -3006,7 +3006,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 83 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 83 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -3024,7 +3024,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 19 anos, paciente con herida en region abdominal, sangrado activo.",
+      "texto": "Hombre de 19 anos, herida en region abdominal, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -3042,7 +3042,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en craneo, sangrado activo.",
+      "texto": "Paciente con herida en craneo, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -3060,7 +3060,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 51 anos, paciente con amenaza de suicidio.",
+      "texto": "Mujer de 51 anos, amenaza de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -3078,7 +3078,7 @@
         "lng": -74.038976
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dolor torácico.",
+      "texto": "Paciente con dolor toracico opresivo.",
       "dictadoSintetico": true
     },
     {
@@ -3096,7 +3096,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con sintomas gastrointestinales.",
+      "texto": "Paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
     {
@@ -3114,7 +3114,7 @@
         "lng": -74.0595
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con deficit neurologico focal subito.",
+      "texto": "Paciente con deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
     {
@@ -3132,7 +3132,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 29 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 29 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -3150,7 +3150,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -3168,7 +3168,7 @@
         "lng": -74.084229
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 53 anos, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Hombre de 53 anos, episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -3186,7 +3186,7 @@
         "lng": -74.128836
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 16 anos, paciente con intento de suicidio.",
+      "texto": "Mujer de 16 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -3204,7 +3204,7 @@
         "lng": -74.084229
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 28 anos, paciente con amenaza de suicidio.",
+      "texto": "Mujer de 28 anos, amenaza de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -3222,7 +3222,7 @@
         "lng": -74.070543
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 91 anos, paciente con dolor torácico.",
+      "texto": "Mujer de 91 anos, dolor toracico opresivo.",
       "dictadoSintetico": true
     },
     {
@@ -3240,7 +3240,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 80 anos, paciente con herida en craneo, sangrado activo.",
+      "texto": "Hombre de 80 anos, herida en craneo, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -3258,7 +3258,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en craneo, sangrado abundante.",
+      "texto": "Paciente con herida en craneo, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -3276,7 +3276,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 35 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Hombre de 35 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -3294,7 +3294,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 37 anos, paciente con sintomas gastrointestinales.",
+      "texto": "Hombre de 37 anos, sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
     {
@@ -3312,7 +3312,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 78 anos, paciente con sintomas gastrointestinales.",
+      "texto": "Mujer de 78 anos, sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
     {
@@ -3330,7 +3330,7 @@
         "lng": -74.080642
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intento de suicidio.",
+      "texto": "Paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -3348,7 +3348,7 @@
         "lng": -74.080642
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -3366,7 +3366,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 7 anos, paciente con violencia sexual.",
+      "texto": "Hombre de 7 anos, violencia sexual.",
       "dictadoSintetico": true
     },
     {
@@ -3384,7 +3384,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 98 anos, paciente con deficit neurologico focal subito.",
+      "texto": "Mujer de 98 anos, deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
     {
@@ -3402,7 +3402,7 @@
         "lng": -74.128836
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 15 anos, paciente con amenaza de suicidio.",
+      "texto": "Mujer de 15 anos, amenaza de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -3420,7 +3420,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 33 anos, paciente con patologia ginecobstétrica.",
+      "texto": "Mujer de 33 anos, patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
     {
@@ -3438,7 +3438,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con maltrato.",
+      "texto": "Paciente con maltrato.",
       "dictadoSintetico": true
     },
     {
@@ -3456,7 +3456,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 63 anos, paciente con herida en region abdominal, sangrado abundante.",
+      "texto": "Mujer de 63 anos, herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -3474,7 +3474,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en torax, sangrado abundante.",
+      "texto": "Paciente con herida en torax, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -3492,7 +3492,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intento de suicidio.",
+      "texto": "Paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -3510,7 +3510,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 65 anos, paciente con herida en region abdominal, sangrado controlado.",
+      "texto": "Hombre de 65 anos, herida en region abdominal, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -3528,7 +3528,7 @@
         "lng": -74.070543
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en miembro inferior, sangrado controlado.",
+      "texto": "Paciente con herida en miembro inferior, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -3546,7 +3546,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 60 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Hombre de 60 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -3564,7 +3564,7 @@
         "lng": -74.066048
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 29 anos, paciente con herida en craneo, sangrado abundante.",
+      "texto": "Mujer de 29 anos, herida en craneo, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -3582,7 +3582,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 54 anos, paciente con dolor torácico.",
+      "texto": "Hombre de 54 anos, dolor toracico opresivo.",
       "dictadoSintetico": true
     },
     {
@@ -3600,7 +3600,7 @@
         "lng": -74.080642
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en torax, sangrado controlado.",
+      "texto": "Paciente con herida en torax, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -3618,7 +3618,7 @@
         "lng": -74.0595
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -3636,7 +3636,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -3654,7 +3654,7 @@
         "lng": -74.084229
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 32 anos, paciente con herida en miembro inferior, sangrado activo.",
+      "texto": "Hombre de 32 anos, herida en miembro inferior, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -3672,7 +3672,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 20 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 20 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -3690,7 +3690,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -3708,7 +3708,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 37 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 37 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -3726,7 +3726,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 56 anos, paciente con herida en miembro inferior, sangrado abundante.",
+      "texto": "Mujer de 56 anos, herida en miembro inferior, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -3744,7 +3744,7 @@
         "lng": -74.084229
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 31 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 31 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -3762,7 +3762,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 23 anos, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Hombre de 23 anos, episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -3780,7 +3780,7 @@
         "lng": -74.084229
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 4 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 4 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -3798,7 +3798,7 @@
         "lng": -74.0595
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 68 anos, paciente con herida en torax, sangrado controlado.",
+      "texto": "Mujer de 68 anos, herida en torax, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -3816,7 +3816,7 @@
         "lng": -74.070543
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con caida de altura.",
+      "texto": "Paciente con caida de altura.",
       "dictadoSintetico": true
     },
     {
@@ -3834,7 +3834,7 @@
         "lng": -74.070543
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 66 anos, paciente con deficit neurologico focal subito.",
+      "texto": "Mujer de 66 anos, deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
     {
@@ -3852,7 +3852,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 15 anos, paciente con amenaza de suicidio.",
+      "texto": "Hombre de 15 anos, amenaza de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -3870,7 +3870,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 77 anos, paciente con herida en torax, sangrado controlado.",
+      "texto": "Hombre de 77 anos, herida en torax, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -3888,7 +3888,7 @@
         "lng": -74.070543
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en craneo, sangrado abundante.",
+      "texto": "Paciente con herida en craneo, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -3906,7 +3906,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en miembro inferior, sangrado activo.",
+      "texto": "Paciente con herida en miembro inferior, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -3924,7 +3924,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en craneo, sangrado abundante.",
+      "texto": "Paciente con herida en craneo, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -3942,7 +3942,7 @@
         "lng": -74.080642
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en torax, sangrado controlado.",
+      "texto": "Paciente con herida en torax, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -3960,7 +3960,7 @@
         "lng": -74.066048
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en craneo, sangrado activo.",
+      "texto": "Paciente con herida en craneo, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -3978,7 +3978,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 72 anos, paciente con sintomas gastrointestinales.",
+      "texto": "Mujer de 72 anos, sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
     {
@@ -3996,7 +3996,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 25 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 25 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -4014,7 +4014,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "texto": "Paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -4032,7 +4032,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -4050,7 +4050,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 40 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 40 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -4068,7 +4068,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en miembro inferior, sangrado activo.",
+      "texto": "Paciente con herida en miembro inferior, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -4086,7 +4086,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 61 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Mujer de 61 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -4104,7 +4104,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 15 anos, paciente con violencia sexual.",
+      "texto": "Hombre de 15 anos, violencia sexual.",
       "dictadoSintetico": true
     },
     {
@@ -4122,7 +4122,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 3 anos, paciente con herida en region abdominal, sangrado abundante.",
+      "texto": "Mujer de 3 anos, herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -4140,7 +4140,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 23 anos, paciente con intento de suicidio.",
+      "texto": "Hombre de 23 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -4158,7 +4158,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 78 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 78 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -4176,7 +4176,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -4194,7 +4194,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -4212,7 +4212,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en torax, sangrado abundante.",
+      "texto": "Paciente con herida en torax, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -4230,7 +4230,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 13 anos, paciente con herida en region abdominal, sangrado controlado.",
+      "texto": "Mujer de 13 anos, herida en region abdominal, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -4248,7 +4248,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 24 anos, paciente con intento de suicidio.",
+      "texto": "Hombre de 24 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -4266,7 +4266,7 @@
         "lng": -74.0595
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 74 anos, paciente con sintomas gastrointestinales.",
+      "texto": "Mujer de 74 anos, sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
     {
@@ -4284,7 +4284,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 62 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 62 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -4302,7 +4302,7 @@
         "lng": -74.0595
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 63 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 63 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -4320,7 +4320,7 @@
         "lng": -74.128836
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 21 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 21 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -4338,7 +4338,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 36 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Mujer de 36 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -4356,7 +4356,7 @@
         "lng": -74.070543
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -4374,7 +4374,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -4392,7 +4392,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 70 anos, paciente con dolor torácico.",
+      "texto": "Mujer de 70 anos, dolor toracico opresivo.",
       "dictadoSintetico": true
     },
     {
@@ -4410,7 +4410,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dolor torácico.",
+      "texto": "Paciente con dolor toracico opresivo.",
       "dictadoSintetico": true
     },
     {
@@ -4428,7 +4428,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 36 anos, paciente con patologia ginecobstétrica.",
+      "texto": "Mujer de 36 anos, patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
     {
@@ -4446,7 +4446,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 13 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 13 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -4464,7 +4464,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 90 anos, paciente con herida en region abdominal, sangrado abundante.",
+      "texto": "Hombre de 90 anos, herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -4482,7 +4482,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 17 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 17 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -4500,7 +4500,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 45 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 45 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -4518,7 +4518,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 67 anos, paciente con dolor torácico.",
+      "texto": "Hombre de 67 anos, dolor toracico opresivo.",
       "dictadoSintetico": true
     },
     {
@@ -4536,7 +4536,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 79 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Hombre de 79 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -4554,7 +4554,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 86 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 86 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -4572,7 +4572,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 32 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 32 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -4590,7 +4590,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 26 anos, paciente con herida en miembro inferior, sangrado controlado.",
+      "texto": "Hombre de 26 anos, herida en miembro inferior, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -4608,7 +4608,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 26 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Mujer de 26 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -4626,7 +4626,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 74 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 74 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -4644,7 +4644,7 @@
         "lng": -74.070543
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 86 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 86 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -4662,7 +4662,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 15 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 15 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -4680,7 +4680,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 76 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 76 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -4698,7 +4698,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 92 anos, paciente con caida de altura.",
+      "texto": "Hombre de 92 anos, caida de altura.",
       "dictadoSintetico": true
     },
     {
@@ -4716,7 +4716,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 57 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Hombre de 57 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -4734,7 +4734,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intento de suicidio.",
+      "texto": "Paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -4752,7 +4752,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 79 anos, paciente con herida en craneo, sangrado activo.",
+      "texto": "Mujer de 79 anos, herida en craneo, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -4770,7 +4770,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con amenaza de suicidio.",
+      "texto": "Paciente con amenaza de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -4788,7 +4788,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -4806,7 +4806,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 46 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 46 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -4824,7 +4824,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 87 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 87 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -4842,7 +4842,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -4860,7 +4860,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 23 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 23 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -4878,7 +4878,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -4896,7 +4896,7 @@
         "lng": -74.070543
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 26 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Mujer de 26 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -4914,7 +4914,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "texto": "Paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -4932,7 +4932,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 100 anos, paciente con deficit neurologico focal subito.",
+      "texto": "Hombre de 100 anos, deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
     {
@@ -4950,7 +4950,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -4968,7 +4968,7 @@
         "lng": -74.084229
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en miembro inferior, sangrado abundante.",
+      "texto": "Paciente con herida en miembro inferior, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -4986,7 +4986,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 23 anos, paciente con herida en miembro inferior, sangrado controlado.",
+      "texto": "Hombre de 23 anos, herida en miembro inferior, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -5004,7 +5004,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 23 anos, paciente con herida en miembro inferior, sangrado abundante.",
+      "texto": "Hombre de 23 anos, herida en miembro inferior, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -5022,7 +5022,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 23 anos, paciente con herida en craneo, sangrado controlado.",
+      "texto": "Mujer de 23 anos, herida en craneo, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -5040,7 +5040,7 @@
         "lng": -74.091912
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 30 anos, paciente con sintomas gastrointestinales.",
+      "texto": "Hombre de 30 anos, sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
     {
@@ -5058,7 +5058,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 16 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 16 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -5076,7 +5076,7 @@
         "lng": -74.091912
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intento de suicidio.",
+      "texto": "Paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -5094,7 +5094,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 17 anos, paciente con herida en craneo, sangrado controlado.",
+      "texto": "Mujer de 17 anos, herida en craneo, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -5112,7 +5112,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 8 anos, paciente con apoyo crue.",
+      "texto": "Mujer de 8 anos, apoyo crue.",
       "dictadoSintetico": true
     },
     {
@@ -5130,7 +5130,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 28 anos, paciente con herida en torax, sangrado abundante.",
+      "texto": "Hombre de 28 anos, herida en torax, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -5148,7 +5148,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 45 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Mujer de 45 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -5166,7 +5166,7 @@
         "lng": -74.070543
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 45 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 45 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -5184,7 +5184,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con caida de altura.",
+      "texto": "Paciente con caida de altura.",
       "dictadoSintetico": true
     },
     {
@@ -5202,7 +5202,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en region abdominal, sangrado abundante.",
+      "texto": "Paciente con herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -5220,7 +5220,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intento de suicidio.",
+      "texto": "Paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -5238,7 +5238,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intento de suicidio.",
+      "texto": "Paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -5256,7 +5256,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 30 anos, paciente con amenaza de suicidio.",
+      "texto": "Mujer de 30 anos, amenaza de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -5274,7 +5274,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 70 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Hombre de 70 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -5292,7 +5292,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 90 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 90 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -5310,7 +5310,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con deficit neurologico focal subito.",
+      "texto": "Paciente con deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
     {
@@ -5328,7 +5328,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 21 anos, paciente con patologia ginecobstétrica.",
+      "texto": "Mujer de 21 anos, patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
     {
@@ -5346,7 +5346,7 @@
         "lng": -74.066048
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 35 anos, paciente con herida en torax, sangrado activo.",
+      "texto": "Hombre de 35 anos, herida en torax, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -5364,7 +5364,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 62 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Mujer de 62 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -5382,7 +5382,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -5400,7 +5400,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 13 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 13 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -5418,7 +5418,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 6 anos, paciente con herida en region abdominal, sangrado abundante.",
+      "texto": "Mujer de 6 anos, herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -5436,7 +5436,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 28 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Mujer de 28 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -5454,7 +5454,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "texto": "Paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -5472,7 +5472,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -5490,7 +5490,7 @@
         "lng": -74.091912
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 23 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Mujer de 23 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -5508,7 +5508,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 80 anos, paciente con caida de altura.",
+      "texto": "Mujer de 80 anos, caida de altura.",
       "dictadoSintetico": true
     },
     {
@@ -5526,7 +5526,7 @@
         "lng": -74.070543
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 34 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 34 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -5544,7 +5544,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 101 anos, paciente con sintomas gastrointestinales.",
+      "texto": "Hombre de 101 anos, sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
     {
@@ -5562,7 +5562,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 69 anos, paciente con deficit neurologico focal subito.",
+      "texto": "Mujer de 69 anos, deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
     {
@@ -5580,7 +5580,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en torax, sangrado activo.",
+      "texto": "Paciente con herida en torax, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -5598,7 +5598,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -5616,7 +5616,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 30 anos, paciente con herida en region abdominal, sangrado abundante.",
+      "texto": "Hombre de 30 anos, herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -5634,7 +5634,7 @@
         "lng": -74.066048
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 35 anos, paciente con herida en torax, sangrado abundante.",
+      "texto": "Mujer de 35 anos, herida en torax, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -5652,7 +5652,7 @@
         "lng": -74.080642
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 18 anos, paciente con intoxicacion.",
+      "texto": "Hombre de 18 anos, intoxicacion.",
       "dictadoSintetico": true
     },
     {
@@ -5670,7 +5670,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "texto": "Paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -5688,7 +5688,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 32 anos, paciente con amenaza de suicidio.",
+      "texto": "Mujer de 32 anos, amenaza de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -5706,7 +5706,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en miembro inferior, sangrado abundante.",
+      "texto": "Paciente con herida en miembro inferior, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -5724,7 +5724,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 21 anos, paciente con herida en craneo, sangrado abundante.",
+      "texto": "Hombre de 21 anos, herida en craneo, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -5742,7 +5742,7 @@
         "lng": -74.038976
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 74 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 74 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -5760,7 +5760,7 @@
         "lng": -74.038976
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en craneo, sangrado activo.",
+      "texto": "Paciente con herida en craneo, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -5778,7 +5778,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -5796,7 +5796,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intento de suicidio.",
+      "texto": "Paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -5814,7 +5814,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 69 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 69 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -5832,7 +5832,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 24 anos, paciente con herida en torax, sangrado controlado.",
+      "texto": "Hombre de 24 anos, herida en torax, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -5850,7 +5850,7 @@
         "lng": -74.080642
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 32 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 32 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -5868,7 +5868,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 80 anos, paciente con sintomas gastrointestinales.",
+      "texto": "Hombre de 80 anos, sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
     {
@@ -5886,7 +5886,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 20 anos, paciente con herida en region abdominal, sangrado activo.",
+      "texto": "Hombre de 20 anos, herida en region abdominal, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -5904,7 +5904,7 @@
         "lng": -74.0595
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 51 anos, paciente con herida en region abdominal, sangrado controlado.",
+      "texto": "Hombre de 51 anos, herida en region abdominal, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -5922,7 +5922,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 32 anos, paciente con intento de suicidio.",
+      "texto": "Mujer de 32 anos, intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -5940,7 +5940,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con violencia sexual.",
+      "texto": "Paciente con violencia sexual.",
       "dictadoSintetico": true
     },
     {
@@ -5958,7 +5958,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 56 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Mujer de 56 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -5976,7 +5976,7 @@
         "lng": -74.084229
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 35 anos, paciente con sintomas gastrointestinales.",
+      "texto": "Hombre de 35 anos, sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
     {
@@ -5994,7 +5994,7 @@
         "lng": -74.080642
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "texto": "Paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6012,7 +6012,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 24 anos, paciente con amenaza de suicidio.",
+      "texto": "Hombre de 24 anos, amenaza de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -6030,7 +6030,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -6048,7 +6048,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Paciente con perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -6066,7 +6066,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con acompañamiento a evento.",
+      "texto": "Paciente con acompañamiento a evento.",
       "dictadoSintetico": true
     },
     {
@@ -6084,7 +6084,7 @@
         "lng": -74.084229
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "texto": "Paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6102,7 +6102,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 37 anos, paciente con herida en region abdominal, sangrado abundante.",
+      "texto": "Mujer de 37 anos, herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
     {
@@ -6120,7 +6120,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 32 anos, paciente con sintomas gastrointestinales.",
+      "texto": "Hombre de 32 anos, sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
     {
@@ -6138,7 +6138,7 @@
         "lng": -74.115013
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "texto": "Paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6156,7 +6156,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 35 anos, paciente con amenaza de suicidio.",
+      "texto": "Mujer de 35 anos, amenaza de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -6174,7 +6174,7 @@
         "lng": -74.066048
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en region abdominal, sangrado controlado.",
+      "texto": "Paciente con herida en region abdominal, sangrado controlado.",
       "dictadoSintetico": true
     },
     {
@@ -6192,7 +6192,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 37 anos, paciente con amenaza de suicidio.",
+      "texto": "Mujer de 37 anos, amenaza de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -6210,7 +6210,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 97 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Mujer de 97 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6228,7 +6228,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 59 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Mujer de 59 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -6246,7 +6246,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "texto": "Paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6264,7 +6264,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 78 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 78 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -6282,7 +6282,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 20 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Hombre de 20 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6300,7 +6300,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 75 anos, paciente con sintomas gastrointestinales.",
+      "texto": "Hombre de 75 anos, sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
     {
@@ -6318,7 +6318,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 75 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Mujer de 75 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6336,7 +6336,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 24 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Mujer de 24 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -6354,7 +6354,7 @@
         "lng": -74.038976
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 22 anos, paciente con sintomas gastrointestinales.",
+      "texto": "Hombre de 22 anos, sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
     {
@@ -6372,7 +6372,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 95 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Mujer de 95 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6390,7 +6390,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 36 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Hombre de 36 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6408,7 +6408,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 71 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Mujer de 71 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -6426,7 +6426,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 71 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Hombre de 71 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6444,7 +6444,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 37 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Hombre de 37 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6462,7 +6462,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 20 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Mujer de 20 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6480,7 +6480,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 41 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 41 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -6498,7 +6498,7 @@
         "lng": -74.128836
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 29 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 29 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -6516,7 +6516,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 14 anos, paciente con amenaza de suicidio.",
+      "texto": "Hombre de 14 anos, amenaza de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -6534,7 +6534,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 58 anos, paciente con sintomas gastrointestinales.",
+      "texto": "Hombre de 58 anos, sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
     {
@@ -6552,7 +6552,7 @@
         "lng": -74.091912
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 46 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Hombre de 46 anos, agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -6570,7 +6570,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intento de suicidio.",
+      "texto": "Paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -6588,7 +6588,7 @@
         "lng": -74.128836
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Paciente con perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -6606,7 +6606,7 @@
         "lng": -74.144141
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 23 anos, paciente con amenaza de suicidio.",
+      "texto": "Hombre de 23 anos, amenaza de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -6624,7 +6624,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 82 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Hombre de 82 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6642,7 +6642,7 @@
         "lng": -74.087372
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 86 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Mujer de 86 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6660,7 +6660,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 89 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Hombre de 89 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6678,7 +6678,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -6696,7 +6696,7 @@
         "lng": -74.084229
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con sintomas gastrointestinales.",
+      "texto": "Paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
     {
@@ -6714,7 +6714,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "texto": "Paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6732,7 +6732,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "texto": "Paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6750,7 +6750,7 @@
         "lng": -74.128836
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con sintomas gastrointestinales.",
+      "texto": "Paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
     {
@@ -6768,7 +6768,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 30 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Hombre de 30 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6786,7 +6786,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 47 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Mujer de 47 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6804,7 +6804,7 @@
         "lng": -74.084229
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 56 anos, paciente con malestar general, sin foco claro.",
+      "texto": "Hombre de 56 anos, malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -6822,7 +6822,7 @@
         "lng": -74.084229
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con acompañamiento a evento.",
+      "texto": "Paciente con acompañamiento a evento.",
       "dictadoSintetico": true
     },
     {
@@ -6840,7 +6840,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con acompañamiento a evento.",
+      "texto": "Paciente con acompañamiento a evento.",
       "dictadoSintetico": true
     },
     {
@@ -6858,7 +6858,7 @@
         "lng": -74.084229
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 15 anos, paciente con acompañamiento a evento.",
+      "texto": "Hombre de 15 anos, acompañamiento a evento.",
       "dictadoSintetico": true
     },
     {
@@ -6876,7 +6876,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con acompañamiento a evento.",
+      "texto": "Paciente con acompañamiento a evento.",
       "dictadoSintetico": true
     },
     {
@@ -6894,7 +6894,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Hombre de 22 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Hombre de 22 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -6912,7 +6912,7 @@
         "lng": -74.117947
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Paciente con perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -6930,7 +6930,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con herida en miembro inferior, sangrado activo.",
+      "texto": "Paciente con herida en miembro inferior, sangrado activo.",
       "dictadoSintetico": true
     },
     {
@@ -6948,7 +6948,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con acompañamiento a evento.",
+      "texto": "Paciente con acompañamiento a evento.",
       "dictadoSintetico": true
     },
     {
@@ -6966,7 +6966,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 71 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "texto": "Mujer de 71 anos, perdida de consciencia, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
     {
@@ -6984,7 +6984,7 @@
         "lng": -74.1096
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -7002,7 +7002,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dolor torácico.",
+      "texto": "Paciente con dolor toracico opresivo.",
       "dictadoSintetico": true
     },
     {
@@ -7020,7 +7020,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "texto": "Paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -7038,7 +7038,7 @@
         "lng": -74.066048
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "texto": "Paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -7056,7 +7056,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con acompañamiento a evento.",
+      "texto": "Paciente con acompañamiento a evento.",
       "dictadoSintetico": true
     },
     {
@@ -7074,7 +7074,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "texto": "Paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
     {
@@ -7092,7 +7092,7 @@
         "lng": -74.089124
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "texto": "Paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -7110,7 +7110,7 @@
         "lng": -74.145412
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Mujer de 59 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Mujer de 59 anos, dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -7128,7 +7128,7 @@
         "lng": -74.091912
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "texto": "Paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
     {
@@ -7146,7 +7146,7 @@
         "lng": -74.205896
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con intento de suicidio.",
+      "texto": "Paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
     {
@@ -7164,7 +7164,7 @@
         "lng": -74.080642
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "texto": "Paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
     {
@@ -7182,7 +7182,7 @@
         "lng": -74.109584
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
     {
@@ -7200,7 +7200,7 @@
         "lng": -74.148875
       },
       "origenCentroide": "ips-urgencias",
-      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "texto": "Paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     }
   ]

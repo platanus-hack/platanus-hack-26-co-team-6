@@ -48,21 +48,28 @@ PRIORIDAD_A_TRIAGE = {"Critica": 1, "Alta": 2, "Media": 3, "Baja": 4}
 # El TIPO_INCIDENTE del 123 viene como "CODIGO - DESCRIPCION". Traducimos los
 # 21 tipos a como lo diria un paramedico por radio. La descripcion clinica
 # aproximada permite que el parser tenga algo real que extraer.
+# El TIPO_INCIDENTE del 123 viene como "CODIGO - DESCRIPCION". Traducimos los
+# 21 tipos a como lo diria un paramedico por radio.
+#
+# Son SINTAGMAS NOMINALES a proposito, sin la palabra "paciente": el sujeto lo
+# pone _dictado() segun haya edad o no. Si una plantilla dijera "paciente con
+# herida", el resultado seria "Paciente, paciente con herida".
 GUION_POR_TIPO = {
-    "HERIDO": "paciente con herida {donde}, sangrado {sangrado}",
-    "TRASTMENT": "paciente con agitacion psicomotora, trastorno mental descompensado",
-    "EVERES": "paciente con dificultad respiratoria, saturacion baja",
-    "ENFERMO": "paciente con malestar general, sin foco claro",
-    "CONVULSION": "paciente con episodio convulsivo tonico clonico",
-    "INCONSCIEN": "paciente inconsciente, sin respuesta a estimulos",
-    "ACCTRANS": "paciente politraumatizado por accidente de transito",
-    "DOLORTORAX": "paciente con dolor toracico opresivo",
-    "CAIDA": "paciente con caida de altura, trauma multiple",
-    "GESTANTE": "paciente gestante con actividad uterina",
-    "INTOXICA": "paciente con cuadro de intoxicacion",
-    "QUEMADO": "paciente con quemaduras",
-    "HEMORRAG": "paciente con hemorragia activa",
-    "ACV": "paciente con deficit neurologico focal subito",
+    "HERIDO": "herida {donde}, sangrado {sangrado}",
+    "TRASTMENT": "agitacion psicomotora, trastorno mental descompensado",
+    "EVERES": "dificultad respiratoria, saturacion baja",
+    "ENFERMO": "malestar general, sin foco claro",
+    "CONVULSION": "episodio convulsivo tonico clonico",
+    "INCONSCIEN": "perdida de consciencia, sin respuesta a estimulos",
+    "ACCTRANS": "politraumatismo por accidente de transito",
+    "DOLORTORAX": "dolor toracico opresivo",
+    "DOLTOR": "dolor toracico opresivo",
+    "CAIDA": "trauma multiple por caida de altura",
+    "GESTANTE": "cuadro obstetrico con actividad uterina",
+    "INTOXICA": "cuadro de intoxicacion",
+    "QUEMADO": "quemaduras",
+    "HEMORRAG": "hemorragia activa",
+    "ACV": "deficit neurologico focal subito",
 }
 
 DONDE = ["en region abdominal", "en miembro inferior", "en craneo", "en torax"]
@@ -142,25 +149,32 @@ def _promedio(coords: list) -> dict:
 
 
 def _dictado(tipo: str, edad, sexo: str | None, semilla: int) -> str:
+    """
+    Arma el dictado. El sujeto depende de si el 123 reporto la edad.
+
+        con edad   -> "Hombre de 58 anos, dolor toracico opresivo."
+        sin edad   -> "Paciente con dolor toracico opresivo."
+
+    Un tercio de los incidentes viene sin edad (EDAD='N/A'), asi que la rama
+    sin edad no es un caso raro: sale en la pantalla del demo.
+    """
     codigo = (tipo or "").split("-")[0].strip()
-    plantilla = GUION_POR_TIPO.get(codigo)
+    hallazgo = GUION_POR_TIPO.get(codigo)
 
-    if plantilla is None:
-        # Tipo sin guion propio: usamos su descripcion tal cual, en minuscula.
-        desc = (tipo or "").split("-", 1)[-1].strip().lower() or "cuadro no especificado"
-        plantilla = f"paciente con {desc}"
+    if hallazgo is None:
+        # Tipo sin guion propio: se usa su descripcion tal cual, en minuscula.
+        hallazgo = (tipo or "").split("-", 1)[-1].strip().lower() or "cuadro no especificado"
 
-    texto = plantilla.format(
+    hallazgo = hallazgo.format(
         donde=DONDE[semilla % len(DONDE)],
         sangrado=SANGRADO[semilla % len(SANGRADO)],
     )
 
-    quien = "Paciente"
-    if edad is not None:
-        genero = {"MASCULINO": "masculino", "FEMENINO": "femenino"}.get(sexo or "")
-        quien = f"{'Hombre' if genero == 'masculino' else 'Mujer' if genero else 'Paciente'} de {edad} anos"
+    if edad is None:
+        return f"Paciente con {hallazgo}."
 
-    return f"{quien}, {texto}."
+    quien = {"MASCULINO": "Hombre", "FEMENINO": "Mujer"}.get(sexo or "", "Paciente")
+    return f"{quien} de {edad} anos, {hallazgo}."
 
 
 def construir(maximo: int = 400) -> dict:

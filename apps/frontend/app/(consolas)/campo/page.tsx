@@ -18,6 +18,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Caso, Candidato, Handshake } from "@/lib/types";
 import { DICTADOS_DEMO } from "@/lib/demo";
+import { CASOS_REALES, type CasoReal } from "@/lib/casos-reales.generado";
 import { nombresServicios, ETIQUETA_TRIAGE, esHoraDorada } from "@/lib/presentacion";
 import * as api from "@/lib/api";
 
@@ -31,6 +32,35 @@ export default function Campo() {
   const [meta, setMeta] = useState({ evaluadas: 0, compatibles: 0 });
   const [handshake, setHandshake] = useState<Handshake | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // ── Incidente real del 123 ─────────────────────────────────────
+  //
+  // Cuando el caso cargado viene de un incidente real, se guarda aquí para
+  // dos cosas: pintar su procedencia (número de incidente y fecha, que es lo
+  // que lo hace verificable) y rutear DESDE su localidad real en vez de desde
+  // ORIGEN_DEMO. Una ambulancia que sale de Usme no ve el mismo ranking que
+  // una que sale del centro, y esa diferencia es justo lo que el producto hace.
+  const [casoReal, setCasoReal] = useState<CasoReal | null>(null);
+  const [indiceReal, setIndiceReal] = useState(0);
+
+  /**
+   * Avanza al siguiente incidente real. Cíclico y no aleatorio a propósito:
+   * el demo tiene que ser determinista (ver NEXT_PUBLIC_MODO_DEMO), y elegir
+   * al azar durante el render rompería la hidratación de la página estática.
+   */
+  function cargarCasoReal() {
+    const c = CASOS_REALES[indiceReal % CASOS_REALES.length];
+    setTexto(c.texto);
+    setCasoReal(c);
+    setIndiceReal((i) => i + 1);
+    setError(null);
+  }
+
+  function cargarDictado(t: string) {
+    setTexto(t);
+    setCasoReal(null);
+    setError(null);
+  }
 
   // ── Cronómetro de hora dorada ──────────────────────────────────
   const [t0, setT0] = useState<number | null>(null);
@@ -83,7 +113,14 @@ export default function Campo() {
     setFase("analizando");
     setT0(Date.now());
     try {
-      const { caso: c } = await api.triage({ texto });
+      // Si el caso salió de un incidente real, la ambulancia arranca donde
+      // arrancó de verdad. Sin esto todo se rutea desde ORIGEN_DEMO y el
+      // ranking sale igual para los 32 casos, que es justo lo contrario de
+      // lo que queremos mostrar.
+      const { caso: c } = await api.triage({
+        texto,
+        origen: casoReal?.origen ?? undefined,
+      });
       setCaso(c);
 
       const m = await api.match({ caso: c, limite: 5 });
@@ -213,7 +250,7 @@ export default function Campo() {
               {DICTADOS_DEMO.map((d) => (
                 <button
                   key={d.etiqueta}
-                  onClick={() => setTexto(d.texto)}
+                  onClick={() => cargarDictado(d.texto)}
                   className="px-3 py-2 text-xs rounded-lg bg-[color:var(--color-superficie)]
                              border border-[color:var(--color-borde)]"
                 >
@@ -221,6 +258,40 @@ export default function Campo() {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* ── Incidentes reales del 123 ──
+              La respuesta a "¿esto solo funciona con sus tres ejemplos?" */}
+          <div className="pt-2">
+            <button
+              onClick={cargarCasoReal}
+              className="w-full px-3 py-3 text-sm rounded-xl text-left
+                         bg-[color:var(--color-superficie)]
+                         border border-dashed border-[color:var(--color-borde)]"
+            >
+              <span className="font-semibold">🗂 Incidente real del 123</span>
+              <span className="text-[color:var(--color-texto-tenue)]">
+                {" "}
+                · {CASOS_REALES.length} casos de Bogotá, junio 2026
+              </span>
+            </button>
+
+            {casoReal && (
+              <p className="mt-2 text-[11px] leading-relaxed text-[color:var(--color-texto-tenue)]">
+                <span className="tabular">{casoReal.incidente}</span> ·{" "}
+                {casoReal.localidad ?? "localidad no referida"} ·{" "}
+                {new Date(casoReal.fecha).toLocaleString("es-CO", {
+                  day: "numeric",
+                  month: "short",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}{" "}
+                · prioridad {casoReal.triage} en el CRUE
+                <br />
+                Incidente real. El texto del dictado es una plantilla: el 123
+                publica los campos, no la narrativa clínica.
+              </p>
+            )}
           </div>
         </section>
       )}
