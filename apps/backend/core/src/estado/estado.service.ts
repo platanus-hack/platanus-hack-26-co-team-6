@@ -10,7 +10,7 @@
  */
 
 import { Injectable } from '@nestjs/common';
-import type { Caso, Handshake } from '../contracts/types';
+import type { Caso, CasoPublico, Handshake } from '../contracts/types';
 import { AlmacenService } from '../almacen/almacen.service';
 import { SedesService } from '../sedes/sedes.service';
 import { CongestionService } from '../scoring/congestion.service';
@@ -25,7 +25,7 @@ export interface CongestionSede {
 }
 
 export interface EstadoResponse {
-  casos: Caso[];
+  casos: CasoPublico[];
   handshakes: Handshake[];
   congestion: CongestionSede[];
   ts: string;
@@ -58,11 +58,44 @@ export class EstadoService {
       };
     });
 
+    const visibles = casoId ? casos.filter((c) => c.id === casoId) : casos;
+
     return {
-      casos: casoId ? casos.filter((c) => c.id === casoId) : casos,
+      casos: visibles.map(despojar),
       handshakes,
       congestion,
       ts: new Date().toISOString(),
     };
   }
+}
+
+/**
+ * Lo que sale del caso hacia las consolas.
+ *
+ * Es una LISTA BLANCA, no un `delete` de lo sensible: se nombra lo que sale,
+ * no lo que se esconde. Quedan fuera `textoCrudo` (el dictado literal del
+ * paramédico) y `origen` (las coordenadas de recogida del paciente).
+ *
+ * Escrito así a propósito, y no con `...resto`: si alguien agrega un campo a
+ * `Caso`, `CasoPublico` lo exige y **esta función deja de compilar**. Obliga a
+ * decidir, campo por campo, si ese dato puede salir del servidor. Con rest
+ * spread entraría solo y en silencio, que es exactamente cómo se filtró antes.
+ */
+function despojar(caso: Caso): CasoPublico {
+  return {
+    id: caso.id,
+    resumen: caso.resumen,
+    triage: caso.triage,
+    dxCie10: caso.dxCie10,
+    dxDescripcion: caso.dxDescripcion,
+    serviciosRequeridos: caso.serviciosRequeridos,
+    complejidadRequerida: caso.complejidadRequerida,
+    edad: caso.edad,
+    sexo: caso.sexo,
+    signosAlarma: caso.signosAlarma,
+    requiereMedicoABordo: caso.requiereMedicoABordo,
+    confianza: caso.confianza,
+    tipoMovil: caso.tipoMovil,
+    creadoEn: caso.creadoEn,
+  };
 }

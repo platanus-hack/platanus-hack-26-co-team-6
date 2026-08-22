@@ -170,6 +170,68 @@ function checkEnvFiles() {
   }
 }
 
+// ----------------------------------------------------------- security ---
+
+/** Reads KEY=value pairs out of a .env file. Returns {} when it is not there. */
+function readEnv(path) {
+  if (!existsSync(path)) return {};
+
+  const pairs = {};
+  for (const line of readFileSync(path, "utf8").split("\n")) {
+    // trim() also drops the trailing \r of a CRLF file, so this handles both.
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+
+    const eq = trimmed.indexOf("=");
+    if (eq <= 0) continue;
+
+    const value = trimmed.slice(eq + 1).trim().replace(/^["']|["']$/g, "");
+    if (value) pairs[trimmed.slice(0, eq).trim()] = value;
+  }
+  return pairs;
+}
+
+/**
+ * core serves raw clinical dictation and patient pickup coordinates, and the
+ * Telegram webhook forces it onto the public internet. These checks exist so a
+ * misconfiguration surfaces here instead of during the demo.
+ */
+function checkSecurity() {
+  const env = readEnv(join(CORE, ".env"));
+
+  if (env.OPERADOR_PASSWORD) {
+    pass("auth: operator password", "set");
+  } else {
+    // Not fatal: core generates one and prints it. Just annoying to hunt for.
+    warn("auth: operator password", "OPERADOR_PASSWORD unset — core prints a random one on boot");
+  }
+
+  if (!env.SESION_SECRET) {
+    warn("auth: session secret", "SESION_SECRET unset — sessions die on every restart");
+  } else if (env.SESION_SECRET.length < 16) {
+    warn("auth: session secret", "SESION_SECRET under 16 chars — ignored, a random one is used");
+  } else {
+    pass("auth: session secret", "set");
+  }
+
+  // The one that breaks a demo silently: with a bot token but no webhook
+  // secret, core rejects every update and the Telegram buttons do nothing.
+  if (!env.TELEGRAM_BOT_TOKEN) {
+    pass("auth: telegram webhook", "no bot token — webhook not in use");
+  } else if (env.TELEGRAM_WEBHOOK_SECRET) {
+    pass("auth: telegram webhook", "secret set — must match setWebhook(secret_token=...)");
+  } else {
+    fail(
+      "auth: telegram webhook",
+      "TELEGRAM_BOT_TOKEN set but TELEGRAM_WEBHOOK_SECRET missing — core rejects every update",
+    );
+  }
+
+  if (env.CORS_ORIGIN === "*") {
+    fail("auth: CORS_ORIGIN", "'*' cannot carry session cookies — set the exact frontend origin");
+  }
+}
+
 // -------------------------------------------------------------- ports ---
 
 async function checkPorts() {
@@ -240,5 +302,6 @@ checkNodeDeps("frontend deps", FRONTEND, "next");
 checkNodeDeps("core deps", CORE, "@nestjs/core");
 checkVenv();
 checkEnvFiles();
+checkSecurity();
 await checkPorts();
 report();

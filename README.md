@@ -43,6 +43,23 @@ Abre <http://localhost:3000>. **Funciona sin ninguna credencial**: sin Supabase 
 
 Para el demo se abren **dos pantallas a la vez**: `/campo` en el celular y `/hospital` en el portátil.
 
+### Las consolas piden contraseña
+
+La landing (`/`) es pública. Las tres consolas (`/campo`, `/hospital`, `/crue`) no: core sirve el dictado clínico y las coordenadas del paciente, así que exige sesión.
+
+Pon una contraseña de turno en `apps/backend/core/.env`:
+
+```bash
+OPERADOR_PASSWORD=lo-que-quieras
+SESION_SECRET=$(openssl rand -hex 32)   # firma la cookie de sesión
+```
+
+Si las dejas en blanco arranca igual: **core genera una contraseña aleatoria y la imprime al arrancar**, buscála en su log. Lo que nunca hace es arrancar sin autenticar.
+
+Se entra una vez en `/entrar` y la sesión dura 12 horas — no molesta durante el pitch.
+
+> Si vas a usar el webhook de Telegram, `TELEGRAM_WEBHOOK_SECRET` es **obligatorio**: sin él, core ignora todos los updates y los botones no hacen nada. `task doctor` te avisa. Ver [`telegram.controller.ts`](apps/backend/core/src/telegram/telegram.controller.ts).
+
 <details>
 <summary><b>Trabajando con Live Share</b></summary>
 
@@ -155,6 +172,8 @@ Una sede sin hemodinamia no es "peor opción": **es no-opción**. Ver una clíni
 
 | Ruta | Quién la usa | Qué hace |
 |---|---|---|
+| `/` | Cualquiera | Landing. La única ruta pública. |
+| `/entrar` | El equipo de turno | Contraseña compartida → cookie de sesión. Las tres consolas de abajo pasan por aquí. |
 | `/campo` | Paramédico (celular) | Dictado → caso estructurado → ranking → despacho → confirmación. El cronómetro de hora dorada vive aquí. |
 | `/hospital` | Jefe de urgencias | Consola de handshake: aceptar / rechazar con motivo. En **triage I no ofrece rechazo** (escala al CRUE). |
 | `/crue` | Regulador | Vista de supervisión: casos, handshakes y estado de la red. **PULSO propone; el CRUE regula.** |

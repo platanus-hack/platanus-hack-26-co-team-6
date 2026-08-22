@@ -8,8 +8,12 @@ async function bootstrap() {
   const config = app.get(ConfigService);
 
   // core es el único origen que ve el navegador. ai-core es interno y no lleva CORS.
+  // credentials: el navegador solo manda la cookie de sesión si se lo
+  // permitimos aquí. Con credentials no vale el comodín '*': el origen tiene
+  // que ser exacto, y por eso CORS_ORIGIN nunca puede ser '*'.
   app.enableCors({
     origin: config.get<string>('CORS_ORIGIN') ?? 'http://localhost:3000',
+    credentials: true,
   });
 
   // 3001, no el 3000 por defecto de Nest — apps/frontend es dueño del 3000 en

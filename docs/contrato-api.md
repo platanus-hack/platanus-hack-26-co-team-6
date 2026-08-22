@@ -28,6 +28,24 @@ Si necesitas un campo nuevo: **agrégalo opcional** (`campo?: tipo`). Así nadie
 
 ---
 
+## Todas las rutas exigen sesión
+
+Salvo dos: `GET /health` y `POST /telegram/webhook` (a Telegram no le puedes pedir una cookie; se autentica con `secret_token`).
+
+El resto responde **401** sin sesión. Se entra una vez:
+
+```ts
+POST /auth/login   → { password: string }   ← Set-Cookie: pulso_sesion (HttpOnly, 12h)
+POST /auth/logout  → {}                     ← borra la cookie
+GET  /auth/sesion  →                        ← { autenticado: boolean }   // público
+```
+
+Desde el navegador, `fetch` necesita `credentials: "include"` o la cookie no viaja — ya está puesto en [`lib/api.ts`](../apps/frontend/lib/api.ts). Desde curl, `-c/-b cookies.txt`, o `Authorization: Bearer <token>`.
+
+La contraseña sale de `OPERADOR_PASSWORD`. Si no está configurada, core genera una e imprime en el log al arrancar.
+
+---
+
 ## Las cinco rutas
 
 ### `POST /triage` — Neid
@@ -72,7 +90,17 @@ Es **idempotente**: un doble toque en el celular no duplica la señal. En un dem
 
 ### `GET /estado?casoId=…`
 
+```ts
+← { casos: CasoPublico[], handshakes: Handshake[], congestion: CongestionSede[], ts: string }
+```
+
 Estado vivo para polling (2s). Lo consumen `/hospital` y `/crue`.
+
+⚠️ **`CasoPublico`, no `Caso`.** Es `Caso` sin `textoCrudo` (el dictado literal del paramédico) ni `origen` (las coordenadas de recogida del paciente). Son los dos campos más sensibles del sistema y ninguna consola los pinta: el mapa de `/campo` usa el `origen` que ya recibió en la respuesta de `POST /triage`.
+
+Si una vista llega a necesitarlos, se expone un endpoint por caso con su propia autorización — **no se re-abren en el listado**.
+
+`despojar()` en [`estado.service.ts`](../apps/backend/core/src/estado/estado.service.ts) construye la respuesta **campo por campo**, no con `...resto`. Así que agregar un campo a `Caso` rompe el build hasta que alguien decida si ese dato puede salir del servidor. Es la parte del diseño que impide que esto se vuelva a filtrar solo.
 
 Sí, polling y no WebSockets. Deliberado: funciona desde el minuto 0 sin configurar nada. Si sobra tiempo después de H20, se cambia a Supabase Realtime y se ve idéntico.
 
