@@ -6,57 +6,159 @@
 
 ---
 
-## Tu punto de partida
+## Dónde vive tu carril: `apps/backend/ai-core`
 
-Ya funciona. `/api/triage` extrae entidades estructuradas con Claude vía structured outputs, y cae a un extractor heurístico si no hay API key. `apps/frontend/lib/scoring.ts` y `apps/frontend/lib/congestion.ts` implementan el modelo completo.
+**Cambió desde la versión anterior de este doc.** Tus cuatro piezas estaban en
+`apps/frontend/lib/`. Ahora existen también en `apps/backend/ai-core`, en
+Python, y ese es el sitio donde se trabaja. El frontend sigue funcionando
+igual — no se tocó nada allá.
 
-Tu trabajo no es construirlo: es **hacer que la rama del LLM sea claramente mejor que la heurística**, y que el modelo de congestión se pueda defender ante un médico.
+```bash
+cd apps/backend/ai-core
+uv sync
+uv run fastapi dev app/main.py     # :8000
+uv run pytest                       # 84 tests, sin red
+```
+
+| Ruta | Qué hace | Equivale a |
+|---|---|---|
+| `POST /v1/triage` | dictado → entidades clínicas | `/api/triage` |
+| `POST /v1/score` | filtro duro + ranking en minutos | paso 3 de `/api/match` |
+
+`/v1/score` **no** busca sedes ni calcula ETA: eso es de Zaid y se queda en
+`/api/match`. Recibe `caso + sedes + etas + senales` y devuelve `candidatos`.
+Es una función pura — ai-core no tiene base de datos a propósito.
 
 ## Tus archivos
 
 | Archivo | Qué es |
 |---|---|
-| [`apps/frontend/app/api/triage/route.ts`](../apps/frontend/app/api/triage/route.ts) | Parser clínico. Esquema Zod + prompt + fallback heurístico. |
-| [`apps/frontend/lib/scoring.ts`](../apps/frontend/lib/scoring.ts) | Score en minutos, `P(aceptación)` Beta-Bernoulli. |
-| [`apps/frontend/lib/congestion.ts`](../apps/frontend/lib/congestion.ts) | Índice de congestión, 4 señales. |
-| [`apps/frontend/lib/servicios-reps.ts`](../apps/frontend/lib/servicios-reps.ts) | Catálogo FHIR de MinSalud + filtros duros. |
+| [`ai-core/app/triage.py`](../apps/backend/ai-core/app/triage.py) | Prompt del sistema, llamada a Claude, cinturón de seguridad, fallback. |
+| [`ai-core/app/scoring.py`](../apps/backend/ai-core/app/scoring.py) | Score en minutos, `P(aceptación)` Beta-Bernoulli, rebote por sede. |
+| [`ai-core/app/congestion.py`](../apps/backend/ai-core/app/congestion.py) | Índice de congestión, 4 señales. |
+| [`ai-core/app/servicios_reps.py`](../apps/backend/ai-core/app/servicios_reps.py) | Catálogo FHIR de MinSalud + filtros duros. |
+| [`ai-core/evals/corpus.py`](../apps/backend/ai-core/evals/corpus.py) | 14 dictados con sus asserts. |
+| Los originales en `apps/frontend/lib/` | Siguen ahí, funcionando. Deuda conocida: dos motores. |
+
+⚠️ **Hay dos parsers clínicos en el repo.** Este y el de TypeScript. Mientras
+convivan, un cambio en el prompt o en el catálogo REPS hay que hacerlo en los
+dos lados o divergen en silencio. Cuando el frontend migre a llamar a `core`,
+se borran los cuatro archivos de `lib/`.
 
 ---
 
 ## Lo que ya está resuelto (no lo reconstruyas)
 
-- **Modelo:** `claude-opus-5`, `effort: "low"` para latencia — ese número sale en el pitch.
-- **Salida estructurada:** `client.messages.parse()` + `zodOutputFormat(EsquemaExtraccion)`. Nada de parsear JSON a mano.
-- **Cinturón de seguridad:** los `serviciosRequeridos` que devuelve el modelo se filtran contra `SERVICIOS_SELECCIONABLES`. Si alucina un código, se descarta silenciosamente.
-- **Fallback total:** si Claude falla, revienta o no hay key, entra `extraccionHeuristica()` con `confianza: 0.35`. **El endpoint nunca devuelve error por falta de credencial.**
-
-⚠️ Requiere `zod` **v4** (`@anthropic-ai/sdk/helpers/zod` no acepta zod 3). Ya está instalado así — no lo bajes.
+- **Modelo:** `claude-opus-5`, `effort: "low"` para latencia — ese número sale
+  en el pitch. Configurable por `.env` (`MODELO_TRIAGE`, `ESFUERZO_TRIAGE`).
+- **Salida estructurada:** `client.messages.parse()` con `output_format=` de un
+  modelo Pydantic. Nada de parsear JSON a mano.
+- **Cinturón de seguridad:** los `serviciosRequeridos` que devuelve el modelo se
+  filtran contra `SERVICIOS_SELECCIONABLES`. Si alucina un código, se descarta
+  silenciosamente.
+- **Fallback total:** si Claude falla, revienta o no hay key, entra
+  `extraccion_heuristica()` con `confianza: 0.35`. **El endpoint nunca devuelve
+  error por falta de credencial.**
+- **`motor` en la respuesta:** `"claude"` o `"heuristica"`. Campo nuevo, no
+  estaba en el contrato. Sin él, la única pista de que estabas viendo la
+  heurística era `confianza == 0.35` exacto.
+- **El contrato sale en camelCase** (`serviciosRequeridos`, `dxCie10`) para
+  espejar `types.ts`, que es ley. Serializa con `by_alias=True` o lo rompes.
 
 ---
 
 ## Tareas
 
-### Bloque 1 · H2–H10 — que el parser sea bueno de verdad
+### Bloque 1 · el parser
 
-- [ ] **Conseguir la API key** y verificar que la rama de Claude entra (la `confianza` sube de 0.35).
-- [ ] **Montar fixtures.** Los 3 dictados de [`apps/frontend/lib/mock.ts`](../apps/frontend/lib/mock.ts) (`DICTADOS_DEMO`) traen su salida esperada. Escribe un script que corra los 3 y compare. No necesitas un framework de tests — un `.mjs` que imprima ✅/❌ es suficiente y lo vas a correr 40 veces.
-- [ ] **Escribir 8–10 dictados más**, incluyendo los feos: transcripción de voz con errores, jerga (*"paciente con SCACEST"*), dictados truncados, casos ambiguos. Los bonitos ya funcionan; los feos son los que rompen el demo en vivo.
-- [ ] **Calibrar el sobre-pedido de servicios.** El error más caro del parser: pedir UCI cuando no hace falta descarta sedes viables y el ranking sale vacío. Un ranking vacío en el escenario es el peor escenario posible. El prompt ya lo advierte — verifica que obedece.
-- [ ] **Medir la latencia.** Si `effort: "low"` con `claude-opus-5` no baja de ~2s, es el cuello de botella del número del pitch. Mide antes de optimizar.
+- [x] **Montar fixtures.** `evals/corpus.py` tiene 14 dictados: los 3 de
+      `DICTADOS_DEMO` más 11 feos.
+- [x] **Escribir 8–10 dictados más**, incluyendo los feos: voz sin tildes ni
+      puntuación, jerga (*SCACEST*, *TEC* + anisocoria), truncados, sin edad ni
+      sexo, ambiguos entre dos niveles, neonato vs. pediátrico vs. adulto,
+      obstétrico, intoxicación sin código REPS propio, y **dos trampas de
+      sobre-pedido**.
+- [ ] 🔴 **Conseguir la API key.** Es lo único que bloquea el resto del bloque.
+      Ponla en `apps/backend/ai-core/.env` y verifica que `motor` diga
+      `"claude"`.
+- [ ] **Correr el corpus y comparar contra la línea base.**
+      ```bash
+      uv run python -m evals.run --heuristica     # línea base medida: 4/14
+      uv run python -m evals.run                  # la rama de Claude
+      ```
+      La heurística falla exactamente donde debe: pide UCI de adultos para una
+      apendicitis estable, no reconoce `SCACEST` sin tildes, manda UCI de
+      adultos a un neonato. **Ese 4/14 es tu número de comparación.**
+- [ ] **Calibrar el sobre-pedido de servicios.** El error más caro del parser:
+      pedir UCI cuando no hace falta descarta sedes viables y el ranking sale
+      vacío. Hay dos dictados dedicados a esto — filtra con
+      `uv run python -m evals.run --filtro trampa`.
+- [ ] **Medir la latencia.** El runner ya imprime mediana y máximo. Si `low` no
+      baja de ~2s, es el cuello de botella del número del pitch. Mide antes de
+      optimizar; si la calidad falla, `--esfuerzo medium` y mide de nuevo.
 
-### Bloque 2 · H10–H20 — el motor
+### Bloque 2 · el motor
 
-- [ ] **Calibrar `PENALIZACION_REBOTE` (22 min) y `ESPERA_PUERTA_MAX` (25 min).** Ahora mismo son juicio informado, no medición. Busca una cifra citable de tiempo de rebote / espera en puerta en urgencias en Colombia. **Una fuente real vale más que un número afinado.** Si no la encuentras en 30 minutos, déjalos y **di en el pitch que son parámetros calibrables, no verdades**. Eso genera confianza; fingir precisión la destruye.
-- [ ] **Revisar los pesos de congestión** en `PESOS`. `rechazoReciente` pesa 0.35 — es el más alto a propósito, porque es la única señal viva. Defiende esa decisión, no la escondas.
-- [ ] **Verificar que el aprendizaje se ve.** Despacha, rechaza, vuelve a matchear: `pAceptacion` de esa sede debe bajar y su congestión subir. Si no se mueve lo suficiente para notarse en pantalla, sube `FUERZA_PRIOR`… **al revés**: bájalo (menos prior = los datos mandan más rápido). Ajústalo hasta que 1 rechazo se vea, pero sin que el modelo quede ridículo.
-- [ ] **`presionEpidemiologica()` es un stub honesto** (estacional). El upgrade real es cruzar con SIVIGILA/INS. **Si no da tiempo, déjalo y dilo tal cual en el pitch.** Un stub declarado es integridad; un stub disfrazado es lo que un jurado técnico caza.
+- [x] **`PENALIZACION_REBOTE` ya no es una constante global.** Ver abajo.
+- [x] **Verificar que el aprendizaje se ve.** Hay un test que falla si un
+      rechazo mueve el score menos de 1 minuto — el mínimo que un jurado
+      alcanza a leer en pantalla. `FUERZA_PRIOR = 10` también está pinneado:
+      si sube, el aprendizaje se vuelve invisible.
+- [ ] **Calibrar `ESPERA_PUERTA_MAX` (25 min).** Sigue siendo juicio informado,
+      no medición. Busca una cifra citable de espera en puerta de urgencias en
+      Colombia. **Una fuente real vale más que un número afinado.** Si no la
+      encuentras en 30 minutos, déjalo y **di en el pitch que son parámetros
+      calibrables, no verdades**. Eso genera confianza; fingir precisión la
+      destruye.
+- [ ] **Revisar los pesos de congestión** en `PESOS`. `rechazo_reciente` pesa
+      0.35 — es el más alto a propósito, porque es la única señal viva.
+      Defiende esa decisión, no la escondas.
+- [ ] **`presion_epidemiologica()` es un stub honesto** (estacional). El upgrade
+      real es cruzar con SIVIGILA/INS. **Si no da tiempo, déjalo y dilo tal cual
+      en el pitch.** Un stub declarado es integridad; un stub disfrazado es lo
+      que un jurado técnico caza.
 
-### Bloque 3 · H20+ — preparar el interrogatorio
+### Bloque 3 · preparar el interrogatorio
 
 - [ ] Tener listas, en una tarjeta, las respuestas a:
-  - *"¿De dónde sacan la ocupación en tiempo real?"* → la respuesta está abajo. **Apréndetela.**
-  - *"¿Qué pasa si el LLM se equivoca en el CIE-10?"* → el CIE-10 es informativo; el **filtro duro** corre sobre `serviciosRequeridos`, y el médico receptor ve el resumen completo y decide. El LLM no diagnostica: prepara la decisión de un humano.
-  - *"¿Por qué Claude y no un clasificador entrenado?"* → no hay dataset etiquetado de dictados de ambulancia en español colombiano. El LLM da cobertura desde el día 1; los handshakes que PULSO acumula **son** el dataset para entrenar después. Es un camino, no una excusa.
+  - *"¿De dónde sacan la ocupación?"* → la respuesta está abajo. **Apréndetela.**
+  - *"¿Qué pasa si el LLM se equivoca en el CIE-10?"* → el CIE-10 es
+    informativo; el **filtro duro** corre sobre `serviciosRequeridos`, y el
+    médico receptor ve el resumen completo y decide. El LLM no diagnostica:
+    prepara la decisión de un humano.
+  - *"¿Por qué Claude y no un clasificador entrenado?"* → no hay dataset
+    etiquetado de dictados de ambulancia en español colombiano. El LLM da
+    cobertura desde el día 1; los handshakes que PULSO acumula **son** el
+    dataset para entrenar después. Es un camino, no una excusa.
+
+---
+
+## El rebote ahora se aprende por sede
+
+Antes: `PENALIZACION_REBOTE = 22`, igual para todos los hospitales de Bogotá.
+Este doc mismo admitía que era *"juicio informado, no medición"*.
+
+Ahora está descompuesto en sus dos mitades, y solo una es observable:
+
+```
+rebote(sede) = espera_de_respuesta(sede)   ← SÍ lo medimos: handshake.latencia_s
+             + SOBRECOSTO_REBOTE (18 min)  ← descargar, re-llamar, re-rutear
+```
+
+Sobre la mitad observable va el mismo encogimiento hacia el prior que usa
+`P(aceptación)`: con cero handshakes devuelve **exactamente 22 minutos** —el
+número que ya está en el pitch no cambia—, y cada respuesta observada lo mueve
+hacia lo que esa sede hace de verdad. Una sede que contesta en 40 segundos
+cuesta menos rebotarla que una que se demora ocho minutos.
+
+Por qué importa en el pitch: convierte *"asumimos 22 minutos"* en *"arrancamos
+en 22 y cada handshake lo calibra por hospital, sin pedirle nada al hospital"*.
+Es la misma tesis del rechazo-como-sensor, aplicada al tiempo.
+
+**Dependencia:** necesita `senales[codigo].latenciasRespuestaMin` en el request,
+que sale de la tabla `handshake`. Hoy esa tabla no se está escribiendo — ver el
+hallazgo en [zaid-backend.md](zaid-backend.md). Sin eso, el motor corre igual
+pero con el prior de siempre.
 
 ---
 
@@ -77,11 +179,14 @@ Alguien **va a preguntar** de dónde sale la ocupación. Es tu momento, no tu pr
 ## Cómo pruebas lo tuyo
 
 ```bash
-curl -s -X POST localhost:3000/api/triage -H "Content-Type: application/json" \
+cd apps/backend/ai-core
+uv run fastapi dev app/main.py
+
+curl -s -X POST localhost:8000/v1/triage -H "Content-Type: application/json" \
   -d '{"texto":"Femenina de 68 anos, hemiparesia derecha subita hace 50 minutos, afasia, Glasgow 13, FA conocida."}'
 ```
 
-Asserts:
+Asserts (los 6 primeros están automatizados en `evals/corpus.py`):
 
 - [ ] IAM con supra ST → `triage: 2`, `serviciosRequeridos` contiene `743` y `110`
 - [ ] ACV → contiene `245`, `110`
@@ -89,6 +194,7 @@ Asserts:
 - [ ] Ningún código fuera de `SERVICIOS_SELECCIONABLES`
 - [ ] Dictado truncado ("paciente con dolor") → `confianza < 0.5`, y **no** inventa un CIE-10
 - [ ] Ante duda entre dos niveles de triage, escoge el más grave
+- [ ] `motor` dice `"claude"`, no `"heuristica"`
 
 ---
 
@@ -100,4 +206,6 @@ Asserts:
 
 **`effort: "low"` es una decisión de latencia, no de costo.** Si la calidad de extracción falla en los dictados feos, **súbelo a `"medium"` y mide de nuevo** — el pitch aguanta 2 segundos más; no aguanta una extracción equivocada en vivo.
 
-**La heurística se te va a colar.** Si `ANTHROPIC_API_KEY` no está cargada en el entorno del server (no basta editar `.env.local` sin reiniciar `pnpm dev`), todo sigue funcionando con la heurística y parece que el LLM anda. **Revisa siempre `confianza`**: 0.35 exacto = estás viendo la heurística.
+**La heurística se te va a colar.** Antes la única pista era `confianza: 0.35`. Ahora la respuesta trae `motor` — míralo. Y recuerda que `.env` se lee al arrancar el proceso: editarlo sin reiniciar `fastapi dev` no hace nada.
+
+**El score depende de la hora.** La curva horaria de congestión cambia el ranking entre las 3 a.m. y las 8 p.m. Para tests y para el video de respaldo, manda `ahora` en el request de `/v1/score` y es reproducible al minuto.

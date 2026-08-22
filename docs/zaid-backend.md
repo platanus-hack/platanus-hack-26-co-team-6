@@ -97,3 +97,81 @@ Asserts duros (no "se ve bien"):
 **`apps/frontend/lib/db.ts` falla en silencio.** Si la RPC no existe o el nombre no coincide, hace `console.warn` y devuelve mock. Eso es bueno (nadie se bloquea) y peligroso (puedes creer que estás sobre datos reales cuando no). **Revisa la consola del servidor a propósito** cada vez que toques la DB.
 
 **El nombre de la columna en la RPC.** El SQL devuelve `coord` como `jsonb` con `{lat, lng}` justamente para que TypeScript no tenga que mapear nada. Si cambias la forma de salida, se rompe `apps/frontend/lib/db.ts` en silencio (llega un `any`).
+
+---
+
+## 🔴 Hallazgo de Neid (H+): los handshakes nunca se guardan
+
+Revisando la capa de datos para conectar el motor, encontré esto. **Es tu
+carril y creo que es el riesgo más alto que tiene el proyecto ahora mismo.**
+
+El README dice que la tabla `handshake` es *"el dataset que se auto-etiqueta —
+el activo del producto"*. La tabla existe en `0001_init.sql`. Pero
+[`apps/frontend/lib/db.ts`](../apps/frontend/lib/db.ts) **no tiene una sola
+función que la escriba**: todo vive en
+[`apps/frontend/lib/almacen.ts`](../apps/frontend/lib/almacen.ts), en memoria.
+
+Dos consecuencias:
+
+**1. El activo del producto no se está recolectando.** Cada rechazo que el
+demo genera se pierde al reiniciar. Si el jurado pregunta *"¿y dónde queda ese
+dataset que dicen que se entrena solo?"*, hoy la respuesta honesta es "en RAM".
+
+**2. En Vercel puede romper el demo en vivo.** `almacen.ts` dice *"para el demo
+da igual: una sola sesión, un solo proceso"*. Eso **no se cumple en Vercel**:
+Sebas necesita deploy porque el webhook de Telegram exige HTTPS, y ahí el
+webhook y el polling de `/campo` pueden caer en instancias serverless
+distintas. El jefe de urgencias aprieta *Aceptar* y la pantalla del paramédico
+no se entera. Es el momento 1:30 del guion.
+
+**Verifícalo en el deploy real, no en local, y hazlo antes de H20 — no a H30.**
+Despacha desde `/campo` en el deploy, acepta desde Telegram, y mira si `/campo`
+se actualiza. Si no lo hace, esa es la causa.
+
+El arreglo es persistir `caso` y `handshake` en Supabase (las tablas ya están,
+con sus índices). No es refactor: son dos `insert` y dos `select`.
+
+## Lo que ai-core necesita de ti: `senales`
+
+`POST /v1/score` de ai-core ya hace el paso 3 de `/api/match` (filtro duro +
+ranking en minutos). No busca sedes ni calcula ETA — eso sigue siendo tuyo.
+
+Para que el motor **aprenda**, el request lleva un bloque opcional por sede:
+
+```ts
+senales: {
+  [codigoSede]: {
+    aceptados: number,               // count de handshake aceptados
+    rechazados: number,              // count de handshake rechazados
+    rechazosRecientes: number,       // en las últimas 6h ← la señal viva
+    latenciasRespuestaMin: number[], // handshake.latencia_s / 60
+  }
+}
+```
+
+Las cuatro salen de una query sobre `handshake` — que es exactamente lo que
+desbloquea el punto anterior. Sin señales el motor corre igual (prior
+estructural del REPS) pero el sistema no aprende, y eso es la tesis.
+
+`latenciasRespuestaMin` es nuevo: ahora la penalización de rebote se calibra
+**por sede** en vez de ser una constante global de 22 minutos. Una sede que
+contesta en 40 segundos cuesta menos rebotarla que una que se demora ocho
+minutos. Detalle en [neid-ai.md](neid-ai.md).
+
+## Sobre montar el grafo de carreteras en PostGIS
+
+Salió la idea de meter la malla vial de Bogotá a PostGIS para calcular
+distancia "de taxista". **No lo hagas.** `driving-traffic` de Mapbox ya te da
+tiempo por calles **con tráfico**, que es estrictamente mejor que un grafo
+propio sin datos de tráfico, y ya está implementado en
+[`apps/frontend/lib/mapbox.ts`](../apps/frontend/lib/mapbox.ts). Montar
+pgRouting sobre un extract OSM te cuesta horas y te deja peor.
+
+El límite real que sí importa es `MAX_DESTINOS = 9`, y ya está manejado con el
+pre-filtro por haversine.
+
+## Zonas rurales: ya está cubierto
+
+También salió la preocupación de rutear a zonas donde no pasa nadie. El ETL ya
+tiene `BOGOTA_BBOX = "-74.25,4.45,-73.98,4.84"` como restricción de geocoding,
+y ese límite sur en 4.45 deja Sumapaz por fuera. No hay nada que hacer aquí.
