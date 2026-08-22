@@ -35,11 +35,33 @@ import { CongestionService } from './congestion.service';
 // ─────────────────────────────────────────────────────────────────
 
 /**
- * Cuánto cuesta un rebote. Descargar al paciente, volver a llamar, re-rutear y
- * volver a salir. 22 min es conservador; en la práctica el "paseo de la
- * muerte" cuesta mucho más.
+ * Lo que tarda un hospital en contestar si acepta. Prior, antes de haber visto
+ * un solo handshake de esa sede. Hoy esa respuesta llega por teléfono.
  */
-export const PENALIZACION_REBOTE = 22;
+export const ESPERA_RESPUESTA_PRIOR = 4;
+
+/**
+ * El resto del rebote: descargar al paciente, re-llamar, re-rutear y volver a
+ * salir. No es observable desde el handshake, así que se queda constante.
+ */
+export const SOBRECOSTO_REBOTE = 18;
+
+/**
+ * Cuánto cuesta un rebote con una sede de la que no sabemos nada. 22 min es
+ * conservador; en la práctica el "paseo de la muerte" cuesta mucho más.
+ *
+ * ⚠️ Es un PARÁMETRO CALIBRABLE, no una verdad: sale de juicio informado, no
+ *    de una medición colombiana publicada. Decirlo en el pitch genera
+ *    confianza; fingir precisión la destruye.
+ */
+export const PENALIZACION_REBOTE = ESPERA_RESPUESTA_PRIOR + SOBRECOSTO_REBOTE;
+
+/**
+ * Cuántas respuestas observadas hacen falta para que los datos de una sede
+ * pesen tanto como el prior. Bajo a propósito: con 3 handshakes ya se nota en
+ * pantalla que el sistema aprendió algo de esa sede.
+ */
+export const FUERZA_PRIOR_LATENCIA = 3;
 
 /** Espera máxima en puerta de urgencias cuando la sede está al 100%. */
 export const ESPERA_PUERTA_MAX = 25;
@@ -109,6 +131,33 @@ export class ScoringService {
     return (alfa0 + aceptados) / (alfa0 + beta0 + aceptados + rechazados);
   }
 
+  // ── Penalización de rebote, por sede ───────────────────────────
+
+  /**
+   * Cuántos minutos cuesta que ESTA sede diga que no.
+   *
+   * El rebote tiene dos mitades y solo una es observable:
+   *
+   *   1. Lo que la sede tarda en contestar → SÍ lo medimos. Cada handshake
+   *      deja su `latenciaS`. Una sede que contesta en 40 segundos cuesta
+   *      mucho menos rebotar que una que se demora ocho minutos.
+   *   2. Descargar, re-llamar, re-rutear y volver a salir → no lo medimos, y
+   *      es igual para todas. Se queda en SOBRECOSTO_REBOTE.
+   *
+   * Sobre la mitad observable aplicamos el mismo encogimiento hacia el prior
+   * que usa P(aceptación): con 0 datos devuelve exactamente los 22 minutos de
+   * siempre, y cada respuesta observada lo mueve hacia lo que esa sede hace de
+   * verdad. Nadie reporta nada; el número se calibra solo.
+   */
+  penalizacionRebote(sedeCodigo: string): number {
+    const observadas = this.almacen.latenciasRespuestaMin(sedeCodigo);
+    const suma = observadas.reduce((a, b) => a + b, 0);
+    const espera =
+      (FUERZA_PRIOR_LATENCIA * ESPERA_RESPUESTA_PRIOR + suma) /
+      (FUERZA_PRIOR_LATENCIA + observadas.length);
+    return espera + SOBRECOSTO_REBOTE;
+  }
+
   // ── Score ──────────────────────────────────────────────────────
 
   calcularDesglose(sede: Sede, etaMin: number, fecha = new Date()): DesgloseScore {
@@ -116,7 +165,7 @@ export class ScoringService {
     const c = this.congestion.indice(sede, fecha);
     return {
       ruta: etaMin,
-      riesgoRechazo: (1 - p) * PENALIZACION_REBOTE,
+      riesgoRechazo: (1 - p) * this.penalizacionRebote(sede.codigo),
       espera: c * ESPERA_PUERTA_MAX,
       bono: -(holgura(sede) * BONO_CAPACIDAD_MAX),
     };

@@ -26,6 +26,9 @@ Si necesitas un campo nuevo: **agrégalo opcional** (`campo?: tipo`). Así nadie
 | `Candidato`, `DesgloseScore` | Zaid (ETA) + Neid (score) | Juan |
 | `Handshake` | Sebas — `/dispatch` | Juan, Sebas |
 
+Nota: `apps/frontend/lib/types.ts` es un espejo manual de `contracts/types.ts`.
+Un campo nuevo hay que agregarlo en los dos o el runtime miente aunque el build pase.
+
 ---
 
 ## Todas las rutas exigen sesión
@@ -135,3 +138,85 @@ Si rompes uno de estos, el demo miente:
 - **Sin tildes en nombres de identificadores y comentarios de código.** Con tildes en todo lo que ve el usuario.
 - Errores: siempre `{ error: string, detalle?: string }`.
 - Timestamps: ISO 8601 en string. Nada de `Date` cruzando la red.
+
+---
+
+## Los servicios de `apps/backend` (agregado H+)
+
+**Ningún doc mencionaba esto y es la mitad del repo.** El scaffold de
+`openspec/changes/scaffold-backend-services/` creó dos servicios que las cinco
+rutas de arriba ignoran:
+
+```
+apps/backend/core/      NestJS  :3001   gateway. Único origen que ve el navegador.
+apps/backend/ai-core/   FastAPI :8000   IA. Interno, sin CORS. Aquí van las API keys.
+```
+
+La topología es `frontend → core → ai-core`. **La costura ya está conectada
+para el triaje**: `POST /triage` de core intenta resolver en ai-core y, si no
+puede, resuelve local.
+
+```
+POST /triage → ai-core (Claude) → Claude local en core → heurística
+               solo si AI_CORE_BASE_URL está puesta
+```
+
+Sin `AI_CORE_BASE_URL`, core resuelve todo local y el comportamiento es
+idéntico al de antes. Con ella puesta, si ai-core se cae el endpoint responde
+igual: **la garantía de "nunca falla por falta de credencial" ahora también
+cubre "nunca falla porque ai-core esté caído"**, y está bajo test.
+
+`GET /health/ai-core` prueba la costura sin tocar la liveness de core.
+
+### Lo que ya expone ai-core
+
+| Ruta | Equivale a | Estado |
+|---|---|---|
+| `GET /health` | — | ✅ |
+| `POST /v1/triage` | `/api/triage` | ✅ paridad completa |
+| `POST /v1/score` | el **paso 3** de `/api/match` | ✅ filtro duro + ranking |
+
+Los cuerpos son **los mismos tipos de `types.ts`, en camelCase**, a propósito:
+migrar una ruta del frontend a ai-core no debe tocar un solo tipo de TypeScript.
+
+**Dos campos nuevos en `TriageResponse`, los dos opcionales:**
+
+- `motor?: "claude" | "heuristica"` — qué produjo la extracción. Sin él, la
+  única pista de que estabas viendo la heurística era `confianza == 0.35`
+  exacto, y eso se pasa por alto justo cuando importa.
+- `via?: "core" | "ai-core"` — dónde corrió.
+
+**`POST /v1/score` no está conectado.** El scoring del demo corre en core
+(`ScoringService`) porque necesita el estado de `AlmacenService`; mandarlo
+afuera obligaría a serializar señales de ~60 sedes en cada `/match` sin ganar
+nada — el scoring es aritmética, no IA. La versión de ai-core sirve para probar
+el modelo aislado y de forma reproducible (fija `ahora` y da el mismo ranking).
+
+### `senales` — lo que ai-core necesita para aprender
+
+ai-core **no tiene base de datos** por diseño. La historia de cada sede viaja
+en el request:
+
+```ts
+senales: {
+  [codigoSede: string]: {
+    aceptados: number;              // handshakes aceptados
+    rechazados: number;             // handshakes rechazados
+    rechazosRecientes: number;      // en las últimas 6h ← la señal viva
+    latenciasRespuestaMin: number[];// handshake.latencia_s / 60
+  }
+}
+```
+
+Todo es opcional: una sede sin señales corre con su prior estructural del REPS
+y el motor funciona igual. **Pero sin señales el sistema no aprende**, que es
+la tesis del producto — ver la nota en [zaid-backend.md](zaid-backend.md).
+
+### Correrlo
+
+```bash
+cd apps/backend/ai-core
+uv sync
+uv run fastapi dev app/main.py    # :8000
+uv run pytest                      # 84 tests, sin red
+```

@@ -9,5 +9,6 @@ import { DispatchService } from './dispatch.service';
   imports: [SedesModule, EtaModule, CanalesModule],
   controllers: [DispatchController],
   providers: [DispatchService],
+  exports: [DispatchService],
 })
 export class DispatchModule {}

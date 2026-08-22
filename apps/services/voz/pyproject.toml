@@ -1,0 +1,24 @@
+[project]
+name = "voz"
+version = "0.1.0"
+description = "Canal de voz y WhatsApp de PULSO. El único servicio con cara pública."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.141.1",
+    "uvicorn[standard]>=0.52.4",
+    "httpx>=0.28.1",
+    "pydantic-settings>=2.15.0",
+    "twilio>=9.4.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+asyncio_mode = "auto"

@@ -110,6 +110,12 @@ export interface ExtraccionClinica {
 
 export interface Caso extends ExtraccionClinica {
   id: string;
+  /**
+   * Telefono desde el que se reporto, si entro por WhatsApp. Es lo que
+   * permite avisarle al paramedico cuando el hospital responde: sin esto
+   * la confirmacion se queda en el servidor y el bucle no se cierra.
+   */
+  telefonoReporta?: string | null;
   /** El dictado literal, sin tocar. Se conserva para auditoria. */
   textoCrudo: string;
   origen: Coordenada;
@@ -200,6 +206,14 @@ export interface Handshake {
   enviadoEn: string;
   respondidoEn: string | null;
   latenciaS: number | null;
+  /**
+   * ETA en minutos al momento de despachar. Es la LINEA BASE contra la que
+   * se mide si el traslado se esta demorando. Sin esto no hay con que
+   * comparar y la deteccion de demoras no puede existir.
+   */
+  etaMinAlDespachar?: number | null;
+  /** Ya se disparo la llamada de seguimiento por demora. Evita repetirla. */
+  demoraAvisada?: boolean;
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -212,10 +226,20 @@ export interface TriageRequest {
   texto: string;
   origen?: Coordenada;
   tipoMovil?: TipoMovil;
+  /** Quien reporta, si entro por WhatsApp. Viaja hasta el Caso. */
+  telefonoReporta?: string | null;
 }
 export interface TriageResponse {
   caso: Caso;
   latenciaMs: number;
+  /**
+   * Qué produjo la extracción. Opcional para no romper a nadie.
+   * Antes la única pista de que estabas viendo la heurística era
+   * `confianza === 0.35` exacto, y eso se pasa por alto justo cuando importa.
+   */
+  motor?: "claude" | "heuristica";
+  /** Dónde corrió. `ai-core` solo aparece si AI_CORE_BASE_URL está puesta. */
+  via?: "core" | "ai-core";
 }
 
 /** POST /api/match — Zaid */

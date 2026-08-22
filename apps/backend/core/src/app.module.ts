@@ -1,8 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 import { HealthController } from './health/health.controller';
 import { AuthModule } from './auth/auth.module';
 import { AlmacenModule } from './almacen/almacen.module';
+import { AiCoreModule } from './ai-core/ai-core.module';
+import { VozModule } from './voz/voz.module';
+import { VigilanteModule } from './vigilante/vigilante.module';
 import { SedesModule } from './sedes/sedes.module';
 import { EtaModule } from './eta/eta.module';
 import { ScoringModule } from './scoring/scoring.module';
@@ -21,6 +25,9 @@ import { TelegramModule } from './telegram/telegram.module';
     // credenciales fallan en silencio.
     ConfigModule.forRoot({ isGlobal: true }),
 
+    // Habilita @Interval. Sin esto el vigilante no corre y nadie mira el reloj.
+    ScheduleModule.forRoot(),
+
     // Sesión de operador. Registra el APP_GUARD global: desde aquí toda
     // ruta exige sesión salvo las marcadas con @Publico(). Va primero a
     // propósito — es la puerta, no una feature más.
@@ -28,6 +35,12 @@ import { TelegramModule } from './telegram/telegram.module';
 
     // Estado de sesión (@Global): casos, handshakes e historial de aceptación.
     AlmacenModule,
+
+    // Costura con el servicio interno de IA. Único dueño de AI_CORE_BASE_URL.
+    AiCoreModule,
+
+    // Canal publico (WhatsApp, telefonia). Opcional: sin VOZ_BASE_URL se salta.
+    VozModule,
 
     // Dominio.
     SedesModule,
@@ -42,6 +55,9 @@ import { TelegramModule } from './telegram/telegram.module';
     EstadoModule,
     TriageModule,
     TelegramModule,
+
+    // El que vigila el reloj: vence handshakes, re-rutea y detecta demoras.
+    VigilanteModule,
   ],
   controllers: [HealthController],
 })
