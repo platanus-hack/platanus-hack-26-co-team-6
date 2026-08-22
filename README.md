@@ -1,10 +1,11 @@
-# 🫀 PULSO
+# 🫀 PULSO — Motor Predictivo de Ruteo e Inferencia de Urgencias Hospitalarias
 
 <img src="./project-logo.png" alt="PULSO" width="140" />
 
 **Del dictado del paramédico al hospital que sí puede recibirlo, en menos de 90 segundos.**
 
-Platanus Hack 26: Bogotá · Track 🚨 Emergencies · team-6
+> Platanus Hack 26: Bogotá · Track 🚨 Emergencies · team-6
+> *Transformando el proceso de referencia y contrarreferencia médica en Colombia mediante inferencia pasiva, matching algorítmico multi-variable y un handshake de un toque.*
 
 ---
 
@@ -42,6 +43,23 @@ Abre <http://localhost:3000>. **Funciona sin ninguna credencial**: sin Supabase 
 
 Para el demo se abren **dos pantallas a la vez**: `/campo` en el celular y `/hospital` en el portátil.
 
+### Las consolas piden contraseña
+
+La landing (`/`) es pública. Las tres consolas (`/campo`, `/hospital`, `/crue`) no: core sirve el dictado clínico y las coordenadas del paciente, así que exige sesión.
+
+Pon una contraseña de turno en `apps/backend/core/.env`:
+
+```bash
+OPERADOR_PASSWORD=lo-que-quieras
+SESION_SECRET=$(openssl rand -hex 32)   # firma la cookie de sesión
+```
+
+Si las dejas en blanco arranca igual: **core genera una contraseña aleatoria y la imprime al arrancar**, buscála en su log. Lo que nunca hace es arrancar sin autenticar.
+
+Se entra una vez en `/entrar` y la sesión dura 12 horas — no molesta durante el pitch.
+
+> Si vas a usar el webhook de Telegram, `TELEGRAM_WEBHOOK_SECRET` es **obligatorio**: sin él, core ignora todos los updates y los botones no hacen nada. `task doctor` te avisa. Ver [`telegram.controller.ts`](apps/backend/core/src/telegram/telegram.controller.ts).
+
 <details>
 <summary><b>Trabajando con Live Share</b></summary>
 
@@ -54,13 +72,17 @@ Para el demo se abren **dos pantallas a la vez**: `/campo` en el celular y `/hos
 
 ---
 
-## El problema
+## 🎯 El problema
 
-Durante una emergencia crítica en Colombia, el proceso de **referencia y contrarreferencia** funciona por teléfono. La ambulancia rebota de IPS en IPS porque nadie sabe, en el momento, quién tiene la cama y el especialista. Cada 15 minutos perdidos en un infarto o un ACV se pagan en secuelas irreversibles.
+En Colombia y América Latina, el proceso de **Referencia y Contrarreferencia (SIRC)** durante una emergencia crítica (ACV, infarto, politraumatismo) sufre de una asimetría de información mortal:
 
-## Por qué falla lo que ya existe
+1. **La "Hora Dorada" perdida.** Por cada 15 minutos de retraso en la asignación de una cama de alta complejidad (UCI, hemodinamia, quirófano), la probabilidad de secuelas irreversibles o muerte aumenta drásticamente.
+2. **El "Paseo de la Muerte".** Las ambulancias rebotan de IPS en IPS porque nadie sabe, en el momento, quién tiene la cama y el especialista de turno. No hay visibilidad en tiempo real de la capacidad instalada real.
+3. **El colapso de la llamada telefónica.** Los centros reguladores (CRUE) dependen de llamadas manuales, correos estáticos y hojas de cálculo para coordinar traslados uno a uno.
 
-Todos los intentos previos —incluidos los del Estado— parten de la misma premisa: **que un hospital saturado va a reportar su ocupación**.
+## 🚫 Por qué falla lo que ya existe
+
+Los intentos previos —incluidos los del Estado (SMART CRUE, dashboards institucionales)— parten de la misma premisa: **que un hospital saturado va a reportar su ocupación**.
 
 No lo hace. Y tenemos la prueba.
 
@@ -73,7 +95,13 @@ No lo hace. Y tenemos la prueba.
 
 Ese es el hallazgo que sostiene todo el pitch. El reporte manual no falla por falta de voluntad: falla por diseño.
 
-## Qué hace PULSO distinto
+| Enfoque tradicional | Por qué fracasa | El enfoque de PULSO |
+| :--- | :--- | :--- |
+| **Reporte manual del hospital** | Exige que médicos en salas colapsadas actualicen un tablero web a mano. El dato nace desactualizado. | **Inferencia pasiva (zero-friction):** la congestión se deduce de las propias respuestas de la red, sin exigir tipeo. |
+| **Ruteo por distancia pura** | Envía la ambulancia al hospital geográficamente más cercano, ignorando si el servicio existe o está saturado. | **Matching multi-variable:** minimiza `ETA + riesgo de rechazo + congestión`, sujeto a un filtro duro de servicios habilitados. |
+| **Burocracia documental** | 20 minutos redactando formatos de remisión y códigos CIE-10 antes de autorizar el despacho. | **LLM Triage Agent:** convierte la nota de voz clínica en entidades médicas estructuradas en segundos. |
+
+## 💡 Qué hace PULSO distinto
 
 **El acto de rechazar ya es el sensor.**
 
@@ -83,7 +111,14 @@ Cada handshake es una observación etiquetada. **La red se entrena sola.**
 
 ---
 
-## Cómo funciona
+## 🧠 La solución: arquitectura
+
+PULSO es un orquestador inteligente que conecta al personal de campo (paramédico en ambulancia / IPS primaria) con el receptor hospitalario óptimo, eliminando la intermediación burocrática manual. Cuatro piezas:
+
+1. **🎙️ Voice/Text Clinical Parser (`/api/triage`).** El paramédico dicta: *"Masculino 54 años, dolor precordial opresivo, supra ST en DII-DIII-aVF, hemodinámicamente inestable"*. Claude (structured output) extrae: diagnóstico probable **CIE-10 `I21.1`**, **triage II** (Res. 5596/2015), servicios mandatorios **`743` hemodinamia + `110` UCI adultos**, complejidad requerida y si obliga móvil **TAM**.
+2. **📊 Ingestion Engine de datos abiertos (REPS).** ETL sobre el Registro Especial de Prestadores: 16.181 sedes de Bogotá con servicios habilitados, geocodificadas a PostGIS.
+3. **🧮 Dynamic Matching & Scoring Engine (`/api/match`).** PostGIS filtra por radio → Mapbox Matrix da ETA con tráfico real → filtro duro + score **en minutos** (ver abajo).
+4. **📲 One-Tap Handshake (`/api/dispatch` + `/api/handshake/respond`).** Alerta instantánea vía Telegram / WhatsApp interactivo al jefe de urgencias con dos botones: `[Aceptar]` / `[Rechazar]`. La respuesta actualiza `P(aceptación)` y la congestión de la sede, y re-rutea al siguiente.
 
 ```
    apps/frontend :3000          apps/backend/core :3001
@@ -116,7 +151,7 @@ Cada handshake es una observación etiquetada. **La red se entrena sola.**
 
 ### El score está en minutos
 
-Decisión de diseño deliberada: **no son "puntos"**. Cada término es una cantidad de minutos de hora dorada que esa decisión cuesta o ahorra. Por eso el ranking se entiende sin explicación.
+Decisión de diseño deliberada: **no son "puntos" ni pesos adimensionales**. Cada término es una cantidad de minutos de hora dorada que esa decisión cuesta o ahorra. Por eso el ranking se entiende sin explicación.
 
 ```
 Costo(sede) = ETA_con_tráfico
@@ -131,11 +166,21 @@ sujeto a (filtro DURO, no ponderado):
 
 Una sede sin hemodinamia no es "peor opción": **es no-opción**. Ver una clínica a 10 minutos tachada en gris por no tener el servicio explica el producto entero sin decir una palabra.
 
-`P(aceptación)` es un posterior Beta-Bernoulli por sede que arranca en un prior estructural del REPS y se mueve con cada handshake. Ver [`apps/backend/core/src/scoring/scoring.service.ts`](apps/backend/core/src/scoring/scoring.service.ts) y [`apps/backend/core/src/scoring/congestion.service.ts`](apps/backend/core/src/scoring/congestion.service.ts).
+`P(aceptación)` es un posterior Beta-Bernoulli por sede que arranca en un prior estructural del REPS y se mueve con cada handshake. La congestión es un índice inferido que sube con cada rechazo y decae en el tiempo. Ver [`apps/backend/core/src/scoring/scoring.service.ts`](apps/backend/core/src/scoring/scoring.service.ts) y [`apps/backend/core/src/scoring/congestion.service.ts`](apps/backend/core/src/scoring/congestion.service.ts).
+
+### Las pantallas
+
+| Ruta | Quién la usa | Qué hace |
+|---|---|---|
+| `/` | Cualquiera | Landing. La única ruta pública. |
+| `/entrar` | El equipo de turno | Contraseña compartida → cookie de sesión. Las tres consolas de abajo pasan por aquí. |
+| `/campo` | Paramédico (celular) | Dictado → caso estructurado → ranking → despacho → confirmación. El cronómetro de hora dorada vive aquí. |
+| `/hospital` | Jefe de urgencias | Consola de handshake: aceptar / rechazar con motivo. En **triage I no ofrece rechazo** (escala al CRUE). |
+| `/crue` | Regulador | Vista de supervisión: casos, handshakes y estado de la red. **PULSO propone; el CRUE regula.** |
 
 ---
 
-## Datos
+## 📂 Datos
 
 Endpoints verificados contra la API real (agosto 2026):
 
@@ -147,9 +192,18 @@ Endpoints verificados contra la API real (agosto 2026):
 
 **Filtro de Bogotá:** `$where=departamentodededesc='Bogotá D.C'` — sin punto final ni coma. Así viene el string; si lo "arreglas" devuelve 0 filas.
 
+<details>
+<summary><b>Fuentes exploradas para el roadmap (no integradas en el MVP)</b></summary>
+
+- **SISPRO / MinSalud — históricos de capacidad instalada:** distribución de camas por IPS y tasas de rotación, como prior más rico que el snapshot 2022.
+- **Bogotá Open Data / IDECA — movilidad e infraestructura vial:** isócronas de ambulancia con tráfico pesado (hoy lo cubre Mapbox `driving-traffic`).
+- **SIVIGILA / INS — eventos de interés en salud pública:** ponderar picos epidemiológicos que saturan trauma o respiratorio.
+
+</details>
+
 ### Códigos de servicio (los correctos)
 
-El README original del proyecto traía `302` para UCI y `408` para hemodinamia. **Están mal.** Según el CodeSystem FHIR de MinSalud:
+El pitch original traía `302` para UCI y `408` para hemodinamia. **Están mal.** Según el CodeSystem FHIR de MinSalud:
 
 | Código | Servicio |
 |---|---|
@@ -165,7 +219,7 @@ Usar el vocabulario que el Ministerio ya publicó es el argumento de interoperab
 
 ---
 
-## Marco normativo
+## ⚖️ Marco normativo
 
 Esto es lo que separa un proyecto de hackathon de uno que un médico toma en serio.
 
@@ -176,7 +230,58 @@ Esto es lo que separa un proyecto de hackathon de uno que un médico toma en ser
 
 ---
 
-## El equipo
+## 🏆 Qué nos hace únicos (moat)
+
+1. **No depende del reporte manual de camas.** A diferencia de las plataformas institucionales, PULSO no asume que un médico ocupado va a loguearse a actualizar un tablero. La señal sale del flujo de trabajo que ya existe: aceptar o rechazar un traslado.
+2. **Cero fricción de adopción.** Los hospitales receptores interactúan con micro-confirmaciones (Telegram / WhatsApp / consola web ligera), sin instalar software nuevo ni migrar historias clínicas.
+3. **Enfoque en la Hora Dorada.** Reduce el tiempo de decisión y enrutamiento de **~45 minutos (promedio actual)** a **menos de 90 segundos**, y el cronómetro en pantalla lo demuestra en vivo.
+4. **Interoperable por diseño.** Habla el vocabulario FHIR/REPS que MinSalud ya publicó y respeta el rol legal del CRUE.
+
+---
+
+## 🛠️ Stack tecnológico
+
+| Capa | Tecnología |
+|---|---|
+| Frontend / PWA | **Next.js 16 (App Router) + Tailwind CSS v4** — optimizado para uso táctil en ambulancia (dark, alto contraste, áreas ≥44px) |
+| API del MVP | Next.js API Routes (`/api/triage`, `/api/match`, `/api/dispatch`, `/api/handshake/respond`, `/api/estado`) |
+| AI / NLP | **Claude (Anthropic SDK)** con structured output a esquema clínico; fallback heurístico por palabras clave sin credencial |
+| Geo & Routing | **Mapbox** Matrix + Directions (`driving-traffic`); fallback por distancia haversine a 22 km/h efectivos |
+| Datos | **PostgreSQL + PostGIS** (Supabase) · ETL Python del REPS ([`scripts/etl/extraer_reps.py`](scripts/etl/extraer_reps.py)) · 14 sedes semilla como fallback |
+| Canales | **Telegram Bot** (inline keyboards) · **WhatsApp Cloud API** · consola web como fallback absoluto |
+| Servicios satélite | Scaffolds **NestJS** ([`apps/backend/core`](apps/backend/core)) y **FastAPI** ([`apps/backend/ai-core`](apps/backend/ai-core)) para extracción post-MVP |
+
+### Estructura del repo
+
+```
+apps/frontend/          ← la app (pantallas + API + lib). El MVP entero vive aquí.
+  app/campo/            ← pantalla del paramédico (Juan)
+  app/hospital/         ← consola del jefe de urgencias (Sebas)
+  app/crue/             ← vista del regulador (Zaid)
+  app/api/              ← triage · match · dispatch · handshake · estado · webhook
+  lib/types.ts          ← ⭐ EL CONTRATO. Ver regla abajo.
+  lib/                  ← scoring, congestión, mapbox, canales, mocks, almacén
+apps/backend/core/      ← scaffold NestJS (post-MVP)
+apps/backend/ai-core/   ← scaffold FastAPI (post-MVP)
+supabase/migrations/    ← esquema PostGIS
+scripts/etl/            ← extractor del REPS (Python)
+docs/                   ← guía por carril + contrato de API
+```
+
+### Degradación: nadie se bloquea por una credencial
+
+| Falta | Qué pasa |
+|---|---|
+| `ANTHROPIC_API_KEY` | Extractor heurístico por palabras clave (confianza 0.35, la UI lo marca) |
+| Supabase | 14 sedes semilla de [`apps/frontend/lib/mock.ts`](apps/frontend/lib/mock.ts) |
+| `NEXT_PUBLIC_MAPBOX_TOKEN` | ETA estimado por distancia (22 km/h efectivos) |
+| `TELEGRAM_BOT_TOKEN` | La tarjeta se imprime en la consola del servidor |
+
+**Esto es a propósito y no se debe "arreglar".** Es lo que permite que los cuatro trabajen en paralelo desde la hora cero.
+
+---
+
+## 👥 El equipo
 
 Cuatro carriles que no se bloquean entre sí. **Cada quien lee su README y arranca.**
 
@@ -188,6 +293,7 @@ Cuatro carriles que no se bloquean entre sí. **Cada quien lee su README y arran
 | **Sebastián Acuña** · [@heysebitas](https://github.com/heysebitas) | Producto / Pitch | [docs/sebas-producto.md](docs/sebas-producto.md) | `/hospital`, Telegram/WhatsApp, demo, deck |
 
 📄 **[docs/contrato-api.md](docs/contrato-api.md)** — el contrato entre los cuatro. Léelo antes de tocar nada.
+🎨 **[docs/juan-frontend-pulsewave.md](docs/juan-frontend-pulsewave.md)** — el lenguaje visual del front (spec Pulsewave adaptado a reglas de campo).
 
 ### La regla que hace que esto funcione
 
@@ -195,7 +301,7 @@ Cuatro carriles que no se bloquean entre sí. **Cada quien lee su README y arran
 
 ---
 
-## Cronograma
+## 🗓️ Cronograma
 
 | Hora | Qué |
 |---|---|
@@ -210,7 +316,7 @@ Cuatro carriles que no se bloquean entre sí. **Cada quien lee su README y arran
 
 ---
 
-## Verificación
+## ✅ Verificación
 
 ```bash
 cd apps/frontend
@@ -240,7 +346,7 @@ curl -s -X POST localhost:3001/match -H "Content-Type: application/json" \
 
 ---
 
-## Pendientes de entrega (plantilla Platanus)
+## 📦 Pendientes de entrega (plantilla Platanus)
 
 - [ ] Llenar metadata en `platanus-hack-project.jsonc` (nombre, oneliner, descripción, deploy URL)
 - [ ] Reemplazar `project-description.md` con la descripción del proyecto — es lo que se renderiza en la página de votación

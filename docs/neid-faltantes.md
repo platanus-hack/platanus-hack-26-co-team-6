@@ -41,6 +41,20 @@ cuánto gana Claude y con qué latencia. Ese delta es el argumento del pitch.
 
 ---
 
+## ⚠️ Deuda que dejé al mezclar con main
+
+**`voz` se autentica contra core con la contraseña de turno.** Zaid puso un
+guard global que niega por defecto — bien puesto, core expone dictado clínico
+y coordenadas del paciente. Para que el flujo de WhatsApp no muriera en 401,
+`voz` hace `POST /auth/login` con `CORE_PASSWORD` y reusa el token.
+
+Funciona y no toca el diseño de nadie, pero **un servicio autenticándose con
+la contraseña compartida de los operadores no distingue quién hizo qué en la
+auditoría**. Lo correcto es un token de servicio propio (`sub: 'voz'`), que
+son pocas líneas en `sesion.service.ts`. Carril de Zaid.
+
+---
+
 ## ⚠️ A medias, con la mitad que falta identificada
 
 ### El puente de audio de la llamada
@@ -120,8 +134,13 @@ en Supabase. Las tablas ya existen con sus índices. Detalle en
 ## ❌ Decidido NO hacer, y por qué
 
 **Cobertura de flota y reposicionamiento de ambulancias.** No hay entidad de
-móvil en el repo, ni demanda histórica por zona, ni viajes de los cuales sacar
-un q10/q90 — al momento del pitch habría cero datos. Y reposicionar
+móvil en el repo ni viajes propios de los cuales sacar un q10/q90.
+
+⚠️ **Esto cambió parcialmente:** main ahora trae `data/llamadas_123/` (9.200
+filas), `data/tiempo_promedio/` y `data/razon_ambulancias/`. Eso es demanda
+histórica y tiempos reales — justo el insumo que yo daba por inexistente. Ya
+no es cierto que "no hay datos"; sigue siendo cierto que no hay entidad de
+móvil ni tiempo para construirla. Y reposicionar
 ambulancias *es* la función operativa del CRUE (Res. 1220/2010), lo que
 debilita la mejor respuesta legal de Sebas.
 

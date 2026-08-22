@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AiCoreClient } from '../ai-core/ai-core.client';
+import { Publico } from '../auth/publico.decorator';
 
 @Controller('health')
 export class HealthController {
@@ -9,6 +10,8 @@ export class HealthController {
    * Liveness probe. Makes no upstream call on purpose — a probe that depends on
    * ai-core would report core as dead whenever a dependency is down.
    */
+  // Sin sesión: un balanceador no tiene cookie. No devuelve dato alguno.
+  @Publico()
   @Get()
   check(): { status: string } {
     return { status: 'ok' };
@@ -21,6 +24,7 @@ export class HealthController {
    *
    * 503 = no configurado o inalcanzable · 504 = lento · 502 = respondió mal.
    */
+  @Publico()
   @Get('ai-core')
   async checkAiCore(): Promise<{
     status: string;

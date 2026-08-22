@@ -15,12 +15,14 @@
  */
 
 import { useEffect, useState } from "react";
-import type { Caso, CongestionSede, Handshake } from "@/lib/types";
+import type { CasoPublico, CongestionSede, Handshake } from "@/lib/types";
 import { ETIQUETA_TRIAGE } from "@/lib/presentacion";
 import * as api from "@/lib/api";
 
 export default function Crue() {
-  const [casos, setCasos] = useState<Caso[]>([]);
+  // CasoPublico, no Caso: /estado ya no manda el dictado crudo ni las
+  // coordenadas del paciente. El tablero nunca los pintó.
+  const [casos, setCasos] = useState<CasoPublico[]>([]);
   const [handshakes, setHandshakes] = useState<Handshake[]>([]);
   const [congestion, setCongestion] = useState<CongestionSede[]>([]);
 

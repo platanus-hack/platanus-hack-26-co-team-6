@@ -44,9 +44,14 @@ Mientras tanto: **Telegram es el canal primario del demo.** Inline keyboards, ce
 
 - [ ] **Bot de Telegram:** hablar con [@BotFather](https://t.me/botfather) → `/newbot` → copiar el token a `TELEGRAM_BOT_TOKEN`.
 - [ ] **Deploy a Vercel.** Telegram exige HTTPS: el webhook **no funciona en localhost**. En local, alternativa: `npx localtunnel --port 3000`.
-- [ ] **Registrar el webhook** (una sola vez):
+- [ ] **Inventar el secreto del webhook** y ponerlo en `apps/backend/core/.env`:
   ```bash
-  curl "https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://<TU-CORE>/telegram/webhook"
+  TELEGRAM_WEBHOOK_SECRET=$(openssl rand -hex 32)
+  ```
+  ⚠️ **No es opcional.** `/telegram/webhook` es la única ruta pública que cambia estado clínico: sin secreto, cualquiera que adivine la URL fabrica un *"el hospital aceptó"* que el sistema no distingue de tu toque real. Core lo sabe y **rechaza todo update sin firmar** — si te lo saltas, los botones no hacen nada y no hay error visible. `task doctor` te avisa.
+- [ ] **Registrar el webhook** con ese secreto (una sola vez):
+  ```bash
+  curl "https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://<TU-CORE>/telegram/webhook&secret_token=<EL-SECRETO>"
   curl "https://api.telegram.org/bot<TOKEN>/getWebhookInfo"   # verificar
   ```
 - [ ] **Sacar el `chat_id`:** escríbele cualquier cosa al bot. El webhook te responde con tu `chat_id` — pégalo en `TELEGRAM_CHAT_ID_DEMO`. (Ya está implementado justo para ahorrarte pelear con `getUpdates`.)

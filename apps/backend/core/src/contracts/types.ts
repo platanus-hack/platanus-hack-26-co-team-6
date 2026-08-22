@@ -30,7 +30,7 @@ export interface Coordenada {
 export type CodServicio = number;
 
 /** Res. 3100/2019 clasifica por complejidad, no por "nivel I/II/III". */
-export type Complejidad = "baja" | "media" | "alta";
+export type Complejidad = 'baja' | 'media' | 'alta';
 
 /**
  * Tipo de movil (Res. 3100/2019).
@@ -38,7 +38,7 @@ export type Complejidad = "baja" | "media" | "alta";
  *  TAM = Transporte Asistencial Medicalizado (medico a bordo)
  * Es un FILTRO DURO: un TAB no traslada un paciente que requiere ventilacion.
  */
-export type TipoMovil = "TAB" | "TAM";
+export type TipoMovil = 'TAB' | 'TAM';
 
 /**
  * Triage segun Res. 5596/2015 (Colombia).
@@ -50,7 +50,7 @@ export type TipoMovil = "TAB" | "TAM";
  */
 export type NivelTriage = 1 | 2 | 3 | 4 | 5;
 
-export type Sexo = "M" | "F" | "desconocido";
+export type Sexo = 'M' | 'F' | 'desconocido';
 
 // ─────────────────────────────────────────────────────────────────
 // Sede — el universo de destinos posibles (Zaid)
@@ -71,7 +71,7 @@ export interface Sede {
   direccion: string;
   localidad: string | null;
   coord: Coordenada;
-  naturaleza: "Pública" | "Privada" | "Mixta";
+  naturaleza: 'Pública' | 'Privada' | 'Mixta';
   complejidad: Complejidad;
   telefono: string | null;
   /** Codigos REPS habilitados en esta sede. Ver SERVICIOS en servicios-reps.ts */
@@ -122,6 +122,24 @@ export interface Caso extends ExtraccionClinica {
   tipoMovil: TipoMovil;
   creadoEn: string; // ISO 8601
 }
+
+/**
+ * Lo que sale por GET /estado.
+ *
+ * `textoCrudo` (el dictado literal del paramedico) y `origen` (las
+ * coordenadas de recogida del paciente) NO viajan aqui: son los dos campos
+ * mas sensibles del sistema y ninguna consola los pinta. El dictado se
+ * conserva en el servidor para auditoria; el mapa de /campo usa el `origen`
+ * que ya recibio en la respuesta de POST /triage, no el de /estado.
+ *
+ * Si alguna vista llega a necesitarlos, se expone un endpoint por caso con su
+ * propia autorizacion — no se re-abren en el listado.
+ *
+ * Agregar un campo a Caso hace que este tipo lo exija, y eso ROMPE el build de
+ * `despojar()` en estado.service.ts, que construye el objeto campo por campo.
+ * Es a proposito: obliga a decidir si ese dato nuevo puede salir del servidor.
+ */
+export type CasoPublico = Omit<Caso, 'textoCrudo' | 'origen'>;
 
 // ─────────────────────────────────────────────────────────────────
 // Candidato — el ranking (Zaid + Neid)
@@ -174,8 +192,8 @@ export interface Candidato {
 // Handshake — el apreton de manos de un toque (Sebas)
 // ─────────────────────────────────────────────────────────────────
 
-export type CanalHandshake = "telegram" | "whatsapp" | "consola";
-export type EstadoHandshake = "enviado" | "aceptado" | "rechazado" | "timeout";
+export type CanalHandshake = 'telegram' | 'whatsapp' | 'consola';
+export type EstadoHandshake = 'enviado' | 'aceptado' | 'rechazado' | 'timeout';
 
 export interface Handshake {
   id: string;
@@ -254,7 +272,7 @@ export interface DispatchResponse {
 /** POST /api/handshake/respond — Sebas (lo llaman la consola Y el webhook) */
 export interface RespondRequest {
   handshakeId: string;
-  decision: "aceptado" | "rechazado";
+  decision: 'aceptado' | 'rechazado';
   motivo?: string;
 }
 export interface RespondResponse {

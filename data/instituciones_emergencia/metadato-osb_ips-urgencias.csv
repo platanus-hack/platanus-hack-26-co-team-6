@@ -1,0 +1,13 @@
+METADATO;DESCRIPCION
+Serie de tiempo desde;2026
+Definición del indicador;Atención de urgencias como la Modalidad de prestación de servicios de salud que busca preservar la vida y prevenir las consecuencias críticas, permanentes o futuras, mediante el uso de tecnologías en salud para la atención de usuarios que presenten alteración de la integridad física, funcional o mental, por cualquier causa y con cualquier grado de severidad que comprometan su vida o funcionalidad.
+Utilidad;Georreferenciar la oferta de servicios de urgencias por parte de los prestadores de servicios de salud que están inscritos y habilitados en la ciudad de Bogotá.
+Unidad de medición;Número absoluto
+Periodicidad;Trimestral
+Fuente de Información ;Registro Especial de Prestadores de Servicios de Salud - REPS Ministerio de Salud y Protección Social. Fecha de corte: 18/07/2026 Fecha de consulta: 18/07/2026. Información dispuesta en la web por las entidades.
+Nombre sede;Nombre de la sede de la institución prestadora de servicios de salud que oferta el servicio de urgencias
+Dirección;Datos de la ubicación de la sede registrada en REPS
+Teléfono;Dato de contacto de la sede registrado en REPS
+Correo electrónico;Dato de contacto de la sede registrado en REPS
+Nivel de complejidad;Grado de especialización del servicio de urgencias
+Formula de cálculo;Prestadores de servicios de salud inscritos en el REPS con servicio de urgencias habilitados.

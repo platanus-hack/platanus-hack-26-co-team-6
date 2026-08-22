@@ -24,6 +24,10 @@ class Settings(BaseSettings):
     #: Presupuesto de una llamada a ai-core que involucra al LLM.
     timeout_ia_s: float = 30.0
     timeout_core_s: float = 10.0
+    #: core niega por defecto: expone dictado clinico y coordenadas del
+    #: paciente. Es la misma contrasena de turno que usan las consolas.
+    #: Vacia = no se manda Authorization (core sin guard activo).
+    core_password: str = ""
 
     # ── URL publica ──────────────────────────────────────────────
     #: Donde Twilio y Meta pueden alcanzarnos. En Render es la URL del

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { HealthController } from './health/health.controller';
+import { AuthModule } from './auth/auth.module';
 import { AlmacenModule } from './almacen/almacen.module';
 import { AiCoreModule } from './ai-core/ai-core.module';
 import { VozModule } from './voz/voz.module';
@@ -26,6 +27,11 @@ import { TelegramModule } from './telegram/telegram.module';
 
     // Habilita @Interval. Sin esto el vigilante no corre y nadie mira el reloj.
     ScheduleModule.forRoot(),
+
+    // Sesión de operador. Registra el APP_GUARD global: desde aquí toda
+    // ruta exige sesión salvo las marcadas con @Publico(). Va primero a
+    // propósito — es la puerta, no una feature más.
+    AuthModule,
 
     // Estado de sesión (@Global): casos, handshakes e historial de aceptación.
     AlmacenModule,
