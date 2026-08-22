@@ -113,6 +113,11 @@ tasks:
 
   # --------------------------------------------------------------- data ---
 
+  datos:descargar:
+    desc: Download the Bogota REPS sources (17 MB, not committed).
+    cmds:
+      - python scripts/datos/descargar.py
+
   datos:
     desc: Rebuild data/procesado and the generated TypeScript from data/.
     cmds:

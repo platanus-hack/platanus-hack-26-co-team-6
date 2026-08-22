@@ -17,6 +17,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 80 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -34,6 +35,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 5 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -51,6 +53,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 69 anos, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -68,6 +71,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 17 anos, paciente con patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
@@ -85,6 +89,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 72 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -102,6 +107,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 34 anos, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -119,6 +125,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 84 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -136,6 +143,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 18 anos, paciente con intoxicacion.",
       "dictadoSintetico": true
     },
@@ -153,6 +161,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 40 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -170,6 +179,7 @@
         "lat": 4.591033,
         "lng": -74.091912
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 42 anos, paciente con herida en miembro inferior, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -187,6 +197,7 @@
         "lat": 4.574034,
         "lng": -74.128836
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 50 anos, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -204,6 +215,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 63 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -221,6 +233,7 @@
         "lat": 4.658259,
         "lng": -74.0595
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 32 anos, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -238,6 +251,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en craneo, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -255,6 +269,7 @@
         "lat": 4.634813,
         "lng": -74.080642
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -272,6 +287,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 61 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -289,6 +305,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 87 anos, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -306,6 +323,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
@@ -323,6 +341,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 95 anos, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -340,6 +359,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -357,6 +377,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 33 anos, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -374,6 +395,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 27 anos, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -391,6 +413,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 30 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -408,6 +431,7 @@
         "lat": 4.574034,
         "lng": -74.128836
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 85 anos, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -425,6 +449,7 @@
         "lat": 4.658259,
         "lng": -74.0595
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 74 anos, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -442,6 +467,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -459,6 +485,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 38 anos, paciente con patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
@@ -476,6 +503,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 57 anos, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -493,6 +521,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 33 anos, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -510,6 +539,7 @@
         "lat": 4.721878,
         "lng": -74.038976
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 80 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -527,6 +557,7 @@
         "lat": 4.721878,
         "lng": -74.038976
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 80 anos, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -544,6 +575,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 31 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -561,6 +593,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 24 anos, paciente con patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
@@ -578,6 +611,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 78 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -595,6 +629,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -612,6 +647,7 @@
         "lat": 4.658259,
         "lng": -74.0595
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 29 anos, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -629,6 +665,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 38 anos, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -646,6 +683,7 @@
         "lat": 4.634813,
         "lng": -74.080642
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -663,6 +701,7 @@
         "lat": 4.672752,
         "lng": -74.070543
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 80 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -680,6 +719,7 @@
         "lat": 4.721878,
         "lng": -74.038976
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 47 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -697,6 +737,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 59 anos, paciente con dolor torácico.",
       "dictadoSintetico": true
     },
@@ -714,6 +755,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dolor torácico.",
       "dictadoSintetico": true
     },
@@ -731,6 +773,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 15 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -748,6 +791,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 76 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -765,6 +809,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -782,6 +827,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 50 anos, paciente con dolor torácico.",
       "dictadoSintetico": true
     },
@@ -799,6 +845,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
@@ -816,6 +863,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -833,6 +881,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -850,6 +899,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -867,6 +917,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -884,6 +935,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 34 anos, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -901,6 +953,7 @@
         "lat": 4.634813,
         "lng": -74.080642
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 83 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -918,6 +971,7 @@
         "lat": 4.574034,
         "lng": -74.128836
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 86 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -935,6 +989,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 59 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -952,6 +1007,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 78 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -969,6 +1025,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -986,6 +1043,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 32 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -1003,6 +1061,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 89 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -1020,6 +1079,7 @@
         "lat": 4.672752,
         "lng": -74.070543
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 90 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1037,6 +1097,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 16 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -1054,6 +1115,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 81 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1071,6 +1133,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -1088,6 +1151,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -1105,6 +1169,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dolor torácico.",
       "dictadoSintetico": true
     },
@@ -1122,6 +1187,7 @@
         "lat": 4.721878,
         "lng": -74.038976
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 20 anos, paciente con intoxicacion.",
       "dictadoSintetico": true
     },
@@ -1139,6 +1205,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 82 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1156,6 +1223,7 @@
         "lat": 4.634813,
         "lng": -74.080642
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 17 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -1173,6 +1241,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 76 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1190,6 +1259,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
@@ -1207,6 +1277,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 64 anos, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -1224,6 +1295,7 @@
         "lat": 4.603697,
         "lng": -74.066048
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -1241,6 +1313,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 93 anos, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -1258,6 +1331,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 62 anos, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -1275,6 +1349,7 @@
         "lat": 4.721878,
         "lng": -74.038976
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -1292,6 +1367,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 13 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1309,6 +1385,7 @@
         "lat": 4.603697,
         "lng": -74.066048
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en torax, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -1326,6 +1403,7 @@
         "lat": 4.658259,
         "lng": -74.0595
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 29 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -1343,6 +1421,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 40 anos, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -1360,6 +1439,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 56 anos, paciente con caida de altura.",
       "dictadoSintetico": true
     },
@@ -1377,6 +1457,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 73 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1394,6 +1475,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 49 anos, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -1411,6 +1493,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 30 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -1428,6 +1511,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 60 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1445,6 +1529,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en torax, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -1462,6 +1547,7 @@
         "lat": 4.721878,
         "lng": -74.038976
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -1479,6 +1565,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 13 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -1496,6 +1583,7 @@
         "lat": 4.721878,
         "lng": -74.038976
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -1513,6 +1601,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -1530,6 +1619,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 75 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1547,6 +1637,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 44 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -1564,6 +1655,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 1 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1581,6 +1673,7 @@
         "lat": 4.658259,
         "lng": -74.0595
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 25 anos, paciente con violencia sexual.",
       "dictadoSintetico": true
     },
@@ -1598,6 +1691,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -1615,6 +1709,7 @@
         "lat": 4.721878,
         "lng": -74.038976
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
@@ -1632,6 +1727,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 73 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1649,6 +1745,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 73 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1666,6 +1763,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1683,6 +1781,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 68 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1700,6 +1799,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 81 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1717,6 +1817,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -1734,6 +1835,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 27 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -1751,6 +1853,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -1768,6 +1871,7 @@
         "lat": 4.721878,
         "lng": -74.038976
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 83 anos, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -1785,6 +1889,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 75 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1802,6 +1907,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -1819,6 +1925,7 @@
         "lat": 4.721878,
         "lng": -74.038976
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 30 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -1836,6 +1943,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 48 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -1853,6 +1961,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 37 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1870,6 +1979,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 25 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -1887,6 +1997,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con amenaza de suicidio.",
       "dictadoSintetico": true
     },
@@ -1904,6 +2015,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 31 anos, paciente con herida en craneo, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -1921,6 +2033,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con apoyo crue.",
       "dictadoSintetico": true
     },
@@ -1938,6 +2051,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 49 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -1955,6 +2069,7 @@
         "lat": 4.721878,
         "lng": -74.038976
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -1972,6 +2087,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intoxicacion.",
       "dictadoSintetico": true
     },
@@ -1989,6 +2105,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 88 anos, paciente con dolor torácico.",
       "dictadoSintetico": true
     },
@@ -2006,6 +2123,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -2023,6 +2141,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 66 anos, paciente con herida en craneo, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -2040,6 +2159,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 95 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -2057,6 +2177,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en torax, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -2074,6 +2195,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 28 anos, paciente con herida en miembro inferior, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -2091,6 +2213,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 82 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -2108,6 +2231,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 64 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -2125,6 +2249,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 16 anos, paciente con amenaza de suicidio.",
       "dictadoSintetico": true
     },
@@ -2142,6 +2267,7 @@
         "lat": 4.591033,
         "lng": -74.091912
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 21 anos, paciente con intoxicacion.",
       "dictadoSintetico": true
     },
@@ -2159,6 +2285,7 @@
         "lat": 4.609491,
         "lng": -74.084229
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -2176,6 +2303,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -2193,6 +2321,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 66 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -2210,6 +2339,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en region abdominal, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -2227,6 +2357,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
@@ -2244,6 +2375,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en torax, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -2261,6 +2393,7 @@
         "lat": 4.574034,
         "lng": -74.128836
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -2278,6 +2411,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 24 anos, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -2295,6 +2429,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en craneo, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -2312,6 +2447,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -2329,6 +2465,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en torax, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -2346,6 +2483,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 19 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -2363,6 +2501,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 34 anos, paciente con herida en torax, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -2380,6 +2519,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 70 anos, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -2397,6 +2537,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 70 anos, paciente con deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
@@ -2414,6 +2555,7 @@
         "lat": 4.634813,
         "lng": -74.080642
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -2431,6 +2573,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 90 anos, paciente con sangrado vaginal.",
       "dictadoSintetico": true
     },
@@ -2448,6 +2591,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 65 anos, paciente con caida de altura.",
       "dictadoSintetico": true
     },
@@ -2465,6 +2609,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 29 anos, paciente con caida de altura.",
       "dictadoSintetico": true
     },
@@ -2482,6 +2627,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 10 anos, paciente con herida en torax, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -2499,6 +2645,7 @@
         "lat": 4.609491,
         "lng": -74.084229
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 11 anos, paciente con violencia sexual.",
       "dictadoSintetico": true
     },
@@ -2516,6 +2663,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 31 anos, paciente con herida en miembro inferior, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -2533,6 +2681,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 42 anos, paciente con herida en miembro inferior, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -2550,6 +2699,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 45 anos, paciente con sangrado vaginal.",
       "dictadoSintetico": true
     },
@@ -2567,6 +2717,7 @@
         "lat": 4.634813,
         "lng": -74.080642
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 23 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -2584,6 +2735,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 72 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -2601,6 +2753,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 86 anos, paciente con dolor torácico.",
       "dictadoSintetico": true
     },
@@ -2618,6 +2771,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 68 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -2635,6 +2789,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -2652,6 +2807,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 89 anos, paciente con herida en torax, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -2669,6 +2825,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intoxicacion.",
       "dictadoSintetico": true
     },
@@ -2686,6 +2843,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 38 anos, paciente con herida en miembro inferior, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -2703,6 +2861,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 4 anos, paciente con herida en region abdominal, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -2720,6 +2879,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 33 anos, paciente con patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
@@ -2737,6 +2897,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 81 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -2754,6 +2915,7 @@
         "lat": 4.609491,
         "lng": -74.084229
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en craneo, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -2771,6 +2933,7 @@
         "lat": 4.574034,
         "lng": -74.128836
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -2788,6 +2951,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 84 anos, paciente con caida de altura.",
       "dictadoSintetico": true
     },
@@ -2805,6 +2969,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 69 anos, paciente con herida en torax, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -2822,6 +2987,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 84 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -2839,6 +3005,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 83 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -2856,6 +3023,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 19 anos, paciente con herida en region abdominal, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -2873,6 +3041,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en craneo, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -2890,6 +3059,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 51 anos, paciente con amenaza de suicidio.",
       "dictadoSintetico": true
     },
@@ -2907,6 +3077,7 @@
         "lat": 4.721878,
         "lng": -74.038976
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dolor torácico.",
       "dictadoSintetico": true
     },
@@ -2924,6 +3095,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
@@ -2941,6 +3113,7 @@
         "lat": 4.658259,
         "lng": -74.0595
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
@@ -2958,6 +3131,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 29 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -2975,6 +3149,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -2992,6 +3167,7 @@
         "lat": 4.609491,
         "lng": -74.084229
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 53 anos, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -3009,6 +3185,7 @@
         "lat": 4.574034,
         "lng": -74.128836
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 16 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -3026,6 +3203,7 @@
         "lat": 4.609491,
         "lng": -74.084229
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 28 anos, paciente con amenaza de suicidio.",
       "dictadoSintetico": true
     },
@@ -3043,6 +3221,7 @@
         "lat": 4.672752,
         "lng": -74.070543
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 91 anos, paciente con dolor torácico.",
       "dictadoSintetico": true
     },
@@ -3060,6 +3239,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 80 anos, paciente con herida en craneo, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -3077,6 +3257,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en craneo, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -3094,6 +3275,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 35 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -3111,6 +3293,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 37 anos, paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
@@ -3128,6 +3311,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 78 anos, paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
@@ -3145,6 +3329,7 @@
         "lat": 4.634813,
         "lng": -74.080642
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -3162,6 +3347,7 @@
         "lat": 4.634813,
         "lng": -74.080642
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -3179,6 +3365,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 7 anos, paciente con violencia sexual.",
       "dictadoSintetico": true
     },
@@ -3196,6 +3383,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 98 anos, paciente con deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
@@ -3213,6 +3401,7 @@
         "lat": 4.574034,
         "lng": -74.128836
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 15 anos, paciente con amenaza de suicidio.",
       "dictadoSintetico": true
     },
@@ -3230,6 +3419,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 33 anos, paciente con patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
@@ -3247,6 +3437,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con maltrato.",
       "dictadoSintetico": true
     },
@@ -3264,6 +3455,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 63 anos, paciente con herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -3281,6 +3473,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en torax, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -3298,6 +3491,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -3315,6 +3509,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 65 anos, paciente con herida en region abdominal, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -3332,6 +3527,7 @@
         "lat": 4.672752,
         "lng": -74.070543
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en miembro inferior, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -3349,6 +3545,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 60 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -3366,6 +3563,7 @@
         "lat": 4.603697,
         "lng": -74.066048
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 29 anos, paciente con herida en craneo, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -3383,6 +3581,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 54 anos, paciente con dolor torácico.",
       "dictadoSintetico": true
     },
@@ -3400,6 +3599,7 @@
         "lat": 4.634813,
         "lng": -74.080642
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en torax, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -3417,6 +3617,7 @@
         "lat": 4.658259,
         "lng": -74.0595
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -3434,6 +3635,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -3451,6 +3653,7 @@
         "lat": 4.609491,
         "lng": -74.084229
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 32 anos, paciente con herida en miembro inferior, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -3468,6 +3671,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 20 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -3485,6 +3689,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -3502,6 +3707,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 37 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -3519,6 +3725,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 56 anos, paciente con herida en miembro inferior, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -3536,6 +3743,7 @@
         "lat": 4.609491,
         "lng": -74.084229
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 31 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -3553,6 +3761,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 23 anos, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -3570,6 +3779,7 @@
         "lat": 4.609491,
         "lng": -74.084229
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 4 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -3587,6 +3797,7 @@
         "lat": 4.658259,
         "lng": -74.0595
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 68 anos, paciente con herida en torax, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -3604,6 +3815,7 @@
         "lat": 4.672752,
         "lng": -74.070543
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con caida de altura.",
       "dictadoSintetico": true
     },
@@ -3621,6 +3833,7 @@
         "lat": 4.672752,
         "lng": -74.070543
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 66 anos, paciente con deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
@@ -3638,6 +3851,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 15 anos, paciente con amenaza de suicidio.",
       "dictadoSintetico": true
     },
@@ -3655,6 +3869,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 77 anos, paciente con herida en torax, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -3672,6 +3887,7 @@
         "lat": 4.672752,
         "lng": -74.070543
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en craneo, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -3689,6 +3905,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en miembro inferior, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -3706,6 +3923,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en craneo, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -3723,6 +3941,7 @@
         "lat": 4.634813,
         "lng": -74.080642
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en torax, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -3740,6 +3959,7 @@
         "lat": 4.603697,
         "lng": -74.066048
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en craneo, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -3757,6 +3977,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 72 anos, paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
@@ -3774,6 +3995,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 25 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -3791,6 +4013,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -3808,6 +4031,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -3825,6 +4049,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 40 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -3842,6 +4067,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en miembro inferior, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -3859,6 +4085,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 61 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -3876,6 +4103,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 15 anos, paciente con violencia sexual.",
       "dictadoSintetico": true
     },
@@ -3893,6 +4121,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 3 anos, paciente con herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -3910,6 +4139,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 23 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -3927,6 +4157,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 78 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -3944,6 +4175,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -3961,6 +4193,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -3978,6 +4211,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en torax, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -3995,6 +4229,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 13 anos, paciente con herida en region abdominal, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -4012,6 +4247,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 24 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -4029,6 +4265,7 @@
         "lat": 4.658259,
         "lng": -74.0595
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 74 anos, paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
@@ -4046,6 +4283,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 62 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -4063,6 +4301,7 @@
         "lat": 4.658259,
         "lng": -74.0595
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 63 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -4080,6 +4319,7 @@
         "lat": 4.574034,
         "lng": -74.128836
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 21 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -4097,6 +4337,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 36 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -4114,6 +4355,7 @@
         "lat": 4.672752,
         "lng": -74.070543
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -4131,6 +4373,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -4148,6 +4391,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 70 anos, paciente con dolor torácico.",
       "dictadoSintetico": true
     },
@@ -4165,6 +4409,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dolor torácico.",
       "dictadoSintetico": true
     },
@@ -4182,6 +4427,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 36 anos, paciente con patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
@@ -4199,6 +4445,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 13 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -4216,6 +4463,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 90 anos, paciente con herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -4233,6 +4481,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 17 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -4250,6 +4499,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 45 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -4267,6 +4517,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 67 anos, paciente con dolor torácico.",
       "dictadoSintetico": true
     },
@@ -4284,6 +4535,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 79 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -4301,6 +4553,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 86 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -4318,6 +4571,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 32 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -4335,6 +4589,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 26 anos, paciente con herida en miembro inferior, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -4352,6 +4607,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 26 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -4369,6 +4625,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 74 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -4386,6 +4643,7 @@
         "lat": 4.672752,
         "lng": -74.070543
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 86 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -4403,6 +4661,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 15 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -4420,6 +4679,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 76 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -4437,6 +4697,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 92 anos, paciente con caida de altura.",
       "dictadoSintetico": true
     },
@@ -4454,6 +4715,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 57 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -4471,6 +4733,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -4488,6 +4751,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 79 anos, paciente con herida en craneo, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -4505,6 +4769,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con amenaza de suicidio.",
       "dictadoSintetico": true
     },
@@ -4522,6 +4787,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -4539,6 +4805,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 46 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -4556,6 +4823,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 87 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -4573,6 +4841,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -4590,6 +4859,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 23 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -4607,6 +4877,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -4624,6 +4895,7 @@
         "lat": 4.672752,
         "lng": -74.070543
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 26 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -4641,6 +4913,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -4658,6 +4931,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 100 anos, paciente con deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
@@ -4675,6 +4949,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -4692,6 +4967,7 @@
         "lat": 4.609491,
         "lng": -74.084229
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en miembro inferior, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -4709,6 +4985,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 23 anos, paciente con herida en miembro inferior, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -4726,6 +5003,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 23 anos, paciente con herida en miembro inferior, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -4743,6 +5021,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 23 anos, paciente con herida en craneo, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -4760,6 +5039,7 @@
         "lat": 4.591033,
         "lng": -74.091912
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 30 anos, paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
@@ -4777,6 +5057,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 16 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -4794,6 +5075,7 @@
         "lat": 4.591033,
         "lng": -74.091912
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -4811,6 +5093,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 17 anos, paciente con herida en craneo, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -4828,6 +5111,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 8 anos, paciente con apoyo crue.",
       "dictadoSintetico": true
     },
@@ -4845,6 +5129,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 28 anos, paciente con herida en torax, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -4862,6 +5147,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 45 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -4879,6 +5165,7 @@
         "lat": 4.672752,
         "lng": -74.070543
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 45 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -4896,6 +5183,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con caida de altura.",
       "dictadoSintetico": true
     },
@@ -4913,6 +5201,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -4930,6 +5219,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -4947,6 +5237,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -4964,6 +5255,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 30 anos, paciente con amenaza de suicidio.",
       "dictadoSintetico": true
     },
@@ -4981,6 +5273,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 70 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -4998,6 +5291,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 90 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -5015,6 +5309,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
@@ -5032,6 +5327,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 21 anos, paciente con patologia ginecobstétrica.",
       "dictadoSintetico": true
     },
@@ -5049,6 +5345,7 @@
         "lat": 4.603697,
         "lng": -74.066048
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 35 anos, paciente con herida en torax, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -5066,6 +5363,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 62 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -5083,6 +5381,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -5100,6 +5399,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 13 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -5117,6 +5417,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 6 anos, paciente con herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -5134,6 +5435,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 28 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -5151,6 +5453,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -5168,6 +5471,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -5185,6 +5489,7 @@
         "lat": 4.591033,
         "lng": -74.091912
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 23 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -5202,6 +5507,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 80 anos, paciente con caida de altura.",
       "dictadoSintetico": true
     },
@@ -5219,6 +5525,7 @@
         "lat": 4.672752,
         "lng": -74.070543
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 34 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -5236,6 +5543,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 101 anos, paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
@@ -5253,6 +5561,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 69 anos, paciente con deficit neurologico focal subito.",
       "dictadoSintetico": true
     },
@@ -5270,6 +5579,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en torax, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -5287,6 +5597,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -5304,6 +5615,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 30 anos, paciente con herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -5321,6 +5633,7 @@
         "lat": 4.603697,
         "lng": -74.066048
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 35 anos, paciente con herida en torax, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -5338,6 +5651,7 @@
         "lat": 4.634813,
         "lng": -74.080642
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 18 anos, paciente con intoxicacion.",
       "dictadoSintetico": true
     },
@@ -5355,6 +5669,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -5372,6 +5687,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 32 anos, paciente con amenaza de suicidio.",
       "dictadoSintetico": true
     },
@@ -5389,6 +5705,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en miembro inferior, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -5406,6 +5723,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 21 anos, paciente con herida en craneo, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -5423,6 +5741,7 @@
         "lat": 4.721878,
         "lng": -74.038976
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 74 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -5440,6 +5759,7 @@
         "lat": 4.721878,
         "lng": -74.038976
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en craneo, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -5457,6 +5777,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -5474,6 +5795,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -5491,6 +5813,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 69 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -5508,6 +5831,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 24 anos, paciente con herida en torax, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -5525,6 +5849,7 @@
         "lat": 4.634813,
         "lng": -74.080642
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 32 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -5542,6 +5867,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 80 anos, paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
@@ -5559,6 +5885,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 20 anos, paciente con herida en region abdominal, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -5576,6 +5903,7 @@
         "lat": 4.658259,
         "lng": -74.0595
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 51 anos, paciente con herida en region abdominal, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -5593,6 +5921,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 32 anos, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -5610,6 +5939,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con violencia sexual.",
       "dictadoSintetico": true
     },
@@ -5627,6 +5957,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 56 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -5644,6 +5975,7 @@
         "lat": 4.609491,
         "lng": -74.084229
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 35 anos, paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
@@ -5661,6 +5993,7 @@
         "lat": 4.634813,
         "lng": -74.080642
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -5678,6 +6011,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 24 anos, paciente con amenaza de suicidio.",
       "dictadoSintetico": true
     },
@@ -5695,6 +6029,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -5712,6 +6047,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -5729,6 +6065,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con acompañamiento a evento.",
       "dictadoSintetico": true
     },
@@ -5746,6 +6083,7 @@
         "lat": 4.609491,
         "lng": -74.084229
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -5763,6 +6101,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 37 anos, paciente con herida en region abdominal, sangrado abundante.",
       "dictadoSintetico": true
     },
@@ -5780,6 +6119,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 32 anos, paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
@@ -5797,6 +6137,7 @@
         "lat": 4.492385,
         "lng": -74.115013
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -5814,6 +6155,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 35 anos, paciente con amenaza de suicidio.",
       "dictadoSintetico": true
     },
@@ -5831,6 +6173,7 @@
         "lat": 4.603697,
         "lng": -74.066048
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en region abdominal, sangrado controlado.",
       "dictadoSintetico": true
     },
@@ -5848,6 +6191,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 37 anos, paciente con amenaza de suicidio.",
       "dictadoSintetico": true
     },
@@ -5865,6 +6209,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 97 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -5882,6 +6227,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 59 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -5899,6 +6245,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -5916,6 +6263,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 78 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -5933,6 +6281,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 20 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -5950,6 +6299,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 75 anos, paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
@@ -5967,6 +6317,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 75 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -5984,6 +6335,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 24 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -6001,6 +6353,7 @@
         "lat": 4.721878,
         "lng": -74.038976
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 22 anos, paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
@@ -6018,6 +6371,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 95 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6035,6 +6389,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 36 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6052,6 +6407,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 71 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -6069,6 +6425,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 71 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6086,6 +6443,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 37 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6103,6 +6461,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 20 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6120,6 +6479,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 41 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -6137,6 +6497,7 @@
         "lat": 4.574034,
         "lng": -74.128836
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 29 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -6154,6 +6515,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 14 anos, paciente con amenaza de suicidio.",
       "dictadoSintetico": true
     },
@@ -6171,6 +6533,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 58 anos, paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
@@ -6188,6 +6551,7 @@
         "lat": 4.591033,
         "lng": -74.091912
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 46 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -6205,6 +6569,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -6222,6 +6587,7 @@
         "lat": 4.574034,
         "lng": -74.128836
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -6239,6 +6605,7 @@
         "lat": 4.672954,
         "lng": -74.144141
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 23 anos, paciente con amenaza de suicidio.",
       "dictadoSintetico": true
     },
@@ -6256,6 +6623,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 82 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6273,6 +6641,7 @@
         "lat": 4.574944,
         "lng": -74.087372
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 86 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6290,6 +6659,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 89 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6307,6 +6677,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -6324,6 +6695,7 @@
         "lat": 4.609491,
         "lng": -74.084229
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
@@ -6341,6 +6713,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6358,6 +6731,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6375,6 +6749,7 @@
         "lat": 4.574034,
         "lng": -74.128836
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con sintomas gastrointestinales.",
       "dictadoSintetico": true
     },
@@ -6392,6 +6767,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 30 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6409,6 +6785,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 47 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6426,6 +6803,7 @@
         "lat": 4.609491,
         "lng": -74.084229
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 56 anos, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6443,6 +6821,7 @@
         "lat": 4.609491,
         "lng": -74.084229
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con acompañamiento a evento.",
       "dictadoSintetico": true
     },
@@ -6460,6 +6839,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con acompañamiento a evento.",
       "dictadoSintetico": true
     },
@@ -6477,6 +6857,7 @@
         "lat": 4.609491,
         "lng": -74.084229
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 15 anos, paciente con acompañamiento a evento.",
       "dictadoSintetico": true
     },
@@ -6494,6 +6875,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con acompañamiento a evento.",
       "dictadoSintetico": true
     },
@@ -6511,6 +6893,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Hombre de 22 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -6528,6 +6911,7 @@
         "lat": 4.628269,
         "lng": -74.117947
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -6545,6 +6929,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con herida en miembro inferior, sangrado activo.",
       "dictadoSintetico": true
     },
@@ -6562,6 +6947,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con acompañamiento a evento.",
       "dictadoSintetico": true
     },
@@ -6579,6 +6965,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 71 anos, paciente inconsciente, sin respuesta a estimulos.",
       "dictadoSintetico": true
     },
@@ -6596,6 +6983,7 @@
         "lat": 4.569346,
         "lng": -74.1096
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -6613,6 +7001,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dolor torácico.",
       "dictadoSintetico": true
     },
@@ -6630,6 +7019,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6647,6 +7037,7 @@
         "lat": 4.603697,
         "lng": -74.066048
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6664,6 +7055,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con acompañamiento a evento.",
       "dictadoSintetico": true
     },
@@ -6681,6 +7073,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
       "dictadoSintetico": true
     },
@@ -6698,6 +7091,7 @@
         "lat": 4.740891,
         "lng": -74.089124
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6715,6 +7109,7 @@
         "lat": 4.627143,
         "lng": -74.145412
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Mujer de 59 anos, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -6732,6 +7127,7 @@
         "lat": 4.591033,
         "lng": -74.091912
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con malestar general, sin foco claro.",
       "dictadoSintetico": true
     },
@@ -6749,6 +7145,7 @@
         "lat": 4.635412,
         "lng": -74.205896
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con intento de suicidio.",
       "dictadoSintetico": true
     },
@@ -6766,6 +7163,7 @@
         "lat": 4.634813,
         "lng": -74.080642
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
       "dictadoSintetico": true
     },
@@ -6783,6 +7181,7 @@
         "lat": 4.697922,
         "lng": -74.109584
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     },
@@ -6800,6 +7199,7 @@
         "lat": 4.561281,
         "lng": -74.148875
       },
+      "origenCentroide": "ips-urgencias",
       "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
       "dictadoSintetico": true
     }

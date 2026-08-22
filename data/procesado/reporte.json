@@ -1,7 +1,7 @@
 {
   "catalogo": {
-    "archivos_en_disco": 17,
-    "declarados": 17,
+    "archivos_en_disco": 20,
+    "declarados": 20,
     "huerfanos": [],
     "rutas_muertas": [],
     "medidas": {
@@ -40,6 +40,24 @@
       "codesystem_reps": {
         "bytes": 34034,
         "filas": 157,
+        "columnas": null,
+        "encoding": "utf-8-sig"
+      },
+      "reps_sedes_bogota": {
+        "bytes": 14020436,
+        "filas": 16181,
+        "columnas": null,
+        "encoding": "utf-8-sig"
+      },
+      "reps_ocupacion_bogota": {
+        "bytes": 502462,
+        "filas": 548,
+        "columnas": null,
+        "encoding": "utf-8-sig"
+      },
+      "reps_capacidad_bogota": {
+        "bytes": 3567539,
+        "filas": 4647,
         "columnas": null,
         "encoding": "utf-8-sig"
       },
@@ -119,21 +137,23 @@
       "Centro de Salud Patio Bonito"
     ],
     "sin_coord": [],
-    "codigo_por_nombre": 67,
-    "codigo_por_cercania": 14,
-    "sin_codigo_reps": [
-      "Clínica Medicentro Familiar Sede Suba",
-      "Hospital de Usme",
-      "Hospital de Bosa"
+    "codigo_reps": 83,
+    "codigo_ambiguo": [
+      "Hospital Universitario Clínica San Rafael"
     ],
-    "periodo_ocupacion": "Septiembre 2025",
+    "codigo_generado": [],
+    "camas_medidas": 62,
+    "camas_capacidad": 1,
+    "camas_prior": 21,
+    "periodo_ocupacion_subred": "Septiembre 2025",
     "ocupacion_por_subred": {
       "Norte": 1.1055,
       "Centro Oriente": 0.7890999999999999,
       "Sur": 1.5941999999999998,
       "Sur Occidente": 1.9742
     },
-    "escritas": 84
+    "escritas": 84,
+    "codigos_unicos": 84
   },
   "demanda": {
     "incidentes": 9206,
@@ -165,9 +185,8 @@
       "3": 47,
       "4": 22
     },
-    "localidades_sin_centroide": [
-      "LA CANDELARIA"
-    ]
+    "localidades_sin_centroide": [],
+    "localidades_por_barrio_homonimo": []
   },
   "contexto": {
     "servicios_reps": 157,
@@ -176,6 +195,6 @@
     "ambulancias_medicalizadas_ciudad": 236.0,
     "localidades_con_tiempo": 21
   },
-  "_generado": "2026-08-22T06:34:12",
+  "_generado": "2026-08-22T06:52:36",
   "_fallidos": []
 }

@@ -3,7 +3,7 @@
 > Generado por `scripts/datos/catalogar.py`. **No editar a mano** —
 > se sobrescribe. Para cambiar una descripcion, edita `scripts/datos/fuentes.py`.
 
-Ultima generacion: 2026-08-22  ·  17 archivos  ·  17 declarados
+Ultima generacion: 2026-08-22  ·  20 archivos  ·  20 declarados
 
 ## Fuentes en uso
 
@@ -25,9 +25,7 @@ Produce: `sedes.json`
 
 cobertura **bogota** · 2900 filas · encoding `utf-8-sig` · 2500 KB
 
-Produce: `sedes.json`
-
-> Corte REPS jul-2020. Se usa para ENRIQUECER las 84 con su codigo de habilitacion real (cruza 81 de 84). No sirve sola como catalogo de urgencias: incluye odontologias, laboratorios y consultorios.
+> Corte REPS jul-2020. YA NO ALIMENTA sedes.json: se uso para sacar el codigo y resulto ser el del PRESTADOR, no el de la sede — colapsaba 9 sedes en un codigo. Ese trabajo ahora lo hace reps_bogota/sedes.json. Se conserva porque es el unico universo geolocalizado de las 2900 IPS de Bogota, util si algun dia se sale de urgencias.
 
 ### `llamadas_123/llamadas123.csv`
 
@@ -71,6 +69,36 @@ Produce: `servicios.json`
 
 > Ya lo usa catalogo/servicios-reps.ts. Aqui se valida que los codigos existan.
 
+### `reps_bogota/sedes.json`
+
+16181 sedes REPS de Bogota con su codigo de habilitacion de sede (PK real).
+
+cobertura **bogota** · 16181 filas · encoding `utf-8-sig` · 13692 KB
+
+Produce: `sedes.json`
+
+> El campo que importa es `codigohabilitacionsede`, de 12 digitos y UNICO (16181 de 16181). NO uses `codigoprestador`, de 10: una subred entera es un solo prestador con decenas de sedes, y usarlo colapsa 9 sedes distintas en un mismo codigo. Cruza con las 84 de urgencias por nombre: 83 con match unico.
+
+### `reps_bogota/ocupacion.json`
+
+Ocupacion de capacidad instalada por sede, Bogota. 548 filas, corte 2022-11-30.
+
+cobertura **bogota** · 548 filas · encoding `utf-8-sig` · 491 KB
+
+Produce: `sedes.json`
+
+> La mejor fuente de camas que tenemos: trae total Y ocupadas por sede. UNA SOLA FECHA, 2022-11-30 — el registro 'diario' obligatorio se apago al terminar el mandato COVID. Eso no es un defecto del dato: es la evidencia de la tesis de PULSO, y va en la primera slide.
+
+### `reps_bogota/capacidad.json`
+
+Capacidad instalada REPS de Bogota: 4647 filas (camas, salas, ambulancias, consultorios).
+
+cobertura **bogota** · 4647 filas · encoding `utf-8-sig` · 3484 KB
+
+Produce: `sedes.json`
+
+> Respaldo de camas para las sedes que no estan en el registro de ocupacion. Trae el total instalado, no la ocupacion. La PK se arma concatenando `c_digo_sede` (10) + `n_mero_sede` (2).
+
 ### `tiempo_promedio/osb_ofertasrv-mincentromedico.csv`
 
 Minutos promedio de desplazamiento al centro medico por localidad, 2017-2021.
@@ -111,7 +139,7 @@ Registro diario de ocupacion de capacidad instalada (REPS).
 
 cobertura **nacional** · 1000 filas · encoding `utf-8-sig` · 845 KB
 
-> INUTILIZABLE tal como esta. Son las primeras 1000 filas del tope por defecto de Socrata, ordenadas alfabeticamente: Antioquia (799), Barranquilla (166), Atlantico (30). CERO registros de Bogota. Re-descargar con $limit y $where — ver REDESCARGA en el README.
+> INUTILIZABLE tal como esta. Son las primeras 1000 filas del tope por defecto de Socrata, ordenadas alfabeticamente: Antioquia (799), Barranquilla (166), Atlantico (30). CERO registros de Bogota. REEMPLAZADA por reps_bogota/ocupacion.json (548 filas, todas de Bogota). Se puede borrar.
 
 ### `c36g-9fc2.json`
 
@@ -119,7 +147,7 @@ Registro Especial de Prestadores y Sedes (REPS), directorio nacional.
 
 cobertura **nacional** · 1000 filas · encoding `utf-8-sig` · 802 KB
 
-> INUTILIZABLE tal como esta: 1000 filas, solo Medellin (933) y Leticia (67). CERO de Bogota. Es la misma fuente que scripts/etl/extraer_reps.py descarga bien, con filtro de departamento.
+> INUTILIZABLE tal como esta: 1000 filas, solo Medellin (933) y Leticia (67). CERO de Bogota. REEMPLAZADA por reps_bogota/sedes.json (16181 filas). Se puede borrar.
 
 ### `s2ru-bqt6.json`
 
@@ -127,7 +155,7 @@ Capacidad instalada por grupo (camas, salas, ambulancias) del REPS.
 
 cobertura **nacional** · 1000 filas · encoding `utf-8-sig` · 718 KB
 
-> INUTILIZABLE tal como esta: 1000 filas, 2 registros de Bogota. Es la fuente que daria camas POR SEDE, que es justo lo que falta hoy. Vale la pena re-descargarla bien.
+> INUTILIZABLE tal como esta: 1000 filas, 2 registros de Bogota. REEMPLAZADA por reps_bogota/capacidad.json (4647 filas). Se puede borrar.
 
 ## Fichas tecnicas
 

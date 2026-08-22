@@ -13,6 +13,10 @@ next-env.d.ts
 scripts/etl/.venv/
 scripts/etl/__pycache__/
 scripts/etl/salida/
+# 17 MB del REPS, reproducibles con 'task datos:descargar' en 15 segundos.
+# Lo DERIVADO si se commitea (data/procesado/ y los .generado.ts), asi que
+# quien clona corre el demo sin descargar nada.
+data/reps_bogota/
 scripts/datos/__pycache__/
 scripts/datos/transformadores/__pycache__/
 # SDD / Atlas local tooling cache (skill registry index) — not shared, regenerated locally

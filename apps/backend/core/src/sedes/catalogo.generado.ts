@@ -6,7 +6,7 @@
  * cambiar el contenido, cambia la fuente o su transformador.
  *
  * Generado: 2026-08-22
- * Fuente:   osb_ofertasrv-ips-urgencias.csv + ins.geojson + osb_ocupacion-urgencias.csv
+ * Fuente:   osb_ofertasrv-ips-urgencias.csv + reps_bogota/{sedes,capacidad,ocupacion}.json + osb_ocupacion-urgencias.csv
  */
 
 import type { Sede } from '../contracts/types';
@@ -14,7 +14,7 @@ import type { Sede } from '../contracts/types';
 /** 84 sedes de urgencias de Bogota. Ver data/CATALOGO.md. */
 export const SEDES_CATALOGO: Sede[] = [
   {
-    "codigo": "1100105322",
+    "codigo": "110010532201",
     "nombre": "Clínica La Inmaculada",
     "direccion": "KR 7 68 70",
     "localidad": "Chapinero",
@@ -31,14 +31,19 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 27
+        "tipo": "CAMAS-Salud Mental Adulto",
+        "total": 108,
+        "ocupadasSnapshot": 119
+      },
+      {
+        "tipo": "CAMAS-Salud Mental Pediátrico",
+        "total": 19,
+        "ocupadasSnapshot": 21
       }
     ]
   },
   {
-    "codigo": "1100105597",
+    "codigo": "110010559704",
     "nombre": "Centro de Atención En Salud Cafam Floresta",
     "direccion": "AK 68 90 88",
     "localidad": "Barrios Unidos",
@@ -62,7 +67,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100105597",
+    "codigo": "110010559711",
     "nombre": "Centro de Atención En Salud Cafam Suba",
     "direccion": "KR 113 C 142 A 98",
     "localidad": "Suba",
@@ -86,7 +91,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100105618",
+    "codigo": "110010561801",
     "nombre": "Fundación Santa Fe de Bogotá",
     "direccion": "CL 119 7 75",
     "localidad": "Usaquén",
@@ -112,24 +117,39 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 199
+        "tipo": "CAMAS-Pediátrica",
+        "total": 40,
+        "ocupadasSnapshot": 40
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 38
+        "total": 37,
+        "ocupadasSnapshot": 34
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 11
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 7,
+        "ocupadasSnapshot": 7
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 4,
+        "ocupadasSnapshot": 4
+      },
+      {
+        "tipo": "CAMAS-Adultos",
+        "total": 204,
+        "ocupadasSnapshot": 198
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 5,
+        "ocupadasSnapshot": 5
       }
     ]
   },
   {
-    "codigo": "1100105668",
+    "codigo": "110010566801",
     "nombre": "Hospital Universitario Clínica San Rafael",
     "direccion": "KR 8 17 45 SUR",
     "localidad": "San Cristóbal",
@@ -156,23 +176,38 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 142
+        "total": 214,
+        "ocupadasSnapshot": 206
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 8,
+        "ocupadasSnapshot": 8
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 10,
+        "ocupadasSnapshot": 10
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 2,
+        "ocupadasSnapshot": 2
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 29,
+        "ocupadasSnapshot": 28
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 27
-      },
-      {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 8
+        "total": 40,
+        "ocupadasSnapshot": 40
       }
     ]
   },
   {
-    "codigo": "1100105681",
+    "codigo": "110010568101",
     "nombre": "Fundación Hospital de La Misericordia",
     "direccion": "AK 14 1 65",
     "localidad": "Los Mártires",
@@ -198,24 +233,24 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 142
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 41,
+        "ocupadasSnapshot": 40
       },
       {
-        "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 27
+        "tipo": "CAMAS-Intermedia Pediátrica",
+        "total": 16,
+        "ocupadasSnapshot": 16
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 8
+        "tipo": "CAMAS-Pediátrica",
+        "total": 334,
+        "ocupadasSnapshot": 333
       }
     ]
   },
   {
-    "codigo": "1100105725",
+    "codigo": "110010572501",
     "nombre": "Clínica de Nuestra Señora de La Paz",
     "direccion": "KR 69 12 75",
     "localidad": "Kennedy",
@@ -233,13 +268,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 47
+        "total": 10,
+        "ocupadasSnapshot": 0
       }
     ]
   },
   {
-    "codigo": "1100106065",
+    "codigo": "110010606501",
     "nombre": "Instituto Nacional de Cancerología",
     "direccion": "Cl 1 9 85",
     "localidad": "San Cristóbal",
@@ -261,18 +296,38 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 71
+        "total": 155,
+        "ocupadasSnapshot": 142
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 25,
+        "ocupadasSnapshot": 24
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 6
+        "total": 17,
+        "ocupadasSnapshot": 15
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 4,
+        "ocupadasSnapshot": 0
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 6,
+        "ocupadasSnapshot": 5
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 2,
+        "ocupadasSnapshot": 0
       }
     ]
   },
   {
-    "codigo": "1100106447",
+    "codigo": "110010644701",
     "nombre": "Fundación Abood Shaio",
     "direccion": "DG 115 A 70 C 75",
     "localidad": "Suba",
@@ -298,24 +353,39 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 199
-      },
-      {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 38
+        "total": 70,
+        "ocupadasSnapshot": 41
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 11
+        "tipo": "CAMAS-Pediátrica",
+        "total": 13,
+        "ocupadasSnapshot": 8
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 1,
+        "ocupadasSnapshot": 1
+      },
+      {
+        "tipo": "CAMAS-Adultos",
+        "total": 165,
+        "ocupadasSnapshot": 138
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 7,
+        "ocupadasSnapshot": 7
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 1,
+        "ocupadasSnapshot": 1
       }
     ]
   },
   {
-    "codigo": "1100106453",
+    "codigo": "110010645301",
     "nombre": "Cruz Roja Colombiana Seccional Cundinamarca Y Bogotá",
     "direccion": "AK 68 68 B 31",
     "localidad": "Engativá",
@@ -339,7 +409,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100106453",
+    "codigo": "110010645318",
     "nombre": "Cruz Roja Colombiana Seccional Cundinamarca Y Bogotá Sede Norte",
     "direccion": "AC 134 7 B 41",
     "localidad": "Usaquén",
@@ -363,7 +433,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100106453",
+    "codigo": "110010645319",
     "nombre": "Cruz Roja Colombiana Seccional Cundinamarca Y Bogotá Sede Alquería",
     "direccion": "AK 68 31 41 SUR",
     "localidad": "Kennedy",
@@ -387,7 +457,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100107521",
+    "codigo": "110010752101",
     "nombre": "Clínica Nueva",
     "direccion": "CL 45 F 16 A 11",
     "localidad": "Teusaquillo",
@@ -408,19 +478,24 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 13,
+        "ocupadasSnapshot": 9
+      },
+      {
         "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 99
+        "total": 66,
+        "ocupadasSnapshot": 61
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 9
+        "total": 15,
+        "ocupadasSnapshot": 10
       }
     ]
   },
   {
-    "codigo": "1100107782",
+    "codigo": "110010778209",
     "nombre": "Salud Sura Calle 100 Bogotá",
     "direccion": "Cl. 100 19 A 35",
     "localidad": "Chapinero",
@@ -444,7 +519,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100107939",
+    "codigo": "110010793901",
     "nombre": "Clínica de La Mujer",
     "direccion": "KR 19 C 91 17",
     "localidad": "Chapinero",
@@ -465,19 +540,29 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 10,
+        "ocupadasSnapshot": 6
+      },
+      {
         "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 99
+        "total": 46,
+        "ocupadasSnapshot": 34
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 9
+        "total": 4,
+        "ocupadasSnapshot": 2
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 3,
+        "ocupadasSnapshot": 0
       }
     ]
   },
   {
-    "codigo": "1100108171",
+    "codigo": "110010817102",
     "nombre": "Clínica Infantil Colsubsidio",
     "direccion": "CL 66 10 48",
     "localidad": "Chapinero",
@@ -499,18 +584,28 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 99
+        "total": 6,
+        "ocupadasSnapshot": 6
       },
       {
-        "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 9
+        "tipo": "CAMAS-Pediátrica",
+        "total": 152,
+        "ocupadasSnapshot": 120
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 7,
+        "ocupadasSnapshot": 7
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 13,
+        "ocupadasSnapshot": 13
       }
     ]
   },
   {
-    "codigo": "1100108171",
+    "codigo": "110010817103",
     "nombre": "Clínica Colsubsidio Ciudad Roma",
     "direccion": "CL 53 SUR 79 D 71",
     "localidad": "Kennedy",
@@ -531,19 +626,24 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 3,
+        "ocupadasSnapshot": 3
+      },
+      {
         "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 178
+        "total": 101,
+        "ocupadasSnapshot": 101
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 16
+        "total": 20,
+        "ocupadasSnapshot": 11
       }
     ]
   },
   {
-    "codigo": "1100108171",
+    "codigo": "110010817136",
     "nombre": "Centro Medico Colsubsidio Quiroga",
     "direccion": "CL 38 SUR 18 30",
     "localidad": "Rafael Uribe Uribe",
@@ -567,7 +667,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100108437",
+    "codigo": "110010843701",
     "nombre": "Clínica de Ortopedia Y Accidentes Laborales",
     "direccion": "CL 6 A 70 06",
     "localidad": "Kennedy",
@@ -585,13 +685,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 47
+        "total": 11,
+        "ocupadasSnapshot": 5
       }
     ]
   },
   {
-    "codigo": "1100108679",
+    "codigo": "110010867901",
     "nombre": "Sociedad de Cirugía de Bogotá - Hospital de San José",
     "direccion": "CL 10 18 75",
     "localidad": "Los Mártires",
@@ -617,24 +717,39 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 142
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 2,
+        "ocupadasSnapshot": 1
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 27
+        "total": 19,
+        "ocupadasSnapshot": 15
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 8
+        "tipo": "CAMAS-Adultos",
+        "total": 152,
+        "ocupadasSnapshot": 148
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 6,
+        "ocupadasSnapshot": 2
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 19,
+        "ocupadasSnapshot": 19
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 16,
+        "ocupadasSnapshot": 12
       }
     ]
   },
   {
-    "codigo": "1100108952",
+    "codigo": "110010895201",
     "nombre": "Clínica Palermo",
     "direccion": "CL 45 C 22 02",
     "localidad": "Teusaquillo",
@@ -655,19 +770,24 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 99
+        "tipo": "CAMAS-UCI Adultos",
+        "total": 24,
+        "ocupadasSnapshot": 15
       },
       {
-        "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 9
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 1,
+        "ocupadasSnapshot": 0
+      },
+      {
+        "tipo": "CAMAS-Adultos",
+        "total": 173,
+        "ocupadasSnapshot": 172
       }
     ]
   },
   {
-    "codigo": "1100109104",
+    "codigo": "110010910401",
     "nombre": "Clínica Juan N Corpas Ltda",
     "direccion": "KR 111 159 A 61",
     "localidad": "Suba",
@@ -688,19 +808,29 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 2,
+        "ocupadasSnapshot": 2
+      },
+      {
         "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 99
+        "total": 120,
+        "ocupadasSnapshot": 72
       },
       {
         "tipo": "CAMAS-UCI Adultos",
+        "total": 13,
+        "ocupadasSnapshot": 10
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
         "total": 8,
-        "ocupadasSnapshot": 9
+        "ocupadasSnapshot": 8
       }
     ]
   },
   {
-    "codigo": "1100109111",
+    "codigo": "110010911101",
     "nombre": "Fundación Cardio Infantil Instituto de Cardiología",
     "direccion": "CL 163 A 13 B 60",
     "localidad": "Usaquén",
@@ -726,24 +856,39 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 28,
+        "ocupadasSnapshot": 20
+      },
+      {
         "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 199
+        "total": 158,
+        "ocupadasSnapshot": 146
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 1,
+        "ocupadasSnapshot": 0
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 1,
+        "ocupadasSnapshot": 0
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 66,
+        "ocupadasSnapshot": 60
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 38
-      },
-      {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 11
+        "total": 67,
+        "ocupadasSnapshot": 64
       }
     ]
   },
   {
-    "codigo": "1100109178",
+    "codigo": "110010917802",
     "nombre": "Centro Policlinico Del Olaya",
     "direccion": "KR 20 23 23 SUR",
     "localidad": "Rafael Uribe Uribe",
@@ -765,18 +910,38 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 71
+        "total": 162,
+        "ocupadasSnapshot": 160
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 6
+        "total": 15,
+        "ocupadasSnapshot": 15
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 10,
+        "ocupadasSnapshot": 9
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 20,
+        "ocupadasSnapshot": 20
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 5,
+        "ocupadasSnapshot": 3
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 3,
+        "ocupadasSnapshot": 3
       }
     ]
   },
   {
-    "codigo": "1100109186",
+    "codigo": "110010918608",
     "nombre": "Clínica Reina Sofia",
     "direccion": "KR 21 127 03",
     "localidad": "Usaquén",
@@ -802,24 +967,29 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 199
-      },
-      {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 38
+        "total": 9,
+        "ocupadasSnapshot": 9
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 11
+        "tipo": "CAMAS-Adultos",
+        "total": 112,
+        "ocupadasSnapshot": 108
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 5,
+        "ocupadasSnapshot": 5
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 8,
+        "ocupadasSnapshot": 8
       }
     ]
   },
   {
-    "codigo": "1100109186",
+    "codigo": "110010918630",
     "nombre": "Clínica Universitaria Colombia",
     "direccion": "Cl 23 66 46",
     "localidad": "Teusaquillo",
@@ -845,24 +1015,24 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 199
-      },
-      {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 38
+        "total": 47,
+        "ocupadasSnapshot": 46
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 11
+        "tipo": "CAMAS-Adultos",
+        "total": 241,
+        "ocupadasSnapshot": 237
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 2,
+        "ocupadasSnapshot": 2
       }
     ]
   },
   {
-    "codigo": "1100109186",
+    "codigo": "110010918655",
     "nombre": "Clínica Reina Sofia Pediatrica Y Mujer",
     "direccion": "Ac 127 20 56",
     "localidad": "Usaquén",
@@ -884,18 +1054,38 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 99
+        "total": 24,
+        "ocupadasSnapshot": 24
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 15,
+        "ocupadasSnapshot": 15
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 11,
+        "ocupadasSnapshot": 11
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 9
+        "total": 3,
+        "ocupadasSnapshot": 2
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 1,
+        "ocupadasSnapshot": 1
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 1,
+        "ocupadasSnapshot": 1
       }
     ]
   },
   {
-    "codigo": "1100109186",
+    "codigo": "110010918668",
     "nombre": "Clínica Infantil Santa María Del Lago",
     "direccion": "CL 73 A 76 66",
     "localidad": "Engativá",
@@ -921,24 +1111,39 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 199
-      },
-      {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 38
+        "total": 9,
+        "ocupadasSnapshot": 7
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 11
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 9,
+        "ocupadasSnapshot": 0
+      },
+      {
+        "tipo": "CAMAS-Adultos",
+        "total": 59,
+        "ocupadasSnapshot": 41
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 6,
+        "ocupadasSnapshot": 6
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 13,
+        "ocupadasSnapshot": 8
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 85,
+        "ocupadasSnapshot": 79
       }
     ]
   },
   {
-    "codigo": "1100109224",
+    "codigo": "110010922401",
     "nombre": "Empresa Social Del Estado Hospital Universitario de La Samaritana",
     "direccion": "KR 8 0 29 SUR",
     "localidad": "San Cristóbal",
@@ -965,23 +1170,23 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 142
+        "total": 143,
+        "ocupadasSnapshot": 120
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 9,
+        "ocupadasSnapshot": 9
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 27
-      },
-      {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 8
+        "total": 21,
+        "ocupadasSnapshot": 19
       }
     ]
   },
   {
-    "codigo": "1100109361",
+    "codigo": "110010936101",
     "nombre": "Clínica de Marly",
     "direccion": "CL 50 9 67",
     "localidad": "Chapinero",
@@ -1008,23 +1213,28 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 199
+        "total": 87,
+        "ocupadasSnapshot": 84
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 38
+        "total": 10,
+        "ocupadasSnapshot": 4
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 11
+        "tipo": "CAMAS-Pediátrica",
+        "total": 8,
+        "ocupadasSnapshot": 8
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 8,
+        "ocupadasSnapshot": 7
       }
     ]
   },
   {
-    "codigo": "1100109456",
+    "codigo": "110010945601",
     "nombre": "Hospital Universitario San Ignacio",
     "direccion": "KR 7 40 62",
     "localidad": "Chapinero",
@@ -1050,24 +1260,39 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 199
+        "tipo": "CAMAS-Pediátrica",
+        "total": 31,
+        "ocupadasSnapshot": 31
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 6,
+        "ocupadasSnapshot": 6
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 38
+        "total": 26,
+        "ocupadasSnapshot": 25
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 11
+        "tipo": "CAMAS-Adultos",
+        "total": 229,
+        "ocupadasSnapshot": 210
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 2,
+        "ocupadasSnapshot": 2
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 6,
+        "ocupadasSnapshot": 6
       }
     ]
   },
   {
-    "codigo": "1100109523",
+    "codigo": "110010952310",
     "nombre": "Virrey Solis I.P.S S.A. Americas",
     "direccion": "AV LAS AMERICAS 66 A 27",
     "localidad": "Puente Aranda",
@@ -1091,7 +1316,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100108222",
+    "codigo": "110010952315",
     "nombre": "Virrey Solis IPS S.A - Clínica Suba",
     "direccion": "AC 145 95 B 22",
     "localidad": "Suba",
@@ -1115,7 +1340,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100109523",
+    "codigo": "110010952317",
     "nombre": "Virrey Solis IPS.S.A. Calle 98",
     "direccion": "KR 49 98 A 28",
     "localidad": "Barrios Unidos",
@@ -1139,7 +1364,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100107335",
+    "codigo": "110010959901",
     "nombre": "Clínica Del Country IPS",
     "direccion": "KR 16 82 57",
     "localidad": "Chapinero",
@@ -1165,24 +1390,39 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 6,
+        "ocupadasSnapshot": 6
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 1,
+        "ocupadasSnapshot": 0
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 6,
+        "ocupadasSnapshot": 5
+      },
+      {
         "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 199
+        "total": 174,
+        "ocupadasSnapshot": 131
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 32,
+        "ocupadasSnapshot": 32
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 38
-      },
-      {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 11
+        "total": 29,
+        "ocupadasSnapshot": 27
       }
     ]
   },
   {
-    "codigo": "1100109666",
+    "codigo": "110010966601",
     "nombre": "Clínica Del Occidente S.A.",
     "direccion": "AV DE LAS AMERICAS 71 C 29",
     "localidad": "Kennedy",
@@ -1208,24 +1448,24 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
+        "tipo": "CAMAS-Intermedia Adultos",
+        "total": 10,
+        "ocupadasSnapshot": 10
+      },
+      {
         "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 355
+        "total": 111,
+        "ocupadasSnapshot": 111
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 67
-      },
-      {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 20
+        "total": 43,
+        "ocupadasSnapshot": 43
       }
     ]
   },
   {
-    "codigo": "1100109523",
+    "codigo": "110011613301",
     "nombre": "Fundación Hospital Infantil Universitario de San Jose",
     "direccion": "KR 52 67 A 71",
     "localidad": "Barrios Unidos",
@@ -1251,24 +1491,39 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 21,
+        "ocupadasSnapshot": 6
+      },
+      {
         "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 199
+        "total": 93,
+        "ocupadasSnapshot": 91
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 1,
+        "ocupadasSnapshot": 1
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 1,
+        "ocupadasSnapshot": 0
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 65,
+        "ocupadasSnapshot": 63
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 38
-      },
-      {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 11
+        "total": 20,
+        "ocupadasSnapshot": 16
       }
     ]
   },
   {
-    "codigo": "1100116938",
+    "codigo": "110011693801",
     "nombre": "Hospital Militar Central",
     "direccion": "TV 3C 49 02",
     "localidad": "Chapinero",
@@ -1294,24 +1549,39 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 199
+        "tipo": "CAMAS-UCI Adultos",
+        "total": 37,
+        "ocupadasSnapshot": 18
       },
       {
-        "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
+        "tipo": "CAMAS-Adultos",
+        "total": 330,
+        "ocupadasSnapshot": 246
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 58,
         "ocupadasSnapshot": 38
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 11
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 2,
+        "ocupadasSnapshot": 0
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 3,
+        "ocupadasSnapshot": 2
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 6,
+        "ocupadasSnapshot": 1
       }
     ]
   },
   {
-    "codigo": "1100118642",
+    "codigo": "110011864201",
     "nombre": "Hospital Universitario Mayor-Mederi",
     "direccion": "CL 24 29 45",
     "localidad": "Los Mártires",
@@ -1337,24 +1607,24 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 142
-      },
-      {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 27
+        "total": 70,
+        "ocupadasSnapshot": 66
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 8
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 34,
+        "ocupadasSnapshot": 31
+      },
+      {
+        "tipo": "CAMAS-Adultos",
+        "total": 505,
+        "ocupadasSnapshot": 490
       }
     ]
   },
   {
-    "codigo": "1100118642",
+    "codigo": "110011864202",
     "nombre": "Hospital Universitario Barrios Unidos-Mederi",
     "direccion": "CL 66 A 52 25",
     "localidad": "Barrios Unidos",
@@ -1375,19 +1645,24 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 2,
+        "ocupadasSnapshot": 0
+      },
+      {
         "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 99
+        "total": 58,
+        "ocupadasSnapshot": 48
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 9
+        "total": 6,
+        "ocupadasSnapshot": 4
       }
     ]
   },
   {
-    "codigo": "1100121564",
+    "codigo": "110012156401",
     "nombre": "Medicentro Familiar IPS SAS",
     "direccion": "CL 20 98 62",
     "localidad": "Fontibón",
@@ -1408,19 +1683,24 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 3,
+        "ocupadasSnapshot": 1
+      },
+      {
         "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 178
+        "total": 41,
+        "ocupadasSnapshot": 15
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 16
+        "total": 23,
+        "ocupadasSnapshot": 5
       }
     ]
   },
   {
-    "codigo": "BOG-U-0042",
+    "codigo": "110012156404",
     "nombre": "Clínica Medicentro Familiar Sede Suba",
     "direccion": "KR 94B 132A 65",
     "localidad": "Suba",
@@ -1453,7 +1733,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100122150",
+    "codigo": "110012215001",
     "nombre": "Clínica Medical S.A.S.",
     "direccion": "CL 36 Sur 77 33",
     "localidad": "Kennedy",
@@ -1475,18 +1755,23 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 178
+        "total": 130,
+        "ocupadasSnapshot": 125
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
+        "total": 16,
         "ocupadasSnapshot": 16
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 13,
+        "ocupadasSnapshot": 10
       }
     ]
   },
   {
-    "codigo": "1100125070",
+    "codigo": "110012507001",
     "nombre": "Administradora Clínica La Colina SAS",
     "direccion": "CL 167 72 07",
     "localidad": "Suba",
@@ -1513,23 +1798,38 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 199
+        "total": 76,
+        "ocupadasSnapshot": 58
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 1,
+        "ocupadasSnapshot": 1
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 7,
+        "ocupadasSnapshot": 7
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 38
+        "total": 7,
+        "ocupadasSnapshot": 6
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 11
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 2,
+        "ocupadasSnapshot": 2
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 47,
+        "ocupadasSnapshot": 44
       }
     ]
   },
   {
-    "codigo": "1100125297",
+    "codigo": "110012529701",
     "nombre": "Clínica Los Nogales SAS",
     "direccion": "CL 95 23 61",
     "localidad": "Chapinero",
@@ -1555,24 +1855,24 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 199
-      },
-      {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 38
+        "total": 36,
+        "ocupadasSnapshot": 32
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 11
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 11,
+        "ocupadasSnapshot": 8
+      },
+      {
+        "tipo": "CAMAS-Adultos",
+        "total": 196,
+        "ocupadasSnapshot": 180
       }
     ]
   },
   {
-    "codigo": "1100130289",
+    "codigo": "110013028901",
     "nombre": "Unidad de Servicios de Salud Santa Clara Hospital Universitario",
     "direccion": "KR 14 B 1 45 SUR",
     "localidad": "Antonio Nariño",
@@ -1598,24 +1898,39 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 19,
+        "ocupadasSnapshot": 19
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 8,
+        "ocupadasSnapshot": 8
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 8,
+        "ocupadasSnapshot": 8
+      },
+      {
         "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 142
+        "total": 187,
+        "ocupadasSnapshot": 127
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 27
+        "total": 43,
+        "ocupadasSnapshot": 32
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 8
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 11,
+        "ocupadasSnapshot": 11
       }
     ]
   },
   {
-    "codigo": "1100130289",
+    "codigo": "110013028902",
     "nombre": "Unidad de Servicios de Salud San Blas",
     "direccion": "TV 5 ESTE 19 50 SUR",
     "localidad": "San Cristóbal",
@@ -1636,19 +1951,29 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 6,
+        "ocupadasSnapshot": 6
+      },
+      {
         "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 71
+        "total": 40,
+        "ocupadasSnapshot": 40
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 6
+        "total": 20,
+        "ocupadasSnapshot": 0
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 90,
+        "ocupadasSnapshot": 52
       }
     ]
   },
   {
-    "codigo": "1100130289",
+    "codigo": "110013028915",
     "nombre": "Unidad de Servicios de Salud Perseverancia",
     "direccion": "KR 5 33 A 45",
     "localidad": "Santa Fe",
@@ -1666,13 +1991,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 19
+        "total": 18,
+        "ocupadasSnapshot": 12
       }
     ]
   },
   {
-    "codigo": "1100130289",
+    "codigo": "110013028916",
     "nombre": "Unidad de Servicios de Salud Samper Mendoza",
     "direccion": "KR 22 22 A 26",
     "localidad": "Los Mártires",
@@ -1690,13 +2015,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 19
+        "total": 12,
+        "ocupadasSnapshot": 12
       }
     ]
   },
   {
-    "codigo": "1100130289",
+    "codigo": "110013028917",
     "nombre": "Unidad de Servicios de Salud Jorge Eliecer Gaitan",
     "direccion": "KR 4 A ESTE 5 20",
     "localidad": "Santa Fe",
@@ -1714,13 +2039,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 19
+        "total": 34,
+        "ocupadasSnapshot": 21
       }
     ]
   },
   {
-    "codigo": "1100130289",
+    "codigo": "110013028918",
     "nombre": "Unidad de Servicios de Salud Diana Turbay",
     "direccion": "KR 1f 48x 40 sur",
     "localidad": "Rafael Uribe Uribe",
@@ -1744,7 +2069,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100130289",
+    "codigo": "110013028919",
     "nombre": "Unidad de Servicios de Salud Chircales",
     "direccion": "TV 5 L BIS 48 F 69 SUR",
     "localidad": "Rafael Uribe Uribe",
@@ -1762,13 +2087,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 19
+        "total": 12,
+        "ocupadasSnapshot": 7
       }
     ]
   },
   {
-    "codigo": "1100130289",
+    "codigo": "110013028920",
     "nombre": "Unidad de Servicios de Salud Olaya",
     "direccion": "KR 21 22 51 SUR",
     "localidad": "Rafael Uribe Uribe",
@@ -1792,7 +2117,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100130289",
+    "codigo": "110013028929",
     "nombre": "Unidad de Servicios de Salud Victoria",
     "direccion": "DG 39 SUR 3 20 ESTE",
     "localidad": "San Cristóbal",
@@ -1814,18 +2139,23 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 71
+        "total": 104,
+        "ocupadasSnapshot": 61
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 5,
+        "ocupadasSnapshot": 3
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 6
+        "total": 13,
+        "ocupadasSnapshot": 4
       }
     ]
   },
   {
-    "codigo": "1100130291",
+    "codigo": "110013029101",
     "nombre": "Unidad de Servicios de Salud Simón Bolívar",
     "direccion": "CL 165 7 06",
     "localidad": "Usaquén",
@@ -1851,24 +2181,39 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 199
-      },
-      {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 38
+        "total": 32,
+        "ocupadasSnapshot": 28
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 11
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 26,
+        "ocupadasSnapshot": 26
+      },
+      {
+        "tipo": "CAMAS-Adultos",
+        "total": 150,
+        "ocupadasSnapshot": 137
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 1,
+        "ocupadasSnapshot": 1
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 59,
+        "ocupadasSnapshot": 32
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 14,
+        "ocupadasSnapshot": 12
       }
     ]
   },
   {
-    "codigo": "1100130291",
+    "codigo": "110013029103",
     "nombre": "Unidad de Servicios de Salud Engativá Calle 80",
     "direccion": "TV 100 A 80 A 50",
     "localidad": "Engativá",
@@ -1889,19 +2234,24 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 3,
+        "ocupadasSnapshot": 3
+      },
+      {
         "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 99
+        "total": 101,
+        "ocupadasSnapshot": 94
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 9
+        "total": 12,
+        "ocupadasSnapshot": 3
       }
     ]
   },
   {
-    "codigo": "1100130291",
+    "codigo": "110013029104",
     "nombre": "Unidad de Servicios de Salud Emaus",
     "direccion": "CL 64 C 121 76",
     "localidad": "Engativá",
@@ -1919,13 +2269,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 27
+        "total": 2,
+        "ocupadasSnapshot": 2
       }
     ]
   },
   {
-    "codigo": "1100130291",
+    "codigo": "110013029114",
     "nombre": "Unidad de Servicios de Salud Centro de Servicios Especializado",
     "direccion": "KR 104 152C 50",
     "localidad": "Suba",
@@ -1947,18 +2297,28 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 99
+        "total": 41,
+        "ocupadasSnapshot": 29
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 70,
+        "ocupadasSnapshot": 18
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 9
+        "total": 6,
+        "ocupadasSnapshot": 3
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 3,
+        "ocupadasSnapshot": 3
       }
     ]
   },
   {
-    "codigo": "1100130291",
+    "codigo": "110013029116",
     "nombre": "Unidad de Servicios de Salud Gaitana I",
     "direccion": "TV 126 134 88",
     "localidad": "Suba",
@@ -1982,7 +2342,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100130291",
+    "codigo": "110013029123",
     "nombre": "Unidad de Servicios de Salud Chapinero",
     "direccion": "CL 66 15 41",
     "localidad": "Barrios Unidos",
@@ -2000,13 +2360,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 27
+        "total": 28,
+        "ocupadasSnapshot": 25
       }
     ]
   },
   {
-    "codigo": "1100130294",
+    "codigo": "110013029401",
     "nombre": "Unidad de Servicios de Salud El Tunal",
     "direccion": "CR 20 47B 35 SUR",
     "localidad": "Tunjuelito",
@@ -2033,23 +2393,33 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 287
+        "total": 57,
+        "ocupadasSnapshot": 57
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 54
+        "total": 35,
+        "ocupadasSnapshot": 25
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
         "total": 10,
-        "ocupadasSnapshot": 16
+        "ocupadasSnapshot": 10
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 45,
+        "ocupadasSnapshot": 0
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 6,
+        "ocupadasSnapshot": 0
       }
     ]
   },
   {
-    "codigo": "1100130294",
+    "codigo": "110013029402",
     "nombre": "Unidad de Servicios de Salud Meissen",
     "direccion": "KR 18 B 60 G 36 SUR",
     "localidad": "Ciudad Bolívar",
@@ -2070,19 +2440,39 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 143
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 4,
+        "ocupadasSnapshot": 2
       },
       {
         "tipo": "CAMAS-UCI Adultos",
+        "total": 20,
+        "ocupadasSnapshot": 19
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 90,
+        "ocupadasSnapshot": 90
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
         "total": 8,
-        "ocupadasSnapshot": 13
+        "ocupadasSnapshot": 7
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 8,
+        "ocupadasSnapshot": 8
+      },
+      {
+        "tipo": "CAMAS-Adultos",
+        "total": 83,
+        "ocupadasSnapshot": 63
       }
     ]
   },
   {
-    "codigo": "1100130294",
+    "codigo": "110013029407",
     "nombre": "Unidad de Servicios de Salud Ambulatoria Tunjuelito",
     "direccion": "AK 14 51 21 SUR",
     "localidad": "Tunjuelito",
@@ -2100,13 +2490,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 38
+        "total": 37,
+        "ocupadasSnapshot": 36
       }
     ]
   },
   {
-    "codigo": "1100130294",
+    "codigo": "110013029413",
     "nombre": "Unidad de Servicios de Salud Jerusalen",
     "direccion": "CL 77 85 B 13 SUR",
     "localidad": "Ciudad Bolívar",
@@ -2130,7 +2520,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100130294",
+    "codigo": "110013029428",
     "nombre": "Unidad de Servicios de Salud Vista Hermosa",
     "direccion": "KR 18 C 66 A 55 SUR",
     "localidad": "Ciudad Bolívar",
@@ -2148,13 +2538,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 38
+        "total": 42,
+        "ocupadasSnapshot": 35
       }
     ]
   },
   {
-    "codigo": "1100130294",
+    "codigo": "110013029430",
     "nombre": "Unidad de Servicios de Salud Usme",
     "direccion": "KR 13 135 A 42 SUR",
     "localidad": "Usme",
@@ -2172,13 +2562,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 38
+        "total": 14,
+        "ocupadasSnapshot": 14
       }
     ]
   },
   {
-    "codigo": "1100130294",
+    "codigo": "110013029431",
     "nombre": "Unidad de Servicios de Salud Santa Librada I",
     "direccion": "KR 9 B 75 49 SUR",
     "localidad": "Usme",
@@ -2196,13 +2586,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 38
+        "total": 10,
+        "ocupadasSnapshot": 6
       }
     ]
   },
   {
-    "codigo": "1100130294",
+    "codigo": "110013029446",
     "nombre": "Unidad de Servicios de Salud San Juan de Sumapáz",
     "direccion": "Corregimiento San Juan de Sumapáz",
     "localidad": "Sumapaz",
@@ -2226,7 +2616,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100130294",
+    "codigo": "110013029449",
     "nombre": "Unidad de Servicios de Salud Nazareth",
     "direccion": "Corregimiento de Nazareth de Sumapaz",
     "localidad": "Sumapaz",
@@ -2244,13 +2634,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 38
+        "total": 2,
+        "ocupadasSnapshot": 0
       }
     ]
   },
   {
-    "codigo": "BOG-U-0070",
+    "codigo": "110013029450",
     "nombre": "Hospital de Usme",
     "direccion": "Cl. 137 Sur 3a 44",
     "localidad": "Usme",
@@ -2274,7 +2664,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100120233",
+    "codigo": "110013029601",
     "nombre": "Hospital Occidente de Kennedy",
     "direccion": "TV 74 F 40 B 54 SUR",
     "localidad": "Kennedy",
@@ -2300,24 +2690,39 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
+        "tipo": "CAMAS-Cuidado Intermedio Pediátrico",
+        "total": 2,
+        "ocupadasSnapshot": 1
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 5,
+        "ocupadasSnapshot": 5
+      },
+      {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 2,
+        "ocupadasSnapshot": 1
+      },
+      {
         "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 355
+        "total": 166,
+        "ocupadasSnapshot": 141
+      },
+      {
+        "tipo": "CAMAS-UCI Pediátrica",
+        "total": 13,
+        "ocupadasSnapshot": 2
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 34,
-        "ocupadasSnapshot": 67
-      },
-      {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 20
+        "total": 31,
+        "ocupadasSnapshot": 30
       }
     ]
   },
   {
-    "codigo": "1100130296",
+    "codigo": "110013029603",
     "nombre": "Hospital Pediátrico Tintal",
     "direccion": "CL 10 86 58",
     "localidad": "Kennedy",
@@ -2338,19 +2743,14 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 178
-      },
-      {
-        "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 16
+        "tipo": "CAMAS-Pediátrica",
+        "total": 78,
+        "ocupadasSnapshot": 53
       }
     ]
   },
   {
-    "codigo": "1100130296",
+    "codigo": "110013029604",
     "nombre": "Centro de Salud Patio Bonito",
     "direccion": "DG 38 sur 82 30",
     "localidad": "Kennedy",
@@ -2374,7 +2774,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100130296",
+    "codigo": "110013029622",
     "nombre": "Centro de Salud Trinidad Galán",
     "direccion": "KR 60 4 15",
     "localidad": "Puente Aranda",
@@ -2392,13 +2792,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 47
+        "total": 6,
+        "ocupadasSnapshot": 0
       }
     ]
   },
   {
-    "codigo": "1100130296",
+    "codigo": "110013029625",
     "nombre": "Hospital Fontibón",
     "direccion": "KR 99 16i 41",
     "localidad": "Fontibón",
@@ -2420,18 +2820,23 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 178
+        "total": 48,
+        "ocupadasSnapshot": 30
       },
       {
         "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 16
+        "total": 6,
+        "ocupadasSnapshot": 2
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 2,
+        "ocupadasSnapshot": 1
       }
     ]
   },
   {
-    "codigo": "BOG-U-0076",
+    "codigo": "110013029654",
     "nombre": "Hospital de Bosa",
     "direccion": "CL 73 Sur 100 A 53",
     "localidad": "Bosa",
@@ -2467,14 +2872,14 @@ export const SEDES_CATALOGO: Sede[] = [
         "ocupadasSnapshot": 67
       },
       {
-        "tipo": "CAMAS-UCI Pediatrica",
+        "tipo": "CAMAS-UCI Pediátrica",
         "total": 10,
         "ocupadasSnapshot": 20
       }
     ]
   },
   {
-    "codigo": "1100130970",
+    "codigo": "110013097001",
     "nombre": "Grupo Empresarial Jarbsalud IPS S.A.S.",
     "direccion": "CL 33 bis 15 64",
     "localidad": "Teusaquillo",
@@ -2492,13 +2897,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 27
+        "total": 19,
+        "ocupadasSnapshot": 0
       }
     ]
   },
   {
-    "codigo": "1100133903",
+    "codigo": "110013390301",
     "nombre": "Loscobos Medical Center SAS - Loscobos",
     "direccion": "AK 9 131 A 40",
     "localidad": "Usaquén",
@@ -2524,24 +2929,29 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
+        "tipo": "CAMAS-Pediátrica",
+        "total": 19,
+        "ocupadasSnapshot": 17
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 2,
+        "ocupadasSnapshot": 0
+      },
+      {
         "tipo": "CAMAS-Adultos",
-        "total": 180,
-        "ocupadasSnapshot": 199
+        "total": 162,
+        "ocupadasSnapshot": 133
       },
       {
         "tipo": "CAMAS-UCI Adultos",
         "total": 34,
-        "ocupadasSnapshot": 38
-      },
-      {
-        "tipo": "CAMAS-UCI Pediatrica",
-        "total": 10,
-        "ocupadasSnapshot": 11
+        "ocupadasSnapshot": 16
       }
     ]
   },
   {
-    "codigo": "1100134091",
+    "codigo": "110013409101",
     "nombre": "Clininorte 161",
     "direccion": "Ac 161 16 C 39/51",
     "localidad": "Usaquén",
@@ -2559,13 +2969,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 27
+        "total": 5,
+        "ocupadasSnapshot": 0
       }
     ]
   },
   {
-    "codigo": "1100134552",
+    "codigo": "110013455201",
     "nombre": "Sociedad Medica Alcala SAS",
     "direccion": "AK 19 135 24",
     "localidad": "Usaquén",
@@ -2583,13 +2993,13 @@ export const SEDES_CATALOGO: Sede[] = [
     "camas": [
       {
         "tipo": "CAMAS-Adultos",
-        "total": 24,
-        "ocupadasSnapshot": 27
+        "total": 12,
+        "ocupadasSnapshot": 12
       }
     ]
   },
   {
-    "codigo": "1100135025",
+    "codigo": "110013502501",
     "nombre": "Clínica Nueva El Lago S.A.S - Sede Calle 76",
     "direccion": "CL 76 15 55",
     "localidad": "Chapinero",
@@ -2610,19 +3020,24 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 99
+        "tipo": "CAMAS-UCI Adultos",
+        "total": 17,
+        "ocupadasSnapshot": 12
       },
       {
-        "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 9
+        "tipo": "CAMAS-Adultos",
+        "total": 141,
+        "ocupadasSnapshot": 138
+      },
+      {
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 18,
+        "ocupadasSnapshot": 18
       }
     ]
   },
   {
-    "codigo": "1100136278",
+    "codigo": "110013627801",
     "nombre": "Clínica Azul",
     "direccion": "KR 49 D 91 33",
     "localidad": "Barrios Unidos",
@@ -2643,19 +3058,24 @@ export const SEDES_CATALOGO: Sede[] = [
     ],
     "camas": [
       {
-        "tipo": "CAMAS-Adultos",
-        "total": 90,
-        "ocupadasSnapshot": 99
+        "tipo": "CAMAS-UCI Adultos",
+        "total": 16,
+        "ocupadasSnapshot": 10
       },
       {
-        "tipo": "CAMAS-UCI Adultos",
-        "total": 8,
-        "ocupadasSnapshot": 9
+        "tipo": "CAMAS-Cuidado Intermedio Adulto",
+        "total": 4,
+        "ocupadasSnapshot": 2
+      },
+      {
+        "tipo": "CAMAS-Adultos",
+        "total": 85,
+        "ocupadasSnapshot": 80
       }
     ]
   },
   {
-    "codigo": "1100109523",
+    "codigo": "110013630032",
     "nombre": "Central de Urgencias Norte",
     "direccion": "CL 163 A 22 22",
     "localidad": "Usaquén",
@@ -2679,7 +3099,7 @@ export const SEDES_CATALOGO: Sede[] = [
     ]
   },
   {
-    "codigo": "1100109186",
+    "codigo": "110013630033",
     "nombre": "Unidad de Urgencias Puente Aranda",
     "direccion": "KR 62 14 41",
     "localidad": "Puente Aranda",

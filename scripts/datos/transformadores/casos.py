@@ -37,7 +37,7 @@ from comun import (  # noqa: E402
     DATOS,
     corregir_coord,
     escribir_json,
-    leer_csv,
+    leer_json,
     limpiar,
     numero,
 )
@@ -90,8 +90,21 @@ def _clave_localidad(s: str | None) -> str:
     return re.sub(r"\s+", " ", s).strip().upper()
 
 
-def _centroides_localidad() -> dict[str, dict]:
-    """Centro aproximado de cada localidad, promediando las IPS que tiene."""
+def _centroides_localidad() -> tuple[dict[str, dict], dict[str, str]]:
+    """
+    Centro aproximado de cada localidad. Devuelve (centroides, de_donde_salio).
+
+    Primero promedia las IPS de urgencias de la localidad, que es la fuente
+    correcta. Pero LA CANDELARIA no tiene NINGUNA IPS de urgencias — no es un
+    bug del cruce, es el dato: sus urgencias las atiende otra localidad. Sin
+    respaldo, sus casos salian sin origen y por tanto sin poder rutearse.
+
+    El respaldo sale de las 2900 IPS del geojson, tomando solo los barrios
+    cuyo nombre ES IGUAL al de la localidad. Esa igualdad estricta es la que
+    lo hace seguro: "LA CANDELARIA" entra, y "CANDELARIA LA NUEVA" —que queda
+    en Ciudad Bolivar, a 12 km— no. Para La Candelaria da 5 puntos en un
+    radio de 0.9 km, a 760 m del centro historico.
+    """
     filas, _ = leer_fuente("ips_urgencias")
     acum: dict[str, list] = collections.defaultdict(list)
 
@@ -101,12 +114,30 @@ def _centroides_localidad() -> dict[str, dict]:
         if loc and coord:
             acum[loc].append(coord)
 
+    centroides = {loc: _promedio(cs) for loc, cs in acum.items()}
+    origen = {loc: "ips-urgencias" for loc in centroides}
+
+    # Respaldo por barrio homonimo, solo para las localidades que faltan.
+    geo = leer_json(DATOS / POR_ID["ins_geojson"].ruta)
+    por_barrio: dict[str, list] = collections.defaultdict(list)
+    for ft in geo.get("features", []):
+        barrio = _clave_localidad(ft.get("properties", {}).get("barrio"))
+        coords = (ft.get("geometry") or {}).get("coordinates") or []
+        if barrio and len(coords) == 2:
+            por_barrio[barrio].append((coords[1], coords[0]))
+
+    for loc, puntos in por_barrio.items():
+        if loc not in centroides and puntos:
+            centroides[loc] = _promedio(puntos)
+            origen[loc] = "barrio-homonimo"
+
+    return centroides, origen
+
+
+def _promedio(coords: list) -> dict:
     return {
-        loc: {
-            "lat": round(sum(c[0] for c in cs) / len(cs), 6),
-            "lng": round(sum(c[1] for c in cs) / len(cs), 6),
-        }
-        for loc, cs in acum.items()
+        "lat": round(sum(c[0] for c in coords) / len(coords), 6),
+        "lng": round(sum(c[1] for c in coords) / len(coords), 6),
     }
 
 
@@ -134,7 +165,7 @@ def _dictado(tipo: str, edad, sexo: str | None, semilla: int) -> str:
 
 def construir(maximo: int = 400) -> dict:
     filas, _ = leer_fuente("llamadas_123")
-    centroides = _centroides_localidad()
+    centroides, origen_centroide = _centroides_localidad()
 
     casos = []
     sin_centroide = set()
@@ -181,6 +212,7 @@ def construir(maximo: int = 400) -> dict:
                 "edad": edad,
                 "sexo": sexo or "desconocido",
                 "origen": origen,
+                "origenCentroide": origen_centroide.get(localidad),
                 "texto": _dictado(tipo, edad, f.get("GENERO"), i),
                 "dictadoSintetico": True,
             }
@@ -226,4 +258,13 @@ def construir(maximo: int = 400) -> dict:
         "exportados": len(recorte),
         "por_triage": dict(sorted(por_triage.items())),
         "localidades_sin_centroide": sorted(sin_centroide),
+        # Solo las localidades que realmente usaron el respaldo. El indice de
+        # barrios trae cientos de entradas mas que ningun caso consulta.
+        "localidades_por_barrio_homonimo": sorted(
+            {
+                c["localidad"]
+                for c in recorte
+                if c.get("origenCentroide") == "barrio-homonimo" and c["localidad"]
+            }
+        ),
     }

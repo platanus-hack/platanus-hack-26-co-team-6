@@ -54,11 +54,12 @@ FUENTES: list[Fuente] = [
         que_es="2900 IPS de Bogota geolocalizadas, con codigo REPS, direccion, telefono y naturaleza.",
         cobertura="bogota",
         estado="usable",
-        produce=("sedes.json",),
         notas=(
-            "Corte REPS jul-2020. Se usa para ENRIQUECER las 84 con su codigo de "
-            "habilitacion real (cruza 81 de 84). No sirve sola como catalogo de "
-            "urgencias: incluye odontologias, laboratorios y consultorios."
+            "Corte REPS jul-2020. YA NO ALIMENTA sedes.json: se uso para sacar el "
+            "codigo y resulto ser el del PRESTADOR, no el de la sede — colapsaba 9 "
+            "sedes en un codigo. Ese trabajo ahora lo hace reps_bogota/sedes.json. "
+            "Se conserva porque es el unico universo geolocalizado de las 2900 IPS "
+            "de Bogota, util si algun dia se sale de urgencias."
         ),
     ),
     Fuente(
@@ -110,6 +111,54 @@ FUENTES: list[Fuente] = [
         notas="Ya lo usa catalogo/servicios-reps.ts. Aqui se valida que los codigos existan.",
     ),
 
+    # ── REPS de Bogota, descargado con el filtro correcto ─────────
+    #
+    # Reemplazan a los tres JSON truncados de mas abajo. Se bajaron con
+    # $limit=50000 y $where del departamento — ver REDESCARGA en el README.
+
+    Fuente(
+        id="reps_sedes_bogota",
+        ruta="reps_bogota/sedes.json",
+        que_es="16181 sedes REPS de Bogota con su codigo de habilitacion de sede (PK real).",
+        cobertura="bogota",
+        estado="usable",
+        produce=("sedes.json",),
+        notas=(
+            "El campo que importa es `codigohabilitacionsede`, de 12 digitos y "
+            "UNICO (16181 de 16181). NO uses `codigoprestador`, de 10: una subred "
+            "entera es un solo prestador con decenas de sedes, y usarlo colapsa "
+            "9 sedes distintas en un mismo codigo. Cruza con las 84 de urgencias "
+            "por nombre: 83 con match unico."
+        ),
+    ),
+    Fuente(
+        id="reps_ocupacion_bogota",
+        ruta="reps_bogota/ocupacion.json",
+        que_es="Ocupacion de capacidad instalada por sede, Bogota. 548 filas, corte 2022-11-30.",
+        cobertura="bogota",
+        estado="usable",
+        produce=("sedes.json",),
+        notas=(
+            "La mejor fuente de camas que tenemos: trae total Y ocupadas por sede. "
+            "UNA SOLA FECHA, 2022-11-30 — el registro 'diario' obligatorio se apago "
+            "al terminar el mandato COVID. Eso no es un defecto del dato: es la "
+            "evidencia de la tesis de PULSO, y va en la primera slide."
+        ),
+    ),
+    Fuente(
+        id="reps_capacidad_bogota",
+        ruta="reps_bogota/capacidad.json",
+        que_es="Capacidad instalada REPS de Bogota: 4647 filas (camas, salas, ambulancias, consultorios).",
+        cobertura="bogota",
+        estado="usable",
+        produce=("sedes.json",),
+        notas=(
+            "Respaldo de camas para las sedes que no estan en el registro de "
+            "ocupacion. Trae el total instalado, no la ocupacion. La PK se arma "
+            "concatenando `c_digo_sede` (10) + `n_mero_sede` (2)."
+        ),
+    ),
+
     # ── Contexto: alimentan el pitch y los priors, no el ruteo ─────
 
     Fuente(
@@ -143,7 +192,10 @@ FUENTES: list[Fuente] = [
         notas="Numero de pitch: solo 236 TAM para 7,9 millones de personas.",
     ),
 
-    # ── Rotas: descargas de Socrata sin $limit ────────────────────
+    # ── Rotas y ya reemplazadas ───────────────────────────────────
+    #
+    # Se conservan solo para que nadie las vuelva a usar por error. Sus
+    # reemplazos correctos estan arriba, en reps_bogota/.
 
     Fuente(
         id="reps_ocupacion_nacional",
@@ -155,7 +207,7 @@ FUENTES: list[Fuente] = [
             "INUTILIZABLE tal como esta. Son las primeras 1000 filas del tope por "
             "defecto de Socrata, ordenadas alfabeticamente: Antioquia (799), "
             "Barranquilla (166), Atlantico (30). CERO registros de Bogota. "
-            "Re-descargar con $limit y $where — ver REDESCARGA en el README."
+            "REEMPLAZADA por reps_bogota/ocupacion.json (548 filas, todas de Bogota). Se puede borrar."
         ),
     ),
     Fuente(
@@ -166,8 +218,7 @@ FUENTES: list[Fuente] = [
         estado="truncado",
         notas=(
             "INUTILIZABLE tal como esta: 1000 filas, solo Medellin (933) y Leticia (67). "
-            "CERO de Bogota. Es la misma fuente que scripts/etl/extraer_reps.py descarga "
-            "bien, con filtro de departamento."
+            "CERO de Bogota. REEMPLAZADA por reps_bogota/sedes.json (16181 filas). Se puede borrar."
         ),
     ),
     Fuente(
@@ -178,8 +229,7 @@ FUENTES: list[Fuente] = [
         estado="truncado",
         notas=(
             "INUTILIZABLE tal como esta: 1000 filas, 2 registros de Bogota. "
-            "Es la fuente que daria camas POR SEDE, que es justo lo que falta hoy. "
-            "Vale la pena re-descargarla bien."
+            "REEMPLAZADA por reps_bogota/capacidad.json (4647 filas). Se puede borrar."
         ),
     ),
 

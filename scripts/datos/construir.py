@@ -29,7 +29,7 @@ AQUI = Path(__file__).resolve().parent
 sys.path.insert(0, str(AQUI))
 
 import catalogar  # noqa: E402
-from comun import RAIZ, SALIDA, escribir_json  # noqa: E402
+from comun import DATOS, RAIZ, SALIDA, escribir_json  # noqa: E402
 from transformadores import casos, contexto, demanda, ocupacion, sedes  # noqa: E402
 
 PASOS = [
@@ -73,7 +73,10 @@ def _ts_sedes() -> Path:
     cuerpo = (
         CABECERA.format(
             fecha=dt.date.today().isoformat(),
-            fuente="osb_ofertasrv-ips-urgencias.csv + ins.geojson + osb_ocupacion-urgencias.csv",
+            fuente=(
+                "osb_ofertasrv-ips-urgencias.csv + reps_bogota/{sedes,capacidad,"
+                "ocupacion}.json + osb_ocupacion-urgencias.csv"
+            ),
         )
         + "\nimport type { Sede } from '../contracts/types';\n\n"
         + "/** 84 sedes de urgencias de Bogota. Ver data/CATALOGO.md. */\n"
@@ -147,8 +150,32 @@ export const DEMANDA_META = {{
 # ── Orquestacion ──────────────────────────────────────────────────
 
 
+def _faltan_descargas() -> list[str]:
+    """
+    Las fuentes REPS no van al repo: 17 MB reproducibles con un comando.
+
+    Se comprueba ANTES de empezar. Sin esto el pipeline corre cinco pasos, dos
+    minutos, y falla al final con un FileNotFoundError que no le dice a nadie
+    que lo que hay que hacer es descargar.
+    """
+    return [
+        n
+        for n in ("sedes.json", "capacidad.json", "ocupacion.json")
+        if not (DATOS / "reps_bogota" / n).exists()
+    ]
+
+
 def main() -> int:
     print("\nPULSO · pipeline de datos\n")
+
+    faltan = _faltan_descargas()
+    if faltan:
+        print(f"  Faltan las fuentes REPS de Bogota: {', '.join(faltan)}")
+        print("  No estan en el repo a proposito: son 17 MB reproducibles.\n")
+        print("      task datos:descargar")
+        print("      (o: python scripts/datos/descargar.py)\n")
+        return 1
+
     reporte, fallidos = {}, []
 
     for clave, titulo, fn in PASOS:

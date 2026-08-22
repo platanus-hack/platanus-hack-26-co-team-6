@@ -252,6 +252,17 @@ function checkData() {
     }
   }
 
+  // Las fuentes REPS son 17 MB y no se commitean. Sin ellas el pipeline no
+  // corre, pero el demo SI: lo generado esta en el repo.
+  const descargas = ["sedes.json", "capacidad.json", "ocupacion.json"].filter(
+    (n) => !existsSync(join(ROOT, "data", "reps_bogota", n)),
+  );
+  if (descargas.length) {
+    warn("data: fuentes REPS", "sin descargar — 'task datos:descargar' (solo hace falta para re-generar)");
+  } else {
+    pass("data: fuentes REPS", "descargadas");
+  }
+
   const reporte = join(ROOT, "data", "procesado", "reporte.json");
   if (!existsSync(reporte)) {
     warn("data: pipeline", "sin correr todavia — 'task datos'");

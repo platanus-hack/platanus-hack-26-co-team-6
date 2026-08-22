@@ -1,8 +1,13 @@
 # Pipeline de datos
 
 ```bash
-task datos          # o: python scripts/datos/construir.py
+task datos:descargar   # una vez: baja 17 MB del REPS (no van al repo)
+task datos             # regenera todo
 ```
+
+> **Para correr el demo no hace falta nada de esto.** `data/procesado/` y los
+> dos `.generado.ts` sí están commiteados: quien clona compila y corre sin
+> tocar Python. Esto solo hace falta para volver a generar.
 
 Lee `data/` (crudo, **nunca lo modifica**) y escribe artefactos tipados que la
 app consume. Es idempotente y solo usa la librería estándar de Python: sin
@@ -15,7 +20,7 @@ app consume. Es idempotente y solo usa la librería estándar de Python: sin
 | Salida | Qué es |
 |---|---|
 | `data/CATALOGO.md` | Qué hay en `data/`, qué cubre y quién lo usa. **Generado — no editar.** |
-| `data/procesado/sedes.json` | 84 IPS de urgencias de Bogotá, reales |
+| `data/procesado/sedes.json` | 84 IPS de urgencias de Bogotá, con código REPS único y camas reales |
 | `data/procesado/demanda.json` | Curva de demanda medida sobre 9206 incidentes del 123 |
 | `data/procesado/ocupacion.json` | Ocupación de urgencias por subred, 2021-2025 |
 | `data/procesado/casos-demo.json` | 400 casos de demo sacados de incidentes reales |
@@ -68,8 +73,17 @@ Sin eso, 7 de las 19 localidades no cruzaban y sus casos salían sin origen.
 Bonito. Sin corregir caen fuera de Bogotá, el filtro por radio nunca las
 alcanza, y desaparecen del ranking sin un solo error en los logs.
 
-**El CSV de urgencias no trae código REPS.** Se cruza con `ins.geojson` por
-nombre normalizado y, si falla, por cercanía física. Cruzan 81 de 84.
+**El CSV de urgencias no trae código REPS.** Se cruza por nombre contra el
+directorio REPS de Bogotá: 83 de 84 con match único, 1 desempatado por
+dirección.
+
+**Y el código fácil de agarrar es el equivocado.** El primer intento usó
+`codigo_pre` del geojson, que es el código del **prestador**, no de la sede.
+Una subred entera es *una* ESE con decenas de sedes: nueve sedes distintas
+quedaron con el código `1100130289`, y como `porCodigo()` hace un `find()`,
+despachar a Santa Clara podía resolverse a San Blas. El campo correcto es
+`codigohabilitacionsede`, de 12 dígitos. El transformador ahora **revienta**
+si la PK deja de ser única.
 
 **Coma decimal y porcentajes como texto.** `"132,52%"` → `1.3252`.
 
@@ -86,49 +100,69 @@ modelo** — el conteo crudo queda intacto en `demanda.json`.
 |---|---|
 | Pico de demanda a las 20:00 | Pico a las **09:00**. Las 20:00 están al 65% |
 | Fin de semana +12% de carga | Sábado y domingo son los días **más flojos** (0.92, 0.91). Los picos son lunes y martes |
-| 14 sedes con servicios "ilustrativos" | 84 IPS reales, 81 con código REPS de verdad |
+| 14 sedes con servicios "ilustrativos" | 84 IPS reales, **todas** con código de habilitación de sede único |
+| Camas y ocupación estimadas | **62 sedes con camas medidas** (total y ocupadas) del registro REPS |
 
 ---
 
-## REDESCARGA — las tres fuentes rotas
+## Las tres fuentes rotas: ya reemplazadas
 
-`uwc4-gvg3.json`, `c36g-9fc2.json` y `s2ru-bqt6.json` son 2.4 MB inservibles:
+`uwc4-gvg3.json`, `c36g-9fc2.json` y `s2ru-bqt6.json` eran 2.4 MB inservibles:
 descargas de Socrata **sin `$limit`**, cortadas en las primeras 1000 filas y
-ordenadas alfabéticamente por departamento. Entre las tres suman **2 registros
-de Bogotá**.
+ordenadas alfabéticamente. Entre las tres traían 2 registros de Bogotá.
 
-Para traerlas bien:
+Ya se re-descargaron con el filtro correcto, a `data/reps_bogota/`:
+
+| Archivo | Filas de Bogotá | Qué aportó |
+|---|---|---|
+| `reps_bogota/sedes.json` | 16 181 | El `codigohabilitacionsede`, PK única de sede |
+| `reps_bogota/capacidad.json` | 4 647 | Camas instaladas por sede (respaldo) |
+| `reps_bogota/ocupacion.json` | 548 | **Camas totales y ocupadas por sede** |
+
+Los tres originales siguen en `data/` marcados como reemplazados en
+`fuentes.py`, solo para que nadie los vuelva a usar por error. Se pueden
+borrar.
+
+Los tres archivos de `data/reps_bogota/` **no se commitean**: son 17 MB que
+`task datos:descargar` reconstruye en 15 segundos, y duplicarían el peso del
+repo. [`descargar.py`](descargar.py) verifica el conteo contra la API antes de
+escribir, así que una descarga truncada falla en vez de quedarse con pinta de
+estar bien.
+
+Si prefieres hacerlo a mano:
 
 ```bash
-# Sedes REPS de Bogota (directorio de prestadores)
-curl -o data/reps_sedes_bogota.json \
-  "https://www.datos.gov.co/resource/c36g-9fc2.json?\$limit=50000&\$where=departamentoprestadordesc='Bogotá D.C'"
+BASE=https://www.datos.gov.co/resource
 
-# Capacidad instalada por sede — la que daria CAMAS POR SEDE,
-# que es el hueco mas grande que le queda al modelo hoy
-curl -o data/reps_capacidad_bogota.json \
-  "https://www.datos.gov.co/resource/s2ru-bqt6.json?\$limit=50000&\$where=departamento='Bogotá D.C'"
+curl -o data/reps_bogota/sedes.json "$BASE/c36g-9fc2.json?\$limit=50000&\$where=departamentoprestadordesc='Bogotá D.C'"
 
-# Ocupacion diaria REPS
-curl -o data/reps_ocupacion_bogota.json \
-  "https://www.datos.gov.co/resource/uwc4-gvg3.json?\$limit=50000&\$where=departamento_sede_prestador='Bogotá D.C'"
+curl -o data/reps_bogota/capacidad.json "$BASE/s2ru-bqt6.json?\$limit=50000&\$where=departamento='Bogotá D.C'"
+
+curl -o data/reps_bogota/ocupacion.json "$BASE/uwc4-gvg3.json?\$limit=50000&\$where=departamento_sede_prestador='Bogotá D.C'"
 ```
 
-> El string del departamento va **sin punto final**: `'Bogotá D.C'`. Con
-> `'Bogotá D.C.'` el filtro devuelve cero filas y parece que no hay datos.
-> Es la misma trampa que ya documenta `scripts/etl/extraer_reps.py`.
+> El departamento va **sin punto final**: `'Bogotá D.C'`. Con `'Bogotá D.C.'`
+> el filtro devuelve cero filas y parece que no hay datos.
 
-Después: declararlas en `fuentes.py` y escribir su transformador.
+> Los campos que las fuentes llaman `c_digo_sede` o `codigo_habilitacion_sede`
+> son en realidad el **prestador**, de 10 dígitos. La PK de sede se arma
+> concatenando el número de sede: 10 + 2 = 12. Los nombres de los campos
+> mienten; las longitudes no.
 
 ---
 
-## El hueco que queda
+## Lo que queda pendiente
 
-**No hay camas por sede para Bogotá.** Hoy `sedes.json` reparte la
-distribución real de camas de la ciudad según el nivel de complejidad, y lo
-marca como inferido. La fuente que lo arreglaría es `s2ru-bqt6` bien
-descargada. Es lo de mayor retorno que queda pendiente en datos.
+**La ocupación medida es del 2022-11-30.** Es la única fecha que existe: el
+registro "diario" obligatorio se apagó al terminar el mandato COVID. No es un
+defecto del pipeline — es la tesis de PULSO, y por eso el modelo la trata como
+*prior estructural* y no como el dato de hoy. La señal viva es el rechazo.
 
-**La Candelaria no tiene IPS de urgencias** en el listado de 84, así que sus
-casos salen sin coordenada de origen. Es un hueco de la fuente, no del
-pipeline.
+**21 de 84 sedes no aparecen en ningún registro de capacidad** y caen a un
+prior por complejidad. Salen marcadas con `origenCamas: "prior-complejidad+subred"`.
+
+**Los servicios por sede siguen siendo inferidos.** REPS no los publica
+abiertos. Es el hueco de datos más grande que queda. La ruta sería la consulta
+pública de habilitación (`prestadores.minsalud.gov.co`), o llenar a mano las 25
+sedes de alta complejidad — que es lo que ya recomienda
+`scripts/etl/extraer_reps.py`, y para un demo son 25 filas.
