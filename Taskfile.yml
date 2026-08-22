@@ -168,9 +168,20 @@ tasks:
 
   # --------------------------------------------------------------- misc ---
 
+  verificar:tipos:
+    desc: Check that lib/types.ts still mirrors contracts/types.ts (task 0.7).
+    cmds:
+      # Structural comparison, not textual: both files carry different
+      # comments and quote styles on purpose.
+      - node scripts/verificar-tipos.mts
+
   build:
     desc: Production build for frontend and core.
     cmds:
+      # First: a green build with a diverged mirror is exactly the failure
+      # this check exists to prevent. It compiles on both sides and breaks
+      # at runtime, in front of the audience.
+      - task: verificar:tipos
       - task: build:frontend
       - task: build:core
 
@@ -187,8 +198,17 @@ tasks:
   test:
     desc: Run the test suites that exist today.
     cmds:
+      - task: test:tipos
       - task: test:core
       - task: test:ai-core
+      - task: test:voz
+
+  test:tipos:
+    desc: Tests of the type-mirror verifier itself.
+    cmds:
+      # node --test, no jest/vitest: the repo root has no test runner and
+      # adding one for two files would cost more than the problem.
+      - node --test scripts/verificar-tipos.test.mts
 
   test:core:
     dir: "{{.CORE}}"
@@ -198,6 +218,14 @@ tasks:
   test:ai-core:
     dir: "{{.AI_CORE}}"
     cmds:
+      - uv run pytest
+
+  test:voz:
+    desc: Voz test suite. The Postgres-backed dedup tests skip without a DB.
+    dir: "{{.VOZ}}"
+    cmds:
+      # PULSO_TEST_DATABASE_URL enables tests/test_deduplicacion_postgres.py,
+      # the only place the insert-on-conflict lock is exercised for real.
       - uv run pytest
 
   typecheck:

@@ -29,6 +29,13 @@ Si necesitas un campo nuevo: **agrégalo opcional** (`campo?: tipo`). Así nadie
 Nota: `apps/frontend/lib/types.ts` es un espejo manual de `contracts/types.ts`.
 Un campo nuevo hay que agregarlo en los dos o el runtime miente aunque el build pase.
 
+**Ya no depende de que alguien se acuerde** (tarea 0.7): `node scripts/verificar-tipos.mts`
+compara la ESTRUCTURA de los dos archivos —no el texto, porque los comentarios y las comillas
+difieren a propósito— y falla nombrando el tipo que divergió. Corre en CI, y `task build` lo
+corre antes de construir. Las divergencias que ya existían están declaradas una por una en
+`TOLERADOS` dentro del script, cada una con su razón; `--estricto` las cuenta como error para
+el día en que se quieran saldar.
+
 ---
 
 ## Todas las rutas exigen sesión

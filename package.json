@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "verificar:tipos": "node scripts/verificar-tipos.mts",
+    "test:tipos": "node --test scripts/verificar-tipos.test.mts",
+    "prebuild": "npm run verificar:tipos",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit"
