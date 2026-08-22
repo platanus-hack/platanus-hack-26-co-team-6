@@ -18,6 +18,7 @@
  */
 
 import { useCallback, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import type { Caso, Candidato, Handshake } from "@/lib/types";
 import type { CasoReal } from "@/lib/casos-reales.generado";
 import { CASOS_REALES } from "@/lib/casos-reales.generado";
@@ -27,7 +28,16 @@ import { Cabecera } from "@/components/campo/Cabecera";
 import { PanelDictado } from "@/components/campo/PanelDictado";
 import { TarjetaCaso } from "@/components/campo/TarjetaCaso";
 import { TarjetaCandidato } from "@/components/campo/TarjetaCandidato";
+import { FotoCalle } from "@/components/mapa/FotoCalle";
 import * as api from "@/lib/api";
+
+// mapbox-gl toca window al importarse: solo en el navegador.
+const MapaDespacho = dynamic(() => import("@/components/campo/MapaDespacho"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-72 rounded-[2rem] bg-[color:var(--color-superficie)] border border-[color:var(--color-borde)] latido" />
+  ),
+});
 
 type Fase = "dictado" | "analizando" | "ranking" | "esperando" | "resuelto";
 
@@ -39,6 +49,7 @@ export default function Campo() {
   const [meta, setMeta] = useState({ evaluadas: 0, compatibles: 0 });
   const [handshake, setHandshake] = useState<Handshake | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [ubicacionDemo, setUbicacionDemo] = useState(false);
 
   // ── Dónde está la ambulancia ───────────────────────────────────
   const geo = useGeolocalizacion();
@@ -102,6 +113,7 @@ export default function Campo() {
       // Sin esto todo se rutea desde el mismo punto y el ranking sale igual
       // salgas de donde salgas, que es lo contrario de lo que hace PULSO.
       const origen = casoReal?.origen ?? geo.origen ?? undefined;
+      setUbicacionDemo(!origen);
 
       const { caso: c } = await api.triage({ texto, origen });
       setCaso(c);
@@ -157,14 +169,16 @@ export default function Campo() {
     setCasoReal(null);
     setT0(null);
     setTranscurrido(0);
+    setUbicacionDemo(false);
     setFase("dictado");
   }
 
   // ── Render ─────────────────────────────────────────────────────
 
-  const sedeAceptante = candidatos.find(
+  const sedeAceptada = candidatos.find(
     (c) => c.sede.codigo === handshake?.sedeCodigo,
-  )?.sede.nombre;
+  )?.sede;
+  const sedeAceptante = sedeAceptada?.nombre;
 
   return (
     <main className="min-h-screen max-w-lg mx-auto p-4 pb-24">
@@ -204,6 +218,20 @@ export default function Campo() {
         <TarjetaCaso caso={caso} />
       )}
 
+      {/* ── Mapa de despacho ── */}
+      {caso &&
+        (fase === "ranking" || fase === "esperando" || fase === "resuelto") && (
+          <section className="mb-4">
+            <MapaDespacho
+              origen={caso.origen}
+              candidatos={candidatos}
+              sedeSeleccionada={handshake?.sedeCodigo ?? null}
+              ubicacionDemo={ubicacionDemo}
+            />
+          </section>
+        )}
+
+      {/* ── Ranking ── */}
       {fase === "ranking" && (
         <section>
           <p className="text-xs text-[color:var(--color-texto-tenue)] mb-3">
@@ -247,6 +275,9 @@ export default function Campo() {
           <p className="text-xs text-[color:var(--color-texto-tenue)]">
             del dictado a la cama confirmada
           </p>
+          {sedeAceptada && (
+            <FotoCalle coord={sedeAceptada.coord} titulo={sedeAceptada.nombre} />
+          )}
           <button
             onClick={reiniciar}
             className="mt-6 px-6 min-h-12 rounded-xl border border-[color:var(--color-borde)]"

@@ -14,6 +14,7 @@ import { SedesService } from '../sedes/sedes.service';
 import { MatchService } from '../match/match.service';
 import { DispatchService } from '../dispatch/dispatch.service';
 import { VozClient } from '../voz/voz.client';
+import { EscalamientoService } from '../escalamiento/escalamiento.service';
 import { VigilanteService } from './vigilante.service';
 
 const AHORA = Date.parse('2026-08-22T20:00:00.000Z');
@@ -35,8 +36,12 @@ const CASO: Caso = {
   telefonoReporta: '573001234567',
   origen: { lat: 4.6, lng: -74.08 },
   tipoMovil: 'TAM',
+  unidad: { id: 'AMB-014' },
   creadoEn: new Date(AHORA).toISOString(),
 };
+
+/** El plazo que DispatchService sella al despachar. Ver common/plazos.ts. */
+const ESPERA_S = 45;
 
 function handshake(over: Partial<Handshake> = {}): Handshake {
   return {
@@ -47,6 +52,7 @@ function handshake(over: Partial<Handshake> = {}): Handshake {
     estado: 'enviado',
     motivoRechazo: null,
     enviadoEn: new Date(AHORA).toISOString(),
+    expiraEn: new Date(AHORA + ESPERA_S * 1000).toISOString(),
     respondidoEn: null,
     latenciaS: null,
     ...over,
@@ -64,6 +70,7 @@ describe('VigilanteService', () => {
   const match = { rankear: jest.fn() };
   const dispatch = { despachar: jest.fn().mockResolvedValue({}) };
   const sedes = { porCodigo: jest.fn().mockResolvedValue({ nombre: 'Clínica X' }) };
+  const escalamiento = { escalar: jest.fn().mockReturnValue({ escalamiento: {} }) };
 
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -78,6 +85,7 @@ describe('VigilanteService', () => {
         { provide: MatchService, useValue: match },
         { provide: DispatchService, useValue: dispatch },
         { provide: VozClient, useValue: voz },
+        { provide: EscalamientoService, useValue: escalamiento },
       ],
     }).compile();
 

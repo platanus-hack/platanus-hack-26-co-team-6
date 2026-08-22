@@ -137,10 +137,22 @@ export class TelegramController {
         motivo:
           decision === 'rechazado' ? 'Saturación del servicio' : undefined,
       });
-      texto =
-        decision === 'aceptado'
-          ? `✅ Traslado ACEPTADO · respondido en ${resultado.handshake.latenciaS}s`
-          : `⛔ Rechazado por saturación · PULSO está re-ruteando`;
+
+      if (!resultado.aplicada) {
+        // La respuesta no cambió nada: o el plazo venció y el caso ya siguió
+        // a otra sede, o alguien ya había tocado el botón. Decirlo importa —
+        // si aquí saliera "ACEPTADO", este jefe de urgencias prepararía una
+        // cama para un paciente que va camino a otro hospital.
+        texto =
+          resultado.handshake.estado === 'timeout'
+            ? '⏱ Esta solicitud ya venció · PULSO la envió a otra sede'
+            : `Esta solicitud ya estaba ${resultado.handshake.estado}`;
+      } else {
+        texto =
+          decision === 'aceptado'
+            ? `✅ Traslado ACEPTADO · respondido en ${resultado.handshake.latenciaS}s`
+            : `⛔ Rechazado por saturación · PULSO está re-ruteando`;
+      }
     } catch (e) {
       this.log.warn(`callback sin handshake válido: ${String(e)}`);
       texto = 'No se encontró la solicitud';

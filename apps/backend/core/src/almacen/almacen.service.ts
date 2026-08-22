@@ -14,8 +14,8 @@
  * de colgarse de `globalThis` que exigía el hot-reload de Next.
  */
 
-import { Injectable } from '@nestjs/common';
-import type { Caso, Handshake } from '../contracts/types';
+import { Injectable, Logger } from '@nestjs/common';
+import type { Caso, Escalamiento, Handshake } from '../contracts/types';
 
 interface Historial {
   aceptados: number;
@@ -24,8 +24,11 @@ interface Historial {
 
 @Injectable()
 export class AlmacenService {
+  private readonly log = new Logger(AlmacenService.name);
+
   private readonly casos = new Map<string, Caso>();
   private readonly handshakes = new Map<string, Handshake>();
+  private readonly escalamientos = new Map<string, Escalamiento>();
   /** sedeCodigo → { aceptados, rechazados } — alimenta P(aceptación) */
   private readonly historial = new Map<string, Historial>();
   /** sedeCodigo → timestamps ISO de rechazos, para la ventana de 6h */
@@ -70,6 +73,35 @@ export class AlmacenService {
   /** Handshakes que siguen esperando respuesta. Los pinta la consola del hospital. */
   handshakesPendientes(): Handshake[] {
     return this.listarHandshakes().filter((h) => h.estado === 'enviado');
+  }
+
+  // Aquí vivió un barrido perezoso que vencía solicitudes al leerlas. Lo
+  // reemplaza VigilanteService, que hace lo mismo con un @Interval y además
+  // re-rutea al siguiente candidato. Dos mecanismos venciendo el mismo
+  // handshake es peor que cualquiera de los dos por separado.
+
+  // ── Escalamientos al CRUE ──────────────────────────────────────
+
+  guardarEscalamiento(e: Escalamiento): Escalamiento {
+    this.escalamientos.set(e.id, e);
+    return e;
+  }
+
+  obtenerEscalamiento(id: string): Escalamiento | undefined {
+    return this.escalamientos.get(id);
+  }
+
+  /** Escalamiento abierto de un caso, si lo hay. Evita duplicarlos. */
+  escalamientoAbiertoDe(casoId: string): Escalamiento | undefined {
+    return [...this.escalamientos.values()].find(
+      (e) => e.casoId === casoId && e.atendidoEn === null,
+    );
+  }
+
+  listarEscalamientos(casoId?: string): Escalamiento[] {
+    const todos = [...this.escalamientos.values()];
+    const filtrados = casoId ? todos.filter((e) => e.casoId === casoId) : todos;
+    return filtrados.sort((a, b) => b.creadoEn.localeCompare(a.creadoEn));
   }
 
   // ── Historial de aceptación — el dataset que se auto-etiqueta ───
@@ -124,6 +156,7 @@ export class AlmacenService {
   reiniciarTodo(): void {
     this.casos.clear();
     this.handshakes.clear();
+    this.escalamientos.clear();
     this.historial.clear();
     this.rechazosRecientes.clear();
     this.latenciasRespuesta.clear();

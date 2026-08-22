@@ -34,6 +34,7 @@ const MOTIVOS = [
 export default function Hospital() {
   const [estado, setEstado] = useState<EstadoResponse | null>(null);
   const [mostrandoMotivos, setMostrandoMotivos] = useState<string | null>(null);
+  const [aviso, setAviso] = useState<string | null>(null);
 
   useEffect(() => {
     // El catch mantiene vivo el polling si core parpadea: el siguiente tick
@@ -52,8 +53,21 @@ export default function Hospital() {
     decision: "aceptado" | "rechazado",
     motivo?: string
   ) {
-    await api.responder({ handshakeId, decision, motivo });
+    const r = await api.responder({ handshakeId, decision, motivo });
     setMostrandoMotivos(null);
+
+    // La respuesta pudo no aplicarse: la solicitud vencía a los 45s y el caso
+    // ya siguió a otra sede. Sin este aviso, tocar "Aceptar" no haría nada
+    // visible salvo que la tarjeta se mueva de columna, y quien lo tocó se
+    // quedaría preparando una cama para un paciente que no viene.
+    setAviso(
+      r.aplicada
+        ? null
+        : r.handshake.estado === "timeout"
+          ? "Esta solicitud ya había vencido. PULSO la envió a otra sede."
+          : `Esta solicitud ya estaba ${r.handshake.estado}.`,
+    );
+
     setEstado(await api.estado());
   }
 
@@ -74,6 +88,25 @@ export default function Hospital() {
           ● en vivo
         </span>
       </header>
+
+      {aviso && (
+        <div
+          role="alert"
+          className="mb-4 p-3 rounded-lg flex items-start gap-2 text-sm
+                     bg-[color:var(--color-alerta)]/15
+                     border border-[color:var(--color-alerta)]/40"
+        >
+          <span aria-hidden>⏱</span>
+          <span className="flex-1">{aviso}</span>
+          <button
+            onClick={() => setAviso(null)}
+            aria-label="Cerrar aviso"
+            className="shrink-0 px-2 text-[color:var(--color-texto-tenue)]"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {pendientes.length === 0 && (
         <div className="p-10 text-center text-[color:var(--color-texto-tenue)] rounded-xl border border-dashed border-[color:var(--color-borde)]">

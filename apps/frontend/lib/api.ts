@@ -14,15 +14,20 @@
  */
 
 import type {
+  AtenderEscalamientoResponse,
+  Capacidades,
   CanalHandshake,
   Caso,
   Coordenada,
   DispatchResponse,
+  EscalarResponse,
   EstadoResponse,
   MatchResponse,
+  MotivoEscalamiento,
   RespondResponse,
   TipoMovil,
   TriageResponse,
+  Unidad,
 } from "./types";
 
 const API =
@@ -81,6 +86,7 @@ export function triage(cuerpo: {
   texto: string;
   origen?: Coordenada;
   tipoMovil?: TipoMovil;
+  unidad?: Unidad;
 }): Promise<TriageResponse> {
   return pedir<TriageResponse>("/triage", {
     method: "POST",
@@ -124,6 +130,62 @@ export function responder(cuerpo: {
 export function estado(casoId?: string): Promise<EstadoResponse> {
   const query = casoId ? `?casoId=${encodeURIComponent(casoId)}` : "";
   return pedir<EstadoResponse>(`/estado${query}`, { cache: "no-store" });
+}
+
+// ── Escalamiento al CRUE ─────────────────────────────────────────
+
+/**
+ * Pasa el caso a un regulador humano.
+ *
+ * Se llama cuando el ranking vuelve vacío, cuando se agotan los candidatos, o
+ * cuando la tripulación lo pide. Es idempotente por caso en el servidor: si ya
+ * hay un escalamiento abierto devuelve ese mismo, así que llamarlo dos veces
+ * desde dos caminos distintos no duplica nada en el tablero del CRUE.
+ */
+export function escalar(cuerpo: {
+  casoId: string;
+  motivo: MotivoEscalamiento;
+  detalle?: string;
+}): Promise<EscalarResponse> {
+  return pedir<EscalarResponse>("/escalamiento", {
+    method: "POST",
+    body: JSON.stringify(cuerpo),
+  });
+}
+
+/** Lo llama /crue cuando un regulador toma el caso. */
+export function atenderEscalamiento(cuerpo: {
+  escalamientoId: string;
+  atendidoPor?: string;
+}): Promise<AtenderEscalamientoResponse> {
+  return pedir<AtenderEscalamientoResponse>("/escalamiento/atender", {
+    method: "POST",
+    body: JSON.stringify(cuerpo),
+  });
+}
+
+// ── Capacidades y voz ────────────────────────────────────────────
+
+/** En qué modo corre cada integración. Lo lee la barra persistente. */
+export function capacidades(): Promise<Capacidades> {
+  return pedir<Capacidades>("/capacidades", { cache: "no-store" });
+}
+
+/**
+ * ¿Está core vivo?
+ *
+ * No usa `pedir` a propósito: /health es la única ruta pública, no necesita
+ * cookie, y sobre todo NO debe disparar el callback de sesión expirada — este
+ * ping corre cada pocos segundos en la barra y un 401 aquí mandaría al
+ * paramédico al login en mitad de un caso.
+ */
+export async function vivo(): Promise<boolean> {
+  try {
+    const res = await fetch(`${API}/health`, { cache: "no-store" });
+    return res.ok;
+  } catch {
+    return false;
+  }
 }
 
 // ── Sesión ───────────────────────────────────────────────────────

@@ -174,6 +174,7 @@ export class TriageService {
       // Si el paciente requiere médico a bordo, el móvil tiene que ser TAM.
       tipoMovil:
         cuerpo.tipoMovil ?? (extraccion.requiereMedicoABordo ? 'TAM' : 'TAB'),
+      unidad: cuerpo.unidad ?? null,
       creadoEn: new Date().toISOString(),
     };
 

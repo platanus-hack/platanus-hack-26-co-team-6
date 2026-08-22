@@ -17,6 +17,8 @@ import { DispatchModule } from './dispatch/dispatch.module';
 import { EstadoModule } from './estado/estado.module';
 import { TriageModule } from './triage/triage.module';
 import { TelegramModule } from './telegram/telegram.module';
+import { EscalamientoModule } from './escalamiento/escalamiento.module';
+import { CapacidadesModule } from './capacidades/capacidades.module';
 
 @Module({
   imports: [
@@ -55,6 +57,10 @@ import { TelegramModule } from './telegram/telegram.module';
     EstadoModule,
     TriageModule,
     TelegramModule,
+    // Cuando el ruteo automático no cierra, el caso pasa a un regulador.
+    EscalamientoModule,
+    // En qué modo corre cada integración. Lo lee la barra de /campo.
+    CapacidadesModule,
 
     // El que vigila el reloj: vence handshakes, re-rutea y detecta demoras.
     VigilanteModule,
