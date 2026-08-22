@@ -28,9 +28,15 @@ class Settings(BaseSettings):
     # Claude NO recibe audio: toma texto, imagenes y PDFs. Una nota de voz
     # de WhatsApp necesita este paso antes del triaje.
     #
-    # "auto" = usa el proveedor que tenga credencial (Deepgram primero, que
-    # es el mas rapido). "deepgram" | "elevenlabs" lo fuerzan.
-    stt_proveedor: str = "auto"
+    # ElevenLabs cubre STT y TTS con la MISMA credencial, asi que es el
+    # default: un proveedor, una llave, los dos lados de la voz.
+    #
+    # Deepgram se queda disponible a proposito. No estorba (son ~40 lineas
+    # probadas) y es el plan B de una sola variable si ElevenLabs limita,
+    # se cae, o la llave no llega a tiempo.
+    #
+    # "auto" = el que tenga credencial. "deepgram" | "elevenlabs" lo fuerzan.
+    stt_proveedor: str = "elevenlabs"
 
     deepgram_api_key: str = ""
     elevenlabs_api_key: str = ""
@@ -46,6 +52,19 @@ class Settings(BaseSettings):
     # Un dictado de ambulancia dura segundos. Si la transcripcion no vuelve
     # en 20s, algo esta mal y es mejor fallar rapido que colgar el triaje.
     stt_timeout_s: float = 20.0
+
+    # ── Sintesis de voz (TTS) ────────────────────────────────────
+    # Para la llamada de seguimiento cuando una ambulancia se demora.
+    # Misma llave que STT: ELEVENLABS_API_KEY.
+
+    # eleven_multilingual_v2 habla espanol bien. Es el default del proveedor.
+    tts_modelo: str = "eleven_multilingual_v2"
+    # Voz por defecto de ElevenLabs. Cambiala por uno de tu biblioteca.
+    tts_voz_id: str = "21m00Tcm4TlvDq8ikWAM"
+    # mp3_44100_128 es el default del proveedor. Para telefonia (Twilio)
+    # conviene ulaw_8000, que es lo que espera la red.
+    tts_formato: str = "mp3_44100_128"
+    tts_timeout_s: float = 20.0
 
 
 settings = Settings()

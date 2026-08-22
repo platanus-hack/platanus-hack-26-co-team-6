@@ -1,4 +1,4 @@
-"""POST /v1/transcribir — audio → texto.
+"""Los dos lados de la voz: audio → texto y texto → audio.
 
 Vive aparte del triaje porque son dos preguntas distintas: "¿qué dijo?" y
 "¿qué significa?". Separarlas deja depurar la primera sin pagar la segunda —
@@ -9,9 +9,10 @@ descartar es que el STT haya oído mal.
 import base64
 import binascii
 
-from fastapi import APIRouter, File, HTTPException, UploadFile
+from fastapi import APIRouter, File, HTTPException, Response, UploadFile
 
-from ..schemas import TranscribirRequest, Transcripcion
+from ..schemas import HablarRequest, TranscribirRequest, Transcripcion
+from ..sintesis import FalloSintesis, SinProveedorTTS, hay_tts, sintetizar
 from ..transcripcion import (
     FalloTranscripcion,
     SinProveedorSTT,
@@ -70,8 +71,44 @@ async def transcribir_archivo(archivo: UploadFile = File(...)) -> Transcripcion:
     )
 
 
+@router.post("/hablar")
+async def hablar(cuerpo: HablarRequest) -> Response:
+    """Texto → audio. Para la llamada de seguimiento a una ambulancia demorada.
+
+    Devuelve los BYTES del audio, no JSON: es un archivo, y envolverlo en
+    base64 dentro de un JSON sólo le agrega un 33% de peso a algo que quien
+    llama va a mandar tal cual por la red telefónica.
+    """
+    try:
+        audio = await sintetizar(cuerpo.texto, cuerpo.voz_id)
+    except SinProveedorTTS as e:
+        raise HTTPException(status_code=503, detail=str(e)) from None
+    except FalloSintesis as e:
+        raise HTTPException(status_code=502, detail=str(e)) from None
+
+    return Response(
+        content=audio.contenido,
+        media_type=audio.mime,
+        headers={"X-Proveedor": audio.proveedor, "X-Latencia-Ms": str(audio.latencia_ms)},
+    )
+
+
+@router.get("/voz")
+def estado_voz() -> dict[str, object]:
+    """Qué hay disponible de voz ahora mismo, en los dos sentidos.
+
+    Míralo antes de culpar al parser: si un audio no produjo nada, lo primero
+    es saber si había proveedor.
+    """
+    quien = proveedor_activo()
+    return {
+        "stt": {"disponible": quien is not None, "proveedor": quien},
+        "tts": {"disponible": hay_tts(), "proveedor": "elevenlabs" if hay_tts() else None},
+    }
+
+
 @router.get("/stt")
 def estado_stt() -> dict[str, object]:
-    """Qué proveedor correría ahora mismo. Míralo antes de culpar al parser."""
+    """Alias histórico de la mitad STT de `/v1/voz`."""
     quien = proveedor_activo()
     return {"disponible": quien is not None, "proveedor": quien}

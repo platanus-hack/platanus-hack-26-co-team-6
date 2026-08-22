@@ -18,7 +18,8 @@ uv run pytest                      # 52 tests, sin red
 | `POST /v1/score` | Filtro duro + ranking en minutos. Sin estado. |
 | `POST /v1/transcribir` | Audio → texto. Deepgram o ElevenLabs. |
 | `POST /v1/transcribir/archivo` | Lo mismo, con `curl -F`. Para probar a mano. |
-| `GET /v1/stt` | Qué proveedor de STT correría ahora mismo. |
+| `POST /v1/hablar` | Texto → audio (TTS). Devuelve bytes, no JSON. |
+| `GET /v1/voz` | Qué hay disponible de voz, en los dos sentidos. |
 
 ```bash
 curl -s -X POST localhost:8000/v1/triage -H "Content-Type: application/json" \
@@ -48,21 +49,31 @@ caro del sistema y el más silencioso.
 La API de Claude recibe texto, imágenes y PDFs — **no audio**. Una nota de voz
 de WhatsApp necesita transcripción antes de que el parser vea nada.
 
-Dos proveedores detrás de la misma interfaz; cambiar es una variable de
-entorno, no un refactor:
+**ElevenLabs cubre los dos lados con la misma llave**, y por eso es el default:
 
-| Proveedor | Endpoint | Autenticación |
+| | Endpoint | Autenticación |
 |---|---|---|
-| Deepgram | `POST /v1/listen`, bytes crudos | `Authorization: Token <key>` — **"Token", no "Bearer"** |
-| ElevenLabs | `POST /v1/speech-to-text`, multipart | header `xi-api-key` — **no** Authorization |
+| STT | `POST /v1/speech-to-text` (multipart, `scribe_v2`) | `xi-api-key` |
+| TTS | `POST /v1/text-to-speech/{voice_id}` (JSON, `eleven_multilingual_v2`) | `xi-api-key` |
 
-Esos dos detalles de auth son los errores de integración más comunes con estas
-APIs y están cubiertos por tests.
+**Deepgram sigue disponible** como plan B de una sola variable
+(`STT_PROVEEDOR=deepgram`) si ElevenLabs limita o la llave no llega. Su
+autenticación es distinta y es el error de integración más común:
+`Authorization: **Token** <key>` — no "Bearer". Está cubierto por tests.
 
 ```bash
-curl localhost:8000/v1/stt                       # ¿hay proveedor?
+curl localhost:8000/v1/voz                       # ¿qué hay disponible?
 curl -F archivo=@nota.ogg localhost:8000/v1/transcribir/archivo
+curl -X POST localhost:8000/v1/hablar -H 'Content-Type: application/json' \
+  -d '{"texto":"La ambulancia no ha reportado."}' --output aviso.mp3
 ```
+
+`POST /v1/hablar` devuelve **bytes de audio, no JSON**: es un archivo, y
+envolverlo en base64 le agregaría 33% de peso a algo que quien llama manda tal
+cual por la red telefónica.
+
+⚠️ **ai-core no marca teléfonos.** Devuelve el audio; quien haga la llamada
+(Twilio, Kapso) vive en `core`.
 
 ⚠️ **Aquí no hay heurística a la que caer.** Todo el resto de PULSO degrada con
 gracia cuando falta una credencial; esto no puede — sin proveedor no hay texto,

@@ -119,6 +119,14 @@ class TranscribirRequest(ModeloCable):
     audio_mime: str = "audio/ogg"
 
 
+class HablarRequest(ModeloCable):
+    """Texto → audio, para la llamada de seguimiento."""
+
+    texto: str
+    #: Voz de ElevenLabs. Omitir usa TTS_VOZ_ID del .env.
+    voz_id: str | None = None
+
+
 class TriageRequest(ModeloCable):
     #: El dictado ya transcrito. Si viene vacío y hay audio, se transcribe.
     texto: str = ""

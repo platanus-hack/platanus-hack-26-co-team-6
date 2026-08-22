@@ -144,3 +144,58 @@ def test_audio_que_transcribe_basura_es_400_con_mensaje_de_audio(monkeypatch):
     r = client.post("/v1/triage", json={"audioBase64": AUDIO_B64})
     assert r.status_code == 400
     assert "audio" in r.json()["detail"].lower()
+
+
+# ── POST /v1/hablar y GET /v1/voz ────────────────────────────────
+
+
+def con_tts(monkeypatch, contenido=b"ID3\x04audio", status=200):
+    monkeypatch.setattr(settings, "elevenlabs_api_key", "el")
+    transporte = httpx.MockTransport(
+        lambda req: httpx.Response(status, content=contenido)
+    )
+
+    class ClienteFalso(_ASYNC_CLIENT_REAL):
+        def __init__(self, *a, **kw):
+            kw["transport"] = transporte
+            super().__init__(*a, **kw)
+
+    monkeypatch.setattr(httpx, "AsyncClient", ClienteFalso)
+
+
+def test_voz_reporta_los_dos_lados():
+    r = client.get("/v1/voz").json()
+    assert r == {
+        "stt": {"disponible": False, "proveedor": None},
+        "tts": {"disponible": False, "proveedor": None},
+    }
+
+
+def test_una_sola_llave_habilita_los_dos_lados(monkeypatch):
+    monkeypatch.setattr(settings, "elevenlabs_api_key", "el")
+    monkeypatch.setattr(settings, "stt_proveedor", "elevenlabs")
+    r = client.get("/v1/voz").json()
+    assert r["stt"]["disponible"] is True
+    assert r["tts"]["disponible"] is True
+
+
+def test_hablar_devuelve_bytes_no_json(monkeypatch):
+    # Es un archivo. Envolverlo en base64 dentro de un JSON le agrega 33% de
+    # peso a algo que quien llama manda tal cual por la red telefónica.
+    con_tts(monkeypatch)
+    r = client.post("/v1/hablar", json={"texto": "La ambulancia no ha reportado."})
+    assert r.status_code == 200
+    assert r.headers["content-type"].startswith("audio/")
+    assert r.headers["x-proveedor"] == "elevenlabs"
+    assert r.content.startswith(b"ID3")
+
+
+def test_hablar_sin_credencial_es_503():
+    r = client.post("/v1/hablar", json={"texto": "hola"})
+    assert r.status_code == 503
+    assert "ELEVENLABS_API_KEY" in r.json()["detail"]
+
+
+def test_hablar_con_fallo_del_proveedor_es_502(monkeypatch):
+    con_tts(monkeypatch, status=500)
+    assert client.post("/v1/hablar", json={"texto": "hola"}).status_code == 502
