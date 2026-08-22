@@ -90,6 +90,60 @@ export default function PanelCaso({
   const [verDictado, setVerDictado] = useState(false);
   const [porQue, setPorQue] = useState<string | null>(null);
 
+  // ── Acciones del regulador (F2) ────────────────────────────────
+  const [bitacora, setBitacora] = useState<EventoBitacora[]>([]);
+  useEffect(() => setBitacora(listarEventos(caso.id)), [caso.id]);
+
+  const [forzarAbierto, setForzarAbierto] = useState(false);
+  const [perimetroAbierto, setPerimetroAbierto] = useState(false);
+  const [cargandoAccion, setCargandoAccion] = useState(false);
+  const [mensaje, setMensaje] = useState<string | null>(null);
+  useEffect(() => {
+    if (!mensaje) return;
+    const id = setTimeout(() => setMensaje(null), 6000);
+    return () => clearTimeout(id);
+  }, [mensaje]);
+
+  const yaSolicitadas = useMemo(
+    () => new Set(handshakes.map((h) => h.sedeCodigo)),
+    [handshakes],
+  );
+  const siguienteCandidato =
+    candidatos?.find(
+      (c) => c.motivoDescarte === null && !yaSolicitadas.has(c.sede.codigo),
+    ) ?? null;
+
+  async function despachar(opciones: {
+    sedeCodigo: string;
+    sedeNombre: string;
+    tipo: EventoBitacora["tipo"];
+    detalle: string;
+  }) {
+    setCargandoAccion(true);
+    try {
+      await api.dispatch({
+        casoId: caso.id,
+        sedeCodigo: opciones.sedeCodigo,
+        canal: "consola",
+      });
+      registrarEvento({
+        casoId: caso.id,
+        tipo: opciones.tipo,
+        regulador: regulador || "(sin nombre)",
+        texto: opciones.detalle,
+      });
+      setBitacora(listarEventos(caso.id));
+      setMensaje(`Solicitud enviada a ${opciones.sedeNombre}`);
+      setForzarAbierto(false);
+    } catch (e) {
+      setMensaje(
+        `No se pudo despachar: ${e instanceof Error ? e.message : "error"}`,
+      );
+    } finally {
+      setCargandoAccion(false);
+    }
+  }
+
   const nombreSede = (codigo: string) =>
     nombresSedes.get(codigo) ??
     candidatos?.find((c) => c.sede.codigo === codigo)?.sede.nombre ??
@@ -117,6 +171,13 @@ export default function PanelCaso({
         });
       }
     }
+    for (const e of bitacora) {
+      linea.push({
+        en: e.ts,
+        texto: `${e.texto} — ${e.regulador} (registro local)`,
+        critico: e.tipo === "override",
+      });
+    }
     if (motivoEscalamiento) {
       linea.push({
         en: new Date(ahoraMs).toISOString(),
@@ -126,7 +187,7 @@ export default function PanelCaso({
     }
     return linea.sort((a, b) => a.en.localeCompare(b.en));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handshakes, caso.creadoEn, motivoEscalamiento, candidatos]);
+  }, [handshakes, caso.creadoEn, motivoEscalamiento, candidatos, bitacora]);
 
   const restanteVivo = vivo
     ? Math.max(0, TIMEOUT_HANDSHAKE_S - (ahoraMs - Date.parse(vivo.enviadoEn)) / 1000)
@@ -179,6 +240,59 @@ export default function PanelCaso({
           </p>
         )}
       </header>
+
+      {/* ── Acciones de regulación (solo casos sin destino aceptado) ── */}
+      {estado !== "aceptado" && (
+        <section className="space-y-2">
+          {mensaje && (
+            <p className="text-xs px-3 py-2 rounded-full bg-neutral-900/70 border border-[color:var(--color-borde)]">
+              {mensaje}
+            </p>
+          )}
+          <div className="grid grid-cols-1 gap-2">
+            <button
+              onClick={() =>
+                siguienteCandidato &&
+                despachar({
+                  sedeCodigo: siguienteCandidato.sede.codigo,
+                  sedeNombre: siguienteCandidato.sede.nombre,
+                  tipo: "siguiente",
+                  detalle: `Reenvió al siguiente candidato: ${siguienteCandidato.sede.nombre} (#${siguienteCandidato.rank}, ${Math.round(siguienteCandidato.etaMin)}′)`,
+                })
+              }
+              disabled={!siguienteCandidato || cargandoAccion}
+              className="rounded-full font-semibold bg-[color:var(--color-info)] text-[#04121f] disabled:opacity-40"
+            >
+              {cargandoAccion
+                ? "Enviando…"
+                : siguienteCandidato
+                  ? `Enviar al siguiente: ${siguienteCandidato.sede.nombre}`
+                  : "Sin siguiente candidato viable"}
+            </button>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => setPerimetroAbierto(true)}
+                className="rounded-full font-medium border border-[color:var(--color-borde)] text-sm"
+              >
+                Ampliar perímetro…
+              </button>
+              <button
+                onClick={() => setForzarAbierto(true)}
+                className="rounded-full font-medium border border-[color:var(--color-critico)]/60 text-[color:var(--color-critico)] text-sm"
+              >
+                Forzar asignación…
+              </button>
+            </div>
+          </div>
+          {vivo && (
+            <p className="text-[11px] text-[color:var(--color-alerta)]">
+              Hay una solicitud en curso a {nombreSede(vivo.sedeCodigo)}:
+              despachar de nuevo crea una segunda en paralelo (riesgo de doble
+              reserva).
+            </p>
+          )}
+        </section>
+      )}
 
       {/* ── Extracción clínica + anti-alucinación ── */}
       <section className="p-4 rounded-2xl bg-[color:var(--color-superficie-alta)] border border-[color:var(--color-borde)] space-y-2">
