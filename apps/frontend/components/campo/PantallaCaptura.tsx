@@ -36,6 +36,7 @@ export function PantallaCaptura({
   vozSoportada,
   falloDictado,
   parcial,
+  transcribiendo,
   medidorRef,
   onAnalizar,
   analizando,
@@ -52,19 +53,21 @@ export function PantallaCaptura({
   vozSoportada: boolean;
   falloDictado: FalloDictado | null;
   parcial: string;
+  transcribiendo: boolean;
   medidorRef: React.MutableRefObject<HTMLElement | null>;
   onAnalizar: () => void;
   analizando: boolean;
   sinSenal: boolean;
   onCancelar: () => void;
 }) {
-  const estadoOrbe: EstadoOrbe = analizando
-    ? "procesando"
-    : sinSenal
-      ? "sin-senal"
-      : escuchando
-        ? "escuchando"
-        : "inactivo";
+  const estadoOrbe: EstadoOrbe =
+    analizando || transcribiendo
+      ? "procesando"
+      : sinSenal
+        ? "sin-senal"
+        : escuchando
+          ? "escuchando"
+          : "inactivo";
 
   const hayTexto = texto.trim().length >= MINIMO_CARACTERES;
 
@@ -78,6 +81,13 @@ export function PantallaCaptura({
         {analizando ? (
           <span className="text-[color:var(--color-alerta)]">
             Analizando el caso…
+          </span>
+        ) : transcribiendo ? (
+          // Solo pasa en el camino de servidor: el proveedor necesita el audio
+          // completo, así que hay unos segundos entre soltar el botón y ver el
+          // texto. Sin decirlo, se leen como que no funcionó.
+          <span className="text-[color:var(--color-alerta)]">
+            Transcribiendo lo dictado…
           </span>
         ) : escuchando ? (
           <span className="text-[color:var(--color-info)]">
@@ -100,7 +110,7 @@ export function PantallaCaptura({
 
       <button
         onClick={onMicrofono}
-        disabled={analizando}
+        disabled={analizando || transcribiendo}
         aria-pressed={escuchando}
         className={`w-full min-h-16 rounded-2xl font-semibold text-lg border transition-colors
                     inline-flex items-center justify-center gap-2.5

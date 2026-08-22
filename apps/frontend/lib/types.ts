@@ -378,6 +378,51 @@ export interface CongestionSede {
   coord?: Coordenada;
 }
 
+/**
+ * POST {API}/voz/transcribir — audio grabado → texto.
+ *
+ * El cuerpo de la petición es el audio BINARIO con su Content-Type real.
+ */
+export interface TranscribirResponse {
+  texto: string;
+  /** Quién transcribió: "deepgram", "elevenlabs"… */
+  proveedor: string;
+  latenciaMs: number;
+}
+
+/** Una maniobra del trayecto, ya en español. */
+export interface PasoNavegacion {
+  /** "Gire a la derecha hacia la Avenida Caracas" */
+  instruccion: string;
+  distanciaM: number;
+  duracionS: number;
+  /** 'turn', 'merge', 'arrive'… La UI elige el icono con esto. */
+  maniobra: string | null;
+  /** 'left', 'right', 'straight'… Complementa a `maniobra`. */
+  direccion: string | null;
+  /** Nombre de la vía, si Mapbox lo conoce. */
+  via: string | null;
+}
+
+/** POST {API}/ruta — cómo llegar a la sede aceptada. */
+export interface RutaResponse {
+  /** GeoJSON LineString para pintar el trazado. */
+  geometria: {
+    type: "LineString";
+    coordinates: [number, number][];
+  };
+  distanciaM: number;
+  duracionS: number;
+  pasos: PasoNavegacion[];
+  destino: {
+    codigo: string;
+    nombre: string;
+    direccion: string;
+    telefono: string | null;
+    coord: Coordenada;
+  };
+}
+
 /** GET {API}/estado */
 export interface EstadoResponse {
   casos: CasoPublico[];

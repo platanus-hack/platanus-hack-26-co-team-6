@@ -42,6 +42,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import * as api from "./api";
 
 // ── Lo mínimo de la Web Speech API que este hook usa ──────────────
 
@@ -95,7 +96,7 @@ export type FalloDictado =
 
 export const MENSAJE_FALLO: Record<FalloDictado, string> = {
   "sin-soporte":
-    "Este navegador no tiene dictado por voz. Escribe el caso: el flujo es idéntico.",
+    "Este navegador no transcribe por su cuenta y el servidor de voz no responde. Escribe el caso: el flujo es idéntico.",
   "sin-permiso":
     "Sin permiso de micrófono. Actívalo en el candado de la barra de direcciones y vuelve a intentar.",
   "sin-microfono": "No se detecta ningún micrófono conectado.",
@@ -139,6 +140,8 @@ export function useDictadoVoz(alTranscribir: (fragmento: string) => void) {
   const [fallo, setFallo] = useState<FalloDictado | null>(null);
   /** Lo que se está oyendo AHORA, todavía sin confirmar. Ver `onresult`. */
   const [parcial, setParcial] = useState("");
+  /** Solo en el camino de servidor: el audio ya se envió y se espera texto. */
+  const [transcribiendo, setTranscribiendo] = useState(false);
 
   const recRef = useRef<Reconocedor | null>(null);
   /** Lo que el USUARIO quiere. Distinto de `escuchando`, que es lo que hay. */
@@ -201,6 +204,79 @@ export function useDictadoVoz(alTranscribir: (fragmento: string) => void) {
     };
     medir();
   }, []);
+
+  // ── Grabación + transcripción en servidor ───────────────────────
+  //
+  // El camino para Firefox y Safari/iOS, que no tienen Web Speech API.
+
+  const grabadoraRef = useRef<MediaRecorder | null>(null);
+
+  /**
+   * Elige un contenedor que este navegador sepa grabar Y que el proveedor de
+   * STT sepa leer. El orden no es casual: webm/opus es lo que graba Chrome y
+   * Firefox; mp4 es lo único que graba Safari.
+   */
+  const tipoGrabacion = useCallback((): string | undefined => {
+    if (typeof MediaRecorder === "undefined") return undefined;
+    const candidatos = [
+      "audio/webm;codecs=opus",
+      "audio/webm",
+      "audio/ogg;codecs=opus",
+      "audio/mp4",
+    ];
+    return candidatos.find((t) => MediaRecorder.isTypeSupported(t));
+  }, []);
+
+  const arrancarGrabacion = useCallback((stream: MediaStream) => {
+    const mime = tipoGrabacion();
+    if (typeof MediaRecorder === "undefined" || !mime) {
+      setSoportado(false);
+      setFallo("sin-soporte");
+      deseadoRef.current = false;
+      pararMedidor();
+      return;
+    }
+
+    const trozos: Blob[] = [];
+    const grabadora = new MediaRecorder(stream, { mimeType: mime });
+
+    grabadora.ondataavailable = (e) => {
+      if (e.data.size > 0) trozos.push(e.data);
+    };
+
+    grabadora.onstop = async () => {
+      pararMedidor();
+      setEscuchando(false);
+      if (trozos.length === 0) return;
+
+      // El texto no aparece hasta que se suelta el botón: el proveedor
+      // necesita el audio completo. Por eso se avisa de que está trabajando —
+      // sin esto son varios segundos de pantalla muda, indistinguibles de que
+      // no hubiera pasado nada.
+      setTranscribiendo(true);
+      try {
+        const { texto } = await api.transcribir(
+          new Blob(trozos, { type: mime }),
+        );
+        if (texto.trim()) alTranscribirRef.current(texto.trim());
+      } catch (e) {
+        // 503 = el servidor de voz no está disponible. No es culpa de quien
+        // dicta, y el textarea sigue ahí.
+        setFallo(
+          (e as { status?: number })?.status === 503
+            ? "sin-soporte"
+            : "desconocido",
+        );
+      } finally {
+        setTranscribiendo(false);
+      }
+    };
+
+    grabadoraRef.current = grabadora;
+    grabadora.start();
+    setEscuchando(true);
+    setFallo(null);
+  }, [pararMedidor, tipoGrabacion]);
 
   // ── Reconocedor ─────────────────────────────────────────────────
 
@@ -290,7 +366,19 @@ export function useDictadoVoz(alTranscribir: (fragmento: string) => void) {
 
   const detener = useCallback(() => {
     deseadoRef.current = false;
-    // `stop()` procesa lo que quedaba en el buffer; `abort()` lo tiraría.
+
+    // Camino de servidor: `stop()` dispara `onstop`, que es quien envía el
+    // audio. Ahí se apaga el medidor y el estado — aquí no, o se cortaría el
+    // envío antes de empezar.
+    if (grabadoraRef.current?.state === "recording") {
+      grabadoraRef.current.stop();
+      grabadoraRef.current = null;
+      return;
+    }
+    grabadoraRef.current = null;
+
+    // Camino del navegador: `stop()` procesa lo que quedaba en el buffer;
+    // `abort()` lo tiraría.
     recRef.current?.stop();
     recRef.current = null;
     setEscuchando(false);
@@ -302,13 +390,6 @@ export function useDictadoVoz(alTranscribir: (fragmento: string) => void) {
     if (deseadoRef.current) return;
     deseadoRef.current = true;
     setFallo(null);
-
-    if (!constructorDisponible()) {
-      setSoportado(false);
-      setFallo("sin-soporte");
-      deseadoRef.current = false;
-      return;
-    }
 
     // Bug #4: el permiso se pide UNA vez y antes que nada. Dos peticiones
     // simultáneas —una del reconocedor, otra del medidor— abren dos diálogos
@@ -352,8 +433,31 @@ export function useDictadoVoz(alTranscribir: (fragmento: string) => void) {
       }
     }
 
-    crearYArrancar();
-  }, [arrancarMedidor, crearYArrancar]);
+    // ── Qué motor transcribe ────────────────────────────────────
+    //
+    // Se prefiere el del navegador cuando existe: es instantáneo, gratis y
+    // muestra el texto mientras se habla. Pero NO existe en Firefox ni en
+    // Safari/iOS, que juntos son buena parte de los teléfonos reales — y ahí
+    // el botón de dictar no hacía nada útil.
+    //
+    // Cuando falta, se graba y se manda a transcribir al servidor. Se pierde
+    // el texto en vivo, pero se gana algo que el motor local no da: el audio
+    // queda en un Blob, así que una zona muerta ya no se lleva lo dicho.
+    if (constructorDisponible()) {
+      crearYArrancar();
+      return;
+    }
+
+    if (streamRef.current) {
+      arrancarGrabacion(streamRef.current);
+      return;
+    }
+
+    // Sin Web Speech y sin micrófono no queda nada que intentar.
+    setSoportado(false);
+    setFallo("sin-soporte");
+    deseadoRef.current = false;
+  }, [arrancarMedidor, arrancarGrabacion, crearYArrancar]);
 
   const alternar = useCallback(() => {
     if (deseadoRef.current) detener();
@@ -365,6 +469,13 @@ export function useDictadoVoz(alTranscribir: (fragmento: string) => void) {
     return () => {
       deseadoRef.current = false;
       recRef.current?.abort();
+      // La grabación se descarta sin enviar: si el usuario salió de la
+      // pantalla, ya no hay dónde poner ese texto.
+      if (grabadoraRef.current?.state === "recording") {
+        grabadoraRef.current.ondataavailable = null;
+        grabadoraRef.current.onstop = null;
+        grabadoraRef.current.stop();
+      }
       cancelAnimationFrame(rafRef.current);
       streamRef.current?.getTracks().forEach((t) => t.stop());
       void ctxRef.current?.close();
@@ -378,6 +489,8 @@ export function useDictadoVoz(alTranscribir: (fragmento: string) => void) {
     fallo,
     /** Lo que se oye ahora mismo, sin confirmar. Se pinta en gris. */
     parcial,
+    /** true mientras el servidor transcribe el audio ya grabado. */
+    transcribiendo,
     alternar,
     detener,
     /** El componente del orbe registra aquí su nodo para recibir --nivel-voz. */

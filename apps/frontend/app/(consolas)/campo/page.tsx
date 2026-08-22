@@ -372,6 +372,7 @@ export default function Campo() {
             vozSoportada={voz.soportado}
             falloDictado={voz.fallo}
             parcial={voz.parcial}
+            transcribiendo={voz.transcribiendo}
             medidorRef={voz.medidorRef}
             onAnalizar={analizar}
             analizando={fase === "analizando"}

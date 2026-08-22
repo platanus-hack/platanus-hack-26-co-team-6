@@ -53,6 +53,39 @@ export class AiCoreClient {
     return this.pedir('/v1/triage', cuerpo, this.timeoutInferencia());
   }
 
+  /**
+   * Audio grabado → texto.
+   *
+   * Es el camino del dictado para los navegadores SIN Web Speech API, que no
+   * son un caso raro: Firefox no la trae y Safari/iOS tampoco. Ahí el
+   * paramédico se quedaba sin dictado y tenía que teclear con el paciente
+   * delante.
+   *
+   * Va en base64 porque es lo que expone `/v1/transcribir` de ai-core. Cuesta
+   * un 33% de tamaño sobre el binario; para un dictado de segundos es un
+   * peaje aceptable a cambio de no montar multipart entre dos servicios.
+   */
+  async transcribir(
+    audio: Buffer,
+    mime: string,
+  ): Promise<{ texto: string; proveedor: string; latenciaMs: number }> {
+    const r = await this.pedir<{
+      texto: string;
+      proveedor: string;
+      latenciaMs?: number;
+      latencia_ms?: number;
+    }>(
+      '/v1/transcribir',
+      { audioBase64: audio.toString('base64'), audioMime: mime },
+      this.timeoutInferencia(),
+    );
+    return {
+      texto: r.texto ?? '',
+      proveedor: r.proveedor,
+      latenciaMs: r.latenciaMs ?? r.latencia_ms ?? 0,
+    };
+  }
+
   // ── Transporte ─────────────────────────────────────────────────
 
   private async pedir<T>(
