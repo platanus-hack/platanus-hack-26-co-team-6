@@ -1,0 +1,57 @@
+schema: spec-driven
+
+context: |
+  Tech stack: Next.js 16.3.1 (App Router), React 19.2.8, TypeScript 5, Tailwind CSS 4
+  Package manager: pnpm@11.18.0, single app (no root pnpm workspace)
+  Architecture: apps/frontend (Next.js scaffold, default pages only), apps/Backend (empty)
+  Testing: no test runner installed (see testing: block below)
+  Style: ESLint 9 flat config (eslint-config-next), no Prettier config found
+
+testing:
+  strict_tdd: true # per user global configuration; not yet enforceable, see notes
+  test_runner: none detected
+  test_command: ""
+  coverage_command: ""
+  layers:
+    unit: false
+    integration: false
+    e2e: false
+  quality:
+    linter: "pnpm --dir apps/frontend lint"
+    type_checker: "pnpm --dir apps/frontend exec tsc --noEmit" # no dedicated script yet
+    formatter: none detected
+  notes: |
+    apps/frontend has no test framework dependency and no "test" script.
+    apps/Backend has no files at all (no stack chosen yet).
+    Strict TDD Mode is enabled globally by the user's configuration but cannot
+    be enforced in practice until a test runner is added. Treat adding a test
+    runner (e.g. Vitest + React Testing Library) as a prerequisite task before
+    any TDD-gated sdd-apply work in apps/frontend.
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+    - Flag when a change requires choosing/adding a backend stack (apps/Backend is currently empty)
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Include sequence diagrams for complex flows
+    - Document architecture decisions with rationale
+    - Document how frontend/backend will integrate once apps/Backend is implemented
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+    - Include "add a test runner" as an explicit prerequisite task before TDD-gated work
+  apply:
+    guidelines:
+      - Follow existing Next.js App Router conventions (apps/frontend/app/)
+      - Follow existing code patterns
+    tdd: true # Strict TDD Mode enabled; no runner installed yet, see testing: block
+    test_command: ""
+  verify:
+    test_command: ""
+    build_command: "pnpm --dir apps/frontend build"
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas
