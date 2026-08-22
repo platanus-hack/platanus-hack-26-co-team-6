@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="halo" cx="0.58" cy="0.44" r="0.62">
+      <stop offset="0" stop-color="#ff3b47" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#ff3b47" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="115" fill="#0a0e14"/>
+  <rect width="512" height="512" rx="115" fill="url(#halo)"/>
+  <g transform="translate(30,-16)" fill="none" stroke="#ff3b47" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 288H84L108 180L132 340L152 250L166 288H300A48 48 0 1 0 258.4 216"/>
+    <path d="M214.5 309.2A110 110 0 1 1 385.5 309.2L300 415Z"/>
+  </g>
+</svg>
