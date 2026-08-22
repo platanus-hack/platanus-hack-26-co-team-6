@@ -15,34 +15,23 @@
  */
 
 import { useEffect, useState } from "react";
-import type { Caso, Handshake } from "@/lib/types";
-import { ETIQUETA_TRIAGE } from "@/lib/servicios-reps";
-
-interface FilaCongestion {
-  codigo: string;
-  nombre: string;
-  indice: number;
-  etiqueta: string;
-  aceptados: number;
-  rechazados: number;
-}
+import type { Caso, CongestionSede, Handshake } from "@/lib/types";
+import { ETIQUETA_TRIAGE } from "@/lib/presentacion";
+import * as api from "@/lib/api";
 
 export default function Crue() {
   const [casos, setCasos] = useState<Caso[]>([]);
   const [handshakes, setHandshakes] = useState<Handshake[]>([]);
-  const [congestion, setCongestion] = useState<FilaCongestion[]>([]);
+  const [congestion, setCongestion] = useState<CongestionSede[]>([]);
 
   useEffect(() => {
+    // Tablero de sala: si core parpadea, el siguiente tick lo recupera solo.
     const cargar = async () => {
-      const r = await fetch("/api/estado");
-      const d = await r.json();
+      const d = await api.estado().catch(() => null);
+      if (!d) return;
       setCasos(d.casos);
       setHandshakes(d.handshakes);
-      setCongestion(
-        [...d.congestion].sort(
-          (a: FilaCongestion, b: FilaCongestion) => b.indice - a.indice
-        )
-      );
+      setCongestion([...d.congestion].sort((a, b) => b.indice - a.indice));
     };
     cargar();
     const id = setInterval(cargar, 2500);

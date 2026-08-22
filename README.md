@@ -11,12 +11,33 @@
 
 ## Arranque rápido (5 minutos)
 
+Con [Task](https://taskfile.dev) instalado, desde la raíz:
+
+```bash
+task setup     # instala las 3 apps y crea los .env locales
+task doctor    # verifica venv, dependencias, env y puertos libres
+task dev       # levanta frontend + core + ai-core a la vez
+```
+
+| App | Stack | Puerto | Gestor |
+|---|---|---|---|
+| `apps/frontend` | Next.js | 3000 | pnpm |
+| `apps/backend/core` | NestJS | 3001 | pnpm |
+| `apps/backend/ai-core` | FastAPI | 8000 | uv |
+
+Para cambiar puertos en una corrida: `task dev PORT_CORE=3005`.
+
+<details>
+<summary><b>Sin Task (solo el frontend)</b></summary>
+
 ```bash
 cd apps/frontend
 pnpm install
-cp ../../.env.example .env.local     # PowerShell: copy ..\..\.env.example .env.local
+cp env.example .env.local           # PowerShell: copy env.example .env.local
 pnpm dev
 ```
+
+</details>
 
 Abre <http://localhost:3000>. **Funciona sin ninguna credencial**: sin Supabase usa 14 sedes semilla, sin Mapbox estima el ETA por distancia, sin API key de Claude usa un extractor por palabras clave. Cada credencial que agregues mejora una pieza sin romper nada.
 
@@ -25,7 +46,7 @@ Para el demo se abren **dos pantallas a la vez**: `/campo` en el celular y `/hos
 <details>
 <summary><b>Trabajando con Live Share</b></summary>
 
-- **Solo el host corre `pnpm dev`.** Live Share reenvía el puerto 3000 a todos.
+- **Solo el host corre `task dev`.** Live Share reenvía el puerto 3000 a todos.
 - El `.env.local` vive **solo en la máquina del host**. Los demás no lo necesitan.
 - Si a alguien no le carga `localhost:3000`, que revise el panel de Live Share → *Shared Servers*.
 - ⚠️ **`node_modules` dentro de OneDrive es un problema conocido**: OneDrive intenta sincronizar 60.000 archivos y bloquea el build. Si ves errores raros de `EPERM` o el build se cuelga, click derecho en la carpeta `hackaton` → *Liberar espacio* / excluir de la sincronización.
@@ -83,28 +104,30 @@ PULSO es un orquestador inteligente que conecta al personal de campo (paramédic
 4. **📲 One-Tap Handshake (`/api/dispatch` + `/api/handshake/respond`).** Alerta instantánea vía Telegram / WhatsApp interactivo al jefe de urgencias con dos botones: `[Aceptar]` / `[Rechazar]`. La respuesta actualiza `P(aceptación)` y la congestión de la sede, y re-rutea al siguiente.
 
 ```
+   apps/frontend :3000          apps/backend/core :3001
+   ─────────────────────        ───────────────────────
         🎙 dictado de voz
               │
-              ▼
+              ▼  fetch
     ┌─────────────────────┐
-    │   /api/triage       │  Claude → entidades clínicas estructuradas
+    │   POST /triage      │  Claude → entidades clínicas estructuradas
     │   (Neid)            │  CIE-10 · triage 1-5 · códigos REPS
     └──────────┬──────────┘
                ▼
     ┌─────────────────────┐
-    │   /api/match        │  1. PostGIS: sedes en el radio
+    │   POST /match       │  1. PostGIS: sedes en el radio
     │   (Zaid + Neid)     │  2. Mapbox Matrix: ETA con tráfico real
     │                     │  3. filtro duro + score en MINUTOS
     └──────────┬──────────┘
                ▼
     ┌─────────────────────┐
-    │   /api/dispatch     │  Telegram / WhatsApp → 2 botones
+    │   POST /dispatch    │  Telegram / WhatsApp → 2 botones
     │   (Sebas)           │
     └──────────┬──────────┘
                ▼
     ┌─────────────────────┐
-    │ /api/handshake/     │  ⭐ aceptar | rechazar
-    │      respond        │     → actualiza P(aceptación) de la sede
+    │  POST /handshake/   │  ⭐ aceptar | rechazar
+    │        respond      │     → actualiza P(aceptación) de la sede
     │   (Sebas)           │     → mueve el índice de congestión
     └─────────────────────┘     → re-rutea al siguiente
 ```
@@ -126,7 +149,7 @@ sujeto a (filtro DURO, no ponderado):
 
 Una sede sin hemodinamia no es "peor opción": **es no-opción**. Ver una clínica a 10 minutos tachada en gris por no tener el servicio explica el producto entero sin decir una palabra.
 
-`P(aceptación)` es un posterior Beta-Bernoulli por sede que arranca en un prior estructural del REPS y se mueve con cada handshake. La congestión es un índice inferido que sube con cada rechazo y decae en el tiempo. Ver [`apps/frontend/lib/scoring.ts`](apps/frontend/lib/scoring.ts) y [`apps/frontend/lib/congestion.ts`](apps/frontend/lib/congestion.ts).
+`P(aceptación)` es un posterior Beta-Bernoulli por sede que arranca en un prior estructural del REPS y se mueve con cada handshake. La congestión es un índice inferido que sube con cada rechazo y decae en el tiempo. Ver [`apps/backend/core/src/scoring/scoring.service.ts`](apps/backend/core/src/scoring/scoring.service.ts) y [`apps/backend/core/src/scoring/congestion.service.ts`](apps/backend/core/src/scoring/congestion.service.ts).
 
 ### Las pantallas
 
@@ -246,8 +269,8 @@ Cuatro carriles que no se bloquean entre sí. **Cada quien lee su README y arran
 | Persona | Carril | README | Dueño de |
 |---|---|---|---|
 | **Juan Lizcano** · [@lizcanojuan1010](https://github.com/lizcanojuan1010) | Frontend / PWA | [docs/juan-frontend.md](docs/juan-frontend.md) | `/campo`, mapa, componentes, el cronómetro |
-| **Alberth Zaid Pantoja** · [@alberthzaid](https://github.com/alberthzaid) | Backend / Datos | [docs/zaid-backend.md](docs/zaid-backend.md) | ETL REPS, PostGIS, `/api/match`, `/crue` |
-| **Neyl Peñuela Bernate** · [@neylinsomne](https://github.com/neylinsomne) | AI / LLM | [docs/neid-ai.md](docs/neid-ai.md) | `/api/triage`, scoring, congestión |
+| **Alberth Zaid Pantoja** · [@alberthzaid](https://github.com/alberthzaid) | Backend / Datos | [docs/zaid-backend.md](docs/zaid-backend.md) | ETL REPS, PostGIS, `/match`, `/crue` |
+| **Neyl Peñuela Bernate** · [@neylinsomne](https://github.com/neylinsomne) | AI / LLM | [docs/neid-ai.md](docs/neid-ai.md) | `/triage`, scoring, congestión |
 | **Sebastián Acuña** · [@heysebitas](https://github.com/heysebitas) | Producto / Pitch | [docs/sebas-producto.md](docs/sebas-producto.md) | `/hospital`, Telegram/WhatsApp, demo, deck |
 
 📄 **[docs/contrato-api.md](docs/contrato-api.md)** — el contrato entre los cuatro. Léelo antes de tocar nada.
@@ -255,7 +278,7 @@ Cuatro carriles que no se bloquean entre sí. **Cada quien lee su README y arran
 
 ### La regla que hace que esto funcione
 
-[`apps/frontend/lib/types.ts`](apps/frontend/lib/types.ts) **es ley**. Nadie cambia un tipo de ahí en silencio: se dice en voz alta antes de guardar. Un cambio silencioso rompe el trabajo de los otros tres sin que se enteren.
+[`apps/backend/core/src/contracts/types.ts`](apps/backend/core/src/contracts/types.ts) **es ley**. Nadie cambia un tipo de ahí en silencio: se dice en voz alta antes de guardar. Un cambio silencioso rompe el trabajo de los otros tres sin que se enteren.
 
 ---
 
@@ -286,11 +309,11 @@ Prueba de humo del flujo completo (con el dev server corriendo):
 
 ```bash
 # 1. dictado → caso estructurado
-curl -s -X POST localhost:3000/api/triage -H "Content-Type: application/json" \
+curl -s -X POST localhost:3001/triage -H "Content-Type: application/json" \
   -d '{"texto":"Masculino 54 anos, dolor precordial opresivo, supra ST en DII DIII aVF, inestable."}'
 
 # 2. caso → ranking  (pasar el objeto `caso` completo de la respuesta anterior)
-curl -s -X POST localhost:3000/api/match -H "Content-Type: application/json" \
+curl -s -X POST localhost:3001/match -H "Content-Type: application/json" \
   -d '{"caso": <el caso>, "limite": 5}'
 ```
 
