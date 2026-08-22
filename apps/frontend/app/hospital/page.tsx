@@ -20,21 +20,9 @@
  */
 
 import { useEffect, useState } from "react";
-import type { Caso, Handshake } from "@/lib/types";
-import { nombresServicios, ETIQUETA_TRIAGE, esHoraDorada } from "@/lib/servicios-reps";
-
-interface Estado {
-  casos: Caso[];
-  handshakes: Handshake[];
-  congestion: {
-    codigo: string;
-    nombre: string;
-    indice: number;
-    etiqueta: string;
-    aceptados: number;
-    rechazados: number;
-  }[];
-}
+import type { EstadoResponse } from "@/lib/types";
+import { nombresServicios, ETIQUETA_TRIAGE, esHoraDorada } from "@/lib/presentacion";
+import * as api from "@/lib/api";
 
 const MOTIVOS = [
   "Sin camas UCI disponibles",
@@ -44,13 +32,15 @@ const MOTIVOS = [
 ];
 
 export default function Hospital() {
-  const [estado, setEstado] = useState<Estado | null>(null);
+  const [estado, setEstado] = useState<EstadoResponse | null>(null);
   const [mostrandoMotivos, setMostrandoMotivos] = useState<string | null>(null);
 
   useEffect(() => {
+    // El catch mantiene vivo el polling si core parpadea: el siguiente tick
+    // vuelve a intentar en vez de dejar la consola congelada.
     const cargar = async () => {
-      const r = await fetch("/api/estado");
-      setEstado(await r.json());
+      const d = await api.estado().catch(() => null);
+      if (d) setEstado(d);
     };
     cargar();
     const id = setInterval(cargar, 2000);
@@ -62,14 +52,9 @@ export default function Hospital() {
     decision: "aceptado" | "rechazado",
     motivo?: string
   ) {
-    await fetch("/api/handshake/respond", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ handshakeId, decision, motivo }),
-    });
+    await api.responder({ handshakeId, decision, motivo });
     setMostrandoMotivos(null);
-    const r = await fetch("/api/estado");
-    setEstado(await r.json());
+    setEstado(await api.estado());
   }
 
   const pendientes = estado?.handshakes.filter((h) => h.estado === "enviado") ?? [];

@@ -9,7 +9,7 @@
  * las 3 de la mañana con guantes puestos, y meterle el mapa.
  *
  * Lo que NO debes romper (lo consumen los otros tres):
- *   - los contratos de /api/triage, /api/match, /api/dispatch
+ *   - los contratos de core: POST /triage, /match, /dispatch (ver lib/api.ts)
  *   - el cronómetro: el número que sale en el pitch sale de aquí
  *
  * Ver docs/juan-frontend.md para tu lista de tareas.
@@ -17,8 +17,9 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Caso, Candidato, Handshake } from "@/lib/types";
-import { DICTADOS_DEMO } from "@/lib/mock";
-import { nombresServicios, ETIQUETA_TRIAGE, esHoraDorada } from "@/lib/servicios-reps";
+import { DICTADOS_DEMO } from "@/lib/demo";
+import { nombresServicios, ETIQUETA_TRIAGE, esHoraDorada } from "@/lib/presentacion";
+import * as api from "@/lib/api";
 
 type Fase = "dictado" | "analizando" | "ranking" | "esperando" | "resuelto";
 
@@ -82,27 +83,15 @@ export default function Campo() {
     setFase("analizando");
     setT0(Date.now());
     try {
-      const rt = await fetch("/api/triage", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ texto }),
-      });
-      if (!rt.ok) throw new Error((await rt.json()).error ?? "Error en triage");
-      const { caso: c } = await rt.json();
+      const { caso: c } = await api.triage({ texto });
       setCaso(c);
 
-      const rm = await fetch("/api/match", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ caso: c, limite: 5 }),
-      });
-      if (!rm.ok) throw new Error((await rm.json()).error ?? "Error en match");
-      const m = await rm.json();
+      const m = await api.match({ caso: c, limite: 5 });
       setCandidatos(m.candidatos);
       setMeta({ evaluadas: m.evaluadas, compatibles: m.compatibles });
       setFase("ranking");
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error inesperado");
       setFase("dictado");
     }
   }
@@ -110,13 +99,16 @@ export default function Campo() {
   async function despachar(c: Candidato) {
     if (!caso) return;
     setFase("esperando");
-    const r = await fetch("/api/dispatch", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ casoId: caso.id, sedeCodigo: c.sede.codigo }),
-    });
-    const { handshake: h } = await r.json();
-    setHandshake(h);
+    try {
+      const { handshake: h } = await api.dispatch({
+        casoId: caso.id,
+        sedeCodigo: c.sede.codigo,
+      });
+      setHandshake(h);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No se pudo despachar");
+      setFase("ranking");
+    }
   }
 
   // Polling del estado del handshake. Juan: si sobra tiempo después de H20,
@@ -124,9 +116,10 @@ export default function Campo() {
   useEffect(() => {
     if (fase !== "esperando" || !handshake) return;
     const id = setInterval(async () => {
-      const r = await fetch(`/api/estado?casoId=${handshake.casoId}`);
-      const d = await r.json();
-      const actual = d.handshakes.find((x: Handshake) => x.id === handshake.id);
+      // Un fallo de red aquí no puede matar el polling: el siguiente tick
+      // reintenta. Sin este catch, core reiniciando deja la pantalla colgada.
+      const d = await api.estado(handshake.casoId).catch(() => null);
+      const actual = d?.handshakes.find((x) => x.id === handshake.id);
       if (actual && actual.estado !== "enviado") {
         setHandshake(actual);
         if (actual.estado === "aceptado") setFase("resuelto");

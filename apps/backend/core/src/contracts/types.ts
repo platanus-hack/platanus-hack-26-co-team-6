@@ -1,22 +1,18 @@
 /**
  * ═══════════════════════════════════════════════════════════════════
- *  PULSO — CONTRATO DE CLIENTE
+ *  PULSO — CONTRATO COMPARTIDO
  * ═══════════════════════════════════════════════════════════════════
  *
- *  ESPEJO de apps/backend/core/src/contracts/types.ts.
+ *  Este archivo es LEY. Los cuatro carriles dependen de el.
  *
- *  El dueño del contrato es CORE. Este archivo existe porque el front y el
- *  backend son dos proyectos pnpm separados y no comparten un paquete todavía.
+ *  REGLA: nadie cambia un tipo de aqui en silencio. Si necesitas cambiar
+ *  algo, lo dices en voz alta / en el chat ANTES de guardar. Un cambio
+ *  silencioso aqui rompe el trabajo de los otros tres sin que se enteren.
  *
- *  REGLA: nadie cambia un tipo aquí sin cambiarlo en core, y al revés. Un
- *  cambio en un solo lado no rompe el build — rompe el runtime, que es peor.
- *  Si esto empieza a doler, la salida es un paquete compartido en el
- *  workspace, no seguir copiando a mano.
- *
- *  Dueños:
- *    Caso / ExtraccionClinica  → Neid  (los produce POST /triage)
- *    Sede / Candidato          → Zaid  (los produce POST /match)
- *    Handshake                 → Sebas (los produce POST /dispatch)
+ *  Duenos:
+ *    Caso / ExtraccionClinica  → Neid  (los produce /api/triage)
+ *    Sede / Candidato          → Zaid  (los produce /api/match)
+ *    Handshake                 → Sebas (los produce /api/dispatch)
  *    Todos los consume         → Juan  (los pinta)
  * ═══════════════════════════════════════════════════════════════════
  */
@@ -30,23 +26,23 @@ export interface Coordenada {
   lng: number;
 }
 
-/** Código de servicio del CodeSystem REPS de MinSalud. Ver presentacion.ts */
+/** Codigo de servicio del CodeSystem REPS de MinSalud. Ver servicios-reps.ts */
 export type CodServicio = number;
 
 /** Res. 3100/2019 clasifica por complejidad, no por "nivel I/II/III". */
 export type Complejidad = "baja" | "media" | "alta";
 
 /**
- * Tipo de móvil (Res. 3100/2019).
- *  TAB = Transporte Asistencial Básico (auxiliar / TAPH)
- *  TAM = Transporte Asistencial Medicalizado (médico a bordo)
- * Es un FILTRO DURO: un TAB no traslada un paciente que requiere ventilación.
+ * Tipo de movil (Res. 3100/2019).
+ *  TAB = Transporte Asistencial Basico (auxiliar / TAPH)
+ *  TAM = Transporte Asistencial Medicalizado (medico a bordo)
+ * Es un FILTRO DURO: un TAB no traslada un paciente que requiere ventilacion.
  */
 export type TipoMovil = "TAB" | "TAM";
 
 /**
- * Triage según Res. 5596/2015 (Colombia).
- *  1 → atención inmediata (riesgo vital)
+ * Triage segun Res. 5596/2015 (Colombia).
+ *  1 → atencion inmediata (riesgo vital)
  *  2 → <= 30 min
  *  3 → <= 120 min
  *  4 → <= 240 min
@@ -57,14 +53,14 @@ export type NivelTriage = 1 | 2 | 3 | 4 | 5;
 export type Sexo = "M" | "F" | "desconocido";
 
 // ─────────────────────────────────────────────────────────────────
-// Sede — el universo de destinos posibles
+// Sede — el universo de destinos posibles (Zaid)
 // ─────────────────────────────────────────────────────────────────
 
 export interface CamaSede {
   /** "CAMAS-Adultos", "CAMAS-UCI Adultos", "CAMAS-Pediatrica"... (nombres REPS) */
   tipo: string;
   total: number;
-  /** Ocupación del snapshot REPS 2022. Es un PRIOR, no la ocupación de hoy. */
+  /** Ocupacion del snapshot REPS 2022. Es un PRIOR, no la ocupacion de hoy. */
   ocupadasSnapshot: number;
 }
 
@@ -78,38 +74,43 @@ export interface Sede {
   naturaleza: "Pública" | "Privada" | "Mixta";
   complejidad: Complejidad;
   telefono: string | null;
-  /** Códigos REPS habilitados en esta sede. */
+  /** Codigos REPS habilitados en esta sede. Ver SERVICIOS en servicios-reps.ts */
   servicios: CodServicio[];
   camas: CamaSede[];
 }
 
 // ─────────────────────────────────────────────────────────────────
-// Caso — lo que sale del parser clínico
+// Caso — lo que sale del parser clinico (Neid)
 // ─────────────────────────────────────────────────────────────────
 
+/**
+ * Lo que el LLM extrae del dictado. NO incluye id, origen ni timestamps:
+ * eso lo agrega el servidor. Este es el esquema exacto que Neid le pide
+ * a Claude via structured output.
+ */
 export interface ExtraccionClinica {
-  /** Una línea, como la diría un médico en la radio. */
+  /** Una linea, como la diria un medico en la radio. */
   resumen: string;
   triage: NivelTriage;
   /** CIE-10, ej "I21.1". null si el dictado no alcanza para inferirlo. */
   dxCie10: string | null;
   dxDescripcion: string;
-  /** Códigos REPS que la sede receptora DEBE tener habilitados. */
+  /** Codigos REPS que la sede receptora DEBE tener habilitados. */
   serviciosRequeridos: CodServicio[];
   complejidadRequerida: Complejidad;
   edad: number | null;
   sexo: Sexo;
   /** Hallazgos que justifican el triage. Se muestran en la tarjeta del receptor. */
   signosAlarma: string[];
-  /** true si el paciente requiere médico a bordo → obliga TAM. */
+  /** true si el paciente requiere medico a bordo → obliga TAM. */
   requiereMedicoABordo: boolean;
-  /** 0..1 — qué tan seguro está el parser. Si < 0.5 la UI pide confirmación. */
+  /** 0..1 — que tan seguro esta el parser. Si < 0.5 la UI pide confirmacion. */
   confianza: number;
 }
 
 export interface Caso extends ExtraccionClinica {
   id: string;
-  /** El dictado literal, sin tocar. Se conserva para auditoría. */
+  /** El dictado literal, sin tocar. Se conserva para auditoria. */
   textoCrudo: string;
   origen: Coordenada;
   tipoMovil: TipoMovil;
@@ -117,15 +118,15 @@ export interface Caso extends ExtraccionClinica {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// Candidato — el ranking
+// Candidato — el ranking (Zaid + Neid)
 // ─────────────────────────────────────────────────────────────────
 
 /**
- * Desglose del score. TODO ESTÁ EN MINUTOS — esa es la decisión de diseño que
- * hace que el jurado entienda el ranking sin explicación.
+ * Desglose del score. TODO ESTA EN MINUTOS — esa es la decision de diseno
+ * que hace que el jurado entienda el ranking sin explicacion.
  */
 export interface DesgloseScore {
-  /** ETA real con tráfico (Mapbox driving-traffic). */
+  /** ETA real con trafico (Mapbox driving-traffic). */
   ruta: number;
   /** (1 - pAceptacion) * PENALIZACION_REBOTE */
   riesgoRechazo: number;
@@ -137,33 +138,34 @@ export interface DesgloseScore {
 
 export interface Candidato {
   sede: Sede;
-  /** 1 = mejor opción. 0 = descartada. */
+  /** 1 = mejor opcion. */
   rank: number;
   etaMin: number;
   distKm: number;
-  /** 0..1 — posterior Beta-Bernoulli. */
+  /** 0..1 — posterior Beta-Bernoulli. Ver scoring.ts */
   pAceptacion: number;
-  /** 0..1 — índice de congestión inferido. */
+  /** 0..1 — indice de congestion inferido. Ver congestion.ts */
   congestion: number;
   /** Costo total en minutos. MENOR ES MEJOR. */
   score: number;
   desglose: DesgloseScore;
   /**
    * Servicios exigidos por el caso que esta sede NO tiene.
-   * Vacío = cumple ese criterio. Puede estar vacío y aun así estar descartada
-   * (por complejidad o por tipo de móvil) — mirar motivoDescarte.
+   * Vacio = cumple ese criterio. Puede estar vacio y aun asi estar
+   * descartada (por complejidad o por tipo de movil) — mirar motivoDescarte.
    */
   serviciosFaltantes: CodServicio[];
   /**
    * null = la sede es despachable.
-   * Si trae texto, la UI la pinta en gris con este motivo y el botón de
-   * despachar va deshabilitado.
+   * Si trae texto, la UI la pinta en gris con este motivo y el boton
+   * de despachar va deshabilitado.
+   * Ej: "No tiene Hemodinamia e intervencionismo", "Requiere móvil TAM".
    */
   motivoDescarte: string | null;
 }
 
 // ─────────────────────────────────────────────────────────────────
-// Handshake — el apretón de manos de un toque
+// Handshake — el apreton de manos de un toque (Sebas)
 // ─────────────────────────────────────────────────────────────────
 
 export type CanalHandshake = "telegram" | "whatsapp" | "consola";
@@ -183,51 +185,62 @@ export interface Handshake {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// RESPUESTAS DE CORE
-// Las firmas exactas de apps/backend/core. No improvisar.
+// CONTRATOS DE API
+// Estas son las firmas exactas. No improvisar.
 // ─────────────────────────────────────────────────────────────────
 
-/** POST {API}/triage */
+/** POST /api/triage — Neid */
+export interface TriageRequest {
+  texto: string;
+  origen?: Coordenada;
+  tipoMovil?: TipoMovil;
+}
 export interface TriageResponse {
   caso: Caso;
   latenciaMs: number;
 }
 
-/** POST {API}/match */
+/** POST /api/match — Zaid */
+export interface MatchRequest {
+  caso: Caso;
+  /** Cuantos candidatos devolver. Default 5. */
+  limite?: number;
+  /** Radio de busqueda en km. Default 25. */
+  radioKm?: number;
+}
 export interface MatchResponse {
   candidatos: Candidato[];
-  /** Cuántas sedes se evaluaron antes de filtrar. Se muestra en el demo. */
+  /** Cuantas sedes se evaluaron antes de filtrar. Se muestra en el demo. */
   evaluadas: number;
-  /** Cuántas pasaron el filtro duro de servicios. */
+  /** Cuantas pasaron el filtro duro de servicios. */
   compatibles: number;
   latenciaMs: number;
 }
 
-/** POST {API}/dispatch */
+/** POST /api/dispatch — Sebas */
+export interface DispatchRequest {
+  casoId: string;
+  sedeCodigo: string;
+  canal?: CanalHandshake;
+}
 export interface DispatchResponse {
   handshake: Handshake;
 }
 
-/** POST {API}/handshake/respond */
+/** POST /api/handshake/respond — Sebas (lo llaman la consola Y el webhook) */
+export interface RespondRequest {
+  handshakeId: string;
+  decision: "aceptado" | "rechazado";
+  motivo?: string;
+}
 export interface RespondResponse {
   handshake: Handshake;
-  /** Congestión de la sede DESPUÉS de procesar la respuesta. */
+  /** Congestion de la sede DESPUES de procesar la respuesta. */
   congestionActualizada: number;
 }
 
-export interface CongestionSede {
-  codigo: string;
-  nombre: string;
-  indice: number;
-  etiqueta: "baja" | "media" | "alta" | "crítica";
-  aceptados: number;
-  rechazados: number;
-}
-
-/** GET {API}/estado */
-export interface EstadoResponse {
-  casos: Caso[];
-  handshakes: Handshake[];
-  congestion: CongestionSede[];
-  ts: string;
+/** Forma de error uniforme. Todas las rutas la devuelven igual. */
+export interface ErrorApi {
+  error: string;
+  detalle?: string;
 }

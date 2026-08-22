@@ -8,7 +8,7 @@
 
 ## Tu punto de partida
 
-Ya funciona. `/api/triage` extrae entidades estructuradas con Claude vía structured outputs, y cae a un extractor heurístico si no hay API key. `apps/frontend/lib/scoring.ts` y `apps/frontend/lib/congestion.ts` implementan el modelo completo.
+Ya funciona. `/triage` extrae entidades estructuradas con Claude vía structured outputs, y cae a un extractor heurístico si no hay API key. `apps/backend/core/src/scoring/scoring.service.ts` y `apps/backend/core/src/scoring/congestion.service.ts` implementan el modelo completo.
 
 Tu trabajo no es construirlo: es **hacer que la rama del LLM sea claramente mejor que la heurística**, y que el modelo de congestión se pueda defender ante un médico.
 
@@ -16,10 +16,10 @@ Tu trabajo no es construirlo: es **hacer que la rama del LLM sea claramente mejo
 
 | Archivo | Qué es |
 |---|---|
-| [`apps/frontend/app/api/triage/route.ts`](../apps/frontend/app/api/triage/route.ts) | Parser clínico. Esquema Zod + prompt + fallback heurístico. |
-| [`apps/frontend/lib/scoring.ts`](../apps/frontend/lib/scoring.ts) | Score en minutos, `P(aceptación)` Beta-Bernoulli. |
-| [`apps/frontend/lib/congestion.ts`](../apps/frontend/lib/congestion.ts) | Índice de congestión, 4 señales. |
-| [`apps/frontend/lib/servicios-reps.ts`](../apps/frontend/lib/servicios-reps.ts) | Catálogo FHIR de MinSalud + filtros duros. |
+| [`apps/backend/core/src/triage/triage.service.ts`](../apps/backend/core/src/triage/triage.service.ts) | Parser clínico. Esquema Zod + prompt + fallback heurístico. |
+| [`apps/backend/core/src/scoring/scoring.service.ts`](../apps/backend/core/src/scoring/scoring.service.ts) | Score en minutos, `P(aceptación)` Beta-Bernoulli. |
+| [`apps/backend/core/src/scoring/congestion.service.ts`](../apps/backend/core/src/scoring/congestion.service.ts) | Índice de congestión, 4 señales. |
+| [`apps/backend/core/src/catalogo/servicios-reps.ts`](../apps/backend/core/src/catalogo/servicios-reps.ts) | Catálogo FHIR de MinSalud + filtros duros. |
 
 ---
 
@@ -39,7 +39,7 @@ Tu trabajo no es construirlo: es **hacer que la rama del LLM sea claramente mejo
 ### Bloque 1 · H2–H10 — que el parser sea bueno de verdad
 
 - [ ] **Conseguir la API key** y verificar que la rama de Claude entra (la `confianza` sube de 0.35).
-- [ ] **Montar fixtures.** Los 3 dictados de [`apps/frontend/lib/mock.ts`](../apps/frontend/lib/mock.ts) (`DICTADOS_DEMO`) traen su salida esperada. Escribe un script que corra los 3 y compare. No necesitas un framework de tests — un `.mjs` que imprima ✅/❌ es suficiente y lo vas a correr 40 veces.
+- [ ] **Montar fixtures.** Los 3 dictados de [`apps/backend/core/src/sedes/semillas.ts`](../apps/backend/core/src/sedes/semillas.ts) (`DICTADOS_DEMO`) traen su salida esperada. Escribe un script que corra los 3 y compare. No necesitas un framework de tests — un `.mjs` que imprima ✅/❌ es suficiente y lo vas a correr 40 veces.
 - [ ] **Escribir 8–10 dictados más**, incluyendo los feos: transcripción de voz con errores, jerga (*"paciente con SCACEST"*), dictados truncados, casos ambiguos. Los bonitos ya funcionan; los feos son los que rompen el demo en vivo.
 - [ ] **Calibrar el sobre-pedido de servicios.** El error más caro del parser: pedir UCI cuando no hace falta descarta sedes viables y el ranking sale vacío. Un ranking vacío en el escenario es el peor escenario posible. El prompt ya lo advierte — verifica que obedece.
 - [ ] **Medir la latencia.** Si `effort: "low"` con `claude-opus-5` no baja de ~2s, es el cuello de botella del número del pitch. Mide antes de optimizar.
@@ -77,7 +77,7 @@ Alguien **va a preguntar** de dónde sale la ocupación. Es tu momento, no tu pr
 ## Cómo pruebas lo tuyo
 
 ```bash
-curl -s -X POST localhost:3000/api/triage -H "Content-Type: application/json" \
+curl -s -X POST localhost:3001/triage -H "Content-Type: application/json" \
   -d '{"texto":"Femenina de 68 anos, hemiparesia derecha subita hace 50 minutos, afasia, Glasgow 13, FA conocida."}'
 ```
 
