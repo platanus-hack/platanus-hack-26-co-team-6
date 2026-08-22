@@ -103,7 +103,23 @@ export default function Registro({ derivados, nombresSedes, flotante = false }: 
   });
 
   function exportarCsv() {
-    const esc = (v: string) => `"${v.replaceAll('"', '""')}"`;
+    /**
+     * Escapa una celda para CSV.
+     *
+     * Las comillas es la parte obvia. La comilla simple de delante NO es
+     * decorativa: Excel, LibreOffice y Sheets interpretan como FÓRMULA
+     * cualquier celda que empiece por = + - @ o un tabulador, y aquí el
+     * contenido no es nuestro — `detalle` arrastra el resumen clínico, que
+     * sale de un dictado transcrito. Un texto que empiece por "=" se
+     * ejecutaría al abrir la auditoría en Excel.
+     *
+     * El prefijo `'` es la convención de esas hojas de cálculo para "esto es
+     * texto literal": no se muestra en la celda.
+     */
+    const esc = (v: string) => {
+      const seguro = /^[=+\-@\t\r]/.test(v) ? `'${v}` : v;
+      return `"${seguro.replaceAll('"', '""')}"`;
+    };
     const lineas = [
       "ts,tipo,caso,actor,detalle",
       ...visibles.map((f) =>
