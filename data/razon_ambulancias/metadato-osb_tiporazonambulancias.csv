@@ -1,0 +1,12 @@
+METADATO;DESCRIPCION
+Serie de tiempo desde;2002
+Definición del indicador;Es la relación entre el número de ambulancias disponibles y la población en una determinada área geográfica en un período dado, expresada por 1.000 habitantes.
+Utilidad;Este indicador permite medir las variaciones del número de ambulancias ofertadas a los habitantes de un área geográfica determinada.
+Unidad de medición;Razón por mil habitantes
+Periodicidad;Trimestral
+Fuente de Información ;"Registro Especial de Prestadores de Servicios de Salud - REPS Ministerio de Salud y Protección Social. Fecha de corte: 08/02/2021 Fecha de consulta: 08/02/2021. Proyección poblacional: DANE Proyecciones de población a nivel departamental 2021 con base en CNPV 2018.
+"
+Tipo ambulancia;Característica según equipación del vehículo
+Naturaleza jurídica;Característica que permite determinar el régimen aplicable a un organismo o entidad
+Número ;Cantidad de ambulancias
+Formula de cálculo;Numero ambulancias / Proyección poblacional para el año analizado por 1.000 habitantes.
