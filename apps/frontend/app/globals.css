@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* El orbe de voz de /campo. Vive aparte porque son 250 líneas de animación
+   que no tienen nada que ver con los tokens de diseño de este archivo. */
+@import "./campo-orbe.css";
+
 /*
  * PULSO — tokens de diseño.
  * Dueño: Sebas. Juan los consume, no los redefine.
