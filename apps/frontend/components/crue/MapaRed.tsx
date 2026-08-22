@@ -16,7 +16,7 @@
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import type { CongestionSede, Handshake } from "@/lib/types";
+import type { Coordenada, CongestionSede, Handshake } from "@/lib/types";
 import type { CasoConsola } from "./derivados";
 import {
   colorCongestion,
@@ -30,9 +30,49 @@ interface Props {
   congestion: CongestionSede[];
   casos: CasoConsola[];
   handshakes: Handshake[];
+  /** Click en el pin de una sede (abre su ficha). */
+  onSede?: (codigo: string) => void;
+  /** Click en el pin de un caso (abre su panel). */
+  onCaso?: (casoId: string) => void;
+  /** Centrar el mapa aquí (ej. "Ver en el mapa" de la ficha). */
+  foco?: Coordenada | null;
+  /** Click en un punto vacío del mapa (explorar el sitio a nivel de calle). */
+  onLugar?: (coord: Coordenada) => void;
+  /** Punto en exploración: se marca con un anillo blanco; null lo quita. */
+  lugar?: Coordenada | null;
+  /**
+   * true → lienzo: llena a su contenedor (sin cápsula, sin viñeta) y la
+   * leyenda va centrada abajo. Es el modo consola-geovisor de /crue.
+   */
+  pantallaCompleta?: boolean;
+  /**
+   * Padding del encuadre inicial, para que los pins no queden debajo de las
+   * cards flotantes (cola a la izquierda, red a la derecha, KPIs arriba).
+   */
+  margenes?: { top: number; bottom: number; left: number; right: number };
 }
 
-export default function MapaRed({ congestion, casos, handshakes }: Props) {
+export default function MapaRed({
+  congestion,
+  casos,
+  handshakes,
+  onSede,
+  onCaso,
+  foco = null,
+  onLugar,
+  lugar = null,
+  pantallaCompleta = false,
+  margenes,
+}: Props) {
+  // Los pins se crean una vez y viven entre renders: el handler real del
+  // click se lee de un ref para que siempre apunte al closure más reciente.
+  const onSedeRef = useRef(onSede);
+  onSedeRef.current = onSede;
+  const onCasoRef = useRef(onCaso);
+  onCasoRef.current = onCaso;
+  const onLugarRef = useRef(onLugar);
+  onLugarRef.current = onLugar;
+  const pinLugarRef = useRef<mapboxgl.Marker | null>(null);
   const contenedorRef = useRef<HTMLDivElement>(null);
   const mapaRef = useRef<mapboxgl.Map | null>(null);
   // Marcadores keyed para actualizar en sitio: el polling llega cada 2.5s y
@@ -126,6 +166,12 @@ export default function MapaRed({ congestion, casos, handshakes }: Props) {
       setListo(true);
     });
 
+    // Click en un punto vacío del mapa → explorar el sitio. Los pins hacen
+    // stopPropagation en su propio click, así que aquí no llegan.
+    mapa.on("click", (e) => {
+      onLugarRef.current?.({ lat: e.lngLat.lat, lng: e.lngLat.lng });
+    });
+
     // Rotación lenta de tablero de sala; para en cuanto alguien interactúa.
     if (!reducirMovimiento) {
       let detenida = false;
@@ -180,7 +226,18 @@ export default function MapaRed({ congestion, casos, handshakes }: Props) {
       if (!pin) {
         const el = document.createElement("div");
         el.className = "red-sede";
-        el.innerHTML = '<span class="red-sede-punto"></span>';
+        // Cruz blanca sobre círculo de color: el símbolo cartográfico de
+        // centro de salud (no emoji). El color lo pone la congestión abajo.
+        el.innerHTML =
+          '<span class="red-sede-punto">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+          '<path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"/></svg>' +
+          "</span>";
+        const codigo = s.codigo;
+        el.addEventListener("click", (e) => {
+          e.stopPropagation();
+          onSedeRef.current?.(codigo);
+        });
         pin = new mapboxgl.Marker({ element: el })
           .setLngLat([s.coord.lng, s.coord.lat])
           .addTo(mapa);
@@ -209,14 +266,23 @@ export default function MapaRed({ congestion, casos, handshakes }: Props) {
       const reducirMovimiento = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
+      // Un padding mayor que el lienzo hace throw en fitBounds: si las cards
+      // no caben (pantalla chica), se encuadra con margen plano.
+      const lienzo = mapa.getContainer();
+      const m = margenes ?? { top: 70, bottom: 70, left: 70, right: 70 };
+      const caben =
+        lienzo.clientWidth > m.left + m.right + 120 &&
+        lienzo.clientHeight > m.top + m.bottom + 120;
       mapa.fitBounds(limites, {
-        padding: 70,
+        padding: caben ? m : 40,
         pitch: 45,
         bearing: mapa.getBearing(),
         maxZoom: 13,
         duration: reducirMovimiento ? 0 : 2400,
       });
     }
+    // margenes solo afecta el encuadre inicial; no re-encuadra al cambiar.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listo, congestion]);
 
   // ── Casos activos (origen latiendo en rojo) ────────────────────
@@ -236,6 +302,11 @@ export default function MapaRed({ congestion, casos, handshakes }: Props) {
         el.innerHTML =
           '<span class="red-caso-anillo"></span>' +
           '<span class="red-caso-punto"></span>';
+        const casoId = c.id;
+        el.addEventListener("click", (e) => {
+          e.stopPropagation();
+          onCasoRef.current?.(casoId);
+        });
         pin = new mapboxgl.Marker({ element: el })
           .setLngLat([c.origen.lng, c.origen.lat])
           .addTo(mapa);
@@ -281,11 +352,42 @@ export default function MapaRed({ congestion, casos, handshakes }: Props) {
       ?.setData(coleccion("enviado"));
   }, [listo, congestion, casos, handshakes]);
 
+  // ── Foco pedido desde afuera ("Ver en el mapa") ────────────────
+  useEffect(() => {
+    const mapa = mapaRef.current;
+    if (!mapa || !listo || !foco) return;
+    mapa.flyTo({ center: [foco.lng, foco.lat], zoom: 14, duration: 1600 });
+  }, [listo, foco]);
+
+  // ── Marcador del punto en exploración (vista de calle) ─────────
+  useEffect(() => {
+    const mapa = mapaRef.current;
+    if (!mapa || !listo) return;
+    if (!lugar) {
+      pinLugarRef.current?.remove();
+      pinLugarRef.current = null;
+      return;
+    }
+    if (!pinLugarRef.current) {
+      const el = document.createElement("div");
+      el.className = "red-lugar";
+      pinLugarRef.current = new mapboxgl.Marker({ element: el })
+        .setLngLat([lugar.lng, lugar.lat])
+        .addTo(mapa);
+    } else {
+      pinLugarRef.current.setLngLat([lugar.lng, lugar.lat]);
+    }
+  }, [listo, lugar]);
+
   // ── Render ─────────────────────────────────────────────────────
 
   if (!token) {
     return (
-      <div className="h-[380px] rounded-[2rem] border border-[color:var(--color-borde)] bg-[color:var(--color-superficie)] flex items-center justify-center text-sm text-[color:var(--color-texto-tenue)]">
+      <div
+        className={`${
+          pantallaCompleta ? "h-full w-full" : "h-[380px] rounded-[2rem] border border-[color:var(--color-borde)]"
+        } bg-[color:var(--color-superficie)] flex items-center justify-center text-sm text-[color:var(--color-texto-tenue)]`}
+      >
         Mapa desactivado — falta NEXT_PUBLIC_MAPBOX_TOKEN
       </div>
     );
@@ -294,56 +396,92 @@ export default function MapaRed({ congestion, casos, handshakes }: Props) {
   const sinCoordenadas = listo && congestion.length > 0 && !congestion.some((s) => s.coord);
 
   return (
-    <div className="relative h-[380px] rounded-[2rem] overflow-hidden border border-[color:var(--color-borde)]">
-      <div ref={contenedorRef} className="absolute inset-0" />
+    <div
+      className={
+        pantallaCompleta
+          ? "relative h-full w-full"
+          : "relative h-[380px] rounded-[2rem] overflow-hidden border border-[color:var(--color-borde)]"
+      }
+    >
+      {/* Inline y no `absolute inset-0`: mapbox-gl.css llega después de
+          Tailwind en el bundle y su `.mapboxgl-map{position:relative}` pisa
+          la clase — el contenedor colapsaba a 0px de alto (mapa negro). */}
+      <div ref={contenedorRef} style={{ position: "absolute", inset: 0 }} />
 
-      <div
-        className="absolute inset-0 pointer-events-none rounded-[2rem]"
-        style={{ boxShadow: "inset 0 0 52px 16px rgba(10,14,20,0.55)" }}
-      />
-
-      {/* Leyenda del semáforo, en píldora glass. */}
-      <div className="absolute bottom-3 left-3 flex items-center gap-3 px-3 py-1.5 rounded-full text-[11px] bg-neutral-900/70 backdrop-blur-lg border border-[color:var(--color-borde)] text-[color:var(--color-texto-tenue)]">
-        <span className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full" style={{ background: "#2ec4a6" }} />
-          libre
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full" style={{ background: "#ff9f1c" }} />
-          congestionada
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full" style={{ background: "#ff3b47" }} />
-          crítica
-        </span>
-      </div>
-
-      {sinCoordenadas && (
-        <span className="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] bg-neutral-900/70 backdrop-blur-lg text-[color:var(--color-texto-tenue)] border border-[color:var(--color-borde)]">
-          core sin coordenadas — reinicia core para ver las sedes
-        </span>
+      {/* Viñeta que funde el satélite con el fondo (solo en cápsula: en el
+          modo lienzo el mapa ES el fondo y la viñeta se sentiría sucia). */}
+      {!pantallaCompleta && (
+        <div
+          className="absolute inset-0 pointer-events-none rounded-[2rem]"
+          style={{ boxShadow: "inset 0 0 52px 16px rgba(10,14,20,0.55)" }}
+        />
       )}
+
+      {/* Leyenda + avisos: centrados abajo en modo lienzo. */}
+      <div
+        className={`absolute bottom-3 flex flex-col items-center gap-2 ${
+          pantallaCompleta ? "left-1/2 -translate-x-1/2" : "left-3 items-start"
+        }`}
+      >
+        {sinCoordenadas && (
+          <span className="px-3 py-1 rounded-full text-[11px] bg-neutral-900/75 backdrop-blur-lg text-[color:var(--color-texto-tenue)] border border-[color:var(--color-borde)] whitespace-nowrap">
+            core sin coordenadas — reinicia core para ver las sedes
+          </span>
+        )}
+        <div className="flex items-center gap-3 px-3 py-1.5 rounded-full text-[11px] bg-neutral-900/75 backdrop-blur-lg border border-[color:var(--color-borde)] text-[color:var(--color-texto-tenue)] whitespace-nowrap">
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full" style={{ background: "#2ec4a6" }} />
+            libre
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full" style={{ background: "#ff9f1c" }} />
+            congestionada
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full" style={{ background: "#ff3b47" }} />
+            crítica
+          </span>
+        </div>
+      </div>
 
       <style>{`
         .red-sede {
-          width: 18px;
-          height: 18px;
+          width: 26px;
+          height: 26px;
           display: grid;
           place-items: center;
+          cursor: pointer;
         }
-        .red-sede-punto {
-          width: 12px;
-          height: 12px;
-          border-radius: 9999px;
-          border: 1.5px solid rgba(255, 255, 255, 0.85);
-          box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-          transition: background 0.6s ease;
-        }
-        .red-sede-critica {
+        .red-caso { cursor: pointer; }
+        .red-lugar {
           width: 16px;
           height: 16px;
+          border-radius: 9999px;
+          border: 2.5px solid #fff;
+          background: rgba(255, 255, 255, 0.25);
+          box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        }
+        .red-sede-punto {
+          width: 22px;
+          height: 22px;
+          border-radius: 9999px;
+          display: grid;
+          place-items: center;
+          border: 1.5px solid rgba(255, 255, 255, 0.9);
+          box-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+          transition: background 0.6s ease, transform 0.2s ease;
+        }
+        .red-sede-punto svg {
+          width: 12px;
+          height: 12px;
+          fill: #fff;
+        }
+        .red-sede:hover .red-sede-punto {
+          transform: scale(1.15);
+        }
+        .red-sede-critica {
           animation: red-latido-punto 1.4s ease-in-out infinite;
-          box-shadow: 0 0 12px rgba(255, 59, 71, 0.8);
+          box-shadow: 0 0 14px rgba(255, 59, 71, 0.85);
         }
         @keyframes red-latido-punto {
           0%, 100% { opacity: 1; }

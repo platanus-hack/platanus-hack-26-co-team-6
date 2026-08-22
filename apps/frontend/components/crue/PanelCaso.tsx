@@ -16,6 +16,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { Ban } from "lucide-react";
 import type { Candidato, Caso } from "@/lib/types";
 import { nombresServicios, ETIQUETA_TRIAGE } from "@/lib/presentacion";
 import * as api from "@/lib/api";
@@ -406,8 +407,9 @@ export default function PanelCaso({
                 <span className="tabular font-bold">{Math.round(c.etaMin)}′</span>
               </div>
               {descartada ? (
-                <p className="mt-1 text-xs text-[color:var(--color-alerta)]">
-                  ⛔ {c.motivoDescarte}
+                <p className="mt-1 text-xs text-[color:var(--color-alerta)] flex items-start gap-1">
+                  <Ban size={12} className="mt-0.5 shrink-0" aria-hidden />
+                  {c.motivoDescarte}
                 </p>
               ) : (
                 <>
@@ -498,7 +500,10 @@ export default function PanelCaso({
                 </div>
               )}
               {h.motivoRechazo && (
-                <p className="text-[color:var(--color-alerta)]">⛔ {h.motivoRechazo}</p>
+                <p className="text-[color:var(--color-alerta)] flex items-start gap-1">
+                  <Ban size={12} className="mt-0.5 shrink-0" aria-hidden />
+                  {h.motivoRechazo}
+                </p>
               )}
               {h.latenciaS !== null && <p>respondió en {h.latenciaS}s</p>}
             </div>
@@ -755,8 +760,8 @@ function PopupForzar({
                 <span className="flex-1 truncate">{c.sede.nombre}</span>
                 <span className="tabular text-xs">{Math.round(c.etaMin)}′</span>
                 {c.motivoDescarte && (
-                  <span className="text-[10px] text-[color:var(--color-critico)]">
-                    ⛔ no elegible
+                  <span className="text-[10px] text-[color:var(--color-critico)] inline-flex items-center gap-0.5">
+                    <Ban size={10} aria-hidden /> no elegible
                   </span>
                 )}
               </label>
@@ -824,8 +829,9 @@ function PopupForzar({
                 <strong>{elegida.sede.nombre}</strong>
               </p>
               {saltaRegla && (
-                <p className="text-[color:var(--color-critico)] text-xs">
-                  ⛔ Saltando: {elegida.motivoDescarte}
+                <p className="text-[color:var(--color-critico)] text-xs flex items-start gap-1">
+                  <Ban size={12} className="mt-0.5 shrink-0" aria-hidden />
+                  Saltando: {elegida.motivoDescarte}
                 </p>
               )}
               <p className="text-xs text-[color:var(--color-texto-tenue)]">

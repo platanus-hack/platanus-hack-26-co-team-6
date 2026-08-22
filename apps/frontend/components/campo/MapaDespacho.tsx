@@ -297,7 +297,10 @@ export default function MapaDespacho({
 
   return (
     <div className="relative h-72 rounded-[2rem] overflow-hidden border border-[color:var(--color-borde)]">
-      <div ref={contenedorRef} className="absolute inset-0" />
+      {/* Inline y no `absolute inset-0`: mapbox-gl.css llega después de
+          Tailwind en el bundle y su `.mapboxgl-map{position:relative}` pisa
+          la clase — el contenedor colapsaba a 0px de alto (mapa negro). */}
+      <div ref={contenedorRef} style={{ position: "absolute", inset: 0 }} />
 
       {/* Viñeta para fundir el satélite con el fondo de la app. */}
       <div

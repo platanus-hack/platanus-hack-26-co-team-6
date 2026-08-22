@@ -28,6 +28,7 @@ import { Cabecera } from "@/components/campo/Cabecera";
 import { PanelDictado } from "@/components/campo/PanelDictado";
 import { TarjetaCaso } from "@/components/campo/TarjetaCaso";
 import { TarjetaCandidato } from "@/components/campo/TarjetaCandidato";
+import { FotoCalle } from "@/components/mapa/FotoCalle";
 import * as api from "@/lib/api";
 
 // mapbox-gl toca window al importarse: solo en el navegador.
@@ -174,9 +175,10 @@ export default function Campo() {
 
   // ── Render ─────────────────────────────────────────────────────
 
-  const sedeAceptante = candidatos.find(
+  const sedeAceptada = candidatos.find(
     (c) => c.sede.codigo === handshake?.sedeCodigo,
-  )?.sede.nombre;
+  )?.sede;
+  const sedeAceptante = sedeAceptada?.nombre;
 
   return (
     <main className="min-h-screen max-w-lg mx-auto p-4 pb-24">
@@ -273,6 +275,9 @@ export default function Campo() {
           <p className="text-xs text-[color:var(--color-texto-tenue)]">
             del dictado a la cama confirmada
           </p>
+          {sedeAceptada && (
+            <FotoCalle coord={sedeAceptada.coord} titulo={sedeAceptada.nombre} />
+          )}
           <button
             onClick={reiniciar}
             className="mt-6 px-6 min-h-12 rounded-xl border border-[color:var(--color-borde)]"

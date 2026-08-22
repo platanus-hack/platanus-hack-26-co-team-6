@@ -50,7 +50,7 @@ export const IMAGENES: Record<string, RegistroImagen> = {
     nota: "Clip de la ambulancia en la calle (public/landing/panoramica.mp4)",
   },
   mapa: {
-    src: null,
+    src: "/landing/mapa-ruta.jpg",
     alt: "Mapa con la ruta a la sede elegida",
     nota: "Screenshot del mapa Mapbox dark con la ruta rosa→naranja al destino",
   },
