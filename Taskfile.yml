@@ -1,0 +1,152 @@
+version: "3"
+
+# PULSO — monorepo task runner.
+#
+# Three apps, three package managers, three ports:
+#   apps/frontend        Next.js   pnpm   :3000   (browser-facing)
+#   apps/backend/core    NestJS    pnpm   :3001   (gateway, owns CORS)
+#   apps/backend/ai-core FastAPI   uv     :8000   (internal, no CORS)
+#
+# Run `task doctor` before `task dev` when something feels wrong.
+
+vars:
+  FRONTEND: apps/frontend
+  CORE: apps/backend/core
+  AI_CORE: apps/backend/ai-core
+
+  # Single source of truth for the dev ports: `dev` binds them and `doctor`
+  # checks them. Override per run, e.g. `task dev PORT_CORE=3005`.
+  PORT_FRONTEND: '{{.PORT_FRONTEND | default "3000"}}'
+  PORT_CORE: '{{.PORT_CORE | default "3001"}}'
+  PORT_AI_CORE: '{{.PORT_AI_CORE | default "8000"}}'
+
+tasks:
+  default:
+    desc: List the available tasks.
+    cmds:
+      - task --list
+    silent: true
+
+  # ---------------------------------------------------------------- dev ---
+
+  dev:
+    desc: Start frontend, core and ai-core at the same time.
+    # `deps` run in parallel. Ctrl-C stops all three.
+    deps:
+      - dev:frontend
+      - dev:core
+      - dev:ai-core
+
+  dev:frontend:
+    desc: Next.js dev server (default :3000).
+    dir: "{{.FRONTEND}}"
+    cmds:
+      # --port, not $PORT: Next only honours the flag reliably across versions.
+      - pnpm dev --port {{.PORT_FRONTEND}}
+
+  dev:core:
+    desc: NestJS gateway in watch mode (default :3001).
+    dir: "{{.CORE}}"
+    env:
+      # src/main.ts reads process.env.PORT. There is no ConfigModule yet, so
+      # apps/backend/core/.env is NOT loaded by Nest — this is what binds it.
+      PORT: "{{.PORT_CORE}}"
+    cmds:
+      - pnpm start:dev
+
+  dev:ai-core:
+    desc: FastAPI service with reload (default :8000).
+    dir: "{{.AI_CORE}}"
+    cmds:
+      # uvicorn, not `fastapi dev`: the fastapi CLI needs fastapi[standard],
+      # and pyproject.toml declares plain `fastapi` + `uvicorn[standard]`.
+      - uv run uvicorn app.main:app --reload --port {{.PORT_AI_CORE}}
+
+  # -------------------------------------------------------------- setup ---
+
+  setup:
+    desc: Install every dependency and create the local env files.
+    cmds:
+      - task: setup:env
+      - task: setup:frontend
+      - task: setup:core
+      - task: setup:ai-core
+      - cmd: echo "Setup complete. Run 'task doctor' to verify, then 'task dev'."
+        silent: true
+
+  setup:env:
+    desc: Copy the env examples into real local env files (never overwrites).
+    cmds:
+      # Node does the copying so this works the same in PowerShell, cmd and bash.
+      - node scripts/setup-env.mjs
+
+  setup:frontend:
+    desc: Install frontend dependencies.
+    dir: "{{.FRONTEND}}"
+    cmds:
+      - pnpm install
+
+  setup:core:
+    desc: Install core dependencies.
+    dir: "{{.CORE}}"
+    cmds:
+      - pnpm install
+
+  setup:ai-core:
+    desc: Create the ai-core virtualenv and sync its dependencies.
+    dir: "{{.AI_CORE}}"
+    cmds:
+      # `uv sync` creates .venv when missing and installs the dev group too.
+      - uv sync --all-groups
+
+  # ------------------------------------------------------------- doctor ---
+
+  doctor:
+    desc: Check tooling, virtualenv, dependencies, env files and free ports.
+    env:
+      # Same ports `dev` binds, so doctor never checks the wrong ones.
+      PORT_FRONTEND: "{{.PORT_FRONTEND}}"
+      PORT_CORE: "{{.PORT_CORE}}"
+      PORT_AI_CORE: "{{.PORT_AI_CORE}}"
+    cmds:
+      - node scripts/doctor.mjs
+
+  # --------------------------------------------------------------- misc ---
+
+  build:
+    desc: Production build for frontend and core.
+    cmds:
+      - task: build:frontend
+      - task: build:core
+
+  build:frontend:
+    dir: "{{.FRONTEND}}"
+    cmds:
+      - pnpm build
+
+  build:core:
+    dir: "{{.CORE}}"
+    cmds:
+      - pnpm build
+
+  test:
+    desc: Run the test suites that exist today.
+    cmds:
+      - task: test:core
+      - task: test:ai-core
+
+  test:core:
+    dir: "{{.CORE}}"
+    cmds:
+      - pnpm test
+
+  test:ai-core:
+    dir: "{{.AI_CORE}}"
+    cmds:
+      - uv run pytest
+
+  typecheck:
+    desc: Type-check the frontend. Must pass before every push.
+    dir: "{{.FRONTEND}}"
+    cmds:
+      - pnpm typecheck
