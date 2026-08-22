@@ -221,31 +221,106 @@ de su carril.
 
 ---
 
-## Lo que cambié en tu código (rama `feat/ai-core-integracion`)
+## Lo que cambié en tu código (rama `feat/ai-core-integracion` · PR #6)
 
-Tres cosas, todas aditivas. Revísalas antes de mezclar.
+Todo aditivo: sin `AI_CORE_BASE_URL` el comportamiento es idéntico al de hoy.
+Aun así son archivos tuyos — revísalos antes de mezclar.
 
-**1. La penalización de rebote ahora se calibra por sede.**
+### 1. La penalización de rebote se calibra por sede
+
 `PENALIZACION_REBOTE = 22` era global. Ahora se descompone en la mitad
 observable (lo que **esa sede** tarda en contestar, que ya calculabas en
 `handshake.service.ts` como `latenciaS`) más el sobrecosto fijo de descargar y
-re-rutear. Con cero handshakes devuelve exactamente 22 — el número del pitch no
-se mueve. Toqué `scoring.service.ts`, `almacen.service.ts` (guarda la latencia)
-y `handshake.service.ts` (se la pasa).
+re-rutear. Con cero handshakes devuelve **exactamente 22** — el número del
+pitch no se mueve. Cada respuesta observada lo acerca a lo que esa sede hace de
+verdad, con el mismo encogimiento hacia el prior que ya usa `P(aceptación)`.
 
-**2. `core` ya puede hablarle a `ai-core`.** Agregué `AiCoreClient` siguiendo
-el `design.md` del scaffold, y `TriageService` lo intenta primero **solo si
-`AI_CORE_BASE_URL` está configurada**. Si no está, o si ai-core no responde,
-sigue exactamente el camino de hoy. Es opt-in: por defecto no cambia nada.
+Se alimenta de `AlmacenService`, así que hoy la calibración se pierde al
+reiniciar core. Es la misma dependencia del hallazgo de arriba.
 
-**3. `motor` y `via` en `TriageResponse`**, ambos opcionales. `motor` dice si
-la extracción salió de Claude o de la heurística — antes la única pista era
-`confianza == 0.35` exacto. `via` dice si corrió en core o en ai-core.
+### 2. `core` ya le habla a `ai-core`
+
+`AiCoreClient` siguiendo el `design.md` del scaffold: `fetch` +
+`AbortSignal.timeout`, mapeo 503/504/502, y **nunca** filtra la URL ni el
+cuerpo upstream al navegador (eso va al log). `TriageService` lo intenta
+primero **solo si `AI_CORE_BASE_URL` está configurada**:
+
+```
+POST /triage → ai-core (Claude) → Claude local en core → heurística
+```
+
+Si ai-core no responde, tarda de más o devuelve basura, core sigue local. No
+es un proxy duro a propósito: un proxy metería una dependencia nueva en el
+camino del demo en vivo.
+
+Un caso que quizá no es obvio: **si ai-core responde con SU heurística pero
+core sí tiene `ANTHROPIC_API_KEY`, core la rechaza y resuelve local.** Sin esa
+regla, un ai-core sin credencial degradaría en silencio a un core que sí podía
+llamar a Claude.
+
+### 3. ⚠️ Toqué `contracts/types.ts` — te lo aviso, como pide la regla
+
+Dos campos nuevos en `TriageResponse`, **los dos opcionales**:
+
+```ts
+motor?: "claude" | "heuristica";   // qué produjo la extracción
+via?:   "core" | "ai-core";        // dónde corrió
+```
+
+`motor` existe porque antes la única pista de que estabas viendo la heurística
+era `confianza === 0.35` exacto, y eso se pasa por alto justo cuando importa.
+
+Los repliqué en `apps/frontend/lib/types.ts`, que es el espejo manual. Si algún
+día duele mantener los dos, la salida es un paquete compartido en el workspace,
+no seguir copiando a mano.
+
+### Archivos tocados
+
+| Archivo | Qué |
+|---|---|
+| `src/ai-core/*` | **Nuevo.** Cliente, módulo, tipos y su spec. |
+| `src/scoring/scoring.service.ts` | `penalizacionRebote(sedeCodigo)` + constantes descompuestas. |
+| `src/almacen/almacen.service.ts` | Guarda la latencia por sede; `latenciasRespuestaMin()`. |
+| `src/handshake/handshake.service.ts` | Una línea: le pasa `latenciaS` a `registrarRespuesta()`. |
+| `src/triage/triage.service.ts` | La cascada. El camino local queda intacto. |
+| `src/triage/triage.module.ts` | Importa `AiCoreModule`. |
+| `src/health/health.controller.ts` | **`GET /health/ai-core`** — prueba la costura sin tocar la liveness. |
+| `src/app.module.ts` | Registra `AiCoreModule`. |
+| `src/contracts/types.ts` | Los dos campos opcionales. |
+| `env.example` | Documenta `AI_CORE_BASE_URL` y `AI_CORE_TIMEOUT_MS`. |
+| `apps/frontend/lib/types.ts` | El espejo. |
+
+### Tests
+
+Core pasó de **1 test a 34**. Nada de red: todo con dobles.
+
+| Spec | Qué protege |
+|---|---|
+| `ai-core.client.spec.ts` | La tabla de traducción de errores del `design.md` y que no se filtre la URL upstream. |
+| `triage.service.spec.ts` | Que `/triage` NUNCA falle porque ai-core esté caído, lento o devuelva basura. |
+| `scoring.service.spec.ts` | Que sin handshakes el rebote dé exactamente 22, y que las sedes no se contaminen. |
+| `health.controller.spec.ts` | Que la liveness NO llame a ai-core (si no, reinicios en cascada). |
+
+```bash
+cd apps/backend/core && pnpm test      # 34
+cd apps/backend/ai-core && uv run pytest   # 84
+```
+
+**Lo que no verifiqué:** la costura de punta a punta con los tres servicios
+arriba. Son 30 segundos y es justo lo que los unitarios no cubren:
+
+```bash
+task dev
+curl localhost:3001/health/ai-core
+```
 
 ### Por qué el scoring se queda en core y no se va a ai-core
 
-Porque necesita el estado de `AlmacenService` (historial y rechazos por sede).
-Mandarlo a ai-core obligaría a serializar señales de ~60 sedes en cada
-`/match`, y no gana nada: el scoring es aritmética, no IA. Lo que sí tiene
-sentido en ai-core es el triaje, que es una llamada texto → JSON sin estado.
+Porque necesita el estado de `AlmacenService` (historial, rechazos y ahora
+latencias por sede). Mandarlo a ai-core obligaría a serializar señales de ~60
+sedes en cada `/match`, y no gana nada: el scoring es aritmética, no IA. Lo que
+sí encaja en ai-core es el triaje, que es una llamada texto → JSON sin estado.
 
+`POST /v1/score` existe en ai-core y **nadie lo llama**: es el mismo modelo en
+Python, útil para probarlo aislado y de forma reproducible (fija `ahora` y da
+siempre el mismo ranking). Si algún día el scoring se muda, ya está escrito.
