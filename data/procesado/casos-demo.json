@@ -1,0 +1,6807 @@
+{
+  "fuente": "Llamadas 123 Bogota, NUSE — incidentes reales, dictado sintetico",
+  "advertencia": "Los campos del incidente son reales. El campo `texto` es una plantilla armada a partir de ellos: el 123 no publica narrativa clinica. Ver la cabecera de scripts/datos/transformadores/casos.py.",
+  "total": 400,
+  "casos": [
+    {
+      "incidente": "CRU-00286143-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "SUBA",
+      "hora": 0,
+      "fecha": "2026-06-01T00:44:00",
+      "edad": 80,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 80 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00304181-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "BOSA",
+      "hora": 0,
+      "fecha": "2026-06-10T00:02:00",
+      "edad": 5,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Mujer de 5 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00319734-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "BOSA",
+      "hora": 0,
+      "fecha": "2026-06-18T00:27:00",
+      "edad": 69,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Hombre de 69 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00334945-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "PATGIN - PATOLOGIA GINECOBSTÉTRICA",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 0,
+      "fecha": "2026-06-26T00:03:00",
+      "edad": 17,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Mujer de 17 anos, paciente con patologia ginecobstétrica.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00298549-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "SUBA",
+      "hora": 1,
+      "fecha": "2026-06-07T01:10:00",
+      "edad": 72,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 72 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00314674-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "ENGATIVA",
+      "hora": 1,
+      "fecha": "2026-06-15T01:46:00",
+      "edad": 34,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Hombre de 34 anos, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00339019-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "BOSA",
+      "hora": 1,
+      "fecha": "2026-06-28T01:02:00",
+      "edad": 84,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Hombre de 84 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00301044-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTOX - INTOXICACION",
+      "localidad": "BOSA",
+      "hora": 2,
+      "fecha": "2026-06-08T02:05:00",
+      "edad": 18,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Hombre de 18 anos, paciente con intoxicacion.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00339152-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "BOSA",
+      "hora": 2,
+      "fecha": "2026-06-28T02:05:00",
+      "edad": 40,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Hombre de 40 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00310294-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "ANTONIO NARINO",
+      "hora": 3,
+      "fecha": "2026-06-13T03:05:00",
+      "edad": 42,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.591033,
+        "lng": -74.091912
+      },
+      "texto": "Hombre de 42 anos, paciente con herida en miembro inferior, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00335054-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "TUNJUELITO",
+      "hora": 3,
+      "fecha": "2026-06-26T03:53:00",
+      "edad": 50,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.574034,
+        "lng": -74.128836
+      },
+      "texto": "Hombre de 50 anos, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00298922-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "ENGATIVA",
+      "hora": 4,
+      "fecha": "2026-06-07T04:58:00",
+      "edad": 63,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Mujer de 63 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00331488-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "CHAPINERO",
+      "hora": 4,
+      "fecha": "2026-06-24T04:06:00",
+      "edad": 32,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.658259,
+        "lng": -74.0595
+      },
+      "texto": "Mujer de 32 anos, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00320035-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 5,
+      "fecha": "2026-06-18T05:41:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Paciente, paciente con herida en craneo, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00292175-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "TEUSAQUILLO",
+      "hora": 6,
+      "fecha": "2026-06-04T06:50:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.634813,
+        "lng": -74.080642
+      },
+      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00310411-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "ENGATIVA",
+      "hora": 6,
+      "fecha": "2026-06-13T06:28:00",
+      "edad": 61,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Hombre de 61 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00329328-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "KENNEDY",
+      "hora": 6,
+      "fecha": "2026-06-23T06:30:00",
+      "edad": 87,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Mujer de 87 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00286399-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "ACV - ACCIDENTE CEREBRO VASCULAR",
+      "localidad": "KENNEDY",
+      "hora": 7,
+      "fecha": "2026-06-01T07:43:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente con deficit neurologico focal subito.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00301260-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "KENNEDY",
+      "hora": 7,
+      "fecha": "2026-06-08T07:18:00",
+      "edad": 95,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Mujer de 95 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00308544-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "SUBA",
+      "hora": 7,
+      "fecha": "2026-06-12T07:31:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00327743-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 7,
+      "fecha": "2026-06-22T07:46:00",
+      "edad": 33,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Mujer de 33 anos, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00337143-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "FONTIBON",
+      "hora": 7,
+      "fecha": "2026-06-27T07:16:00",
+      "edad": 27,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Mujer de 27 anos, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00288459-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "KENNEDY",
+      "hora": 8,
+      "fecha": "2026-06-02T08:42:00",
+      "edad": 30,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 30 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00301287-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "TUNJUELITO",
+      "hora": 8,
+      "fecha": "2026-06-08T08:01:00",
+      "edad": 85,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.574034,
+        "lng": -74.128836
+      },
+      "texto": "Mujer de 85 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00304550-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "CHAPINERO",
+      "hora": 8,
+      "fecha": "2026-06-10T08:27:00",
+      "edad": 74,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.658259,
+        "lng": -74.0595
+      },
+      "texto": "Hombre de 74 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00318395-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "KENNEDY",
+      "hora": 8,
+      "fecha": "2026-06-17T08:52:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00327939-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "PATGIN - PATOLOGIA GINECOBSTÉTRICA",
+      "localidad": "USME",
+      "hora": 8,
+      "fecha": "2026-06-22T08:43:00",
+      "edad": 38,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Mujer de 38 anos, paciente con patologia ginecobstétrica.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00339816-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "KENNEDY",
+      "hora": 8,
+      "fecha": "2026-06-28T08:07:00",
+      "edad": 57,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Mujer de 57 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00288592-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "SUBA",
+      "hora": 9,
+      "fecha": "2026-06-02T09:53:00",
+      "edad": 33,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 33 anos, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00296970-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "USAQUEN",
+      "hora": 9,
+      "fecha": "2026-06-06T09:18:00",
+      "edad": 80,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.721878,
+        "lng": -74.038976
+      },
+      "texto": "Mujer de 80 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00304689-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "USAQUEN",
+      "hora": 9,
+      "fecha": "2026-06-10T09:34:00",
+      "edad": 80,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.721878,
+        "lng": -74.038976
+      },
+      "texto": "Mujer de 80 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00310661-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "PUENTE ARANDA",
+      "hora": 9,
+      "fecha": "2026-06-13T09:52:00",
+      "edad": 31,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Hombre de 31 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00320304-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "PATGIN - PATOLOGIA GINECOBSTÉTRICA",
+      "localidad": "BOSA",
+      "hora": 9,
+      "fecha": "2026-06-18T09:04:00",
+      "edad": 24,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Mujer de 24 anos, paciente con patologia ginecobstétrica.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00326025-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "ENGATIVA",
+      "hora": 9,
+      "fecha": "2026-06-21T09:25:00",
+      "edad": 78,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Hombre de 78 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00337310-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 9,
+      "fecha": "2026-06-27T09:40:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00286634-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "CHAPINERO",
+      "hora": 10,
+      "fecha": "2026-06-01T10:00:00",
+      "edad": 29,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.658259,
+        "lng": -74.0595
+      },
+      "texto": "Mujer de 29 anos, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00292553-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "KENNEDY",
+      "hora": 10,
+      "fecha": "2026-06-04T10:15:00",
+      "edad": 38,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 38 anos, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00302906-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "TEUSAQUILLO",
+      "hora": 10,
+      "fecha": "2026-06-09T10:01:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.634813,
+        "lng": -74.080642
+      },
+      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00308847-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "BARRIOS UNIDOS",
+      "hora": 10,
+      "fecha": "2026-06-12T10:24:00",
+      "edad": 80,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.672752,
+        "lng": -74.070543
+      },
+      "texto": "Hombre de 80 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00318536-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "USAQUEN",
+      "hora": 10,
+      "fecha": "2026-06-17T10:28:00",
+      "edad": 47,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.721878,
+        "lng": -74.038976
+      },
+      "texto": "Hombre de 47 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00328082-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "DOLTOR - DOLOR TORÁCICO",
+      "localidad": "KENNEDY",
+      "hora": 10,
+      "fecha": "2026-06-22T10:48:00",
+      "edad": 59,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 59 anos, paciente con dolor torácico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00333738-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "DOLTOR - DOLOR TORÁCICO",
+      "localidad": "SUBA",
+      "hora": 10,
+      "fecha": "2026-06-25T10:26:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con dolor torácico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00286734-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "BOSA",
+      "hora": 11,
+      "fecha": "2026-06-01T11:02:00",
+      "edad": 15,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Mujer de 15 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00292738-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "SUBA",
+      "hora": 11,
+      "fecha": "2026-06-04T11:56:00",
+      "edad": 76,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 76 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00303129-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "KENNEDY",
+      "hora": 11,
+      "fecha": "2026-06-09T11:42:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00313069-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "DOLTOR - DOLOR TORÁCICO",
+      "localidad": "KENNEDY",
+      "hora": 11,
+      "fecha": "2026-06-14T11:06:00",
+      "edad": 50,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 50 anos, paciente con dolor torácico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00320538-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "ACV - ACCIDENTE CEREBRO VASCULAR",
+      "localidad": "SUBA",
+      "hora": 11,
+      "fecha": "2026-06-18T11:24:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con deficit neurologico focal subito.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00328066-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 11,
+      "fecha": "2026-06-22T11:06:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00340061-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "PUENTE ARANDA",
+      "hora": 11,
+      "fecha": "2026-06-28T11:00:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00288896-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "KENNEDY",
+      "hora": 12,
+      "fecha": "2026-06-02T12:31:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente con herida en region abdominal, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00303198-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "SUBA",
+      "hora": 12,
+      "fecha": "2026-06-09T12:39:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00310946-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 12,
+      "fecha": "2026-06-13T12:52:00",
+      "edad": 34,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Hombre de 34 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00324611-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "TEUSAQUILLO",
+      "hora": 12,
+      "fecha": "2026-06-20T12:24:00",
+      "edad": 83,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.634813,
+        "lng": -74.080642
+      },
+      "texto": "Hombre de 83 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00337540-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "TUNJUELITO",
+      "hora": 12,
+      "fecha": "2026-06-27T12:33:00",
+      "edad": 86,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.574034,
+        "lng": -74.128836
+      },
+      "texto": "Mujer de 86 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00289028-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "ENGATIVA",
+      "hora": 13,
+      "fecha": "2026-06-02T13:41:00",
+      "edad": 59,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Mujer de 59 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00295208-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "PUENTE ARANDA",
+      "hora": 13,
+      "fecha": "2026-06-05T13:55:00",
+      "edad": 78,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Hombre de 78 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00307138-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 13,
+      "fecha": "2026-06-11T13:28:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00317024-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "KENNEDY",
+      "hora": 13,
+      "fecha": "2026-06-16T13:36:00",
+      "edad": 32,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 32 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00329930-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "KENNEDY",
+      "hora": 13,
+      "fecha": "2026-06-23T13:49:00",
+      "edad": 89,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Mujer de 89 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00335751-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "BARRIOS UNIDOS",
+      "hora": 13,
+      "fecha": "2026-06-26T13:26:00",
+      "edad": 90,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.672752,
+        "lng": -74.070543
+      },
+      "texto": "Mujer de 90 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00289101-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "USME",
+      "hora": 14,
+      "fecha": "2026-06-02T14:31:00",
+      "edad": 16,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Hombre de 16 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00299820-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "KENNEDY",
+      "hora": 14,
+      "fecha": "2026-06-07T14:56:00",
+      "edad": 81,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Mujer de 81 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00307295-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 14,
+      "fecha": "2026-06-11T14:59:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00320891-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "SUBA",
+      "hora": 14,
+      "fecha": "2026-06-18T14:23:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00332238-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "DOLTOR - DOLOR TORÁCICO",
+      "localidad": "ENGATIVA",
+      "hora": 14,
+      "fecha": "2026-06-24T14:00:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con dolor torácico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00342062-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTOX - INTOXICACION",
+      "localidad": "USAQUEN",
+      "hora": 14,
+      "fecha": "2026-06-29T14:12:00",
+      "edad": 20,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.721878,
+        "lng": -74.038976
+      },
+      "texto": "Mujer de 20 anos, paciente con intoxicacion.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00297503-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 15,
+      "fecha": "2026-06-06T15:17:00",
+      "edad": 82,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Mujer de 82 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00303467-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "TEUSAQUILLO",
+      "hora": 15,
+      "fecha": "2026-06-09T15:23:00",
+      "edad": 17,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.634813,
+        "lng": -74.080642
+      },
+      "texto": "Mujer de 17 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00313497-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "USME",
+      "hora": 15,
+      "fecha": "2026-06-14T15:22:00",
+      "edad": 76,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Hombre de 76 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00318966-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "ACV - ACCIDENTE CEREBRO VASCULAR",
+      "localidad": "KENNEDY",
+      "hora": 15,
+      "fecha": "2026-06-17T15:11:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente con deficit neurologico focal subito.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00326655-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "PUENTE ARANDA",
+      "hora": 15,
+      "fecha": "2026-06-21T15:00:00",
+      "edad": 64,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Hombre de 64 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00340468-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "SANTA FE",
+      "hora": 15,
+      "fecha": "2026-06-28T15:38:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.603697,
+        "lng": -74.066048
+      },
+      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00291247-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 16,
+      "fecha": "2026-06-03T16:24:00",
+      "edad": 93,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Hombre de 93 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00303481-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "BOSA",
+      "hora": 16,
+      "fecha": "2026-06-09T16:20:00",
+      "edad": 62,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Mujer de 62 anos, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00315541-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "USAQUEN",
+      "hora": 16,
+      "fecha": "2026-06-15T16:19:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.721878,
+        "lng": -74.038976
+      },
+      "texto": "Paciente, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00326787-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 16,
+      "fecha": "2026-06-21T16:12:00",
+      "edad": 13,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Hombre de 13 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00340598-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "SANTA FE",
+      "hora": 16,
+      "fecha": "2026-06-28T16:10:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.603697,
+        "lng": -74.066048
+      },
+      "texto": "Paciente, paciente con herida en torax, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00301940-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "CHAPINERO",
+      "hora": 17,
+      "fecha": "2026-06-08T17:45:00",
+      "edad": 29,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.658259,
+        "lng": -74.0595
+      },
+      "texto": "Hombre de 29 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00321332-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "SUBA",
+      "hora": 17,
+      "fecha": "2026-06-18T17:45:00",
+      "edad": 40,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Hombre de 40 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00342252-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "CAIALT - CAIDA DE ALTURA",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 17,
+      "fecha": "2026-06-29T17:01:00",
+      "edad": 56,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Hombre de 56 anos, paciente con caida de altura.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00307457-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "ENGATIVA",
+      "hora": 18,
+      "fecha": "2026-06-11T18:57:00",
+      "edad": 73,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Hombre de 73 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00326898-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "PUENTE ARANDA",
+      "hora": 18,
+      "fecha": "2026-06-21T18:26:00",
+      "edad": 49,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Hombre de 49 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00289569-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "ENGATIVA",
+      "hora": 19,
+      "fecha": "2026-06-02T19:09:00",
+      "edad": 30,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Mujer de 30 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00295800-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "SUBA",
+      "hora": 19,
+      "fecha": "2026-06-05T19:34:00",
+      "edad": 60,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Hombre de 60 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00302079-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "ENGATIVA",
+      "hora": 19,
+      "fecha": "2026-06-08T19:50:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con herida en torax, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00311480-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "USAQUEN",
+      "hora": 19,
+      "fecha": "2026-06-13T19:43:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.721878,
+        "lng": -74.038976
+      },
+      "texto": "Paciente, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00317428-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "KENNEDY",
+      "hora": 19,
+      "fecha": "2026-06-16T19:27:00",
+      "edad": 13,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Mujer de 13 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00325225-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "USAQUEN",
+      "hora": 19,
+      "fecha": "2026-06-20T19:23:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.721878,
+        "lng": -74.038976
+      },
+      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00334597-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "BOSA",
+      "hora": 19,
+      "fecha": "2026-06-25T19:40:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Paciente, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00342411-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "KENNEDY",
+      "hora": 19,
+      "fecha": "2026-06-29T19:27:00",
+      "edad": 75,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Mujer de 75 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00293786-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "KENNEDY",
+      "hora": 20,
+      "fecha": "2026-06-04T20:15:00",
+      "edad": 44,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 44 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00306012-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "KENNEDY",
+      "hora": 20,
+      "fecha": "2026-06-10T20:41:00",
+      "edad": 1,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 1 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00314047-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "VIOSEXUAL - VIOLENCIA SEXUAL",
+      "localidad": "CHAPINERO",
+      "hora": 20,
+      "fecha": "2026-06-14T20:46:00",
+      "edad": 25,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.658259,
+        "lng": -74.0595
+      },
+      "texto": "Mujer de 25 anos, paciente con violencia sexual.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00321619-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "FONTIBON",
+      "hora": 20,
+      "fecha": "2026-06-18T20:34:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Paciente, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00332929-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "PATGIN - PATOLOGIA GINECOBSTÉTRICA",
+      "localidad": "USAQUEN",
+      "hora": 20,
+      "fecha": "2026-06-24T20:14:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.721878,
+        "lng": -74.038976
+      },
+      "texto": "Paciente, paciente con patologia ginecobstétrica.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00289721-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 21,
+      "fecha": "2026-06-02T21:02:00",
+      "edad": 73,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Hombre de 73 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00307995-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 21,
+      "fecha": "2026-06-11T21:14:00",
+      "edad": 73,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Mujer de 73 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00317871-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "BOSA",
+      "hora": 21,
+      "fecha": "2026-06-16T21:39:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00330880-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "FONTIBON",
+      "hora": 21,
+      "fecha": "2026-06-23T21:54:00",
+      "edad": 68,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Hombre de 68 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00342576-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 21,
+      "fecha": "2026-06-29T21:35:00",
+      "edad": 81,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Hombre de 81 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00296072-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "FONTIBON",
+      "hora": 22,
+      "fecha": "2026-06-05T22:46:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00312075-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 22,
+      "fecha": "2026-06-13T22:57:00",
+      "edad": 27,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Mujer de 27 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00330889-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "KENNEDY",
+      "hora": 22,
+      "fecha": "2026-06-23T22:17:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00344261-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "USAQUEN",
+      "hora": 22,
+      "fecha": "2026-06-30T22:59:00",
+      "edad": 83,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.721878,
+        "lng": -74.038976
+      },
+      "texto": "Mujer de 83 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00296324-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "KENNEDY",
+      "hora": 23,
+      "fecha": "2026-06-05T23:51:00",
+      "edad": 75,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Mujer de 75 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00314373-26",
+      "triage": 1,
+      "prioridad123": "Critica",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "KENNEDY",
+      "hora": 23,
+      "fecha": "2026-06-14T23:11:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00286121-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "USAQUEN",
+      "hora": 0,
+      "fecha": "2026-06-01T00:46:00",
+      "edad": 30,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.721878,
+        "lng": -74.038976
+      },
+      "texto": "Hombre de 30 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00294005-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "FONTIBON",
+      "hora": 0,
+      "fecha": "2026-06-05T00:16:00",
+      "edad": 48,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Hombre de 48 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00302367-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "SUBA",
+      "hora": 0,
+      "fecha": "2026-06-09T00:13:00",
+      "edad": 37,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 37 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00310166-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "FONTIBON",
+      "hora": 0,
+      "fecha": "2026-06-13T00:35:00",
+      "edad": 25,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Mujer de 25 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00319722-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "AMESUI - AMENAZA DE SUICIDIO",
+      "localidad": "SUBA",
+      "hora": 0,
+      "fecha": "2026-06-18T00:31:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con amenaza de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00327598-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "FONTIBON",
+      "hora": 0,
+      "fecha": "2026-06-22T00:35:00",
+      "edad": 31,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Hombre de 31 anos, paciente con herida en craneo, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00334973-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "APOYO CRUE",
+      "localidad": "ENGATIVA",
+      "hora": 0,
+      "fecha": "2026-06-26T00:51:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con apoyo crue.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00342711-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 0,
+      "fecha": "2026-06-30T00:28:00",
+      "edad": 49,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Mujer de 49 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00300633-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "USAQUEN",
+      "hora": 1,
+      "fecha": "2026-06-08T01:03:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.721878,
+        "lng": -74.038976
+      },
+      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00306356-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTOX - INTOXICACION",
+      "localidad": "SUBA",
+      "hora": 1,
+      "fecha": "2026-06-11T01:37:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con intoxicacion.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00316313-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "DOLTOR - DOLOR TORÁCICO",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 1,
+      "fecha": "2026-06-16T01:52:00",
+      "edad": 88,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Hombre de 88 anos, paciente con dolor torácico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00325715-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "ENGATIVA",
+      "hora": 1,
+      "fecha": "2026-06-21T01:33:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con herida en region abdominal, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00334984-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 1,
+      "fecha": "2026-06-26T01:22:00",
+      "edad": 66,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Hombre de 66 anos, paciente con herida en craneo, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00286197-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "SUBA",
+      "hora": 2,
+      "fecha": "2026-06-01T02:45:00",
+      "edad": 95,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 95 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00301046-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "SUBA",
+      "hora": 2,
+      "fecha": "2026-06-08T02:10:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con herida en torax, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00308359-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "BOSA",
+      "hora": 2,
+      "fecha": "2026-06-12T02:20:00",
+      "edad": 28,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Hombre de 28 anos, paciente con herida en miembro inferior, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00321956-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "USME",
+      "hora": 2,
+      "fecha": "2026-06-19T02:09:00",
+      "edad": 82,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Hombre de 82 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00334968-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "USME",
+      "hora": 2,
+      "fecha": "2026-06-26T02:13:00",
+      "edad": 64,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Hombre de 64 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00290150-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "AMESUI - AMENAZA DE SUICIDIO",
+      "localidad": "ENGATIVA",
+      "hora": 3,
+      "fecha": "2026-06-03T03:19:00",
+      "edad": 16,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Mujer de 16 anos, paciente con amenaza de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00298759-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTOX - INTOXICACION",
+      "localidad": "ANTONIO NARINO",
+      "hora": 3,
+      "fecha": "2026-06-07T03:26:00",
+      "edad": 21,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.591033,
+        "lng": -74.091912
+      },
+      "texto": "Hombre de 21 anos, paciente con intoxicacion.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00314762-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "LOS MARTIRES",
+      "hora": 3,
+      "fecha": "2026-06-15T03:09:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.609491,
+        "lng": -74.084229
+      },
+      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00324039-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "ENGATIVA",
+      "hora": 3,
+      "fecha": "2026-06-20T03:24:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00336958-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "USME",
+      "hora": 3,
+      "fecha": "2026-06-27T03:26:00",
+      "edad": 66,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Mujer de 66 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00290198-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "KENNEDY",
+      "hora": 4,
+      "fecha": "2026-06-03T04:59:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente con herida en region abdominal, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00306432-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "PATGIN - PATOLOGIA GINECOBSTÉTRICA",
+      "localidad": "SUBA",
+      "hora": 4,
+      "fecha": "2026-06-11T04:03:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con patologia ginecobstétrica.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00318153-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "KENNEDY",
+      "hora": 4,
+      "fecha": "2026-06-17T04:35:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente con herida en torax, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00331493-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "TUNJUELITO",
+      "hora": 4,
+      "fecha": "2026-06-24T04:06:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.574034,
+        "lng": -74.128836
+      },
+      "texto": "Paciente, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00339551-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "ENGATIVA",
+      "hora": 4,
+      "fecha": "2026-06-28T04:39:00",
+      "edad": 24,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Hombre de 24 anos, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00294400-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 5,
+      "fecha": "2026-06-05T05:08:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Paciente, paciente con herida en craneo, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00308457-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "FONTIBON",
+      "hora": 5,
+      "fecha": "2026-06-12T05:31:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00322027-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 5,
+      "fecha": "2026-06-19T05:42:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Paciente, paciente con herida en torax, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00341635-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "KENNEDY",
+      "hora": 5,
+      "fecha": "2026-06-29T05:10:00",
+      "edad": 19,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 19 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00296731-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "BOSA",
+      "hora": 6,
+      "fecha": "2026-06-06T06:21:00",
+      "edad": 34,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Hombre de 34 anos, paciente con herida en torax, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00304351-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 6,
+      "fecha": "2026-06-10T06:57:00",
+      "edad": 70,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Hombre de 70 anos, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00314950-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ACV - ACCIDENTE CEREBRO VASCULAR",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 6,
+      "fecha": "2026-06-15T06:16:00",
+      "edad": 70,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Hombre de 70 anos, paciente con deficit neurologico focal subito.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00324221-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "TEUSAQUILLO",
+      "hora": 6,
+      "fecha": "2026-06-20T06:57:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.634813,
+        "lng": -74.080642
+      },
+      "texto": "Paciente, paciente con herida en region abdominal, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00333466-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "SANVAG - SANGRADO VAGINAL",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 6,
+      "fecha": "2026-06-25T06:45:00",
+      "edad": 90,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Mujer de 90 anos, paciente con sangrado vaginal.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00342839-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CAIALT - CAIDA DE ALTURA",
+      "localidad": "ENGATIVA",
+      "hora": 6,
+      "fecha": "2026-06-30T06:44:00",
+      "edad": 65,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Hombre de 65 anos, paciente con caida de altura.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00288301-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CAIALT - CAIDA DE ALTURA",
+      "localidad": "KENNEDY",
+      "hora": 7,
+      "fecha": "2026-06-02T07:21:00",
+      "edad": 29,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 29 anos, paciente con caida de altura.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00292259-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "BOSA",
+      "hora": 7,
+      "fecha": "2026-06-04T07:55:00",
+      "edad": 10,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Mujer de 10 anos, paciente con herida en torax, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00296836-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "VIOSEXUAL - VIOLENCIA SEXUAL",
+      "localidad": "LOS MARTIRES",
+      "hora": 7,
+      "fecha": "2026-06-06T07:40:00",
+      "edad": 11,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.609491,
+        "lng": -74.084229
+      },
+      "texto": "Mujer de 11 anos, paciente con violencia sexual.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00302667-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "KENNEDY",
+      "hora": 7,
+      "fecha": "2026-06-09T07:04:00",
+      "edad": 31,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 31 anos, paciente con herida en miembro inferior, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00308501-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "BOSA",
+      "hora": 7,
+      "fecha": "2026-06-12T07:37:00",
+      "edad": 42,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Hombre de 42 anos, paciente con herida en miembro inferior, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00316513-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "SANVAG - SANGRADO VAGINAL",
+      "localidad": "SUBA",
+      "hora": 7,
+      "fecha": "2026-06-16T07:20:00",
+      "edad": 45,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 45 anos, paciente con sangrado vaginal.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00320194-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "TEUSAQUILLO",
+      "hora": 7,
+      "fecha": "2026-06-18T07:52:00",
+      "edad": 23,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.634813,
+        "lng": -74.080642
+      },
+      "texto": "Hombre de 23 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00325870-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "KENNEDY",
+      "hora": 7,
+      "fecha": "2026-06-21T07:03:00",
+      "edad": 72,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Mujer de 72 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00331572-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "DOLTOR - DOLOR TORÁCICO",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 7,
+      "fecha": "2026-06-24T07:10:00",
+      "edad": 86,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Mujer de 86 anos, paciente con dolor torácico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00335178-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "KENNEDY",
+      "hora": 7,
+      "fecha": "2026-06-26T07:04:00",
+      "edad": 68,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 68 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00339788-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "SUBA",
+      "hora": 7,
+      "fecha": "2026-06-28T07:44:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00288386-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 8,
+      "fecha": "2026-06-02T08:51:00",
+      "edad": 89,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Mujer de 89 anos, paciente con herida en torax, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00292376-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTOX - INTOXICACION",
+      "localidad": "ENGATIVA",
+      "hora": 8,
+      "fecha": "2026-06-04T08:56:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con intoxicacion.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00296892-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "BOSA",
+      "hora": 8,
+      "fecha": "2026-06-06T08:44:00",
+      "edad": 38,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Mujer de 38 anos, paciente con herida en miembro inferior, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00302747-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "KENNEDY",
+      "hora": 8,
+      "fecha": "2026-06-09T08:41:00",
+      "edad": 4,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 4 anos, paciente con herida en region abdominal, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00308660-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "PATGIN - PATOLOGIA GINECOBSTÉTRICA",
+      "localidad": "FONTIBON",
+      "hora": 8,
+      "fecha": "2026-06-12T08:39:00",
+      "edad": 33,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Mujer de 33 anos, paciente con patologia ginecobstétrica.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00315017-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "BOSA",
+      "hora": 8,
+      "fecha": "2026-06-15T08:07:00",
+      "edad": 81,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Hombre de 81 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00318406-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "LOS MARTIRES",
+      "hora": 8,
+      "fecha": "2026-06-17T08:59:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.609491,
+        "lng": -74.084229
+      },
+      "texto": "Paciente, paciente con herida en craneo, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00325907-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "TUNJUELITO",
+      "hora": 8,
+      "fecha": "2026-06-21T08:12:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.574034,
+        "lng": -74.128836
+      },
+      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00329459-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CAIALT - CAIDA DE ALTURA",
+      "localidad": "BOSA",
+      "hora": 8,
+      "fecha": "2026-06-23T08:14:00",
+      "edad": 84,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Hombre de 84 anos, paciente con caida de altura.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00335227-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 8,
+      "fecha": "2026-06-26T08:12:00",
+      "edad": 69,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Hombre de 69 anos, paciente con herida en torax, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00337259-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "FONTIBON",
+      "hora": 8,
+      "fecha": "2026-06-27T08:54:00",
+      "edad": 84,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Hombre de 84 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00286501-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "SUBA",
+      "hora": 9,
+      "fecha": "2026-06-01T09:19:00",
+      "edad": 83,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 83 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00288523-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "KENNEDY",
+      "hora": 9,
+      "fecha": "2026-06-02T09:07:00",
+      "edad": 19,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 19 anos, paciente con herida en region abdominal, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00292392-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "SUBA",
+      "hora": 9,
+      "fecha": "2026-06-04T09:21:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con herida en craneo, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00294827-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "AMESUI - AMENAZA DE SUICIDIO",
+      "localidad": "PUENTE ARANDA",
+      "hora": 9,
+      "fecha": "2026-06-05T09:54:00",
+      "edad": 51,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Mujer de 51 anos, paciente con amenaza de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00301329-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "DOLTOR - DOLOR TORÁCICO",
+      "localidad": "USAQUEN",
+      "hora": 9,
+      "fecha": "2026-06-08T09:08:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.721878,
+        "lng": -74.038976
+      },
+      "texto": "Paciente, paciente con dolor torácico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00304588-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "SINTOGASTR - SINTOMAS GASTROINTESTINALES",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 9,
+      "fecha": "2026-06-10T09:19:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Paciente, paciente con sintomas gastrointestinales.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00306733-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ACV - ACCIDENTE CEREBRO VASCULAR",
+      "localidad": "CHAPINERO",
+      "hora": 9,
+      "fecha": "2026-06-11T09:26:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.658259,
+        "lng": -74.0595
+      },
+      "texto": "Paciente, paciente con deficit neurologico focal subito.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00310639-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "FONTIBON",
+      "hora": 9,
+      "fecha": "2026-06-13T09:24:00",
+      "edad": 29,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Hombre de 29 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00315101-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "ENGATIVA",
+      "hora": 9,
+      "fecha": "2026-06-15T09:29:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00316756-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "LOS MARTIRES",
+      "hora": 9,
+      "fecha": "2026-06-16T09:47:00",
+      "edad": 53,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.609491,
+        "lng": -74.084229
+      },
+      "texto": "Hombre de 53 anos, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00320418-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "TUNJUELITO",
+      "hora": 9,
+      "fecha": "2026-06-18T09:52:00",
+      "edad": 16,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.574034,
+        "lng": -74.128836
+      },
+      "texto": "Mujer de 16 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00324354-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "AMESUI - AMENAZA DE SUICIDIO",
+      "localidad": "LOS MARTIRES",
+      "hora": 9,
+      "fecha": "2026-06-20T09:22:00",
+      "edad": 28,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.609491,
+        "lng": -74.084229
+      },
+      "texto": "Mujer de 28 anos, paciente con amenaza de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00327990-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "DOLTOR - DOLOR TORÁCICO",
+      "localidad": "BARRIOS UNIDOS",
+      "hora": 9,
+      "fecha": "2026-06-22T09:27:00",
+      "edad": 91,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.672752,
+        "lng": -74.070543
+      },
+      "texto": "Mujer de 91 anos, paciente con dolor torácico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00331839-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "BOSA",
+      "hora": 9,
+      "fecha": "2026-06-24T09:25:00",
+      "edad": 80,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Hombre de 80 anos, paciente con herida en craneo, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00333674-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "ENGATIVA",
+      "hora": 9,
+      "fecha": "2026-06-25T09:36:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con herida en craneo, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00337267-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "ENGATIVA",
+      "hora": 9,
+      "fecha": "2026-06-27T09:27:00",
+      "edad": 35,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Hombre de 35 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00341778-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "SINTOGASTR - SINTOMAS GASTROINTESTINALES",
+      "localidad": "PUENTE ARANDA",
+      "hora": 9,
+      "fecha": "2026-06-29T09:20:00",
+      "edad": 37,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Hombre de 37 anos, paciente con sintomas gastrointestinales.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00286623-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "SINTOGASTR - SINTOMAS GASTROINTESTINALES",
+      "localidad": "SUBA",
+      "hora": 10,
+      "fecha": "2026-06-01T10:15:00",
+      "edad": 78,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 78 anos, paciente con sintomas gastrointestinales.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00288626-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "TEUSAQUILLO",
+      "hora": 10,
+      "fecha": "2026-06-02T10:08:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.634813,
+        "lng": -74.080642
+      },
+      "texto": "Paciente, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00292520-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "TEUSAQUILLO",
+      "hora": 10,
+      "fecha": "2026-06-04T10:43:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.634813,
+        "lng": -74.080642
+      },
+      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00294890-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "VIOSEXUAL - VIOLENCIA SEXUAL",
+      "localidad": "USME",
+      "hora": 10,
+      "fecha": "2026-06-05T10:36:00",
+      "edad": 7,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Hombre de 7 anos, paciente con violencia sexual.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00297082-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ACV - ACCIDENTE CEREBRO VASCULAR",
+      "localidad": "BOSA",
+      "hora": 10,
+      "fecha": "2026-06-06T10:53:00",
+      "edad": 98,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Mujer de 98 anos, paciente con deficit neurologico focal subito.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00302713-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "AMESUI - AMENAZA DE SUICIDIO",
+      "localidad": "TUNJUELITO",
+      "hora": 10,
+      "fecha": "2026-06-09T10:12:00",
+      "edad": 15,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.574034,
+        "lng": -74.128836
+      },
+      "texto": "Mujer de 15 anos, paciente con amenaza de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00304797-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "PATGIN - PATOLOGIA GINECOBSTÉTRICA",
+      "localidad": "ENGATIVA",
+      "hora": 10,
+      "fecha": "2026-06-10T10:32:00",
+      "edad": 33,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Mujer de 33 anos, paciente con patologia ginecobstétrica.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00310678-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "MALTRATO - MALTRATO",
+      "localidad": "ENGATIVA",
+      "hora": 10,
+      "fecha": "2026-06-13T10:03:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con maltrato.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00315140-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "ENGATIVA",
+      "hora": 10,
+      "fecha": "2026-06-15T10:16:00",
+      "edad": 63,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Mujer de 63 anos, paciente con herida en region abdominal, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00318546-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "BOSA",
+      "hora": 10,
+      "fecha": "2026-06-17T10:49:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Paciente, paciente con herida en torax, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00322363-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "BOSA",
+      "hora": 10,
+      "fecha": "2026-06-19T10:01:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Paciente, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00324435-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 10,
+      "fecha": "2026-06-20T10:45:00",
+      "edad": 65,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Hombre de 65 anos, paciente con herida en region abdominal, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00328033-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "BARRIOS UNIDOS",
+      "hora": 10,
+      "fecha": "2026-06-22T10:41:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.672752,
+        "lng": -74.070543
+      },
+      "texto": "Paciente, paciente con herida en miembro inferior, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00329759-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "BOSA",
+      "hora": 10,
+      "fecha": "2026-06-23T10:25:00",
+      "edad": 60,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Hombre de 60 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00333751-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "SANTA FE",
+      "hora": 10,
+      "fecha": "2026-06-25T10:55:00",
+      "edad": 29,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.603697,
+        "lng": -74.066048
+      },
+      "texto": "Mujer de 29 anos, paciente con herida en craneo, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00337400-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "DOLTOR - DOLOR TORÁCICO",
+      "localidad": "SUBA",
+      "hora": 10,
+      "fecha": "2026-06-27T10:31:00",
+      "edad": 54,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Hombre de 54 anos, paciente con dolor torácico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00343050-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "TEUSAQUILLO",
+      "hora": 10,
+      "fecha": "2026-06-30T10:10:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.634813,
+        "lng": -74.080642
+      },
+      "texto": "Paciente, paciente con herida en torax, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00288685-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "CHAPINERO",
+      "hora": 11,
+      "fecha": "2026-06-02T11:11:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.658259,
+        "lng": -74.0595
+      },
+      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00292614-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "KENNEDY",
+      "hora": 11,
+      "fecha": "2026-06-04T11:11:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00297034-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "LOS MARTIRES",
+      "hora": 11,
+      "fecha": "2026-06-06T11:01:00",
+      "edad": 32,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.609491,
+        "lng": -74.084229
+      },
+      "texto": "Hombre de 32 anos, paciente con herida en miembro inferior, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00301442-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 11,
+      "fecha": "2026-06-08T11:29:00",
+      "edad": 20,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Hombre de 20 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00304970-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "ENGATIVA",
+      "hora": 11,
+      "fecha": "2026-06-10T11:45:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00313079-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "USME",
+      "hora": 11,
+      "fecha": "2026-06-14T11:21:00",
+      "edad": 37,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Hombre de 37 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00316926-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "SUBA",
+      "hora": 11,
+      "fecha": "2026-06-16T11:55:00",
+      "edad": 56,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 56 anos, paciente con herida en miembro inferior, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00322456-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "LOS MARTIRES",
+      "hora": 11,
+      "fecha": "2026-06-19T11:03:00",
+      "edad": 31,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.609491,
+        "lng": -74.084229
+      },
+      "texto": "Hombre de 31 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00326169-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "SUBA",
+      "hora": 11,
+      "fecha": "2026-06-21T11:08:00",
+      "edad": 23,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Hombre de 23 anos, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00328178-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "LOS MARTIRES",
+      "hora": 11,
+      "fecha": "2026-06-22T11:41:00",
+      "edad": 4,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.609491,
+        "lng": -74.084229
+      },
+      "texto": "Mujer de 4 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00333786-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "CHAPINERO",
+      "hora": 11,
+      "fecha": "2026-06-25T11:16:00",
+      "edad": 68,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.658259,
+        "lng": -74.0595
+      },
+      "texto": "Mujer de 68 anos, paciente con herida en torax, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00335553-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CAIALT - CAIDA DE ALTURA",
+      "localidad": "BARRIOS UNIDOS",
+      "hora": 11,
+      "fecha": "2026-06-26T11:26:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.672752,
+        "lng": -74.070543
+      },
+      "texto": "Paciente, paciente con caida de altura.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00341890-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ACV - ACCIDENTE CEREBRO VASCULAR",
+      "localidad": "BARRIOS UNIDOS",
+      "hora": 11,
+      "fecha": "2026-06-29T11:18:00",
+      "edad": 66,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.672752,
+        "lng": -74.070543
+      },
+      "texto": "Mujer de 66 anos, paciente con deficit neurologico focal subito.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00286757-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "AMESUI - AMENAZA DE SUICIDIO",
+      "localidad": "SUBA",
+      "hora": 12,
+      "fecha": "2026-06-01T12:23:00",
+      "edad": 15,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Hombre de 15 anos, paciente con amenaza de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00292754-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "PUENTE ARANDA",
+      "hora": 12,
+      "fecha": "2026-06-04T12:29:00",
+      "edad": 77,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Hombre de 77 anos, paciente con herida en torax, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00297199-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "BARRIOS UNIDOS",
+      "hora": 12,
+      "fecha": "2026-06-06T12:25:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.672752,
+        "lng": -74.070543
+      },
+      "texto": "Paciente, paciente con herida en craneo, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00301623-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "SUBA",
+      "hora": 12,
+      "fecha": "2026-06-08T12:47:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con herida en miembro inferior, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00309031-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "KENNEDY",
+      "hora": 12,
+      "fecha": "2026-06-12T12:53:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente con herida en craneo, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00315263-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "TEUSAQUILLO",
+      "hora": 12,
+      "fecha": "2026-06-15T12:44:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.634813,
+        "lng": -74.080642
+      },
+      "texto": "Paciente, paciente con herida en torax, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00320687-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "SANTA FE",
+      "hora": 12,
+      "fecha": "2026-06-18T12:39:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.603697,
+        "lng": -74.066048
+      },
+      "texto": "Paciente, paciente con herida en craneo, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00326354-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "SINTOGASTR - SINTOMAS GASTROINTESTINALES",
+      "localidad": "FONTIBON",
+      "hora": 12,
+      "fecha": "2026-06-21T12:27:00",
+      "edad": 72,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Mujer de 72 anos, paciente con sintomas gastrointestinales.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00332180-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "ENGATIVA",
+      "hora": 12,
+      "fecha": "2026-06-24T12:32:00",
+      "edad": 25,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Hombre de 25 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00340179-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "ENGATIVA",
+      "hora": 12,
+      "fecha": "2026-06-28T12:29:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00290711-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "USME",
+      "hora": 13,
+      "fecha": "2026-06-03T13:50:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00295150-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 13,
+      "fecha": "2026-06-05T13:46:00",
+      "edad": 40,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Hombre de 40 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00299579-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 13,
+      "fecha": "2026-06-07T13:31:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Paciente, paciente con herida en miembro inferior, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00303255-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "KENNEDY",
+      "hora": 13,
+      "fecha": "2026-06-09T13:45:00",
+      "edad": 61,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Mujer de 61 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00308906-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "VIOSEXUAL - VIOLENCIA SEXUAL",
+      "localidad": "USME",
+      "hora": 13,
+      "fecha": "2026-06-12T13:50:00",
+      "edad": 15,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Hombre de 15 anos, paciente con violencia sexual.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00311039-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "BOSA",
+      "hora": 13,
+      "fecha": "2026-06-13T13:32:00",
+      "edad": 3,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Mujer de 3 anos, paciente con herida en region abdominal, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00317060-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "ENGATIVA",
+      "hora": 13,
+      "fecha": "2026-06-16T13:11:00",
+      "edad": 23,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Hombre de 23 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00324675-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 13,
+      "fecha": "2026-06-20T13:35:00",
+      "edad": 78,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Hombre de 78 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00328318-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "SUBA",
+      "hora": 13,
+      "fecha": "2026-06-22T13:43:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00332248-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "ENGATIVA",
+      "hora": 13,
+      "fecha": "2026-06-24T13:24:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00335667-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 13,
+      "fecha": "2026-06-26T13:51:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Paciente, paciente con herida en torax, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00341982-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "ENGATIVA",
+      "hora": 13,
+      "fecha": "2026-06-29T13:04:00",
+      "edad": 13,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Mujer de 13 anos, paciente con herida en region abdominal, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00286910-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "BOSA",
+      "hora": 14,
+      "fecha": "2026-06-01T14:08:00",
+      "edad": 24,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Hombre de 24 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00291073-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "SINTOGASTR - SINTOMAS GASTROINTESTINALES",
+      "localidad": "CHAPINERO",
+      "hora": 14,
+      "fecha": "2026-06-03T14:11:00",
+      "edad": 74,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.658259,
+        "lng": -74.0595
+      },
+      "texto": "Mujer de 74 anos, paciente con sintomas gastrointestinales.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00297343-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "PUENTE ARANDA",
+      "hora": 14,
+      "fecha": "2026-06-06T14:59:00",
+      "edad": 62,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Mujer de 62 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00299577-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "CHAPINERO",
+      "hora": 14,
+      "fecha": "2026-06-07T14:22:00",
+      "edad": 63,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.658259,
+        "lng": -74.0595
+      },
+      "texto": "Mujer de 63 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00303302-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "TUNJUELITO",
+      "hora": 14,
+      "fecha": "2026-06-09T14:03:00",
+      "edad": 21,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.574034,
+        "lng": -74.128836
+      },
+      "texto": "Hombre de 21 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00307172-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "SUBA",
+      "hora": 14,
+      "fecha": "2026-06-11T14:48:00",
+      "edad": 36,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 36 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00311155-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "BARRIOS UNIDOS",
+      "hora": 14,
+      "fecha": "2026-06-13T14:52:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.672752,
+        "lng": -74.070543
+      },
+      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00317092-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 14,
+      "fecha": "2026-06-16T14:34:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00320970-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "DOLTOR - DOLOR TORÁCICO",
+      "localidad": "KENNEDY",
+      "hora": 14,
+      "fecha": "2026-06-18T14:58:00",
+      "edad": 70,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Mujer de 70 anos, paciente con dolor torácico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00326546-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "DOLTOR - DOLOR TORÁCICO",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 14,
+      "fecha": "2026-06-21T14:33:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Paciente, paciente con dolor torácico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00330112-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "PATGIN - PATOLOGIA GINECOBSTÉTRICA",
+      "localidad": "SUBA",
+      "hora": 14,
+      "fecha": "2026-06-23T14:03:00",
+      "edad": 36,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 36 anos, paciente con patologia ginecobstétrica.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00335715-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "USME",
+      "hora": 14,
+      "fecha": "2026-06-26T14:02:00",
+      "edad": 13,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Hombre de 13 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00337750-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "KENNEDY",
+      "hora": 14,
+      "fecha": "2026-06-27T14:41:00",
+      "edad": 90,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 90 anos, paciente con herida en region abdominal, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00286906-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "USME",
+      "hora": 15,
+      "fecha": "2026-06-01T15:57:00",
+      "edad": 17,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Hombre de 17 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00290986-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "ENGATIVA",
+      "hora": 15,
+      "fecha": "2026-06-03T15:00:00",
+      "edad": 45,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Hombre de 45 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00293106-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "DOLTOR - DOLOR TORÁCICO",
+      "localidad": "PUENTE ARANDA",
+      "hora": 15,
+      "fecha": "2026-06-04T15:59:00",
+      "edad": 67,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Hombre de 67 anos, paciente con dolor torácico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00297513-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "USME",
+      "hora": 15,
+      "fecha": "2026-06-06T15:22:00",
+      "edad": 79,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Hombre de 79 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00301776-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "ENGATIVA",
+      "hora": 15,
+      "fecha": "2026-06-08T15:28:00",
+      "edad": 86,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Mujer de 86 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00304989-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "SUBA",
+      "hora": 15,
+      "fecha": "2026-06-10T15:13:00",
+      "edad": 32,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Hombre de 32 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00307342-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 15,
+      "fecha": "2026-06-11T15:29:00",
+      "edad": 26,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Hombre de 26 anos, paciente con herida en miembro inferior, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00310930-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "BOSA",
+      "hora": 15,
+      "fecha": "2026-06-13T15:37:00",
+      "edad": 26,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Mujer de 26 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00315548-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "BOSA",
+      "hora": 15,
+      "fecha": "2026-06-15T15:47:00",
+      "edad": 74,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Mujer de 74 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00320945-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "BARRIOS UNIDOS",
+      "hora": 15,
+      "fecha": "2026-06-18T15:19:00",
+      "edad": 86,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.672752,
+        "lng": -74.070543
+      },
+      "texto": "Mujer de 86 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00324840-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "USME",
+      "hora": 15,
+      "fecha": "2026-06-20T15:29:00",
+      "edad": 15,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Hombre de 15 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00326743-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "USME",
+      "hora": 15,
+      "fecha": "2026-06-21T15:54:00",
+      "edad": 76,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Mujer de 76 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00330247-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CAIALT - CAIDA DE ALTURA",
+      "localidad": "SUBA",
+      "hora": 15,
+      "fecha": "2026-06-23T15:34:00",
+      "edad": 92,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Hombre de 92 anos, paciente con caida de altura.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00334097-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 15,
+      "fecha": "2026-06-25T15:19:00",
+      "edad": 57,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Hombre de 57 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00337894-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "SUBA",
+      "hora": 15,
+      "fecha": "2026-06-27T15:55:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00343472-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "BOSA",
+      "hora": 15,
+      "fecha": "2026-06-30T15:29:00",
+      "edad": 79,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Mujer de 79 anos, paciente con herida en craneo, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00291136-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "AMESUI - AMENAZA DE SUICIDIO",
+      "localidad": "ENGATIVA",
+      "hora": 16,
+      "fecha": "2026-06-03T16:02:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con amenaza de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00293270-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "PUENTE ARANDA",
+      "hora": 16,
+      "fecha": "2026-06-04T16:47:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00301822-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "KENNEDY",
+      "hora": 16,
+      "fecha": "2026-06-08T16:03:00",
+      "edad": 46,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 46 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00307424-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "KENNEDY",
+      "hora": 16,
+      "fecha": "2026-06-11T16:21:00",
+      "edad": 87,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 87 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00317171-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "SUBA",
+      "hora": 16,
+      "fecha": "2026-06-16T16:10:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00322960-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "BOSA",
+      "hora": 16,
+      "fecha": "2026-06-19T16:32:00",
+      "edad": 23,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Hombre de 23 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00330059-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "BOSA",
+      "hora": 16,
+      "fecha": "2026-06-23T16:39:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00335978-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "BARRIOS UNIDOS",
+      "hora": 16,
+      "fecha": "2026-06-26T16:03:00",
+      "edad": 26,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.672752,
+        "lng": -74.070543
+      },
+      "texto": "Mujer de 26 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00342249-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 16,
+      "fecha": "2026-06-29T16:54:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00300089-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ACV - ACCIDENTE CEREBRO VASCULAR",
+      "localidad": "KENNEDY",
+      "hora": 17,
+      "fecha": "2026-06-07T17:30:00",
+      "edad": 100,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 100 anos, paciente con deficit neurologico focal subito.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00313732-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "SUBA",
+      "hora": 17,
+      "fecha": "2026-06-14T17:39:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00325008-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "LOS MARTIRES",
+      "hora": 17,
+      "fecha": "2026-06-20T17:00:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.609491,
+        "lng": -74.084229
+      },
+      "texto": "Paciente, paciente con herida en miembro inferior, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00334391-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "KENNEDY",
+      "hora": 17,
+      "fecha": "2026-06-25T17:52:00",
+      "edad": 23,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 23 anos, paciente con herida en miembro inferior, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00293561-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "KENNEDY",
+      "hora": 18,
+      "fecha": "2026-06-04T18:47:00",
+      "edad": 23,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 23 anos, paciente con herida en miembro inferior, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00307726-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "FONTIBON",
+      "hora": 18,
+      "fecha": "2026-06-11T18:53:00",
+      "edad": 23,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Mujer de 23 anos, paciente con herida en craneo, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00322500-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "SINTOGASTR - SINTOMAS GASTROINTESTINALES",
+      "localidad": "ANTONIO NARINO",
+      "hora": 18,
+      "fecha": "2026-06-19T18:47:00",
+      "edad": 30,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.591033,
+        "lng": -74.091912
+      },
+      "texto": "Hombre de 30 anos, paciente con sintomas gastrointestinales.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00334406-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 18,
+      "fecha": "2026-06-25T18:27:00",
+      "edad": 16,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Hombre de 16 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00343642-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "ANTONIO NARINO",
+      "hora": 18,
+      "fecha": "2026-06-30T18:25:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.591033,
+        "lng": -74.091912
+      },
+      "texto": "Paciente, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00289651-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "BOSA",
+      "hora": 19,
+      "fecha": "2026-06-02T19:26:00",
+      "edad": 17,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Mujer de 17 anos, paciente con herida en craneo, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00295784-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "APOYO CRUE",
+      "localidad": "USME",
+      "hora": 19,
+      "fecha": "2026-06-05T19:25:00",
+      "edad": 8,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Mujer de 8 anos, paciente con apoyo crue.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00300304-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "KENNEDY",
+      "hora": 19,
+      "fecha": "2026-06-07T19:18:00",
+      "edad": 28,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 28 anos, paciente con herida en torax, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00305753-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "FONTIBON",
+      "hora": 19,
+      "fecha": "2026-06-10T19:26:00",
+      "edad": 45,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Mujer de 45 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00309581-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "BARRIOS UNIDOS",
+      "hora": 19,
+      "fecha": "2026-06-12T19:14:00",
+      "edad": 45,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.672752,
+        "lng": -74.070543
+      },
+      "texto": "Hombre de 45 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00313907-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CAIALT - CAIDA DE ALTURA",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 19,
+      "fecha": "2026-06-14T19:43:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Paciente, paciente con caida de altura.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00322738-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 19,
+      "fecha": "2026-06-19T19:26:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Paciente, paciente con herida en region abdominal, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00325252-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "SUBA",
+      "hora": 19,
+      "fecha": "2026-06-20T19:47:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00328893-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "FONTIBON",
+      "hora": 19,
+      "fecha": "2026-06-22T19:51:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Paciente, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00334312-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "AMESUI - AMENAZA DE SUICIDIO",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 19,
+      "fecha": "2026-06-25T19:24:00",
+      "edad": 30,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Mujer de 30 anos, paciente con amenaza de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00338305-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "ENGATIVA",
+      "hora": 19,
+      "fecha": "2026-06-27T19:42:00",
+      "edad": 70,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Hombre de 70 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00287425-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 20,
+      "fecha": "2026-06-01T20:11:00",
+      "edad": 90,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Mujer de 90 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00291787-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ACV - ACCIDENTE CEREBRO VASCULAR",
+      "localidad": "KENNEDY",
+      "hora": 20,
+      "fecha": "2026-06-03T20:45:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente con deficit neurologico focal subito.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00295977-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "PATGIN - PATOLOGIA GINECOBSTÉTRICA",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 20,
+      "fecha": "2026-06-05T20:32:00",
+      "edad": 21,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Mujer de 21 anos, paciente con patologia ginecobstétrica.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00302104-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "SANTA FE",
+      "hora": 20,
+      "fecha": "2026-06-08T20:24:00",
+      "edad": 35,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.603697,
+        "lng": -74.066048
+      },
+      "texto": "Hombre de 35 anos, paciente con herida en torax, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00307836-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "ENGATIVA",
+      "hora": 20,
+      "fecha": "2026-06-11T20:12:00",
+      "edad": 62,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Mujer de 62 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00313989-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "SUBA",
+      "hora": 20,
+      "fecha": "2026-06-14T20:23:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00319353-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "KENNEDY",
+      "hora": 20,
+      "fecha": "2026-06-17T20:08:00",
+      "edad": 13,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 13 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00325267-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "USME",
+      "hora": 20,
+      "fecha": "2026-06-20T20:07:00",
+      "edad": 6,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Mujer de 6 anos, paciente con herida en region abdominal, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00330590-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "USME",
+      "hora": 20,
+      "fecha": "2026-06-23T20:13:00",
+      "edad": 28,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Mujer de 28 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00336395-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "ENGATIVA",
+      "hora": 20,
+      "fecha": "2026-06-26T20:10:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00342433-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "KENNEDY",
+      "hora": 20,
+      "fecha": "2026-06-29T20:55:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00289675-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "ANTONIO NARINO",
+      "hora": 21,
+      "fecha": "2026-06-02T21:31:00",
+      "edad": 23,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.591033,
+        "lng": -74.091912
+      },
+      "texto": "Mujer de 23 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00293867-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "CAIALT - CAIDA DE ALTURA",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 21,
+      "fecha": "2026-06-04T21:08:00",
+      "edad": 80,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Mujer de 80 anos, paciente con caida de altura.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00299901-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "BARRIOS UNIDOS",
+      "hora": 21,
+      "fecha": "2026-06-07T21:37:00",
+      "edad": 34,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.672752,
+        "lng": -74.070543
+      },
+      "texto": "Hombre de 34 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00305851-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "SINTOGASTR - SINTOMAS GASTROINTESTINALES",
+      "localidad": "ENGATIVA",
+      "hora": 21,
+      "fecha": "2026-06-10T21:16:00",
+      "edad": 101,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Hombre de 101 anos, paciente con sintomas gastrointestinales.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00309816-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ACV - ACCIDENTE CEREBRO VASCULAR",
+      "localidad": "BOSA",
+      "hora": 21,
+      "fecha": "2026-06-12T21:22:00",
+      "edad": 69,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Mujer de 69 anos, paciente con deficit neurologico focal subito.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00314150-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "BOSA",
+      "hora": 21,
+      "fecha": "2026-06-14T21:26:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Paciente, paciente con herida en torax, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00319569-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "BOSA",
+      "hora": 21,
+      "fecha": "2026-06-17T21:51:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00325418-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "KENNEDY",
+      "hora": 21,
+      "fecha": "2026-06-20T21:37:00",
+      "edad": 30,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 30 anos, paciente con herida en region abdominal, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00333028-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "SANTA FE",
+      "hora": 21,
+      "fecha": "2026-06-24T21:52:00",
+      "edad": 35,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.603697,
+        "lng": -74.066048
+      },
+      "texto": "Mujer de 35 anos, paciente con herida en torax, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00336511-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTOX - INTOXICACION",
+      "localidad": "TEUSAQUILLO",
+      "hora": 21,
+      "fecha": "2026-06-26T21:33:00",
+      "edad": 18,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.634813,
+        "lng": -74.080642
+      },
+      "texto": "Hombre de 18 anos, paciente con intoxicacion.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00343572-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "PUENTE ARANDA",
+      "hora": 21,
+      "fecha": "2026-06-30T21:18:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00291521-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "AMESUI - AMENAZA DE SUICIDIO",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 22,
+      "fecha": "2026-06-03T22:46:00",
+      "edad": 32,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Mujer de 32 anos, paciente con amenaza de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00296121-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "ENGATIVA",
+      "hora": 22,
+      "fecha": "2026-06-05T22:00:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con herida en miembro inferior, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00300661-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "KENNEDY",
+      "hora": 22,
+      "fecha": "2026-06-07T22:15:00",
+      "edad": 21,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 21 anos, paciente con herida en craneo, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00306200-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "USAQUEN",
+      "hora": 22,
+      "fecha": "2026-06-10T22:12:00",
+      "edad": 74,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.721878,
+        "lng": -74.038976
+      },
+      "texto": "Hombre de 74 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00311973-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "USAQUEN",
+      "hora": 22,
+      "fecha": "2026-06-13T22:27:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.721878,
+        "lng": -74.038976
+      },
+      "texto": "Paciente, paciente con herida en craneo, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00317918-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 22,
+      "fecha": "2026-06-16T22:08:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00321789-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "PUENTE ARANDA",
+      "hora": 22,
+      "fecha": "2026-06-18T22:38:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Paciente, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00329135-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "KENNEDY",
+      "hora": 22,
+      "fecha": "2026-06-22T22:26:00",
+      "edad": 69,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Mujer de 69 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00334861-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "KENNEDY",
+      "hora": 22,
+      "fecha": "2026-06-25T22:27:00",
+      "edad": 24,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Hombre de 24 anos, paciente con herida en torax, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00342466-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "TEUSAQUILLO",
+      "hora": 22,
+      "fecha": "2026-06-29T22:01:00",
+      "edad": 32,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.634813,
+        "lng": -74.080642
+      },
+      "texto": "Hombre de 32 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00289816-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "SINTOGASTR - SINTOMAS GASTROINTESTINALES",
+      "localidad": "USME",
+      "hora": 23,
+      "fecha": "2026-06-02T23:15:00",
+      "edad": 80,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Hombre de 80 anos, paciente con sintomas gastrointestinales.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00294179-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "SUBA",
+      "hora": 23,
+      "fecha": "2026-06-04T23:53:00",
+      "edad": 20,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Hombre de 20 anos, paciente con herida en region abdominal, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00304030-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "CHAPINERO",
+      "hora": 23,
+      "fecha": "2026-06-09T23:18:00",
+      "edad": 51,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.658259,
+        "lng": -74.0595
+      },
+      "texto": "Hombre de 51 anos, paciente con herida en region abdominal, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00310058-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "SUBA",
+      "hora": 23,
+      "fecha": "2026-06-12T23:27:00",
+      "edad": 32,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 32 anos, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00316244-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "VIOSEXUAL - VIOLENCIA SEXUAL",
+      "localidad": "KENNEDY",
+      "hora": 23,
+      "fecha": "2026-06-15T23:44:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente con violencia sexual.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00321820-26",
+      "triage": 2,
+      "prioridad123": "Alta",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "FONTIBON",
+      "hora": 23,
+      "fecha": "2026-06-18T23:23:00",
+      "edad": 56,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Mujer de 56 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00287922-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "SINTOGASTR - SINTOMAS GASTROINTESTINALES",
+      "localidad": "LOS MARTIRES",
+      "hora": 0,
+      "fecha": "2026-06-02T00:17:00",
+      "edad": 35,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.609491,
+        "lng": -74.084229
+      },
+      "texto": "Hombre de 35 anos, paciente con sintomas gastrointestinales.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00341479-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "TEUSAQUILLO",
+      "hora": 0,
+      "fecha": "2026-06-29T00:54:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.634813,
+        "lng": -74.080642
+      },
+      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00290105-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "AMESUI - AMENAZA DE SUICIDIO",
+      "localidad": "BOSA",
+      "hora": 2,
+      "fecha": "2026-06-03T02:15:00",
+      "edad": 24,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Hombre de 24 anos, paciente con amenaza de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00294340-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "SUBA",
+      "hora": 3,
+      "fecha": "2026-06-05T03:31:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00288143-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 4,
+      "fecha": "2026-06-02T04:35:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00342801-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ACOMPAÑAMIENTO A EVENTO",
+      "localidad": "FONTIBON",
+      "hora": 5,
+      "fecha": "2026-06-30T05:04:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Paciente, paciente con acompañamiento a evento.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00288289-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "LOS MARTIRES",
+      "hora": 7,
+      "fecha": "2026-06-02T07:42:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.609491,
+        "lng": -74.084229
+      },
+      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00308568-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "BOSA",
+      "hora": 7,
+      "fecha": "2026-06-12T07:52:00",
+      "edad": 37,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Mujer de 37 anos, paciente con herida en region abdominal, sangrado abundante.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00335189-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "SINTOGASTR - SINTOMAS GASTROINTESTINALES",
+      "localidad": "PUENTE ARANDA",
+      "hora": 7,
+      "fecha": "2026-06-26T07:41:00",
+      "edad": 32,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Hombre de 32 anos, paciente con sintomas gastrointestinales.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00299215-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "USME",
+      "hora": 8,
+      "fecha": "2026-06-07T08:51:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.492385,
+        "lng": -74.115013
+      },
+      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00316581-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "AMESUI - AMENAZA DE SUICIDIO",
+      "localidad": "SUBA",
+      "hora": 8,
+      "fecha": "2026-06-16T08:12:00",
+      "edad": 35,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 35 anos, paciente con amenaza de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00286493-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "SANTA FE",
+      "hora": 9,
+      "fecha": "2026-06-01T09:20:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.603697,
+        "lng": -74.066048
+      },
+      "texto": "Paciente, paciente con herida en region abdominal, sangrado controlado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00299233-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "AMESUI - AMENAZA DE SUICIDIO",
+      "localidad": "SUBA",
+      "hora": 9,
+      "fecha": "2026-06-07T09:03:00",
+      "edad": 37,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 37 anos, paciente con amenaza de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00306757-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 9,
+      "fecha": "2026-06-11T09:46:00",
+      "edad": 97,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Mujer de 97 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00324389-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "SUBA",
+      "hora": 9,
+      "fecha": "2026-06-20T09:39:00",
+      "edad": 59,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 59 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00335433-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "SUBA",
+      "hora": 9,
+      "fecha": "2026-06-26T09:59:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00299356-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "SUBA",
+      "hora": 10,
+      "fecha": "2026-06-07T10:49:00",
+      "edad": 78,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Hombre de 78 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00318394-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "BOSA",
+      "hora": 10,
+      "fecha": "2026-06-17T10:30:00",
+      "edad": 20,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Hombre de 20 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00333741-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "SINTOGASTR - SINTOMAS GASTROINTESTINALES",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 10,
+      "fecha": "2026-06-25T10:18:00",
+      "edad": 75,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Hombre de 75 anos, paciente con sintomas gastrointestinales.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00290768-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "ENGATIVA",
+      "hora": 11,
+      "fecha": "2026-06-03T11:19:00",
+      "edad": 75,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Mujer de 75 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00306904-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 11,
+      "fecha": "2026-06-11T11:35:00",
+      "edad": 24,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Mujer de 24 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00316865-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "SINTOGASTR - SINTOMAS GASTROINTESTINALES",
+      "localidad": "USAQUEN",
+      "hora": 11,
+      "fecha": "2026-06-16T11:36:00",
+      "edad": 22,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.721878,
+        "lng": -74.038976
+      },
+      "texto": "Hombre de 22 anos, paciente con sintomas gastrointestinales.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00328087-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "KENNEDY",
+      "hora": 11,
+      "fecha": "2026-06-22T11:30:00",
+      "edad": 95,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Mujer de 95 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00292634-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 12,
+      "fecha": "2026-06-04T12:07:00",
+      "edad": 36,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Hombre de 36 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00318693-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "PUENTE ARANDA",
+      "hora": 12,
+      "fecha": "2026-06-17T12:36:00",
+      "edad": 71,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Mujer de 71 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00341964-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "SUBA",
+      "hora": 12,
+      "fecha": "2026-06-29T12:48:00",
+      "edad": 71,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Hombre de 71 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00303179-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "PUENTE ARANDA",
+      "hora": 13,
+      "fecha": "2026-06-09T13:19:00",
+      "edad": 37,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Hombre de 37 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00322482-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "PUENTE ARANDA",
+      "hora": 13,
+      "fecha": "2026-06-19T13:28:00",
+      "edad": 20,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Mujer de 20 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00291066-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "PUENTE ARANDA",
+      "hora": 14,
+      "fecha": "2026-06-03T14:30:00",
+      "edad": 41,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Hombre de 41 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00311079-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "TUNJUELITO",
+      "hora": 14,
+      "fecha": "2026-06-13T14:13:00",
+      "edad": 29,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.574034,
+        "lng": -74.128836
+      },
+      "texto": "Hombre de 29 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00335674-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "AMESUI - AMENAZA DE SUICIDIO",
+      "localidad": "ENGATIVA",
+      "hora": 14,
+      "fecha": "2026-06-26T14:02:00",
+      "edad": 14,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Hombre de 14 anos, paciente con amenaza de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00299939-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "SINTOGASTR - SINTOMAS GASTROINTESTINALES",
+      "localidad": "SUBA",
+      "hora": 15,
+      "fecha": "2026-06-07T15:58:00",
+      "edad": 58,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Hombre de 58 anos, paciente con sintomas gastrointestinales.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00315539-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "ANTONIO NARINO",
+      "hora": 15,
+      "fecha": "2026-06-15T15:44:00",
+      "edad": 46,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.591033,
+        "lng": -74.091912
+      },
+      "texto": "Hombre de 46 anos, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00340441-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "SUBA",
+      "hora": 15,
+      "fecha": "2026-06-28T15:16:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00305490-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "TUNJUELITO",
+      "hora": 16,
+      "fecha": "2026-06-10T16:14:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.574034,
+        "lng": -74.128836
+      },
+      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00335732-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "AMESUI - AMENAZA DE SUICIDIO",
+      "localidad": "FONTIBON",
+      "hora": 16,
+      "fecha": "2026-06-26T16:14:00",
+      "edad": 23,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.672954,
+        "lng": -74.144141
+      },
+      "texto": "Hombre de 23 anos, paciente con amenaza de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00334309-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "SUBA",
+      "hora": 17,
+      "fecha": "2026-06-25T17:04:00",
+      "edad": 82,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Hombre de 82 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00338185-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "SAN CRISTOBAL",
+      "hora": 18,
+      "fecha": "2026-06-27T18:58:00",
+      "edad": 86,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.574944,
+        "lng": -74.087372
+      },
+      "texto": "Mujer de 86 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00317511-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "SUBA",
+      "hora": 19,
+      "fecha": "2026-06-16T19:55:00",
+      "edad": 89,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Hombre de 89 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00338076-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 19,
+      "fecha": "2026-06-27T19:29:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00307874-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "SINTOGASTR - SINTOMAS GASTROINTESTINALES",
+      "localidad": "LOS MARTIRES",
+      "hora": 20,
+      "fecha": "2026-06-11T20:21:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.609491,
+        "lng": -74.084229
+      },
+      "texto": "Paciente, paciente con sintomas gastrointestinales.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00323410-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "ENGATIVA",
+      "hora": 20,
+      "fecha": "2026-06-19T20:23:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00297993-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "KENNEDY",
+      "hora": 21,
+      "fecha": "2026-06-06T21:11:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00323467-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "SINTOGASTR - SINTOMAS GASTROINTESTINALES",
+      "localidad": "TUNJUELITO",
+      "hora": 21,
+      "fecha": "2026-06-19T21:16:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.574034,
+        "lng": -74.128836
+      },
+      "texto": "Paciente, paciente con sintomas gastrointestinales.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00287578-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 22,
+      "fecha": "2026-06-01T22:10:00",
+      "edad": 30,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Hombre de 30 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00314026-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "BOSA",
+      "hora": 22,
+      "fecha": "2026-06-14T22:03:00",
+      "edad": 47,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Mujer de 47 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00293181-26",
+      "triage": 3,
+      "prioridad123": "Media",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "LOS MARTIRES",
+      "hora": 23,
+      "fecha": "2026-06-04T23:48:00",
+      "edad": 56,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.609491,
+        "lng": -74.084229
+      },
+      "texto": "Hombre de 56 anos, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00286112-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "ACOMPAÑAMIENTO A EVENTO",
+      "localidad": "LOS MARTIRES",
+      "hora": 0,
+      "fecha": "2026-06-01T00:40:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.609491,
+        "lng": -74.084229
+      },
+      "texto": "Paciente, paciente con acompañamiento a evento.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00310148-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "ACOMPAÑAMIENTO A EVENTO",
+      "localidad": "ENGATIVA",
+      "hora": 0,
+      "fecha": "2026-06-13T00:00:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con acompañamiento a evento.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00331127-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "ACOMPAÑAMIENTO A EVENTO",
+      "localidad": "LOS MARTIRES",
+      "hora": 0,
+      "fecha": "2026-06-24T00:04:00",
+      "edad": 15,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.609491,
+        "lng": -74.084229
+      },
+      "texto": "Hombre de 15 anos, paciente con acompañamiento a evento.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00304225-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "ACOMPAÑAMIENTO A EVENTO",
+      "localidad": "ENGATIVA",
+      "hora": 1,
+      "fecha": "2026-06-10T01:39:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con acompañamiento a evento.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00316337-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "BOSA",
+      "hora": 3,
+      "fecha": "2026-06-16T03:10:00",
+      "edad": 22,
+      "sexo": "M",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Hombre de 22 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00320021-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "PUENTE ARANDA",
+      "hora": 5,
+      "fecha": "2026-06-18T05:25:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.628269,
+        "lng": -74.117947
+      },
+      "texto": "Paciente, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00329349-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "HERIDO - HERIDOS ACCIDENTALES",
+      "localidad": "KENNEDY",
+      "hora": 6,
+      "fecha": "2026-06-23T06:35:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente con herida en miembro inferior, sangrado activo.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00320148-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "ACOMPAÑAMIENTO A EVENTO",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 7,
+      "fecha": "2026-06-18T07:13:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Paciente, paciente con acompañamiento a evento.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00288553-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "INCONSCIEN - INCONSCIENTE O PARO CARDIORRESPIRATORIO",
+      "localidad": "SUBA",
+      "hora": 9,
+      "fecha": "2026-06-02T09:28:00",
+      "edad": 71,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Mujer de 71 anos, paciente inconsciente, sin respuesta a estimulos.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00304700-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "RAFAEL URIBE URIBE",
+      "hora": 10,
+      "fecha": "2026-06-10T10:12:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.569346,
+        "lng": -74.1096
+      },
+      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00313108-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "DOLTOR - DOLOR TORÁCICO",
+      "localidad": "KENNEDY",
+      "hora": 11,
+      "fecha": "2026-06-14T11:26:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente con dolor torácico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00341974-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "ENGATIVA",
+      "hora": 12,
+      "fecha": "2026-06-29T12:42:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00301770-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "SANTA FE",
+      "hora": 15,
+      "fecha": "2026-06-08T15:09:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.603697,
+        "lng": -74.066048
+      },
+      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00326856-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "ACOMPAÑAMIENTO A EVENTO",
+      "localidad": "KENNEDY",
+      "hora": 16,
+      "fecha": "2026-06-21T16:44:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Paciente, paciente con acompañamiento a evento.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00307587-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "CONVULSION - CONVULSION",
+      "localidad": "BOSA",
+      "hora": 18,
+      "fecha": "2026-06-11T18:57:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Paciente, paciente con episodio convulsivo tonico clonico.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00309269-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "SUBA",
+      "hora": 19,
+      "fecha": "2026-06-12T19:24:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.740891,
+        "lng": -74.089124
+      },
+      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00291782-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "KENNEDY",
+      "hora": 20,
+      "fecha": "2026-06-03T20:30:00",
+      "edad": 59,
+      "sexo": "F",
+      "origen": {
+        "lat": 4.627143,
+        "lng": -74.145412
+      },
+      "texto": "Mujer de 59 anos, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00336468-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "ENFERMO",
+      "localidad": "ANTONIO NARINO",
+      "hora": 20,
+      "fecha": "2026-06-26T20:59:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.591033,
+        "lng": -74.091912
+      },
+      "texto": "Paciente, paciente con malestar general, sin foco claro.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00319429-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "INTSUI - INTENTO DE SUICIDIO",
+      "localidad": "BOSA",
+      "hora": 21,
+      "fecha": "2026-06-17T21:25:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.635412,
+        "lng": -74.205896
+      },
+      "texto": "Paciente, paciente con intento de suicidio.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00298254-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "TRASTMENT - TRASTORNO MENTAL",
+      "localidad": "TEUSAQUILLO",
+      "hora": 22,
+      "fecha": "2026-06-06T22:34:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.634813,
+        "lng": -74.080642
+      },
+      "texto": "Paciente, paciente con agitacion psicomotora, trastorno mental descompensado.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00323584-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "ENGATIVA",
+      "hora": 22,
+      "fecha": "2026-06-19T22:58:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.697922,
+        "lng": -74.109584
+      },
+      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    },
+    {
+      "incidente": "CRU-00291826-26",
+      "triage": 4,
+      "prioridad123": "Baja",
+      "tipoIncidente": "EVERES - EVENTO RESPIRATORIO",
+      "localidad": "CIUDAD BOLIVAR",
+      "hora": 23,
+      "fecha": "2026-06-03T23:13:00",
+      "edad": null,
+      "sexo": "desconocido",
+      "origen": {
+        "lat": 4.561281,
+        "lng": -74.148875
+      },
+      "texto": "Paciente, paciente con dificultad respiratoria, saturacion baja.",
+      "dictadoSintetico": true
+    }
+  ]
+}

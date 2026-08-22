@@ -1,0 +1,190 @@
+"""
+PULSO — pipeline de datos.
+
+    python scripts/datos/construir.py
+
+Lee data/ (crudo, jamas lo modifica) y escribe:
+
+    data/CATALOGO.md            que hay en la carpeta y para que sirve
+    data/procesado/*.json       artefactos tipados que consume la app
+    data/procesado/reporte.json que salio de cada paso, con sus problemas
+
+Y genera el codigo TypeScript que core importa:
+
+    apps/backend/core/src/sedes/catalogo.generado.ts
+    apps/backend/core/src/scoring/demanda.generada.ts
+
+Es idempotente: correlo las veces que quieras. Solo stdlib, sin pip install.
+"""
+
+from __future__ import annotations
+
+import datetime as dt
+import json
+import sys
+import traceback
+from pathlib import Path
+
+AQUI = Path(__file__).resolve().parent
+sys.path.insert(0, str(AQUI))
+
+import catalogar  # noqa: E402
+from comun import RAIZ, SALIDA, escribir_json  # noqa: E402
+from transformadores import casos, contexto, demanda, ocupacion, sedes  # noqa: E402
+
+PASOS = [
+    ("catalogo", "Inventario de data/", catalogar.construir),
+    ("sedes", "84 IPS de urgencias -> sedes.json", sedes.construir),
+    ("demanda", "9206 incidentes 123 -> demanda.json", demanda.construir),
+    ("ocupacion", "Ocupacion por subred -> ocupacion.json", ocupacion.construir),
+    ("casos", "Incidentes reales -> casos-demo.json", casos.construir),
+    ("contexto", "Ambulancias, camas, tiempos -> contexto.json", contexto.construir),
+]
+
+
+# ── Generacion de TypeScript ──────────────────────────────────────
+
+CABECERA = """/**
+ * ARCHIVO GENERADO — no editar a mano.
+ *
+ * Lo produce `python scripts/datos/construir.py` a partir de data/.
+ * Cualquier cambio aqui se pierde en la siguiente corrida. Si necesitas
+ * cambiar el contenido, cambia la fuente o su transformador.
+ *
+ * Generado: {fecha}
+ * Fuente:   {fuente}
+ */
+"""
+
+
+def _ts_sedes() -> Path:
+    """sedes.json -> un modulo TS tipado que core importa como cualquier otro."""
+    datos = json.loads((SALIDA / "sedes.json").read_text(encoding="utf-8"))
+
+    # Solo los campos del tipo Sede. Los de trazabilidad (subred, origenCodigo,
+    # serviciosInferidos) se quedan en el JSON: sirven para auditar, no para el
+    # ruteo, y meterlos aqui obligaria a tocar el contrato compartido.
+    campos = (
+        "codigo", "nombre", "direccion", "localidad", "coord",
+        "naturaleza", "complejidad", "telefono", "servicios", "camas",
+    )
+    limpias = [{k: s[k] for k in campos} for s in datos]
+
+    cuerpo = (
+        CABECERA.format(
+            fecha=dt.date.today().isoformat(),
+            fuente="osb_ofertasrv-ips-urgencias.csv + ins.geojson + osb_ocupacion-urgencias.csv",
+        )
+        + "\nimport type { Sede } from '../contracts/types';\n\n"
+        + "/** 84 sedes de urgencias de Bogota. Ver data/CATALOGO.md. */\n"
+        + "export const SEDES_CATALOGO: Sede[] = "
+        + json.dumps(limpias, ensure_ascii=False, indent=2)
+        + ";\n"
+    )
+
+    ruta = RAIZ / "apps/backend/core/src/sedes/catalogo.generado.ts"
+    ruta.write_text(cuerpo, encoding="utf-8")
+    return ruta
+
+
+def _ts_demanda() -> Path:
+    """demanda.json -> la curva horaria medida, lista para congestion.service.ts."""
+    d = json.loads((SALIDA / "demanda.json").read_text(encoding="utf-8"))
+
+    hora = {int(k): v for k, v in d["curvaHora"].items()}
+    dia = d["factorDia"]
+
+    cuerpo = (
+        CABECERA.format(
+            fecha=dt.date.today().isoformat(),
+            fuente=f"llamadas123.csv — {d['incidentes']} incidentes, "
+            f"{d['periodo']['desde']} a {d['periodo']['hasta']}",
+        )
+        + f"""
+/**
+ * Curva de demanda MEDIDA, no supuesta.
+ *
+ * {d["incidentes"]} incidentes reales del 123 entre {d["periodo"]["desde"]} y {d["periodo"]["hasta"]}.
+ * Normalizada 0..1 sobre la hora pico ({d["horaPico"]}:00). Valle a las {d["horaValle"]}:00.
+ */
+export const CURVA_HORA: Record<number, number> = {json.dumps(hora, indent=2)};
+
+/**
+ * Factor por dia de semana, RELATIVO AL PROMEDIO (no al pico).
+ *
+ * Orbita 1.0: un dia flojo baja de 1, uno cargado sube. Se multiplica por la
+ * curva horaria. Si aqui hubiera valores 0..1 normalizados al pico, multiplicar
+ * encogeria la curva entera — que es un error facil de cometer y dificil de ver.
+ */
+export const CURVA_DIA: Record<string, number> = {json.dumps(dia, ensure_ascii=False, indent=2)};
+
+/** Domingo=0, para calzar con Date.getDay(). */
+export const CURVA_DIA_POR_INDICE: Record<number, number> = {{
+  0: CURVA_DIA['domingo'],
+  1: CURVA_DIA['lunes'],
+  2: CURVA_DIA['martes'],
+  3: CURVA_DIA['miercoles'],
+  4: CURVA_DIA['jueves'],
+  5: CURVA_DIA['viernes'],
+  6: CURVA_DIA['sabado'],
+}};
+
+export const DEMANDA_META = {{
+  incidentes: {d["incidentes"]},
+  desde: '{d["periodo"]["desde"]}',
+  hasta: '{d["periodo"]["hasta"]}',
+  horaPico: {d["horaPico"]},
+  horaValle: {d["horaValle"]},
+}} as const;
+"""
+    )
+
+    ruta = RAIZ / "apps/backend/core/src/scoring/demanda.generada.ts"
+    ruta.write_text(cuerpo, encoding="utf-8")
+    return ruta
+
+
+# ── Orquestacion ──────────────────────────────────────────────────
+
+
+def main() -> int:
+    print("\nPULSO · pipeline de datos\n")
+    reporte, fallidos = {}, []
+
+    for clave, titulo, fn in PASOS:
+        print(f"  {titulo}")
+        try:
+            reporte[clave] = fn()
+            for k, v in (reporte[clave] or {}).items():
+                if k == "medidas":
+                    continue
+                if isinstance(v, list) and len(v) > 4:
+                    v = f"{len(v)} elementos: {v[:3]} ..."
+                print(f"      {k}: {v}")
+        except Exception as e:  # noqa: BLE001
+            fallidos.append(clave)
+            reporte[clave] = {"error": f"{type(e).__name__}: {e}"}
+            print(f"      FALLO: {e}")
+            traceback.print_exc(limit=2)
+        print()
+
+    if not fallidos:
+        print("  Generando TypeScript para core")
+        for ruta in (_ts_sedes(), _ts_demanda()):
+            print(f"      {ruta.relative_to(RAIZ)}")
+        print()
+
+    reporte["_generado"] = dt.datetime.now().isoformat(timespec="seconds")
+    reporte["_fallidos"] = fallidos
+    escribir_json("reporte.json", reporte)
+
+    if fallidos:
+        print(f"  {len(fallidos)} paso(s) fallaron: {', '.join(fallidos)}\n")
+        return 1
+
+    print("  Listo. Ver data/CATALOGO.md y data/procesado/reporte.json\n")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

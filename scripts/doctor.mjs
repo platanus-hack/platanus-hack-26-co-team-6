@@ -232,6 +232,44 @@ function checkSecurity() {
   }
 }
 
+// --------------------------------------------------------------- data ---
+
+/**
+ * core importa dos archivos que genera `task datos`. Si faltan, el build de
+ * core no compila y el error apunta a un import roto, no a la causa real.
+ */
+function checkData() {
+  const generados = [
+    { label: "data: catalogo de sedes", path: join(CORE, "src", "sedes", "catalogo.generado.ts") },
+    { label: "data: curva de demanda", path: join(CORE, "src", "scoring", "demanda.generada.ts") },
+  ];
+
+  for (const { label, path } of generados) {
+    if (existsSync(path)) {
+      pass(label, "generado");
+    } else {
+      fail(label, "falta — corre 'task datos' (core no compila sin esto)");
+    }
+  }
+
+  const reporte = join(ROOT, "data", "procesado", "reporte.json");
+  if (!existsSync(reporte)) {
+    warn("data: pipeline", "sin correr todavia — 'task datos'");
+    return;
+  }
+
+  try {
+    const { _fallidos = [], _generado } = JSON.parse(readFileSync(reporte, "utf8"));
+    if (_fallidos.length) {
+      fail("data: pipeline", `fallaron ${_fallidos.length} paso(s): ${_fallidos.join(", ")}`);
+    } else {
+      pass("data: pipeline", `ultima corrida ${String(_generado).slice(0, 16)}`);
+    }
+  } catch {
+    warn("data: pipeline", "reporte.json ilegible — vuelve a correr 'task datos'");
+  }
+}
+
 // -------------------------------------------------------------- ports ---
 
 async function checkPorts() {
@@ -303,5 +341,6 @@ checkNodeDeps("core deps", CORE, "@nestjs/core");
 checkVenv();
 checkEnvFiles();
 checkSecurity();
+checkData();
 await checkPorts();
 report();

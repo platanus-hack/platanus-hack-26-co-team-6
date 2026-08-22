@@ -180,6 +180,33 @@ Una sede sin hemodinamia no es "peor opción": **es no-opción**. Ver una clíni
 
 ---
 
+## 🔧 El pipeline de datos
+
+```bash
+task datos     # regenera data/procesado/ y el TypeScript que core importa
+```
+
+`data/` trae 17 archivos de datos abiertos en tres encodings distintos. El
+pipeline los normaliza y los convierte en artefactos tipados. Lee
+[`scripts/datos/README.md`](scripts/datos/README.md); el inventario vive en
+[`data/CATALOGO.md`](data/CATALOGO.md), y se genera solo.
+
+Lo que salió de ahí y **cambió el producto**:
+
+| Antes | Ahora |
+|---|---|
+| 14 sedes escritas a mano, servicios "ilustrativos" | **84 IPS de urgencias reales**, 81 con código REPS, coordenadas y complejidad oficiales |
+| Curva de demanda inventada, pico supuesto a las 20:00 | **Medida sobre 9206 incidentes del 123**. El pico real es a las **09:00** |
+| Fin de semana +12% de carga | Sábado y domingo son los días **más flojos**. Los picos son lunes y martes |
+| Ocupación de camas estimada | **Ocupación real por subred**, 2021-2025 |
+| Dictados de demo inventados | **400 casos** derivados de incidentes reales |
+
+Dos archivos TypeScript se generan y **se commitean**, para que quien clone el
+repo compile sin correr Python: `sedes/catalogo.generado.ts` y
+`scoring/demanda.generada.ts`. No se editan a mano.
+
+---
+
 ## 📂 Datos
 
 Endpoints verificados contra la API real (agosto 2026):

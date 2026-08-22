@@ -1,0 +1,181 @@
+{
+  "catalogo": {
+    "archivos_en_disco": 17,
+    "declarados": 17,
+    "huerfanos": [],
+    "rutas_muertas": [],
+    "medidas": {
+      "ips_urgencias": {
+        "bytes": 13647,
+        "filas": 84,
+        "columnas": 10,
+        "encoding": "cp1252"
+      },
+      "ins_geojson": {
+        "bytes": 2559689,
+        "filas": 2900,
+        "columnas": null,
+        "encoding": "utf-8-sig"
+      },
+      "llamadas_123": {
+        "bytes": 969209,
+        "filas": 9206,
+        "columnas": 10,
+        "encoding": "latin-1",
+        "mojibake": 534,
+        "mojibakeReparado": true
+      },
+      "ocupacion_urgencias": {
+        "bytes": 5760,
+        "filas": 57,
+        "columnas": 13,
+        "encoding": "cp1252"
+      },
+      "transporte_especial": {
+        "bytes": 39955,
+        "filas": 225,
+        "columnas": 9,
+        "encoding": "utf-8-sig"
+      },
+      "codesystem_reps": {
+        "bytes": 34034,
+        "filas": 157,
+        "columnas": null,
+        "encoding": "utf-8-sig"
+      },
+      "tiempo_centro_medico": {
+        "bytes": 1342,
+        "filas": 42,
+        "columnas": 4,
+        "encoding": "utf-8-sig"
+      },
+      "razon_camas": {
+        "bytes": 2058,
+        "filas": 49,
+        "columnas": 4,
+        "encoding": "cp1252"
+      },
+      "razon_ambulancias": {
+        "bytes": 250,
+        "filas": 6,
+        "columnas": 5,
+        "encoding": "cp1252"
+      },
+      "reps_ocupacion_nacional": {
+        "bytes": 865137,
+        "filas": 1000,
+        "columnas": null,
+        "encoding": "utf-8-sig"
+      },
+      "reps_sedes_nacional": {
+        "bytes": 820812,
+        "filas": 1000,
+        "columnas": null,
+        "encoding": "utf-8-sig"
+      },
+      "reps_capacidad_nacional": {
+        "bytes": 734982,
+        "filas": 1000,
+        "columnas": null,
+        "encoding": "utf-8-sig"
+      },
+      "meta_ips_urgencias": {
+        "bytes": 1437,
+        "filas": 12,
+        "columnas": 2,
+        "encoding": "cp1252"
+      },
+      "meta_ocupacion": {
+        "bytes": 967,
+        "filas": 9,
+        "columnas": 2,
+        "encoding": "cp1252"
+      },
+      "meta_camas": {
+        "bytes": 1052,
+        "filas": 10,
+        "columnas": 2,
+        "encoding": "cp1252"
+      },
+      "meta_ambulancias": {
+        "bytes": 1050,
+        "filas": 10,
+        "columnas": 2,
+        "encoding": "cp1252"
+      },
+      "meta_tiempo": {
+        "bytes": 766,
+        "filas": 9,
+        "columnas": 2,
+        "encoding": "cp1252"
+      }
+    }
+  },
+  "sedes": {
+    "leidas": 84,
+    "encoding_origen": "cp1252",
+    "coords_corregidas": [
+      "Hospital de Usme",
+      "Centro de Salud Patio Bonito"
+    ],
+    "sin_coord": [],
+    "codigo_por_nombre": 67,
+    "codigo_por_cercania": 14,
+    "sin_codigo_reps": [
+      "Clínica Medicentro Familiar Sede Suba",
+      "Hospital de Usme",
+      "Hospital de Bosa"
+    ],
+    "periodo_ocupacion": "Septiembre 2025",
+    "ocupacion_por_subred": {
+      "Norte": 1.1055,
+      "Centro Oriente": 0.7890999999999999,
+      "Sur": 1.5941999999999998,
+      "Sur Occidente": 1.9742
+    },
+    "escritas": 84
+  },
+  "demanda": {
+    "incidentes": 9206,
+    "periodo": "2026-06-01 -> 2026-07-01",
+    "hora_pico": 9,
+    "hora_valle": 5,
+    "horas_anomalas_interpoladas": [
+      17,
+      18
+    ],
+    "localidades": 19,
+    "tipos_incidente": 21
+  },
+  "ocupacion": {
+    "meses": 57,
+    "rango": "Enero 2021 -> Septiembre 2025",
+    "ultimo_total_riss": 1.3252000000000002,
+    "pico_absoluto": [
+      2.2466,
+      "Sur Occidente Mayo 2025"
+    ]
+  },
+  "casos": {
+    "incidentes_unicos": 8495,
+    "exportados": 400,
+    "por_triage": {
+      "1": 106,
+      "2": 225,
+      "3": 47,
+      "4": 22
+    },
+    "localidades_sin_centroide": [
+      "LA CANDELARIA"
+    ]
+  },
+  "contexto": {
+    "servicios_reps": 157,
+    "prestadores_ambulancia": 225,
+    "con_medicalizado": 53,
+    "ambulancias_medicalizadas_ciudad": 236.0,
+    "localidades_con_tiempo": 21
+  },
+  "_generado": "2026-08-22T06:34:12",
+  "_fallidos": []
+}

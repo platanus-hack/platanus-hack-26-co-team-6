@@ -13,5 +13,7 @@ next-env.d.ts
 scripts/etl/.venv/
 scripts/etl/__pycache__/
 scripts/etl/salida/
+scripts/datos/__pycache__/
+scripts/datos/transformadores/__pycache__/
 # SDD / Atlas local tooling cache (skill registry index) — not shared, regenerated locally
 .atl/
