@@ -14,16 +14,22 @@
  *   - los contratos de core: POST /triage, /match, /dispatch (ver lib/api.ts)
  *   - el cronómetro: el número que sale en el pitch sale de aquí
  *
- * Estado de la reforma (ver docs/juan-campo-v2.md): están hechos §0 la barra
- * persistente, §1 el inicio y §2 la captura con el orbe. Siguen pendientes §3
- * la compuerta humana de revisión, §4 el estado de escalamiento, §5 la
- * solicitud con cronómetro de expiración, §6 la pantalla de ruta y §7 la
- * entrada manual.
+ * Estado de la reforma (ver docs/juan-campo-v2.md): hechos §0 la barra
+ * persistente, §1 el inicio con mapa de la unidad en vivo, §2 la captura con
+ * el orbe y §6 la pantalla de ruta con navegación. Pendientes §3 la compuerta
+ * humana de revisión —hay una parada cuando el motor se niega a rutear, pero
+ * no el editor de entidades—, §4 el estado de escalamiento, §5 el cronómetro
+ * de expiración de la solicitud y §7 la entrada manual estructurada.
  */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
-import type { Caso, Candidato, Handshake } from "@/lib/types";
+import type {
+  Caso,
+  Candidato,
+  Handshake,
+  RutaResponse,
+} from "@/lib/types";
 import type { CasoReal } from "@/lib/casos-reales.generado";
 import { CASOS_REALES } from "@/lib/casos-reales.generado";
 import { useGeolocalizacion } from "@/lib/useGeolocalizacion";
@@ -39,6 +45,7 @@ import {
   type CasoActivo,
 } from "@/components/campo/PantallaInicio";
 import { PantallaCaptura } from "@/components/campo/PantallaCaptura";
+import { PantallaRuta } from "@/components/campo/PantallaRuta";
 import { TarjetaCaso } from "@/components/campo/TarjetaCaso";
 import { TarjetaCandidato } from "@/components/campo/TarjetaCandidato";
 import { RevisionRequerida } from "@/components/campo/RevisionRequerida";
@@ -282,10 +289,43 @@ export default function Campo() {
 
   // ── Render ─────────────────────────────────────────────────────
 
-  const sedeAceptada = useMemo(
-    () => candidatos.find((c) => c.sede.codigo === handshake?.sedeCodigo)?.sede,
+  const candidatoAceptado = useMemo(
+    () => candidatos.find((c) => c.sede.codigo === handshake?.sedeCodigo) ?? null,
     [candidatos, handshake],
   );
+  const sedeAceptada = candidatoAceptado?.sede;
+
+  // ── Ruta hasta la sede aceptada ────────────────────────────────
+  //
+  // Se pide UNA vez, al aceptar. No se recalcula con cada arreglo del GPS:
+  // Directions cuesta una llamada por invocación y el trazado completo no
+  // cambia porque la ambulancia avance cien metros. Lo que sí se mueve en
+  // vivo es el marcador de la unidad sobre el mapa.
+  const [ruta, setRuta] = useState<RutaResponse | null>(null);
+  const [cargandoRuta, setCargandoRuta] = useState(false);
+
+  useEffect(() => {
+    if (fase !== "resuelto" || !caso || !sedeAceptada) return;
+
+    let vivo = true;
+    // En un microtask: un setState síncrono dentro del efecto encadena un
+    // render extra en cada montaje. Mismo patrón que useConectividad.
+    queueMicrotask(() => vivo && setCargandoRuta(true));
+    api
+      .ruta({ origen: caso.origen, sedeCodigo: sedeAceptada.codigo })
+      // Sin MAPBOX_TOKEN esto es un 503: no hay ruta que trazar. No es un
+      // error que mostrar — la pantalla cae al botón de navegación externa.
+      .catch(() => null)
+      .then((r) => {
+        if (!vivo) return;
+        setRuta(r);
+        setCargandoRuta(false);
+      });
+
+    return () => {
+      vivo = false;
+    };
+  }, [fase, caso, sedeAceptada]);
 
   return (
     <div className="relative min-h-screen">
@@ -432,34 +472,39 @@ export default function Campo() {
           </section>
         )}
 
-        {fase === "resuelto" && handshake && (
-          <section className="p-6 rounded-xl border border-[color:var(--color-estable)]/50 bg-[color:var(--color-estable)]/10 text-center">
-            <div className="text-4xl mb-3" aria-hidden>
-              ✅
-            </div>
-            <p className="text-xl font-bold">Traslado aceptado</p>
-            <p className="text-sm text-[color:var(--color-texto-tenue)] mt-1">
-              {sedeAceptada?.nombre}
-            </p>
-            <p className="mt-4 text-3xl font-bold tabular">
-              {transcurrido.toFixed(0)}s
-            </p>
-            <p className="text-xs text-[color:var(--color-texto-tenue)]">
-              del dictado a la cama confirmada
-            </p>
+        {fase === "resuelto" && handshake && caso && (
+          <>
+            <PantallaRuta
+              caso={caso}
+              candidato={candidatoAceptado}
+              ruta={ruta}
+              cargandoRuta={cargandoRuta}
+              transcurrido={transcurrido}
+              onEntregado={volverAlInicio}
+              // Reabrir el ruteo con el evento de auditoría es §6 completo y
+              // todavía no está: por ahora se vuelve al ranking, que es donde
+              // el paramédico puede elegir otra sede.
+              onNovedad={() => setFase("ranking")}
+            />
+
+            {/* La llegada, a nivel de calle: para reconocer la entrada de
+                urgencias antes de estar delante de ella. */}
             {sedeAceptada && (
               <FotoCalle
                 coord={sedeAceptada.coord}
                 titulo={sedeAceptada.nombre}
               />
             )}
-            <button
-              onClick={volverAlInicio}
-              className="mt-6 px-6 min-h-12 rounded-xl border border-[color:var(--color-borde)]"
-            >
-              Nuevo caso
-            </button>
-          </section>
+
+            {/* El número del pitch: del dictado a la cama confirmada. */}
+            <p className="mt-4 text-center text-xs text-[color:var(--color-texto-tenue)]">
+              <span className="text-2xl font-bold tabular text-[color:var(--color-texto)]">
+                {transcurrido.toFixed(0)}s
+              </span>
+              <br />
+              del dictado a la cama confirmada
+            </p>
+          </>
         )}
       </main>
     </div>
