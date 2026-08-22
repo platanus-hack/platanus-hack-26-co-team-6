@@ -1,0 +1,136 @@
+"""Los endpoints públicos. Los que hay que exponer en Render."""
+
+import pytest
+from fastapi.testclient import TestClient
+
+from app.config import settings
+from app.main import app
+from app.sesiones import reiniciar
+
+client = TestClient(app)
+
+
+@pytest.fixture(autouse=True)
+def entorno(monkeypatch):
+    reiniciar()
+    monkeypatch.setattr(settings, "whatsapp_verify_token", "secreto-del-demo")
+    monkeypatch.setattr(settings, "whatsapp_token", "")
+    monkeypatch.setattr(settings, "secreto_endpoint", "")
+
+
+def test_health_no_toca_nada_aguas_abajo():
+    assert client.get("/health").json() == {"status": "ok"}
+
+
+def test_listo_dice_que_falta():
+    r = client.get("/listo").json()
+    assert r["whatsapp"]["puede_enviar"] is False
+    assert r["twilio"]["configurado"] is False
+    assert r["aguas_abajo"]["ai_core"]
+
+
+# ── GET /webhooks/whatsapp — la verificación de Meta ─────────────
+
+
+def test_verificacion_devuelve_el_reto_en_texto_plano():
+    r = client.get(
+        "/webhooks/whatsapp",
+        params={
+            "hub.mode": "subscribe",
+            "hub.verify_token": "secreto-del-demo",
+            "hub.challenge": "9876",
+        },
+    )
+    assert r.status_code == 200
+    assert r.text == "9876"
+
+
+def test_verificacion_con_token_malo_es_403():
+    r = client.get(
+        "/webhooks/whatsapp",
+        params={
+            "hub.mode": "subscribe",
+            "hub.verify_token": "adivinado",
+            "hub.challenge": "9876",
+        },
+    )
+    assert r.status_code == 403
+
+
+# ── POST /webhooks/whatsapp ──────────────────────────────────────
+
+
+def _payload(id_msg="w1", texto="paciente con dolor precordial"):
+    return {
+        "entry": [
+            {
+                "changes": [
+                    {
+                        "value": {
+                            "messages": [
+                                {
+                                    "from": "573001",
+                                    "id": id_msg,
+                                    "type": "text",
+                                    "text": {"body": texto},
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+
+
+def test_acusa_recibo_rapido():
+    r = client.post("/webhooks/whatsapp", json=_payload())
+    assert r.status_code == 200
+    assert r.json()["mensajes"] == "1"
+
+
+def test_un_cuerpo_ilegible_devuelve_200_igual():
+    # Meta reintenta ante un error y, si insiste, DESACTIVA el webhook.
+    # Un 500 aquí no avisa de un bug: deja sin canal a mitad del demo.
+    r = client.post(
+        "/webhooks/whatsapp", content=b"no es json", headers={"Content-Type": "application/json"}
+    )
+    assert r.status_code == 200
+
+
+def test_payload_con_forma_rara_devuelve_200():
+    assert client.post("/webhooks/whatsapp", json={"cosa": "rara"}).status_code == 200
+
+
+def test_el_mismo_mensaje_dos_veces_se_procesa_una():
+    # WhatsApp reintenta. Sin idempotencia, un reporte dispara dos traslados.
+    primera = client.post("/webhooks/whatsapp", json=_payload("repetido"))
+    segunda = client.post("/webhooks/whatsapp", json=_payload("repetido"))
+    assert primera.json()["mensajes"] == "1"
+    assert segunda.json()["mensajes"] == "1"  # normalizó 1, pero no lo encoló
+
+
+# ── POST /telefonia/llamar ───────────────────────────────────────
+
+
+def test_llamar_exige_e164():
+    r = client.post("/telefonia/llamar", json={"a": "3001234567"})
+    assert r.status_code == 400
+
+
+def test_llamar_sin_twilio_es_503_y_dice_que_falta():
+    r = client.post("/telefonia/llamar", json={"a": "+573001234567"})
+    assert r.status_code == 503
+    assert "TWILIO_ACCOUNT_SID" in r.json()["detail"]
+
+
+def test_con_secreto_configurado_el_endpoint_queda_protegido(monkeypatch):
+    # Cada llamada cuesta dinero real.
+    monkeypatch.setattr(settings, "secreto_endpoint", "abc")
+    assert client.post("/telefonia/llamar", json={"a": "+573001234567"}).status_code == 401
+    r = client.post(
+        "/telefonia/llamar",
+        json={"a": "+573001234567"},
+        headers={"X-Secreto": "abc"},
+    )
+    assert r.status_code != 401

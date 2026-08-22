@@ -1,0 +1,55 @@
+# Blueprint de Render para el canal público de PULSO.
+#
+#   render.com → New → Blueprint → apuntar a este repo
+#
+# Sólo `voz` va aquí a propósito: es el ÚNICO servicio que necesita cara
+# pública. `core` y `ai-core` son internos y no deben quedar expuestos —
+# ai-core tiene las credenciales de los proveedores de IA.
+services:
+  - type: web
+    name: pulso-voz
+    runtime: docker
+    dockerfilePath: ./apps/services/voz/Dockerfile
+    dockerContext: ./apps/services/voz
+    plan: free
+    region: oregon
+    healthCheckPath: /health
+    autoDeploy: false
+
+    envVars:
+      # Render lo inyecta; el Dockerfile lo lee.
+      - key: PORT
+        value: 8090
+
+      # La URL pública de ESTE servicio. Twilio abre un WebSocket de vuelta
+      # hacia acá, así que sin esto la telefonía no funciona.
+      # fromService se auto-rellena con la URL que Render asigne.
+      - key: URL_PUBLICA
+        fromService:
+          type: web
+          name: pulso-voz
+          property: host
+
+      # Hacia adentro. Cámbialas por las URLs internas cuando core y ai-core
+      # también estén en Render.
+      - key: AI_CORE_BASE_URL
+        sync: false
+      - key: CORE_BASE_URL
+        sync: false
+
+      # ── Secretos: se ponen a mano en el dashboard, NUNCA en este archivo ──
+      # `sync: false` es justo eso: Render pide el valor y no lo versiona.
+      - key: WHATSAPP_VERIFY_TOKEN
+        sync: false
+      - key: WHATSAPP_TOKEN
+        sync: false
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_PHONE_NUMBER
+        sync: false
+      - key: SECRETO_ENDPOINT
+        sync: false
