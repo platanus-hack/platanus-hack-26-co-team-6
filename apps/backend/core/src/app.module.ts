@@ -13,6 +13,9 @@ import { DispatchModule } from './dispatch/dispatch.module';
 import { EstadoModule } from './estado/estado.module';
 import { TriageModule } from './triage/triage.module';
 import { TelegramModule } from './telegram/telegram.module';
+import { EscalamientoModule } from './escalamiento/escalamiento.module';
+import { VozModule } from './voz/voz.module';
+import { CapacidadesModule } from './capacidades/capacidades.module';
 
 @Module({
   imports: [
@@ -42,6 +45,12 @@ import { TelegramModule } from './telegram/telegram.module';
     EstadoModule,
     TriageModule,
     TelegramModule,
+    // Cuando el ruteo automático no cierra, el caso pasa a un regulador.
+    EscalamientoModule,
+    // Transcripción de servidor (Deepgram) para los navegadores sin Web Speech.
+    VozModule,
+    // En qué modo corre cada integración. Lo lee la barra de /campo.
+    CapacidadesModule,
   ],
   controllers: [HealthController],
 })

@@ -40,15 +40,33 @@ export class HandshakeService {
    * Lanza NotFoundException si el handshake no existe — Nest la traduce a 404.
    */
   async procesarRespuesta(cuerpo: RespondRequest): Promise<RespondResponse> {
+    // Antes de mirar nada: aplicar los vencimientos pendientes. Sin esto, una
+    // respuesta que llega pasado el plazo se procesaría como válida solo
+    // porque nadie había consultado el estado todavía — el resultado
+    // dependería de si alguien tenía una consola abierta, que es la clase de
+    // no-determinismo que no se puede depurar en tarima.
+    this.almacen.expirarVencidos();
+
     const h = this.almacen.obtenerHandshake(cuerpo.handshakeId);
     if (!h) throw new NotFoundException('Handshake no encontrado');
 
-    // Idempotencia: sin esto, un doble toque en el celular duplica la señal y
-    // ensucia el modelo. En un demo en vivo esto pasa siempre.
+    // Dos casos distintos que se manejan igual, y por eso comparten rama:
+    //
+    //  DOBLE TOQUE (ya aceptado/rechazado). Sin esto la señal se duplica y
+    //  ensucia el modelo. En un demo en vivo esto pasa siempre.
+    //
+    //  RESPUESTA TARDÍA (ya en timeout). El paramédico probablemente ya siguió
+    //  con el siguiente candidato, así que revivir esta solicitud podría dejar
+    //  a dos hospitales esperando al mismo paciente. La respuesta se descarta
+    //  y `aplicada: false` obliga a quien llama a decirlo en voz alta.
     if (h.estado !== 'enviado') {
+      this.log.warn(
+        `respuesta ignorada sobre handshake ${h.id}: ya estaba en '${h.estado}'`,
+      );
       return {
         handshake: h,
         congestionActualizada: await this.congestionDe(h.sedeCodigo),
+        aplicada: false,
       };
     }
 
@@ -75,7 +93,7 @@ export class HandshakeService {
         `· congestión ahora ${(congestionActualizada * 100).toFixed(0)}%`,
     );
 
-    return { handshake: actualizado, congestionActualizada };
+    return { handshake: actualizado, congestionActualizada, aplicada: true };
   }
 
   private async congestionDe(sedeCodigo: string): Promise<number> {

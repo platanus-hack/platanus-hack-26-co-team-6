@@ -10,7 +10,13 @@
  */
 
 import { Injectable } from '@nestjs/common';
-import type { Caso, CasoPublico, Coordenada, Handshake } from '../contracts/types';
+import type {
+  Caso,
+  CasoPublico,
+  Coordenada,
+  Escalamiento,
+  Handshake,
+} from '../contracts/types';
 import { AlmacenService } from '../almacen/almacen.service';
 import { SedesService } from '../sedes/sedes.service';
 import { CongestionService } from '../scoring/congestion.service';
@@ -31,6 +37,8 @@ export interface EstadoResponse {
   casos: CasoPublico[];
   handshakes: Handshake[];
   congestion: CongestionSede[];
+  /** Casos que el ruteo automatico no cerro y esperan a un regulador. */
+  escalamientos: Escalamiento[];
   ts: string;
 }
 
@@ -68,6 +76,7 @@ export class EstadoService {
       casos: visibles.map(despojar),
       handshakes,
       congestion,
+      escalamientos: this.almacen.listarEscalamientos(casoId),
       ts: new Date().toISOString(),
     };
   }
@@ -100,6 +109,11 @@ function despojar(caso: Caso): CasoPublico {
     requiereMedicoABordo: caso.requiereMedicoABordo,
     confianza: caso.confianza,
     tipoMovil: caso.tipoMovil,
+    // SÍ sale, y es el punto: el regulador del CRUE tiene que saber QUÉ móvil
+    // está preguntando para poder llamarlo por radio. No identifica al
+    // paciente ni dice dónde está — dice quién pregunta, que es justo lo que
+    // hoy se resuelve gritando por la frecuencia.
+    unidad: caso.unidad,
     creadoEn: caso.creadoEn,
   };
 }
