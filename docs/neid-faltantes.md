@@ -5,6 +5,23 @@ Complemento de [neid-ai.md](neid-ai.md), que dice lo que sí está.
 
 Última actualización: rama `feat/ai-core-integracion` (PR #6).
 
+## ✅ Cerrado en esta ronda
+
+- **Nadie vigilaba el reloj.** `VigilanteService` en core barre cada 5s:
+  vence handshakes sin respuesta (el estado `timeout` que nadie escribía
+  nunca), **re-rutea solo** al siguiente candidato, y detecta traslados que se
+  pasan de 1.5x su ETA para disparar la llamada de seguimiento.
+- **El bucle no se cerraba.** `core` ahora conoce el servicio `voz`: cuando el
+  hospital acepta o rechaza, el paramédico recibe el aviso por WhatsApp con la
+  ubicación. Era el momento 1:50 del guion, el del cronómetro.
+- **Bug encontrado y arreglado:** `voz` creaba el caso llamando a ai-core
+  directo y después pedía `/dispatch` a core — que busca el caso en SU
+  almacén y respondía **404 siempre**. Ahora va por `core.triage`, que además
+  hace viajar el teléfono hasta el `Caso`.
+- **El ETA se botaba.** Se calculaba al despachar, se mostraba y se perdía.
+  Ahora se guarda en el handshake (`etaMinAlDespachar`): es la línea base sin
+  la cual no existe "demora" que medir.
+
 ---
 
 ## 🔴 Bloqueado por credenciales
@@ -53,12 +70,15 @@ no promete, y lo devuelve al canal que sí funciona.
 respuesta, y quién lo recibe. Hasta que eso exista, prometer apoyo en una
 llamada a alguien con un paciente complicado es peor que no ofrecerlo.
 
-### El registro de demoras
+### El registro de demoras que reporta el paramédico
 
-`reportar_demora` clasifica bien y responde al paramédico, pero el dato
-**sólo queda en el log**. Cuando `core` exponga dónde guardarlo, se manda allá.
-Es la materia prima del cálculo de cobertura, así que mientras no se persista,
-ese cálculo no tiene de dónde salir.
+Ojo, son dos cosas distintas y sólo una está hecha:
+
+- ✅ **Demora detectada por el reloj** (el traslado se pasó de su ETA): el
+  vigilante la ve y dispara la llamada.
+- ❌ **Demora que el paramédico reporta él mismo** ("hay trancón"): se
+  clasifica bien y se le responde, pero el dato **sólo queda en el log**.
+  Cuando `core` exponga dónde guardarlo, se manda allá.
 
 ---
 

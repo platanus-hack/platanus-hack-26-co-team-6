@@ -132,9 +132,15 @@ export class TriageService {
 
     const desdeAiCore = await this.intentarAiCore(cuerpo, texto);
     if (desdeAiCore) {
-      this.almacen.guardarCaso(desdeAiCore.caso);
+      // ai-core no sabe de telefonos: el canal es de core. Se lo pegamos aca
+      // o el bucle no se cierra para los casos que entran por WhatsApp.
+      const caso = {
+        ...desdeAiCore.caso,
+        telefonoReporta: cuerpo.telefonoReporta ?? null,
+      };
+      this.almacen.guardarCaso(caso);
       return {
-        caso: desdeAiCore.caso,
+        caso,
         latenciaMs: Date.now() - t0,
         motor: desdeAiCore.motor,
         via: 'ai-core',
@@ -161,6 +167,9 @@ export class TriageService {
       ...extraccion,
       id: randomUUID(),
       textoCrudo: texto,
+      // Viaja desde el canal de WhatsApp hasta el Caso. Sin esto no hay
+      // a quien avisarle cuando el hospital responde.
+      telefonoReporta: cuerpo.telefonoReporta ?? null,
       origen: cuerpo.origen ?? ORIGEN_DEMO,
       // Si el paciente requiere médico a bordo, el móvil tiene que ser TAM.
       tipoMovil:

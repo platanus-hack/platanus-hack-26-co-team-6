@@ -35,6 +35,21 @@ async def _pedir(metodo: str, ruta: str, **kw: Any) -> dict[str, Any]:
         raise CoreCaido(f"core {ruta} no devolvió JSON") from e
 
 
+async def triage(texto: str, telefono: str) -> dict[str, Any]:
+    """Dictado → caso, GUARDADO en el almacén de core.
+
+    ⚠️ Va por core y no por ai-core directo, aunque ai-core sea quien piensa.
+    Si el caso no queda en el almacén de core, el `/dispatch` siguiente
+    responde 404: busca el caso por id y no lo encuentra.
+
+    De paso el teléfono viaja hasta el Caso, que es lo que permite avisarle
+    al paramédico cuando el hospital responde.
+    """
+    return await _pedir(
+        "POST", "/triage", json={"texto": texto, "telefonoReporta": telefono}
+    )
+
+
 async def match(caso: dict[str, Any], limite: int = 5) -> dict[str, Any]:
     """Caso → ranking de sedes. core hace PostGIS + Mapbox + scoring."""
     return await _pedir("POST", "/match", json={"caso": caso, "limite": limite})

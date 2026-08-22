@@ -109,6 +109,11 @@ export interface ExtraccionClinica {
 
 export interface Caso extends ExtraccionClinica {
   id: string;
+  /**
+   * Telefono desde el que se reporto, si entro por WhatsApp. Es lo que
+   * permite avisarle al paramedico cuando el hospital responde.
+   */
+  telefonoReporta?: string | null;
   /** El dictado literal, sin tocar. Se conserva para auditoría. */
   textoCrudo: string;
   origen: Coordenada;
@@ -180,6 +185,13 @@ export interface Handshake {
   enviadoEn: string;
   respondidoEn: string | null;
   latenciaS: number | null;
+  /**
+   * ETA en minutos al momento de despachar. Es la LINEA BASE contra la que
+   * se mide si el traslado se esta demorando.
+   */
+  etaMinAlDespachar?: number | null;
+  /** Ya se disparo la llamada de seguimiento por demora. */
+  demoraAvisada?: boolean;
 }
 
 // ─────────────────────────────────────────────────────────────────

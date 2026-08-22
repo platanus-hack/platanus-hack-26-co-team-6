@@ -16,7 +16,7 @@ import logging
 from fastapi import FastAPI
 
 from .config import settings
-from .rutas import whatsapp
+from .rutas import interno, whatsapp
 from .telefonia import rutas as telefonia
 from .telefonia import llamadas
 from .canales.whatsapp import GRAPH  # noqa: F401  (documenta la versión de Graph)
@@ -26,6 +26,7 @@ logging.basicConfig(level=settings.log_level)
 app = FastAPI(title="voz", version="0.1.0")
 
 app.include_router(whatsapp.router)
+app.include_router(interno.router)
 app.include_router(telefonia.router)
 
 

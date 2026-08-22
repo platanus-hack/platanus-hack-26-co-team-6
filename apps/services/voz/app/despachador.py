@@ -12,7 +12,7 @@ import logging
 from typing import Any, Callable, Coroutine
 
 from .canales import whatsapp
-from .clientes import ai_core, core
+from .clientes import core
 from .sesiones import Sesion, guardar, obtener
 
 log = logging.getLogger(__name__)
@@ -47,7 +47,9 @@ async def _registrar_caso(telefono: str, args: dict[str, Any]) -> str:
     if len(dictado) < 10:
         return await _responder(telefono, "El reporte llegó muy corto. ¿Me lo repites?")
 
-    triaje = await ai_core.triage(texto=dictado)
+    # Por core, NO por ai-core directo: core es quien guarda el caso en su
+    # almacén, y sin eso el /dispatch de abajo responde 404.
+    triaje = await core.triage(dictado, telefono)
     caso = triaje["caso"]
 
     ranking = await core.match(caso)

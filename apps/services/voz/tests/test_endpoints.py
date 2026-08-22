@@ -134,3 +134,119 @@ def test_con_secreto_configurado_el_endpoint_queda_protegido(monkeypatch):
         headers={"X-Secreto": "abc"},
     )
     assert r.status_code != 401
+
+
+# ── /interno — lo que llama core para cerrar el bucle ────────────
+
+
+def test_notificar_manda_el_aviso(monkeypatch):
+    enviados = []
+
+    async def falso_texto(a, t):
+        enviados.append((a, t))
+        return {"enviado": True}
+
+    monkeypatch.setattr("app.rutas.interno.whatsapp.enviar_texto", falso_texto)
+
+    r = client.post(
+        "/interno/notificar",
+        json={"telefono": "573001", "texto": "✅ Clínica X aceptó"},
+    )
+    assert r.status_code == 200
+    assert enviados == [("573001", "✅ Clínica X aceptó")]
+
+
+def test_notificar_con_ubicacion_manda_las_dos_cosas(monkeypatch):
+    textos, ubicaciones = [], []
+    monkeypatch.setattr(
+        "app.rutas.interno.whatsapp.enviar_texto",
+        lambda a, t: _async({"enviado": True}, textos, (a, t)),
+    )
+    monkeypatch.setattr(
+        "app.rutas.interno.whatsapp.enviar_ubicacion",
+        lambda a, lat, lng, n, d: _async({"enviado": True}, ubicaciones, (a, lat, lng, n)),
+    )
+
+    client.post(
+        "/interno/notificar",
+        json={
+            "telefono": "573001",
+            "texto": "aceptó",
+            "ubicacion": {"lat": 4.6, "lng": -74.08, "nombre": "Clínica X"},
+        },
+    )
+    assert len(textos) == 1 and len(ubicaciones) == 1
+
+
+def _async(resultado, registro, dato):
+    async def _c():
+        registro.append(dato)
+        return resultado
+
+    return _c()
+
+
+def test_notificar_sin_telefono_es_400():
+    assert client.post("/interno/notificar", json={"texto": "x"}).status_code == 400
+
+
+def test_interno_queda_protegido_por_secreto(monkeypatch):
+    # Está en el mismo servicio público que los webhooks: cualquiera lo alcanza.
+    monkeypatch.setattr(settings, "secreto_endpoint", "abc")
+    sin = client.post("/interno/notificar", json={"telefono": "1", "texto": "x"})
+    assert sin.status_code == 401
+
+
+def test_seguimiento_sin_twilio_degrada_a_whatsapp(monkeypatch):
+    # Una demora que nadie ve es justo el problema que veníamos a resolver:
+    # mejor un mensaje que perder el aviso.
+    enviados = []
+    monkeypatch.setattr(
+        "app.rutas.interno.whatsapp.enviar_texto",
+        lambda a, t: _async({"enviado": True}, enviados, (a, t)),
+    )
+
+    r = client.post(
+        "/interno/seguimiento",
+        json={"telefono": "573001", "motivo": "Lleva 31 min contra 20 estimados."},
+    )
+    assert r.status_code == 200
+    assert r.json()["via"] == "whatsapp"
+    assert "31 min" in enviados[0][1]
+
+
+def test_seguimiento_llama_cuando_twilio_esta_listo(monkeypatch):
+    monkeypatch.setattr("app.rutas.interno.llamadas.configurado", lambda: True)
+    monkeypatch.setattr("app.rutas.interno.llamadas.llamar", lambda a: "CA123")
+
+    r = client.post("/interno/seguimiento", json={"telefono": "573001", "motivo": "x"})
+    assert r.json() == {"via": "llamada", "sid": "CA123"}
+
+
+def test_seguimiento_agrega_el_mas_si_falta(monkeypatch):
+    vistos = []
+    monkeypatch.setattr("app.rutas.interno.llamadas.configurado", lambda: True)
+    monkeypatch.setattr(
+        "app.rutas.interno.llamadas.llamar", lambda a: vistos.append(a) or "CA1"
+    )
+
+    client.post("/interno/seguimiento", json={"telefono": "573001234567"})
+    assert vistos == ["+573001234567"]
+
+
+def test_si_la_llamada_falla_no_se_pierde_el_aviso(monkeypatch):
+    enviados = []
+    monkeypatch.setattr("app.rutas.interno.llamadas.configurado", lambda: True)
+
+    def revienta(a):
+        raise RuntimeError("Twilio 21215")
+
+    monkeypatch.setattr("app.rutas.interno.llamadas.llamar", revienta)
+    monkeypatch.setattr(
+        "app.rutas.interno.whatsapp.enviar_texto",
+        lambda a, t: _async({"enviado": True}, enviados, (a, t)),
+    )
+
+    r = client.post("/interno/seguimiento", json={"telefono": "573001", "motivo": "x"})
+    assert r.json()["via"] == "whatsapp"
+    assert enviados
