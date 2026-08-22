@@ -1,5 +1,8 @@
 # PULSO · /campo con lenguaje "Pulsewave" — spec fusionado
 
+> 📌 **Documento de la hackathon (ago 2026).** Conserva contexto útil, pero **algunas rutas de archivo ya cambiaron**.
+> El plan vigente está en [`docs/README.md`](README.md).
+
 **Principio rector:** el template RBP/Pulsewave aporta el *lenguaje* (tokens dark, tipografía editorial, cápsulas, easings firma, píldoras glass, springs). Tu doc de frontend aporta las *reglas duras* (≥44px, legible a bajo brillo, sin scroll horizontal, teléfono con guantes, cronómetro intocable). **Cuando choquen, ganan las reglas duras — siempre.**
 
 ---

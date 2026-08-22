@@ -1,5 +1,8 @@
 # Neid · Faltantes
 
+> 📌 **Documento de la hackathon (ago 2026).** Conserva contexto útil, pero **algunas rutas de archivo ya cambiaron**.
+> El plan vigente está en [`docs/README.md`](README.md) y las tareas en [`docs/tareas/neid.md`](tareas/neid.md).
+
 Lo que está a medias, lo que está bloqueado y lo que decidí NO hacer.
 Complemento de [neid-ai.md](neid-ai.md), que dice lo que sí está.
 

@@ -1,98 +1,84 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# core
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
+El dominio de PULSO y el dueño del estado. NestJS, puerto **3001**. **Servicio interno**: lo llama el
+frontend y `voz`; nunca debe quedar expuesto a internet.
 
 ```bash
-$ pnpm install
+pnpm install
+pnpm start:dev        # :3001
+pnpm test             # unitarios
+pnpm test:e2e
 ```
 
-## Compile and run the project
+## Qué expone
 
-```bash
-# development
-$ pnpm run start
+| Ruta | Qué hace | Dueño histórico |
+|---|---|---|
+| `POST /triage` | Dictado → `Caso` estructurado (delega en ai-core, cae a heurística) | Neid |
+| `POST /match` | Caso → ranking de sedes. PostGIS + Mapbox + score en minutos | Zaid + Neid |
+| `POST /dispatch` | Dispara el handshake por Telegram/WhatsApp/consola | Sebas |
+| `POST /handshake/respond` | ⭐ Aceptar/rechazar. Lo llaman la consola **y** el webhook de Telegram | Sebas |
+| `POST /escalamiento` | El caso pasa a un regulador humano | — |
+| `GET /estado` | Estado vivo para `/hospital` y `/crue` (polling 2 s) | — |
+| `GET /capacidades` | En qué modo está cada integración | — |
+| `POST /auth/login` · `/logout` · `GET /auth/sesion` | Sesión | Sebas |
+| `GET /health` | Liveness. No toca nada aguas abajo | — |
+| `POST /telegram/webhook` | Webhook de Telegram (`secret_token`) | Sebas |
 
-# watch mode
-$ pnpm run start:dev
+**Todas exigen sesión** salvo `GET /health` y el webhook de Telegram. El `SesionGuard` es global y
+**niega por defecto**: para abrir una ruta hay que marcarla con `@Publico()` a propósito.
 
-# production mode
-$ pnpm run start:prod
+Los contratos exactos están en [`src/contracts/types.ts`](src/contracts/types.ts) — **es ley** — y
+explicados en [`docs/contrato-api.md`](../../../docs/contrato-api.md).
+
+## Reglas que no se rompen
+
+1. **Todo degrada sin credenciales, y lo dice.** Sin Supabase → semillas. Sin Mapbox → ETA por
+   distancia. Sin ai-core → extractor heurístico. Sin Telegram → log. `GET /capacidades` hace visible
+   en qué modo está corriendo cada pieza; sin eso, un ETA estimado se ve igual que uno con tráfico.
+   **La única excepción es la autenticación**: ahí un fallback abierto *es* la vulnerabilidad.
+2. **`src/contracts/types.ts` no se cambia en silencio.** Campos nuevos siempre opcionales.
+3. **El conjunto vacío es un evento, no una respuesta muda.** Si el ranking sale vacío, se escala al
+   CRUE — nunca se devuelve una lista en blanco.
+4. **La auditoría es append-only.** `pulso_routing_decision_audit` tiene triggers que rechazan
+   `UPDATE`, `DELETE` y `TRUNCATE`. Una corrección es un evento nuevo.
+5. **Sin PII en logs ni en URLs.** `textoCrudo`, `origen`, teléfono y token de paciente nunca salen.
+
+## Estado actual y hacia dónde va
+
+| Pieza | Hoy | Destino | Tarea |
+|---|---|---|---|
+| `AlmacenService` | **`Map` en RAM** — se pierde al reiniciar | Postgres | [1.2](../../../docs/tareas/neid.md#12--persistir-caso-y-handshake) |
+| Sesión | Contraseña de turno compartida | Actor + organización + roles | [1.3](../../../docs/tareas/sebas.md#13--sesión-con-actor-real) |
+| Aislamiento | No existe | RLS + alcance + guard | [1.5](../../../docs/tareas/zaid.md#15--rol-no-owner--force-rls--encontextode), [1.6](../../../docs/tareas/neid.md#16--policies-de-rls--caso_acceso) |
+| `VigilanteService` | `@Interval` en el proceso web | Worker con lock distribuido | [3.8](../../../docs/tareas/neid.md#38--vigilante-a-worker-con-lock-distribuido) |
+| Eventos | 3 de 22 se guardan | `evento_caso` append-only | [3.1](../../../docs/tareas/neid.md#31--evento_caso--registroservice), [3.2](../../../docs/tareas/sebas.md#32--cablear-los-22-eventos) |
+| Aceptación única | Guard escrito, **nadie lo llama** | Conectado | [0.1](../../../docs/tareas/sebas.md#01--conectar-el-guard-de-aceptación-única) |
+
+Plan completo en [`docs/`](../../../docs/README.md).
+
+## Estructura
+
+```
+src/
+├── contracts/      types.ts (LEY) + schemas zod
+├── auth/           sesión + guard global
+├── triage/         dictado → caso (respaldo TS del prompt de ai-core)
+├── match/          orquesta sedes + ETA + scoring
+├── sedes/          catálogo REPS (Supabase o semillas)
+├── eta/            Mapbox Matrix, o distancia/22 km-h
+├── scoring/        filtro duro + costo en minutos + congestión
+├── routing/        políticas clínicas, elegibilidad, evidencia de decisión
+├── dispatch/ handshake/ canales/   el apretón de manos
+├── escalamiento/   cuando el ruteo no cierra
+├── vigilante/      vence handshakes, detecta demoras, re-rutea
+├── almacen/        estado en memoria (→ Postgres)
+├── persistence/    RoutingStore: memoria | Postgres
+└── migration/      ETL del REPS
 ```
 
-## Run tests
+## Migraciones
 
-```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Viven en [`supabase/migrations/`](../../../supabase/migrations/), numeradas y con `down`.
+`0001_init.sql` trae el esquema base y **RLS habilitada en todas las tablas** — con la advertencia de
+que la service role key se la salta, que es justo lo que hay que corregir en la tarea 1.5.

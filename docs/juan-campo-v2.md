@@ -1,5 +1,8 @@
 # /campo v2 — plan de integración
 
+> 📌 **Documento de la hackathon (ago 2026).** Conserva contexto útil, pero **algunas rutas de archivo ya cambiaron**.
+> El plan vigente está en [`docs/README.md`](README.md) y las tareas en [`docs/tareas/juan.md`](tareas/juan.md).
+
 > Rediseño de la consola de campo a las 9 pantallas del spec, más el orbe de
 > voz portado desde `~/dev/Domu task`.
 >
