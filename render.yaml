@@ -2,25 +2,41 @@
 #
 #   render.com → New → Blueprint → apuntar a este repo, rama main
 #
-# TRES servicios, y sólo UNO con cara pública:
+# CUATRO servicios. Tres públicos, UNO privado — y el privado es el que importa:
 #
+#   pulso-frontend web   :3000  ← las consolas, desde cualquier celular del mundo
+#   pulso-core     web   :3001  ← la API. Pública, pero NIEGA POR DEFECTO.
 #   pulso-voz      web   :8090  ← Meta/Kapso y Twilio lo alcanzan desde internet
-#   pulso-core     pserv :3001  ← interno. Sin URL pública.
-#   pulso-ai-core  pserv :8000  ← interno. Tiene las llaves de Anthropic y ElevenLabs.
+#   pulso-ai-core  pserv :8000  ← PRIVADO. Anthropic y ElevenLabs viven acá.
 #
-# `pserv` (private service) es lo que hace cumplir "core y ai-core no se
-# exponen": Render no les asigna subdominio .onrender.com y no son alcanzables
-# desde internet. Sólo se ven entre ellos, por el nombre del servicio.
+# POR QUÉ core SÍ PUEDE SER PÚBLICO Y ai-core NO:
 #
-# ⚠️ LOS TRES TIENEN QUE ESTAR EN LA MISMA `region` Y EL MISMO WORKSPACE.
+#   Abrir core expone su SUPERFICIE DE API, no sus credenciales. Las llaves
+#   nunca viajan al navegador: el navegador le pide a core, y core llama al
+#   proveedor DESDE EL SERVIDOR. Lo que protege esa superficie es SesionGuard,
+#   que niega por defecto — sin cookie de sesión, 401 en todo salvo /health y
+#   los webhooks. Detrás hay dictado clínico y coordenadas de paciente, así que
+#   OPERADOR_PASSWORD tiene que ser larga de verdad, no la del ensayo.
+#
+#   ai-core NO TIENE AUTENTICACIÓN DE NINGUNA CLASE. Lo único que lo protege es
+#   no ser alcanzable. Por eso es el que se queda sin URL pública, y por eso
+#   ANTHROPIC_API_KEY y ELEVENLABS_API_KEY viven ahí y en ningún otro lado.
+#
+# LO QUE EL NAVEGADOR SÍ VE: todo lo que empiece por NEXT_PUBLIC_ se compila
+# dentro del bundle que se descarga cualquiera. Ahí sólo van tokens que ya son
+# públicos por diseño (el de Mapbox para pintar el mapa, la anon key de
+# Supabase sujeta a RLS). Ninguna credencial de servidor entra ahí — está
+# escrito en apps/frontend/env.example y sigue siendo cierto.
+#
+# ⚠️ LOS CUATRO TIENEN QUE ESTAR EN LA MISMA `region` Y EL MISMO WORKSPACE.
 #    La red privada de Render es por región + workspace. Si core queda en
 #    oregon y ai-core en frankfurt, no se ven y el blueprint no avisa.
 #
-# ⚠️ `plan: free` NO EXISTE PARA `pserv`. El instance type gratuito sólo
-#    cubre web services, Postgres y Key Value. Mantener core y ai-core fuera
-#    de internet cuesta el instance type pagado más barato (starter) por cada
-#    uno. No hay tercera opción: o son privados y pagados, o son web services
-#    gratuitos y quedan expuestos.
+# ⚠️ `plan: free` NO EXISTE PARA `pserv`. El instance type gratuito sólo cubre
+#    web services, Postgres y Key Value. Mantener ai-core fuera de internet
+#    cuesta el instance type pagado más barato (starter). No hay tercera
+#    opción: o es privado y pagado, o es un web service gratuito y queda
+#    expuesto con las llaves detrás.
 #
 # Las URLs internas van como literales, no con `fromService`: el blueprint no
 # sabe concatenar, `fromService` devuelve `host` o `host:puerto` sin esquema,
@@ -57,7 +73,10 @@ services:
         sync: false
 
   # ── core ──────────────────────────────────────────────────────────────
-  - type: pserv
+  # Público, para que las consolas lo alcancen desde cualquier celular. Lo que
+  # lo protege es SesionGuard, no el firewall: sin cookie de sesión responde
+  # 401 en todo salvo /health y los webhooks. Verificado.
+  - type: web
     name: pulso-core
     runtime: docker
     dockerfilePath: ./apps/backend/core/Dockerfile
@@ -65,6 +84,7 @@ services:
     dockerContext: .
     plan: starter
     region: oregon
+    healthCheckPath: /health
     autoDeployTrigger: "off"
 
     envVars:
@@ -115,9 +135,11 @@ services:
         sync: false
 
       # ── Origen del navegador ──────────────────────────────────────────
-      # NUNCA '*': core manda cookie de sesión y con credenciales el navegador
-      # exige un origen exacto. Poner la URL del frontend cuando exista; hasta
-      # entonces ninguna consola puede hablar con core (ver la nota del final).
+      # ⚠️ La URL EXACTA de pulso-frontend, con https:// y SIN barra final.
+      #    NUNCA '*': core manda cookie de sesión, y con credenciales el
+      #    navegador exige un origen exacto — el comodín lo rechaza el browser,
+      #    no core. `fromService` no sirve: devuelve el host pelado, sin
+      #    esquema, y aquí se compara el origen completo.
       - key: CORS_ORIGIN
         sync: false
       # Front y core en dominios distintos ⇒ SameSite=None + HTTPS.
@@ -194,12 +216,15 @@ services:
       #    exige PULSO_ADMIN_TOKEN para emitirlo. El orden es:
       #
       #      1. desplegar core con PULSO_ADMIN_TOKEN puesto
-      #      2. shell de Render en pulso-core:
-      #           curl -X POST http://localhost:3001/auth/servicio \
+      #      2. emitirlo contra la URL pública de core:
+      #           curl -X POST https://<url-de-core>/auth/servicio \
       #                -H "x-pulso-admin-token: $PULSO_ADMIN_TOKEN" \
       #                -H 'content-type: application/json' -d '{"nombre":"voz"}'
-      #         (desde fuera no se puede: core es pserv, no tiene URL pública)
       #      3. pegar el `token` aquí y redesplegar voz
+      #
+      #    /auth/servicio es @Publico() a propósito — lo que la cierra es la
+      #    cabecera x-pulso-admin-token, no el guard de sesión. Sin
+      #    PULSO_ADMIN_TOKEN configurada la ruta niega a todo el mundo.
       #
       # ⚠️ DURA 24 HORAS Y NO SE RENUEVA SOLO (DURACION_SERVICIO_MS en
       #    sesion.service.ts:59). Si el demo es más de un día después de
@@ -250,24 +275,52 @@ services:
       - key: TWILIO_PHONE_NUMBER
         sync: false
 
-# ── apps/frontend NO ESTÁ EN ESTE BLUEPRINT, a propósito ────────────────
-#
-# Las tres consolas (/campo, /hospital, /crue) le pegan a core DESDE EL
-# NAVEGADOR: lib/api.ts lo dice en su encabezado — «Todas las llamadas salen
-# del navegador, así que la URL tiene que ser pública → NEXT_PUBLIC_API_URL».
-#
-# Con core como `pserv` no hay URL pública que poner ahí. Desplegar el front
-# tal cual sería desplegar tres pantallas que no cargan nada.
-#
-# Las tres salidas, en orden de preferencia:
-#
-#   1. Que el front deje de hablar con core desde el navegador: route
-#      handlers de Next (app/api/[...]/route.ts) que hagan de proxy contra
-#      http://pulso-core:3001 por la red privada. core sigue privado, la
-#      cookie de sesión sigue siendo HttpOnly y el bundle deja de necesitar
-#      NEXT_PUBLIC_API_URL. Es cambio de código, no de despliegue.
-#   2. Demo sólo por WhatsApp/teléfono: es lo que este blueprint despliega
-#      hoy, y el canal que el jurado va a tocar.
-#   3. Publicar core como `web` y confiar en OPERADOR_PASSWORD. Contradice
-#      la regla de no exponer core; ai-core seguiría privado. Si se toma esta
-#      salida, CORS_ORIGIN tiene que ser la URL exacta del front, nunca '*'.
+  # ── frontend ─────────────────────────────────────────────────────────
+  # Las tres consolas: /campo, /hospital, /crue. Desde cualquier celular.
+  #
+  # `runtime: node`, no docker: no hay Dockerfile para el front y Render
+  # compila Next nativo. `rootDir` hace que todo corra dentro de apps/frontend,
+  # que tiene su propio lockfile y su propio pnpm-workspace.yaml.
+  - type: web
+    name: pulso-frontend
+    runtime: node
+    rootDir: apps/frontend
+    # corepack: apps/frontend/package.json fija pnpm@11.18.0 en packageManager,
+    # así que esto instala exactamente esa versión y respeta el lockfile.
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
+    # `next start` lee PORT del entorno, que es lo que Render inyecta.
+    startCommand: pnpm start
+    plan: starter
+    region: oregon
+    autoDeployTrigger: "off"
+
+    envVars:
+      # ⚠️ TODO LO DE ABAJO SE COMPILA DENTRO DEL BUNDLE Y CUALQUIERA LO VE.
+      #    Next inlinea NEXT_PUBLIC_* en tiempo de BUILD, no de arranque: para
+      #    cambiar una hay que REDESPLEGAR, no basta reiniciar. Y por lo mismo,
+      #    aquí no entra ni una credencial de servidor. Nunca.
+
+      # La URL pública EXACTA de pulso-core, con https:// y sin barra final.
+      # Al revés: CORS_ORIGIN de core tiene que ser la URL de ESTE servicio, o
+      # el navegador bloquea cada llamada con cookie.
+      - key: NEXT_PUBLIC_API_URL
+        sync: false
+
+      # Token PÚBLICO de Mapbox, sólo para pintar el mapa de /campo. Es
+      # distinto del MAPBOX_TOKEN de core, que usa la Matrix API y sí es
+      # secreto. Restringe este por dominio en el dashboard de Mapbox.
+      - key: NEXT_PUBLIC_MAPBOX_TOKEN
+        sync: false
+
+      # Supabase para Realtime desde el navegador. La ANON key está sujeta a
+      # RLS; la service role NO va aquí bajo ninguna circunstancia — esa vive
+      # en pulso-core y se salta RLS.
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+
+      # Mapillary: foto a nivel de calle de la llegada a la sede aceptada.
+      # Sin él la foto no se pinta y el resto sigue igual.
+      - key: NEXT_PUBLIC_MAPILLARY_TOKEN
+        sync: false
