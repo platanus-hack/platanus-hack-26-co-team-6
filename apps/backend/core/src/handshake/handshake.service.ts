@@ -12,6 +12,12 @@ import type {
   RespondRequest,
   RespondResponse,
 } from '../contracts/types';
+import {
+  codigoDesdeEtiqueta,
+  etiquetaDeMotivo,
+  motivoPorCodigo,
+  MOTIVO_POR_DEFECTO,
+} from '../catalogo/motivos-rechazo';
 import { AlmacenService } from '../almacen/almacen.service';
 import { SedesService } from '../sedes/sedes.service';
 import { CongestionService } from '../scoring/congestion.service';
@@ -68,11 +74,13 @@ export class HandshakeService {
     const ahora = new Date();
     const enviado = new Date(h.enviadoEn);
 
+    const { motivoCodigo, motivoRechazo } = this.resolverMotivo(cuerpo);
+
     const actualizado: Handshake = {
       ...h,
       estado: cuerpo.decision,
-      motivoRechazo:
-        cuerpo.decision === 'rechazado' ? (cuerpo.motivo ?? 'Saturación') : null,
+      motivoRechazo,
+      motivoCodigo,
       respondidoEn: ahora.toISOString(),
       latenciaS: Math.round((ahora.getTime() - enviado.getTime()) / 1000),
     };
@@ -98,6 +106,57 @@ export class HandshakeService {
     );
 
     return { handshake: actualizado, congestionActualizada, aplicada: true };
+  }
+
+  /**
+   * Motivo de rechazo → codigo del catalogo + etiqueta — tarea 0.6.
+   *
+   * Lo que se GUARDA y se reporta es el codigo; la etiqueta viaja congelada
+   * al momento del rechazo para que la consola y el historial sigan pintando
+   * lo mismo que ya pintaban.
+   *
+   * Tres caminos, en este orden:
+   *   1. `motivoCodigo` del catalogo  → camino nuevo, el unico que agrega bien
+   *   2. `motivo` de texto que cruza  → cliente viejo o webhook: se recupera
+   *   3. texto que no cruza           → se conserva el texto y el codigo queda
+   *                                     nulo. **No se inventa un codigo**: un
+   *                                     codigo falso ensucia el dataset mas
+   *                                     que un hueco declarado.
+   *
+   * Un `motivoCodigo` desconocido (cliente adelantado a un deploy viejo de
+   * core) tampoco revienta: se guarda tal cual y `etiquetaDeMotivo` devuelve
+   * el propio codigo.
+   */
+  private resolverMotivo(cuerpo: RespondRequest): {
+    motivoCodigo: string | null;
+    motivoRechazo: string | null;
+  } {
+    if (cuerpo.decision !== 'rechazado')
+      return { motivoCodigo: null, motivoRechazo: null };
+
+    if (cuerpo.motivoCodigo) {
+      if (!motivoPorCodigo(cuerpo.motivoCodigo))
+        this.log.warn(
+          `motivoCodigo desconocido '${cuerpo.motivoCodigo}': se guarda igual, ` +
+            'revisa el catalogo de motivos_rechazo',
+        );
+      return {
+        motivoCodigo: cuerpo.motivoCodigo,
+        motivoRechazo:
+          cuerpo.motivo ?? etiquetaDeMotivo(cuerpo.motivoCodigo),
+      };
+    }
+
+    const recuperado = codigoDesdeEtiqueta(cuerpo.motivo);
+    if (recuperado)
+      return { motivoCodigo: recuperado, motivoRechazo: cuerpo.motivo ?? null };
+
+    return cuerpo.motivo
+      ? { motivoCodigo: null, motivoRechazo: cuerpo.motivo }
+      : {
+          motivoCodigo: MOTIVO_POR_DEFECTO,
+          motivoRechazo: etiquetaDeMotivo(MOTIVO_POR_DEFECTO),
+        };
   }
 
   /** Nunca lanza: un fallo del canal no puede tumbar el handshake. */

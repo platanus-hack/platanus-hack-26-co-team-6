@@ -41,6 +41,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { timingSafeEqual } from 'node:crypto';
+import { MOTIVO_POR_DEFECTO } from '../catalogo/motivos-rechazo';
 import { HandshakeService } from '../handshake/handshake.service';
 import { Publico } from '../auth/publico.decorator';
 
@@ -134,8 +135,11 @@ export class TelegramController {
       const resultado = await this.handshake.procesarRespuesta({
         handshakeId,
         decision,
-        motivo:
-          decision === 'rechazado' ? 'Saturación del servicio' : undefined,
+        // Telegram no ofrece la lista de motivos (son dos botones), así que
+        // manda el código genérico del catálogo — tarea 0.6. Lo que NO se
+        // hace es mandar texto libre: eso es lo que partía la serie.
+        motivoCodigo:
+          decision === 'rechazado' ? MOTIVO_POR_DEFECTO : undefined,
       });
 
       if (!resultado.aplicada) {

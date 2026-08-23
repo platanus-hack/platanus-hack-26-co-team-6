@@ -73,11 +73,20 @@ export default function Hospital() {
   async function responder(
     handshakeId: string,
     decision: "aceptado" | "rechazado",
+    // Tarea 0.6: viajan los dos. `motivoCodigo` es lo que se agrega después;
+    // `motivo` es la etiqueta que esta pantalla mostró, congelada al momento
+    // del rechazo para que el historial no cambie si mañana se reescribe.
+    motivoCodigo?: string,
     motivo?: string,
   ) {
     setEligiendoMotivo(null);
     try {
-      const r = await api.responder({ handshakeId, decision, motivo });
+      const r = await api.responder({
+        handshakeId,
+        decision,
+        motivo,
+        motivoCodigo,
+      });
 
       // La respuesta pudo no aplicarse: la solicitud vencía a los 45s y el
       // caso ya siguió a otra sede. Ahora el cronómetro de la tarjeta lo
@@ -143,7 +152,9 @@ export default function Hospital() {
               eligiendoMotivo={eligiendoMotivo === h.id}
               onAceptar={() => void responder(h.id, "aceptado")}
               onPedirMotivo={() => setEligiendoMotivo(h.id)}
-              onRechazar={(motivo) => void responder(h.id, "rechazado", motivo)}
+              onRechazar={(codigo, etiqueta) =>
+                void responder(h.id, "rechazado", codigo, etiqueta)
+              }
               onCancelarMotivo={() => setEligiendoMotivo(null)}
             />
           );

@@ -16,6 +16,7 @@
 import type {
   AtenderEscalamientoResponse,
   Capacidades,
+  CatalogoMotivosResponse,
   CanalHandshake,
   Caso,
   Coordenada,
@@ -160,12 +161,26 @@ export function dispatch(cuerpo: {
 export function responder(cuerpo: {
   handshakeId: string;
   decision: "aceptado" | "rechazado";
+  /** Etiqueta que vio quien respondió. Se guarda congelada. */
   motivo?: string;
+  /** Código del catálogo — tarea 0.6. Es LO QUE SE AGREGA después. */
+  motivoCodigo?: string;
 }): Promise<RespondResponse> {
   return pedir<RespondResponse>("/handshake/respond", {
     method: "POST",
     body: JSON.stringify(cuerpo),
   });
+}
+
+/**
+ * Catálogo versionado de motivos de rechazo — tarea 0.6.
+ *
+ * La consola NO lleva los motivos escritos adentro. Los pide, guarda el
+ * `codigo` y pinta la `etiqueta`: así, corregir una palabra es un deploy de
+ * core y no parte la serie histórica de aceptación, que es el activo.
+ */
+export function catalogoMotivosRechazo(): Promise<CatalogoMotivosResponse> {
+  return pedir<CatalogoMotivosResponse>("/catalogo/motivos-rechazo");
 }
 
 export function estado(casoId?: string): Promise<EstadoResponse> {

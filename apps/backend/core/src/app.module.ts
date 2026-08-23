@@ -22,6 +22,7 @@ import { PulsoErrorFilter } from './common/pulso-error.filter';
 import { RoutingModule } from './routing/routing.module';
 import { EscalamientoModule } from './escalamiento/escalamiento.module';
 import { CapacidadesModule } from './capacidades/capacidades.module';
+import { CatalogoModule } from './catalogo/catalogo.module';
 
 @Module({
   imports: [
@@ -65,6 +66,8 @@ import { CapacidadesModule } from './capacidades/capacidades.module';
     EscalamientoModule,
     // En qué modo corre cada integración. Lo lee la barra de /campo.
     CapacidadesModule,
+    // Catálogos versionados (motivos de rechazo). Los lee /hospital.
+    CatalogoModule,
 
     // El que vigila el reloj: vence handshakes, re-rutea y detecta demoras.
     VigilanteModule,

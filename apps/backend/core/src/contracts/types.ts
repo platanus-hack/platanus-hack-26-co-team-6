@@ -216,6 +216,36 @@ export interface Candidato {
 export type CanalHandshake = 'telegram' | 'whatsapp' | 'consola';
 export type EstadoHandshake = 'enviado' | 'aceptado' | 'rechazado' | 'timeout';
 
+/**
+ * Categoria del motivo de rechazo — tarea 0.6.
+ *
+ * `administrativo` es la que sostiene la tesis: un rebote por falta de cama
+ * y uno por falta de claridad del pagador son problemas distintos y hasta hoy
+ * se contaban juntos.
+ */
+export type CategoriaMotivoRechazo =
+  | 'capacidad'
+  | 'recurso_humano'
+  | 'tecnico'
+  | 'administrativo';
+
+/** Una entrada del catalogo `motivo_rechazo`. El `codigo` es inmutable. */
+export interface MotivoRechazoCatalogo {
+  codigo: string;
+  /** Editable: cambiarla NO parte la serie historica. */
+  etiqueta: string;
+  categoria: CategoriaMotivoRechazo;
+  version: number;
+  /** false = ya no se ofrece, pero el historico lo sigue resolviendo. */
+  vigente?: boolean;
+}
+
+/** GET /catalogo/motivos-rechazo */
+export interface CatalogoMotivosResponse {
+  version: number;
+  motivos: MotivoRechazoCatalogo[];
+}
+
 export interface Handshake {
   id: string;
   casoId: string;
@@ -224,6 +254,12 @@ export interface Handshake {
   estado: EstadoHandshake;
   /** "Sin camas UCI", "Hemodinamia en procedimiento"... */
   motivoRechazo: string | null;
+  /**
+   * Codigo del catalogo `motivo_rechazo` — tarea 0.6. ESTE es el campo que
+   * se agrega y se reporta; `motivoRechazo` es la etiqueta congelada al
+   * momento del rechazo y solo se conserva para no romper lo que ya lo pinta.
+   */
+  motivoCodigo?: string | null;
   enviadoEn: string;
   /**
    * Cuando esta solicitud deja de esperar y pasa a 'timeout'.
@@ -378,7 +414,10 @@ export interface DispatchResponse {
 export interface RespondRequest {
   handshakeId: string;
   decision: 'aceptado' | 'rechazado';
+  /** Etiqueta libre. Se conserva por compatibilidad; prefiera `motivoCodigo`. */
   motivo?: string;
+  /** Codigo del catalogo `motivo_rechazo` (GET /catalogo/motivos-rechazo). */
+  motivoCodigo?: string;
 }
 export interface RespondResponse {
   handshake: Handshake;

@@ -53,6 +53,7 @@ export class DispatchService {
       canal: cuerpo.canal ?? 'telegram',
       estado: 'enviado',
       motivoRechazo: null,
+      motivoCodigo: null,
       enviadoEn: enviadoEn.toISOString(),
       expiraEn: expiraEn.toISOString(),
       respondidoEn: null,
