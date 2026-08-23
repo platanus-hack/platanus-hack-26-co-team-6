@@ -16,9 +16,13 @@
  *
  *  - QUE SIGUE VIVA. El polling es cada 2 s; si core se cae, el punto deja de
  *    latir. Es la diferencia entre "no hay solicitudes" y "no hay conexión".
+ *
+ * La forma es la del header de la landing: píldoras glass, wordmark en
+ * minúscula. Misma marca, otro lado del producto.
  */
 
 import { useEffect } from "react";
+import { MarcaPulso } from "./MarcaPulso";
 
 export function Cabecera({ pendientes, conectado }: { pendientes: number; conectado: boolean }) {
   // El título del documento es el único aviso que funciona con la pestaña
@@ -32,19 +36,17 @@ export function Cabecera({ pendientes, conectado }: { pendientes: number; conect
   }, [pendientes]);
 
   return (
-    <header className="flex items-center gap-2 mb-6">
-      <span className="text-2xl" aria-hidden>
-        🏥
-      </span>
-      <span className="font-bold text-lg">PULSO</span>
-      <span className="text-xs text-[color:var(--color-texto-tenue)]">
-        jefatura de urgencias · red distrital
-      </span>
+    <header className="mb-6 flex flex-wrap items-center gap-3">
+      <MarcaPulso rotulo="jefatura de urgencias · red distrital" />
 
-      <span className="ml-auto flex items-center gap-1.5 text-xs text-[color:var(--color-texto-tenue)]">
+      <span
+        className="ml-auto inline-flex h-12 items-center gap-2 rounded-2xl
+                   bg-neutral-900/70 px-4 text-xs font-medium shadow-lg
+                   backdrop-blur-lg text-texto-tenue"
+      >
         <span
           aria-hidden
-          className={`inline-block w-1.5 h-1.5 rounded-full ${conectado ? "latido" : ""}`}
+          className={`inline-block h-1.5 w-1.5 rounded-full ${conectado ? "latido" : ""}`}
           style={{
             background: conectado
               ? "var(--color-estable)"

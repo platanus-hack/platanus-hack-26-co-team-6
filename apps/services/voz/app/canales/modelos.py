@@ -26,4 +26,7 @@ class MensajeEntrante:
     lat: float | None = None
     lng: float | None = None
     nombre_contacto: str | None = None
+    #: Id del botón que tocó, si el mensaje vino de uno. Llega estructurado y
+    #: no hay que volver a interpretarlo con el LLM.
+    id_boton: str | None = None
     crudo: dict[str, Any] = field(default_factory=dict, repr=False)

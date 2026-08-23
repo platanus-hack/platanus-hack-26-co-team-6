@@ -22,6 +22,7 @@
  * respuesta. Lo que se pinta vive en components/hospital/.
  */
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import type { EstadoResponse } from "@/lib/types";
 import { Cabecera } from "@/components/hospital/Cabecera";
@@ -105,7 +106,7 @@ export default function Hospital() {
     estado?.congestion.find((c) => c.codigo === cod)?.nombre;
 
   return (
-    <main className="min-h-screen max-w-2xl mx-auto p-4">
+    <main className="min-h-screen w-full px-4 py-4 sm:px-8 sm:py-6 lg:px-12">
       <Cabecera pendientes={pendientes.length} conectado={conectado} />
 
       {/*
@@ -115,8 +116,8 @@ export default function Hospital() {
         tenia otro dueno en la ola.
       */}
       <nav aria-label="Vistas de urgencias" className="mb-4 grid gap-2 sm:grid-cols-2">
-        <a href="/hospital/capacidad" className="flex min-h-14 items-center justify-center rounded-xl border border-[color:var(--color-borde)] bg-[color:var(--color-superficie-alta)] px-4 text-center font-semibold">Declarar capacidad y estado operativo</a>
-        <a href="/hospital/recepcion" className="flex min-h-14 items-center justify-center rounded-xl border border-[color:var(--color-borde)] bg-[color:var(--color-superficie-alta)] px-4 text-center font-semibold">Prearribos en camino</a>
+        <Link href="/hospital/capacidad" className="flex min-h-14 items-center justify-center rounded-xl border border-[color:var(--color-borde)] bg-[color:var(--color-superficie-alta)] px-4 text-center font-semibold">Declarar capacidad y estado operativo</Link>
+        <Link href="/hospital/recepcion" className="flex min-h-14 items-center justify-center rounded-xl border border-[color:var(--color-borde)] bg-[color:var(--color-superficie-alta)] px-4 text-center font-semibold">Prearribos en camino</Link>
       </nav>
 
       {aviso && (
@@ -161,7 +162,11 @@ export default function Hospital() {
         })}
       </div>
 
-      <HistorialAuditoria handshakes={resueltos} nombreSede={nombreSede} />
+      <HistorialAuditoria
+        handshakes={resueltos}
+        nombreSede={nombreSede}
+        caso={caso}
+      />
     </main>
   );
 }

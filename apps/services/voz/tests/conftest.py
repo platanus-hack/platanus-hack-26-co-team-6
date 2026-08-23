@@ -33,6 +33,12 @@ NEUTRALIZAR = {
     "core_password": "",
     "secreto_endpoint": "",
     "url_publica": "",
+    # ⚠️ SIN ESTO EL TEST DE LATENCIA MIDE LA RED, NO EL CÓDIGO.
+    # La deduplicación abre un pool contra Postgres, y con un Supabase remoto
+    # la PRIMERA conexión tarda ~2 s. El test de la tarea 0.3 exige p99 < 1 s
+    # y fallaba midiendo el viaje a la nube. Con el `.env` puesto pasaba; en
+    # CI, sin él, pasaba — otra vez la suite dependiendo de quién la corre.
+    "webhook_database_url": "",
 }
 
 

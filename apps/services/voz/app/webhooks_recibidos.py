@@ -94,7 +94,19 @@ def modo() -> str:
 
 
 async def _obtener_pool() -> Any:
-    """Pool perezoso. Abrirlo al importar rompería el arranque sin base."""
+    """Pool perezoso. Abrirlo al importar rompería el arranque sin base.
+
+    ⚠️ LA PRIMERA CONEXIÓN CUESTA. Medido contra el Supabase de producción
+       desde Bogotá: ~2 s para abrir el pool. El presupuesto que da Meta es de
+       ~3 s, así que el PRIMER webhook después de cada arranque se lleva dos
+       tercios — y en el plan free de Render, que duerme el servicio a los 15
+       minutos, «el primer webhook después de arrancar» es el del demo.
+
+       Con el pool caliente el costo desaparece. La mitigación es mantener el
+       servicio despierto (un ping cada 10 min) o abrir el pool al arrancar en
+       vez de al primer uso; lo segundo hace que un Postgres caído impida el
+       arranque, que es la razón por la que se dejó perezoso.
+    """
     global _pool
     if _pool is not None:
         return _pool

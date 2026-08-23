@@ -226,6 +226,21 @@ async def moviles() -> dict[str, Any]:
     return await _pedir("GET", "/moviles")
 
 
+async def ruta(origen: dict[str, float], destino: dict[str, float]) -> dict[str, Any]:
+    """La geometría de una pata del turno, para resaltarla en el mapa.
+
+    Sale de Mapbox Directions vía core, que es quien tiene el token.
+    """
+    return await _pedir(
+        "POST", "/ruta/tramo", json={"origen": origen, "destino": destino}
+    )
+
+
+async def direccion(coord: dict[str, float]) -> dict[str, Any]:
+    """Coordenadas → dirección legible. Geocodificación inversa vía core."""
+    return await _pedir("POST", "/ruta/direccion", json={"coord": coord})
+
+
 async def estado(caso_id: str) -> dict[str, Any]:
     """Estado vivo de un caso: handshakes, sede aceptada, etc.
 

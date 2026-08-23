@@ -44,7 +44,7 @@ Contexto necesario antes de tocar nada. Detalle en [`docs/pulso-agente-campo-y-r
 | **Los webhooks no verifican firma y tardan 4-8 s** (Meta espera 3 s y ya reintenta). ~~No deduplican~~: la deduplicación por `wamid` ya está en `voz/app/webhooks_recibidos.py` (migración `0003`) | `services/voz/` | [0.2](docs/tareas/zaid.md#02--verificar-firma-de-whatsapp-y-twilio), [0.3](docs/tareas/neid.md#03--responder-el-webhook-en--3-s), ~~[0.4](docs/tareas/juan.md#04--deduplicar-webhooks-por-wamid)~~ |
 | **De 22 eventos del sistema, 3 se guardan** | transversal | [3.1](docs/tareas/neid.md#31--evento_caso--registroservice), [3.2](docs/tareas/sebas.md#32--cablear-los-22-eventos) |
 | **El prompt clínico está duplicado** en Python y TypeScript | `ai-core` + `core/src/triage` | [0.5](docs/tareas/neid.md#05--un-solo-prompt-clínico) |
-| **El override del CRUE vive en `localStorage`** | `components/crue/bitacora.ts` | [3.11](docs/tareas/juan.md#311--persistir-el-override-del-crue) |
+| ~~El override del CRUE vive en `localStorage`~~ **Cerrado (3.11)**: es `POST /casos/:id/override` con justificación obligatoria y `evento_caso` — pero sin `PULSO_EVENTOS_DATABASE_URL` la línea de tiempo sigue en RAM (ver fila 1.2) | `core/src/eventos/` | ~~[3.11](docs/tareas/juan.md)~~ |
 
 ## Estructura
 

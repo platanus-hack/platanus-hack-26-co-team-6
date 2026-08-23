@@ -1,0 +1,15 @@
+escalamiento_id,caso_id,motivo,sedes_intentadas,detalle,creado_en,atendido_en,atendido_por
+ESC-001,CAS-0001,candidatos-agotados,110013028929 110013029402 110013028902 110010566801,4 sedes rechazaron o dejaron vencer la solicitud,2026-08-22T19:07:17-05:00,2026-08-22T19:08:42-05:00,regulador_crue:Marcela Tibaquirá
+ESC-002,CAS-0012,candidatos-agotados,110013390301 110010918608 110010911101 110010561801,4 sedes rechazaron o dejaron vencer la solicitud,2026-08-22T19:44:14-05:00,2026-08-22T19:49:17-05:00,regulador_crue:Néstor Cifuentes
+ESC-003,CAS-0020,candidatos-agotados,110010966601 110010918630 110010918668 110013029601,4 sedes rechazaron o dejaron vencer la solicitud,2026-08-22T20:20:40-05:00,,
+ESC-004,CAS-0039,candidatos-agotados,110010568101 110010867901 110010606501,3 sedes rechazaron o dejaron vencer la solicitud,2026-08-22T21:31:56-05:00,2026-08-22T21:37:39-05:00,regulador_crue:Prudencio Rincón
+ESC-005,CAS-0047,candidatos-agotados,110010918668 110010644701 110011613301,3 sedes rechazaron o dejaron vencer la solicitud,2026-08-22T22:19:36-05:00,2026-08-22T22:24:17-05:00,regulador_crue:Quintina Aristizábal
+ESC-006,CAS-0058,candidatos-agotados,110012215001 110013029601 110010966601,3 sedes rechazaron o dejaron vencer la solicitud,2026-08-22T23:07:30-05:00,,
+ESC-007,CAS-0066,candidatos-agotados,110010966601 110012215001 110013029601 110013029603,4 sedes rechazaron o dejaron vencer la solicitud,2026-08-22T23:47:52-05:00,2026-08-22T23:53:03-05:00,regulador_crue:Saúl Peñaloza
+ESC-008,CAS-0074,candidatos-agotados,110010918668 110013029103 110010644701 110012156404,4 sedes rechazaron o dejaron vencer la solicitud,2026-08-23T00:34:00-05:00,2026-08-23T00:37:39-05:00,regulador_crue:Teodora Yepes
+ESC-009,CAS-0085,candidatos-agotados,110010867901 110011864201 110010568101 110010606501,4 sedes rechazaron o dejaron vencer la solicitud,2026-08-23T01:46:01-05:00,,
+ESC-010,CAS-0093,candidatos-agotados,110013029654 110010817103 110013029601 110012215001,4 sedes rechazaron o dejaron vencer la solicitud,2026-08-23T02:57:14-05:00,2026-08-23T02:59:46-05:00,regulador_crue:Vilma Nempeque
+ESC-011,CAS-0094,solicitud-paramedico,110012156404,La tripulación pidió regulación del CRUE desde /campo,2026-08-23T02:56:01-05:00,2026-08-23T03:01:48-05:00,regulador_crue:Wilmar Umaña
+ESC-012,CAS-0101,candidatos-agotados,110012507001 110010644701 110010918668,3 sedes rechazaron o dejaron vencer la solicitud,2026-08-23T04:05:32-05:00,,
+ESC-013,CAS-0112,candidatos-agotados,110010895201 110010752101 110010936101,3 sedes rechazaron o dejaron vencer la solicitud,2026-08-23T06:08:58-05:00,2026-08-23T06:12:19-05:00,regulador_crue:Yolanda Lozano
+ESC-014,CAS-0120,candidatos-agotados,110013028929 110013029402 110013028902,3 sedes rechazaron o dejaron vencer la solicitud,2026-08-23T06:52:20-05:00,2026-08-23T06:55:18-05:00,regulador_crue:Zacarías Sarmiento

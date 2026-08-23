@@ -28,7 +28,22 @@ FROM node:24-slim AS runtime
 
 RUN corepack enable && corepack prepare pnpm@11.18.0 --activate
 
-WORKDIR /app
+# ⚠️ EL LAYOUT DEL REPO SE ESPEJA A PROPÓSITO, no es decoración.
+#    `zonas.controller.ts` calcula la raíz así:
+#        RAIZ = join(__dirname, '..','..','..','..','..')
+#    o sea cinco niveles arriba de `dist/zonas`, y de ahí lee
+#    `data/derivados/zonas_h3.json` y `data/geo/localidades.geojson`.
+#
+#    Con la app aplanada en /app/dist eso resolvía a `//data/...`, que no
+#    existe: GET /zonas respondía `{"zonas":[],"fuente":"no disponible"}` y
+#    /zonas/localidades daba 404 — sin ruido en el log, porque el controlador
+#    degrada en silencio. Con la app en /app/apps/backend/core, los cinco
+#    niveles caen justo en /app y `data/` queda donde el código la busca.
+#
+#    Corolario: core SÍ lee data/ en tiempo de ejecución (no al arrancar:
+#    la primera vez que alguien pide /zonas). Copiarla no es previsión, es
+#    requisito.
+WORKDIR /app/apps/backend/core
 ENV NODE_ENV=production
 
 COPY apps/backend/core/package.json apps/backend/core/pnpm-lock.yaml apps/backend/core/pnpm-workspace.yaml ./
@@ -36,13 +51,8 @@ RUN pnpm install --frozen-lockfile --prod
 
 COPY --from=build /app/dist ./dist
 
-# Las fuentes compartidas del repo. Hoy core NO las lee al arrancar: el
-# catálogo REPS y la demanda del 123 ya vienen compilados a TypeScript
-# (src/sedes/catalogo.generado.ts, src/scoring/demanda.generada.ts), y el
-# único lector de data/ es el CLI de migración, que no corre en este proceso.
-# Viajan igual para que el día que la tarea 0.5 vuelva el prompt clínico
-# fuente única en data/, este Dockerfile no tenga que cambiar. Son 6 MB.
-COPY data ./data
+# En /app/data, que es exactamente donde caen los cinco `..` de arriba.
+COPY data /app/data
 
 # Render inyecta PORT. El 3001 es el default de main.ts, para que la imagen
 # también corra sin PORT (el 3000 es de apps/frontend).

@@ -47,6 +47,61 @@ export class EtaController {
     private readonly sedes: SedesService,
   ) {}
 
+  /**
+   * `POST /ruta/tramo` — ruta entre dos coordenadas cualesquiera.
+   *
+   * El `POST /ruta` de arriba exige un código de sede, y con razón: para el
+   * traslado B→C el destino es un hospital del catálogo y no unas
+   * coordenadas que el cliente podría inventarse.
+   *
+   * Pero el turno tiene otras dos patas que NO van a una sede: A→B (hacia el
+   * paciente) y C→D (hacia la zona a cubrir). Para esas hace falta esto.
+   *
+   * Sigue pasando por core porque el token con cuota de Directions es el del
+   * servidor, no el público del navegador.
+   */
+  @Post('tramo')
+  async tramo(
+    @Body() cuerpo: { origen?: Coordenada; destino?: Coordenada },
+  ): Promise<RutaNavegable & { direccionDestino: string | null }> {
+    const { origen, destino } = cuerpo ?? {};
+    if (
+      typeof origen?.lat !== 'number' ||
+      typeof origen?.lng !== 'number' ||
+      typeof destino?.lat !== 'number' ||
+      typeof destino?.lng !== 'number'
+    ) {
+      throw new BadRequestException('Faltan origen y destino { lat, lng }');
+    }
+
+    const nav = await this.eta.navegacion(origen, destino);
+    if (!nav) {
+      throw new ServiceUnavailableException(
+        'Sin MAPBOX_TOKEN no hay geometría de ruta',
+      );
+    }
+    // La dirección viaja con la ruta: quien pide el tramo casi siempre la
+    // necesita para decirle al paramédico a dónde va, y son dos llamadas a
+    // Mapbox que conviene hacer juntas.
+    return { ...nav, direccionDestino: await this.eta.direccionDe(destino) };
+  }
+
+  /**
+   * `POST /ruta/direccion` — coordenadas → dirección legible.
+   *
+   * Un paramédico al volante no teclea «4.628, -74.155».
+   */
+  @Post('direccion')
+  async direccion(
+    @Body() cuerpo: { coord?: Coordenada },
+  ): Promise<{ direccion: string | null }> {
+    const c = cuerpo?.coord;
+    if (typeof c?.lat !== 'number' || typeof c?.lng !== 'number') {
+      throw new BadRequestException('Falta coord { lat, lng }');
+    }
+    return { direccion: await this.eta.direccionDe(c) };
+  }
+
   @Post()
   async calcular(@Body() cuerpo: RutaRequest): Promise<RutaResponse> {
     const { origen, sedeCodigo } = cuerpo ?? {};

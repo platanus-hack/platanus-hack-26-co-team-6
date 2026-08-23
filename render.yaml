@@ -161,7 +161,24 @@ services:
       - key: COOKIE_CROSS_SITE
         value: "true"
 
+      # ── Identidad del turno (PR #23) ──────────────────────────────────
+      # Declaraciones DEL LADO DEL SERVIDOR: quien despliega decide qué rol
+      # acredita la contraseña de turno. Sin ellas la sesión no acredita
+      # NINGÚN rol y responden 403 el override del CRUE
+      # (POST /casos/:id/override) y la auditoría por caso. El log lo avisa al
+      # arrancar, pero no tumba el servicio: se descubre al usarlo.
+      - key: PULSO_ROLES_TURNO
+        value: admin_organizacion
+      - key: PULSO_ORGANIZACION_TURNO
+        value: org-demo
+
       # ── Credenciales de servidor ──────────────────────────────────────
+      # ⚠️ SUPABASE_URL TIENE QUE EMPEZAR POR https:// — es la URL del proyecto
+      #    (https://<ref>.supabase.co), NO la cadena de Postgres, que va en
+      #    PULSO_ROUTING_DATABASE_URL. Con un valor sin esquema, el cliente
+      #    lanza «Invalid supabaseUrl» en onModuleInit y core NO ARRANCA: eso
+      #    tumbó el primer deploy. Vacía sí es válido — ahí sí degrada a
+      #    semillas y lo dice en el log.
       # Sin Supabase, core sirve las 84 sedes desde semillas compiladas.
       # Sin Mapbox, el ETA se estima por distancia. Las dos degradaciones son
       # la regla, no un bug: GET /capacidades las hace visibles.
@@ -204,15 +221,22 @@ services:
         value: 8090
 
       # La URL pública de ESTE servicio. Twilio abre un WebSocket de vuelta
-      # hacia acá, así que sin esto la telefonía no funciona.
-      # `property: host` devuelve el hostname pelado (pulso-voz.onrender.com,
-      # sin esquema) y está bien: llamadas.py::_host_publico() lo quiere así
-      # para armar wss://{host}/telefonia/twilio.
+      # hacia acá, así que sin esto la telefonía no suena.
+      #
+      # ⚠️ SE PONE A MANO: https://pulso-voz.onrender.com
+      #
+      #    Aquí había un `fromService … property: host` y ESTÁ MAL. En el
+      #    primer deploy resolvió a "pulso-voz" pelado —el nombre interno del
+      #    servicio, no el hostname público— y con eso llamadas.py arma
+      #    `wss://pulso-voz/telefonia/twilio`, que no existe desde internet:
+      #    la llamada se conecta y se cae sin audio. Se vio en GET /listo,
+      #    campo url_publica.
+      #
+      #    llamadas.py::_host_publico() quita el esquema, así que da igual si
+      #    la pegas con https:// o sin él. Lo que NO puede faltar es el
+      #    dominio completo.
       - key: URL_PUBLICA
-        fromService:
-          type: web
-          name: pulso-voz
-          property: host
+        sync: false
 
       # Hacia adentro, por la red privada. CORE_BASE_URL es la RAÍZ de core
       # (voz le pega a /auth/login), no /interno.
@@ -268,7 +292,26 @@ services:
       # habla con graph.facebook.com y nada lee kapso_api_key. Ver el reporte.
       - key: WHATSAPP_PROVEEDOR
         value: meta
+      # ⚠️ SIN ESTO EL WEBHOOK PÚBLICO ACEPTA CUALQUIER COSA.
+      #    `entorno` vale "desarrollo" por defecto (config.py:98), y en
+      #    desarrollo la verificación de firma ADVIERTE Y PASA. O sea: en
+      #    Render, sin estas dos, cualquiera puede hacer POST a
+      #    /webhooks/whatsapp e inventar una urgencia — con un endpoint
+      #    público eso no es un modo degradado, es un agujero.
+      #
+      #    Con ENTORNO=produccion y sin secreto, responde 401 y el canal
+      #    muere. Van juntas o no van.
+      #
+      #    El App Secret sale de developers.facebook.com → tu App →
+      #    Configuración → Básico → Aplicar secreto.
+      - key: ENTORNO
+        value: produccion
+      - key: WHATSAPP_APP_SECRET
+        sync: false
+
       # La cadena que TÚ inventas y le repites a Meta al registrar el webhook.
+      # Es lo que Meta te devuelve en el GET de verificación; no protege el
+      # POST, para eso está WHATSAPP_APP_SECRET.
       # Este repo es público: no la dejes en un valor conocido.
       - key: WHATSAPP_VERIFY_TOKEN
         sync: false
@@ -300,9 +343,13 @@ services:
     name: pulso-frontend
     runtime: node
     rootDir: apps/frontend
-    # corepack: apps/frontend/package.json fija pnpm@11.18.0 en packageManager,
-    # así que esto instala exactamente esa versión y respeta el lockfile.
-    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
+    # ⚠️ NADA DE `corepack enable` AQUÍ. La imagen de Render ya trae pnpm en
+    #    /usr/bin/pnpm y el filesystem es de sólo lectura, así que corepack
+    #    revienta al intentar reemplazar el symlink:
+    #      Internal Error: EROFS: read-only file system, unlink '/usr/bin/pnpm'
+    #    Eso tumbó el primer deploy. El pnpm de la imagen lee el lockfile 9.0
+    #    sin problema.
+    buildCommand: pnpm install --frozen-lockfile && pnpm build
     # `next start` lee PORT del entorno, que es lo que Render inyecta.
     startCommand: pnpm start
     plan: starter

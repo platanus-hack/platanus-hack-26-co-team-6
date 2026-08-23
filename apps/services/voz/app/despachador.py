@@ -14,6 +14,7 @@ from typing import Any, Callable, Coroutine
 from .canales import whatsapp
 from .clientes import ai_core, core
 from .zonas import zonas
+from . import turno
 from .sesiones import Sesion, guardar, obtener
 
 log = logging.getLogger(__name__)
@@ -79,6 +80,23 @@ async def _registrar_caso(telefono: str, args: dict[str, Any]) -> str:
     guardar(s)
 
     await core.dispatch(caso["id"], sede["codigo"])
+
+    # Si esta unidad tiene turno abierto, el ranking lo mueve de B a C. Sin
+    # esto el turno se queda en `con_paciente` para siempre y el botón de
+    # «entregué» nunca aplica.
+    t = turno.de_telefono(telefono)
+    if t is not None:
+        from .logistica import asignar_hospital
+        from .turno import Lugar
+
+        await asignar_hospital(
+            t.unidad_id,
+            Lugar(
+                lat=s.sede_lat, lng=s.sede_lng,
+                direccion=s.sede_direccion, nombre=s.sede_nombre,
+                eta_min=ganador.get("etaMin"),
+            ),
+        )
 
     texto = (
         f"🚑 {sede['nombre']}\n"
@@ -156,8 +174,16 @@ async def _declarar_unidad(telefono: str, args: dict[str, Any]) -> str:
     s = obtener(telefono)
     s.unidad_id = unidad
     guardar(s)
+    # Abrir el turno aquí no es un detalle: este mensaje del paramédico es lo
+    # que ABRE LA VENTANA DE 24 HORAS de WhatsApp. Sin él, PULSO no puede
+    # escribirle primero para despacharlo — necesitaría una plantilla aprobada
+    # por Meta, que tarda 24-48 h en salir.
+    turno.abrir(unidad, telefono)
+
     return await _responder(
-        telefono, f"Copiado, {unidad}. Manda el reporte cuando estés con el paciente."
+        telefono,
+        f"Copiado, {unidad}. Turno abierto — te aviso si entra una emergencia "
+        f"en tu zona.",
     )
 
 

@@ -19,7 +19,7 @@ from fastapi import FastAPI, Response
 from . import metricas, webhooks_recibidos
 from .clientes import core as cliente_core
 from .config import settings
-from .rutas import interno, whatsapp
+from .rutas import despacho, interno, whatsapp
 from .telefonia import rutas as telefonia
 from .telefonia import llamadas
 from .canales.whatsapp import GRAPH  # noqa: F401  (documenta la versión de Graph)
@@ -51,6 +51,7 @@ app = FastAPI(title="voz", version="0.1.0", lifespan=ciclo)
 
 app.include_router(whatsapp.router)
 app.include_router(interno.router)
+app.include_router(despacho.router)
 app.include_router(telefonia.router)
 
 

@@ -31,6 +31,7 @@ import { InvitacionesModule } from './invitaciones/invitaciones.module';
 import { RdaModule } from './rda/rda.module';
 import { AfiliacionModule } from './afiliacion/afiliacion.module';
 import { MovilesModule } from './moviles/moviles.module';
+import { SemillasDemoModule } from './semillas-demo/semillas-demo.module';
 
 @Module({
   imports: [
@@ -104,6 +105,10 @@ import { MovilesModule } from './moviles/moviles.module';
     // Pre-llenado del RDA en FHIR R4 (tarea 4.8). Pre-llena, NO reporta al
     // IHCE: el borrador queda pendiente hasta que un humano lo firme.
     RdaModule,
+
+    // Turno de noche sintético para el demo. APAGADO salvo que
+    // PULSO_DEMO_SINTETICO=true; ver semillas-demo.service.ts.
+    SemillasDemoModule,
 
     // El que vigila el reloj: vence handshakes, re-rutea y detecta demoras.
     VigilanteModule,

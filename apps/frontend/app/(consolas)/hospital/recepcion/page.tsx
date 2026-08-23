@@ -21,13 +21,15 @@
  */
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { Ambulance, ArrowRight } from "lucide-react";
 import * as api from "@/lib/api";
-import type { EstadoResponse } from "@/lib/types";
-import { ETIQUETA_TRIAGE } from "@/lib/presentacion";
+import type { EstadoResponse, Handshake } from "@/lib/types";
+import { esHoraDorada, ETIQUETA_TRIAGE, nombresServicios } from "@/lib/presentacion";
 import { hace } from "@/lib/recepcion-modelo";
 import { useAhora } from "@/components/hospital/recepcion/useAhora";
+import { MarcaPulso } from "@/components/hospital/MarcaPulso";
 
 const SONDEO_MS = 3000;
 
@@ -59,8 +61,20 @@ export default function Recepciones() {
   );
 
   return (
-    <main className="mx-auto min-h-screen w-full max-w-3xl p-4 sm:p-6">
-      <h1 className="text-2xl font-bold">Prearribos</h1>
+    <main className="min-h-screen w-full px-4 py-4 sm:px-8 sm:py-6 lg:px-12">
+      <div className="mb-6 flex flex-wrap items-center gap-3">
+        <MarcaPulso rotulo="prearribos · jefatura de urgencias" />
+        <Link
+          href="/hospital"
+          className="ml-auto inline-flex h-11 items-center rounded-full border
+                     border-borde bg-superficie/70 px-4 text-sm font-medium
+                     backdrop-blur text-texto-tenue"
+        >
+          Solicitudes
+        </Link>
+      </div>
+
+      <h1 className="text-2xl font-bold tracking-tight">Prearribos</h1>
       <p className="mt-1 text-sm text-[color:var(--color-texto-tenue)]">
         Traslados aceptados que todavía no han llegado a la puerta.
       </p>
@@ -74,45 +88,146 @@ export default function Recepciones() {
           </p>
         </div>
       ) : (
-        <ul className="mt-6 space-y-2">
+        <TablaPrearribos aceptados={aceptados} estado={estado} ahora={ahora} />
+      )}
+    </main>
+  );
+}
+
+const ETIQUETA_SEXO: Record<string, string> = {
+  M: "masculino",
+  F: "femenino",
+  desconocido: "—",
+};
+
+const ETIQUETA_CANAL: Record<string, string> = {
+  telegram: "Telegram",
+  whatsapp: "WhatsApp",
+  consola: "Consola",
+};
+
+/**
+ * Todos los prearribos de una vez, columna por columna, en lugar de abrirlos
+ * uno por uno: esta pantalla se proyecta en la pared de urgencias y quien la
+ * mira compara traslados, no lee tarjetas. La fila entera navega al detalle;
+ * el enlace del diagnóstico es el mismo destino para quien va con teclado.
+ */
+function TablaPrearribos({
+  aceptados,
+  estado,
+  ahora,
+}: {
+  aceptados: Handshake[];
+  estado: EstadoResponse | null;
+  ahora: number;
+}) {
+  const router = useRouter();
+
+  return (
+    <div className="mt-6 overflow-x-auto rounded-2xl border border-[color:var(--color-borde)] bg-[color:var(--color-superficie)]">
+      <table className="w-full min-w-[900px] text-sm">
+        <thead>
+          <tr className="border-b border-[color:var(--color-borde)] text-left text-xs uppercase tracking-wide text-[color:var(--color-texto-tenue)]">
+            <th scope="col" className="px-4 py-3 font-medium">Diagnóstico</th>
+            <th scope="col" className="px-3 py-3 font-medium">Triage</th>
+            <th scope="col" className="px-3 py-3 font-medium">Paciente</th>
+            <th scope="col" className="px-3 py-3 font-medium">Servicios requeridos</th>
+            <th scope="col" className="px-3 py-3 font-medium">Sede que aceptó</th>
+            <th scope="col" className="px-3 py-3 font-medium">Canal</th>
+            <th scope="col" className="px-3 py-3 font-medium">Aceptado</th>
+            <th scope="col" className="px-3 py-3 font-medium">ETA al despachar</th>
+            <th scope="col" className="px-3 py-3">
+              <span className="sr-only">Abrir el prearribo</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
           {aceptados.map((h) => {
             const caso = estado?.casos.find((c) => c.id === h.casoId);
             const sede = estado?.congestion.find(
               (c) => c.codigo === h.sedeCodigo,
             )?.nombre;
+            const destino = `/hospital/recepcion/${h.casoId}`;
 
             return (
-              <li key={h.id}>
-                <Link
-                  href={`/hospital/recepcion/${h.casoId}`}
-                  className="flex items-center gap-3 rounded-2xl border border-[color:var(--color-borde)] bg-[color:var(--color-superficie)] p-4"
-                >
-                  <Ambulance
-                    className="size-5 shrink-0 text-[color:var(--color-estable)]"
-                    strokeWidth={2.2}
-                  />
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate font-semibold">
-                      {caso?.dxDescripcion ?? "Caso sin diagnóstico"}
+              <tr
+                key={h.id}
+                onClick={() => router.push(destino)}
+                className="cursor-pointer border-b border-[color:var(--color-borde)]
+                           last:border-b-0
+                           hover:bg-[color:var(--color-superficie-alta)]/60"
+              >
+                <td className="px-4 py-3">
+                  <Link
+                    href={destino}
+                    className="flex items-center gap-2 font-semibold"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Ambulance
+                      className="size-4 shrink-0 text-[color:var(--color-estable)]"
+                      strokeWidth={2.2}
+                    />
+                    {caso?.dxDescripcion ?? "Caso sin diagnóstico"}
+                  </Link>
+                  {caso && (caso.dxCie10 || caso.signosAlarma.length > 0) && (
+                    <p className="mt-0.5 max-w-[36ch] truncate pl-6 text-xs text-[color:var(--color-texto-tenue)]">
+                      {[caso.dxCie10, caso.signosAlarma.join(", ")]
+                        .filter(Boolean)
+                        .join(" · ")}
                     </p>
-                    <p className="truncate text-xs text-[color:var(--color-texto-tenue)]">
-                      {caso ? `Triage ${ETIQUETA_TRIAGE[caso.triage]} · ` : ""}
-                      {sede ?? h.sedeCodigo}
-                      {h.respondidoEn
-                        ? ` · aceptado ${hace(h.respondidoEn, ahora)}`
-                        : ""}
-                    </p>
-                  </div>
+                  )}
+                </td>
+                <td className="px-3 py-3 whitespace-nowrap">
+                  {caso ? (
+                    <span
+                      style={
+                        esHoraDorada(caso.triage)
+                          ? { color: "var(--color-critico)" }
+                          : undefined
+                      }
+                    >
+                      {ETIQUETA_TRIAGE[caso.triage]}
+                    </span>
+                  ) : (
+                    "—"
+                  )}
+                </td>
+                <td className="px-3 py-3 whitespace-nowrap">
+                  {caso
+                    ? `${caso.edad !== null ? `${caso.edad} años` : "edad s/d"} · ${
+                        ETIQUETA_SEXO[caso.sexo] ?? caso.sexo
+                      }`
+                    : "—"}
+                </td>
+                <td className="px-3 py-3 text-xs">
+                  {caso && caso.serviciosRequeridos.length > 0
+                    ? nombresServicios(caso.serviciosRequeridos)
+                    : "—"}
+                </td>
+                <td className="px-3 py-3">{sede ?? h.sedeCodigo}</td>
+                <td className="px-3 py-3 whitespace-nowrap">
+                  {ETIQUETA_CANAL[h.canal] ?? h.canal}
+                </td>
+                <td className="px-3 py-3 whitespace-nowrap text-[color:var(--color-texto-tenue)]">
+                  {h.respondidoEn ? hace(h.respondidoEn, ahora) : "—"}
+                </td>
+                <td className="px-3 py-3 whitespace-nowrap tabular">
+                  {h.etaMinAlDespachar != null
+                    ? `${h.etaMinAlDespachar} min`
+                    : "—"}
+                </td>
+                <td className="px-3 py-3">
                   <ArrowRight
-                    className="size-5 shrink-0 text-[color:var(--color-texto-tenue)]"
+                    aria-hidden
+                    className="size-4 text-[color:var(--color-texto-tenue)]"
                     strokeWidth={2.2}
                   />
-                </Link>
-              </li>
+                </td>
+              </tr>
             );
           })}
-        </ul>
-      )}
-    </main>
+        </tbody>
+      </table>
+    </div>
   );
 }
