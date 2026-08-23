@@ -24,9 +24,11 @@ import json
 import pathlib
 
 RAIZ = pathlib.Path(__file__).resolve().parents[2]
-PLANTILLA = RAIZ / "data/prompts/triage.txt"
 CATALOGO = RAIZ / "data/catalogos/servicios-reps.json"
-GOLDEN = RAIZ / "data/prompts/triage.rendered.txt"
+PROMPTS = RAIZ / "data/prompts"
+
+#: Cada prompt canónico y su golden. Agregar uno es agregar una línea.
+NOMBRES = ("triage", "sbar")
 
 MARCADOR = "{{CATALOGO_SERVICIOS}}"
 
@@ -47,8 +49,8 @@ def lineas_catalogo(catalogo: dict) -> str:
     )
 
 
-def renderizar() -> str:
-    plantilla = PLANTILLA.read_text(encoding="utf-8")
+def renderizar(nombre: str = "triage") -> str:
+    plantilla = (PROMPTS / f"{nombre}.txt").read_text(encoding="utf-8")
     # Las líneas de comentario son para quien edita el archivo, no para el
     # modelo. Se quitan antes de interpolar.
     cuerpo = "\n".join(
@@ -57,19 +59,24 @@ def renderizar() -> str:
     return cuerpo.replace(MARCADOR, lineas_catalogo(cargar_catalogo()))
 
 
-def version() -> str:
+def version(nombre: str = "triage") -> str:
     """Identidad del prompt renderizado. Prepara la tarea 3.12.
 
     Se deriva del contenido: cambiar el prompt cambia la versión sola, sin
     que nadie tenga que acordarse de subir un número.
     """
-    return hashlib.sha256(renderizar().encode("utf-8")).hexdigest()[:12]
+    return hashlib.sha256(renderizar(nombre).encode("utf-8")).hexdigest()[:12]
 
 
 def main() -> int:
-    render = renderizar()
-    GOLDEN.write_text(render, encoding="utf-8")
-    print(f"{GOLDEN.relative_to(RAIZ)} · {len(render)} caracteres · versión {version()}")
+    for nombre in NOMBRES:
+        render = renderizar(nombre)
+        golden = PROMPTS / f"{nombre}.rendered.txt"
+        golden.write_text(render, encoding="utf-8")
+        print(
+            f"{golden.relative_to(RAIZ)} · {len(render)} caracteres "
+            f"· versión {version(nombre)}"
+        )
     return 0
 
 

@@ -80,3 +80,34 @@ def test_los_archivos_canonicos_existen():
     assert PLANTILLA.exists(), PLANTILLA
     assert CATALOGO.exists(), CATALOGO
     assert GOLDEN.exists(), f"corre: python3 scripts/prompts/render.py"
+
+
+# ── El prompt de SBAR (4.2) sigue las mismas reglas ──────────────
+
+
+def test_el_sbar_tambien_tiene_golden():
+    from app.prompts import prompt
+
+    golden = PLANTILLA.parent / "sbar.rendered.txt"
+    assert golden.exists(), "corre: python3 scripts/prompts/render.py"
+    assert prompt("sbar") == golden.read_text(encoding="utf-8")
+
+
+def test_el_sbar_no_lleva_comentarios_al_modelo():
+    from app.prompts import prompt
+
+    assert not any(l.startswith("#") for l in prompt("sbar").splitlines())
+
+
+def test_los_dos_prompts_tienen_versiones_distintas():
+    from app.prompts import version_prompt
+
+    assert version_prompt("triage") != version_prompt("sbar")
+
+
+def test_agregar_el_sbar_no_movio_la_version_del_triaje():
+    # Si esto falla, el prompt clínico cambió sin querer y los evals dejan de
+    # ser comparables con los de antes.
+    from app.prompts import version_prompt
+
+    assert version_prompt("triage") == "b6b3e3556c87"
