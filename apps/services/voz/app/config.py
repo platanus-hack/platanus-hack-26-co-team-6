@@ -61,7 +61,15 @@ class Settings(BaseSettings):
     #: (regla 2 de AGENTS.md: la excepcion es produccion, ver es_produccion).
     whatsapp_app_secret: str = ""
     kapso_api_key: str = ""
-    kapso_base_url: str = "https://app.kapso.ai/api/v1"
+    kapso_base_url: str = "https://api.kapso.ai/platform/v1"
+    #: Numero de WhatsApp en Kapso. Lo necesita el registro del webhook.
+    kapso_phone_number_id: str = ""
+
+    #: Secreto con el que el proveedor firma cada entrega (HMAC-SHA256 del
+    #: cuerpo crudo). SIN ESTO EL WEBHOOK ACEPTA CUALQUIER COSA: es un
+    #: endpoint publico y cualquiera podria inventar una emergencia.
+    #: Vacio = no se verifica. Se avisa al arrancar; en produccion, ponlo.
+    whatsapp_webhook_secret: str = ""
 
     # ── Twilio ───────────────────────────────────────────────────
     twilio_account_sid: str = ""
