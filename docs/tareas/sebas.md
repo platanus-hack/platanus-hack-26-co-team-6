@@ -4,7 +4,7 @@
 > **En este plan rota:** también le toca el core de identidad, Testcontainers, el shell de `/panel` y
 > los runbooks. **Es dueño de tipos en la ola 4.**
 
-**Ola 0** ✅ [0.1](#01--conectar-el-guard-de-aceptación-única) · ✅ [0.6](#06--motivos-de-rechazo-como-enum-versionado) — **Ola 1** ✅ [1.3](#13--sesión-con-actor-real) · [1.7](#17--testcontainers--aislamiento-de-inquilino) — **Ola 2** [2.3](#23--vista-afiliacionverificar) · [2.7](#27--shell-de-panel) · [2.11](#211--rate-limit--idempotency-key) — **Ola 3** [3.2](#32--cablear-los-22-eventos) · [3.5](#35--sede_canal--envío-dirigido) · [3.10](#310--reporte-del-traslado) — **Ola 4** [4.1](#41--tabla-recepcion--protocolos) · [4.5](#45--entrega-por-qr) · [4.10](#410--vista-de-firma-de-trámites) — **Ola 5** [5.2](#52--vista-panelwebhooks) · [5.5](#55--alertas-y-runbooks) · [5.9](#59--panelapi--llaves-con-alcance)
+**Ola 0** ✅ [0.1](#01--conectar-el-guard-de-aceptación-única) · ✅ [0.6](#06--motivos-de-rechazo-como-enum-versionado) — **Ola 1** ✅ [1.3](#13--sesión-con-actor-real) · [1.7](#17--testcontainers--aislamiento-de-inquilino) — **Ola 2** [2.3](#23--vista-afiliacionverificar) · [2.7](#27--shell-de-panel) · ✅ [2.11](#211--rate-limit--idempotency-key) — **Ola 3** [3.2](#32--cablear-los-22-eventos) · [3.5](#35--sede_canal--envío-dirigido) · [3.10](#310--reporte-del-traslado) — **Ola 4** [4.1](#41--tabla-recepcion--protocolos) · [4.5](#45--entrega-por-qr) · [4.10](#410--vista-de-firma-de-trámites) — **Ola 5** [5.2](#52--vista-panelwebhooks) · [5.5](#55--alertas-y-runbooks) · [5.9](#59--panelapi--llaves-con-alcance)
 
 ---
 
@@ -195,10 +195,10 @@ Lo que hoy tapa el hueco es que el fan-out es secuencial. **El día que alguien 
 5. El cliente de `/campo` genera la clave por acción y la reusa al reintentar (engancha con la cola offline).
 
 **Hecho cuando.**
-- [ ] La misma mutación con la misma clave dos veces → un solo efecto
-- [ ] La misma clave con cuerpo distinto → 409
-- [ ] El rate limit devuelve `Retry-After` y no rompe la UI
-- [ ] `/campo` reintenta sin duplicar
+- [x] La misma mutación con la misma clave dos veces → un solo efecto (y la respuesta lleva `Idempotency-Replayed: true`)
+- [x] La misma clave con cuerpo distinto → 409 `PULSO_IDEMPOTENCY_CONFLICT`
+- [x] El rate limit devuelve `Retry-After` y `retryable: true`; `/triage` nunca hace esperar más de 5 s
+- [x] `/campo` reintenta sin duplicar — la clave se deriva de la acción (caso+sede), no de un aleatorio por intento
 
 **Trampas.** No apliques rate limit a `POST /triage` con la misma dureza que al resto. **Un paramédico con un paciente crítico reintentando no es un abusador**, y bloquearlo es el peor fallo posible del sistema.
 

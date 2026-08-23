@@ -19,6 +19,7 @@ import { EstadoModule } from './estado/estado.module';
 import { TriageModule } from './triage/triage.module';
 import { TelegramModule } from './telegram/telegram.module';
 import { PulsoErrorFilter } from './common/pulso-error.filter';
+import { ComunModule } from './common/comun.module';
 import { RoutingModule } from './routing/routing.module';
 import { EscalamientoModule } from './escalamiento/escalamiento.module';
 import { CapacidadesModule } from './capacidades/capacidades.module';
@@ -39,6 +40,11 @@ import { CatalogoModule } from './catalogo/catalogo.module';
     // ruta exige sesión salvo las marcadas con @Publico(). Va primero a
     // propósito — es la puerta, no una feature más.
     AuthModule,
+
+    // Idempotencia por `Idempotency-Key` y límite de tasa por actor y por
+    // organización. Después de AuthModule porque los dos leen el actor que
+    // deja el SesionGuard.
+    ComunModule,
 
     // Estado de sesión (@Global): casos, handshakes e historial de aceptación.
     AlmacenModule,
