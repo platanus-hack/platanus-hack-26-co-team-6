@@ -5,17 +5,33 @@
  * esté lista, SedesService lee de allá y esto queda como estado de sesión
  * (casos y handshakes vivos del demo).
  *
- * Limitación conocida: el estado se pierde al reiniciar core y no se comparte
- * entre instancias. Para el demo da igual — una sola sesión, un solo proceso.
- * No lo "arreglen": si necesitan persistencia real, es porque ya deberían
- * estar escribiendo en Supabase.
+ * ⚠️ YA NO ES SOLO MEMORIA (tarea 1.2). Es una CACHÉ EN PROCESO con
+ * write-through a `RepositorioPulso`: se hidrata al arrancar y cada escritura
+ * va también al repositorio, sin bloquear.
+ *
+ * Las lecturas siguen siendo SÍNCRONAS a propósito. Dieciséis archivos
+ * consumen esta clase; volverlas async los rompería a todos de golpe. La
+ * decisión, con su costo, está explicada en `repositorios/repositorio.ts`.
+ *
+ * Limitación que SIGUE en pie: no se comparte entre instancias. Cada réplica
+ * tiene su caché y ve lo que había al arrancar más lo que escribió ella. Es
+ * mejor que antes —donde una réplica no veía NUNCA lo de la otra— pero no es
+ * multi-instancia de verdad. Eso es la tarea 3.8.
  *
  * Como Nest instancia los providers una sola vez, ya no hace falta el truco
  * de colgarse de `globalThis` que exigía el hot-reload de Next.
  */
 
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  OnModuleInit,
+  Optional,
+} from '@nestjs/common';
 import type { Caso, Escalamiento, Handshake } from '../contracts/types';
+import { MemoriaRepositorio } from '../repositorios/memoria.repositorio';
+import { REPOSITORIO, type RepositorioPulso } from '../repositorios/repositorio';
 
 interface Historial {
   aceptados: number;
@@ -23,7 +39,88 @@ interface Historial {
 }
 
 @Injectable()
-export class AlmacenService {
+export class AlmacenService implements OnModuleInit {
+  /**
+   * El default de memoria NO es un adorno: varios specs hacen
+   * `new AlmacenService()` directo, sin el contenedor de Nest. Sin él, esta
+   * tarea obligaría a tocar cada uno de esos tests — que es justo lo que la
+   * 1.2 advierte que vuelve el PR inmergeable.
+   */
+  constructor(
+    // @Optional() es lo que hace que el default de TypeScript sirva: sin él,
+    // Nest EXIGE el token aunque haya valor por defecto, y cualquier
+    // TestingModule que arme AlmacenService sin importar RepositoriosModule
+    // deja de compilar el contenedor. Son decenas de specs.
+    @Optional()
+    @Inject(REPOSITORIO)
+    private readonly repo: RepositorioPulso = new MemoriaRepositorio(),
+  ) {}
+
+  /**
+   * Hidrata la caché desde el repositorio al arrancar.
+   *
+   * Si falla, el servicio arranca igual con la caché vacía: un core que no
+   * levanta es peor que uno sin historia. Se avisa fuerte porque perder la
+   * hidratación en silencio se ve exactamente igual que una base vacía.
+   */
+  async onModuleInit(): Promise<void> {
+    try {
+      const { casos, handshakes } = await this.repo.cargar();
+      for (const c of casos) this.casos.set(c.id, c);
+      for (const h of handshakes) {
+        this.handshakes.set(h.id, h);
+        // El historial y la ventana de rechazos son PROYECCIONES sobre los
+        // handshakes, no estado aparte. Reconstruirlas al hidratar es lo que
+        // hace que pAceptacion sobreviva al reinicio.
+        this.proyectar(h);
+      }
+      this.log.log(
+        `Hidratado desde ${this.repo.clase}: ${casos.length} casos, ` +
+          `${handshakes.length} handshakes.`,
+      );
+    } catch (e) {
+      this.log.error(
+        `No pude hidratar desde ${this.repo.clase}, arranco con la caché ` +
+          `vacía: ${String(e)}`,
+      );
+    }
+  }
+
+  /** Reconstruye historial, ventana de rechazos y latencias desde un handshake. */
+  private proyectar(h: Handshake): void {
+    if (h.estado !== 'aceptado' && h.estado !== 'rechazado') return;
+    const previo = this.historial.get(h.sedeCodigo) ?? { aceptados: 0, rechazados: 0 };
+    if (h.estado === 'aceptado') previo.aceptados += 1;
+    else previo.rechazados += 1;
+    this.historial.set(h.sedeCodigo, previo);
+
+    if (h.estado === 'rechazado' && h.respondidoEn) {
+      const lista = this.rechazosRecientes.get(h.sedeCodigo) ?? [];
+      lista.push(h.respondidoEn);
+      this.rechazosRecientes.set(h.sedeCodigo, lista);
+    }
+    if (typeof h.latenciaS === 'number' && h.latenciaS >= 0) {
+      const lista = this.latenciasRespuesta.get(h.sedeCodigo) ?? [];
+      lista.push(h.latenciaS);
+      this.latenciasRespuesta.set(h.sedeCodigo, lista);
+    }
+  }
+
+  /**
+   * Escribe en el repositorio sin bloquear al que llamó.
+   *
+   * Las lecturas de `AlmacenService` son SÍNCRONAS y las consumen dieciséis
+   * archivos. Esperar a Postgres en cada escritura obligaría a volver async
+   * toda la superficie. Por eso se dispara y se registra el fallo: si la
+   * escritura falla, la caché ya tiene el dato y el turno sigue — lo que se
+   * pierde es la durabilidad de ESA fila, y queda en el log.
+   */
+  private persistir(promesa: Promise<void>, que: string): void {
+    void promesa.catch((e) =>
+      this.log.error(`no pude persistir ${que}: ${String(e)}`),
+    );
+  }
+
   private readonly log = new Logger(AlmacenService.name);
 
   private readonly casos = new Map<string, Caso>();
@@ -40,6 +137,7 @@ export class AlmacenService {
 
   guardarCaso(caso: Caso): Caso {
     this.casos.set(caso.id, caso);
+    this.persistir(this.repo.guardarCaso(caso), `caso ${caso.id}`);
     return caso;
   }
 
@@ -57,6 +155,7 @@ export class AlmacenService {
 
   guardarHandshake(h: Handshake): Handshake {
     this.handshakes.set(h.id, h);
+    this.persistir(this.repo.guardarHandshake(h), `handshake ${h.id}`);
     return h;
   }
 
@@ -160,5 +259,6 @@ export class AlmacenService {
     this.historial.clear();
     this.rechazosRecientes.clear();
     this.latenciasRespuesta.clear();
+    this.persistir(this.repo.limpiar(), 'el borrado');
   }
 }

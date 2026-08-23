@@ -5,6 +5,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { HealthController } from './health/health.controller';
 import { AuthModule } from './auth/auth.module';
 import { AlmacenModule } from './almacen/almacen.module';
+import { RepositoriosModule } from './repositorios/repositorios.module';
 import { AiCoreModule } from './ai-core/ai-core.module';
 import { ZonasModule } from './zonas/zonas.module';
 import { VozModule } from './voz/voz.module';
@@ -48,6 +49,8 @@ import { MovilesModule } from './moviles/moviles.module';
     AuthModule,
 
     // Estado de sesión (@Global): casos, handshakes e historial de aceptación.
+    // De dónde salen caso y handshake. @Global, va antes que AlmacenModule.
+    RepositoriosModule,
     AlmacenModule,
 
     // La línea de tiempo del caso (@Global). Punto único de escritura de
