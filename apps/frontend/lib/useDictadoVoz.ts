@@ -134,8 +134,23 @@ const RMS_MAXIMO = 0.18;
 
 // ──────────────────────────────────────────────────────────────────
 
-export function useDictadoVoz(alTranscribir: (fragmento: string) => void) {
+export function useDictadoVoz(
+  alTranscribir: (fragmento: string) => void,
+  /**
+   * Se llama cuando el dictado termina **de verdad** y el texto ya está puesto.
+   *
+   * Vive aquí y no en un efecto de quien llama porque solo este hook sabe
+   * distinguir el final real de los falsos: `continuous` corta sola cada pocos
+   * segundos de silencio (bug #1 de arriba) y el reconocedor se relevanta.
+   * Mirar `escuchando` desde fuera vería un final por cada pausa para pensar.
+   *
+   * En el camino del servidor se llama después de que llegue la transcripción,
+   * no al soltar el botón: antes de eso todavía no hay texto que analizar.
+   */
+  alTerminar?: () => void,
+) {
   const [escuchando, setEscuchando] = useState(false);
+
   const [soportado, setSoportado] = useState(true);
   const [fallo, setFallo] = useState<FalloDictado | null>(null);
   /** Lo que se está oyendo AHORA, todavía sin confirmar. Ver `onresult`. */
@@ -158,6 +173,11 @@ export function useDictadoVoz(alTranscribir: (fragmento: string) => void) {
   useEffect(() => {
     alTranscribirRef.current = alTranscribir;
   }, [alTranscribir]);
+
+  const alTerminarRef = useRef(alTerminar);
+  useEffect(() => {
+    alTerminarRef.current = alTerminar;
+  }, [alTerminar]);
 
   // ── Nivel de voz ────────────────────────────────────────────────
 
@@ -269,6 +289,7 @@ export function useDictadoVoz(alTranscribir: (fragmento: string) => void) {
         );
       } finally {
         setTranscribiendo(false);
+        alTerminarRef.current?.();
       }
     };
 
@@ -384,6 +405,9 @@ export function useDictadoVoz(alTranscribir: (fragmento: string) => void) {
     setEscuchando(false);
     setParcial("");
     pararMedidor();
+    // `stop()` todavía puede entregar un último `onresult`. Por eso quien
+    // escuche esto debe dejar una ventana antes de usar el texto.
+    alTerminarRef.current?.();
   }, [pararMedidor]);
 
   const iniciar = useCallback(async () => {

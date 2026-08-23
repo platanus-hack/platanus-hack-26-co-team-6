@@ -14,9 +14,10 @@
  * escalamiento — el invariante del conjunto vacío, no una lista vacía muda.
  */
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Ban } from "lucide-react";
+import Link from "next/link";
 import type { Candidato, Caso } from "@/lib/types";
 import { nombresServicios, ETIQUETA_TRIAGE } from "@/lib/presentacion";
 import * as api from "@/lib/api";
@@ -27,8 +28,8 @@ import {
   TIMEOUT_HANDSHAKE_S,
 } from "./derivados";
 import {
-  listarEventos,
-  registrarEvento,
+  bitacoraDeCaso,
+  registrarOverride,
   type EventoBitacora,
 } from "./bitacora";
 
@@ -96,11 +97,38 @@ export default function PanelCaso({
   const [porQue, setPorQue] = useState<string | null>(null);
 
   // ── Acciones del regulador (F2) ────────────────────────────────
+  //
+  // La bitácora ya NO sale de `localStorage` (tarea 3.11): la escribe y la
+  // guarda core. Sobrevive a recargar el navegador y a cambiar de máquina, y
+  // la ven todos los reguladores, no solo el que la tecleó.
   const [bitacora, setBitacora] = useState<EventoBitacora[]>([]);
-  useEffect(() => setBitacora(listarEventos(caso.id)), [caso.id]);
+  const [modoRegistro, setModoRegistro] = useState<
+    "memoria" | "postgres" | null
+  >(null);
+  const [errorBitacora, setErrorBitacora] = useState<string | null>(null);
+
+  const recargarBitacora = useCallback(async () => {
+    try {
+      const { eventos, modo } = await bitacoraDeCaso(caso.id);
+      setBitacora(eventos);
+      setModoRegistro(modo);
+      setErrorBitacora(null);
+    } catch (e) {
+      // Sin registro no se pinta una línea de tiempo vacía como si no hubiera
+      // pasado nada: se dice que no se pudo leer.
+      setBitacora([]);
+      setErrorBitacora(e instanceof Error ? e.message : "core no respondió");
+    }
+  }, [caso.id]);
+
+  useEffect(() => {
+    void recargarBitacora();
+  }, [recargarBitacora]);
 
   const [forzarAbierto, setForzarAbierto] = useState(false);
   const [perimetroAbierto, setPerimetroAbierto] = useState(false);
+  /** Radio con el que se re-puntuó, si el regulador amplió el perímetro. */
+  const [radioAplicado, setRadioAplicado] = useState<number | null>(null);
   const [cargandoAccion, setCargandoAccion] = useState(false);
   const [mensaje, setMensaje] = useState<string | null>(null);
   useEffect(() => {
@@ -118,12 +146,14 @@ export default function PanelCaso({
       (c) => c.motivoDescarte === null && !yaSolicitadas.has(c.sede.codigo),
     ) ?? null;
 
-  async function despachar(opciones: {
-    sedeCodigo: string;
-    sedeNombre: string;
-    tipo: EventoBitacora["tipo"];
-    detalle: string;
-  }) {
+  /**
+   * Enviar al siguiente candidato del ranking.
+   *
+   * No escribe bitácora desde aquí: el despacho ya deja su propio handshake,
+   * que la línea de tiempo pinta. El registro de auditoría lo escribe el
+   * servidor, nunca el navegador — ver el encabezado de `bitacora.ts`.
+   */
+  async function despachar(opciones: { sedeCodigo: string; sedeNombre: string }) {
     setCargandoAccion(true);
     try {
       await api.dispatch({
@@ -131,18 +161,52 @@ export default function PanelCaso({
         sedeCodigo: opciones.sedeCodigo,
         canal: "consola",
       });
-      registrarEvento({
-        casoId: caso.id,
-        tipo: opciones.tipo,
-        regulador: regulador || "(sin nombre)",
-        texto: opciones.detalle,
-      });
-      setBitacora(listarEventos(caso.id));
       setMensaje(`Solicitud enviada a ${opciones.sedeNombre}`);
-      setForzarAbierto(false);
     } catch (e) {
       setMensaje(
         `No se pudo despachar: ${e instanceof Error ? e.message : "error"}`,
+      );
+    } finally {
+      setCargandoAccion(false);
+    }
+  }
+
+  /**
+   * El override: forzar un destino contra el ranking.
+   *
+   * Una sola llamada al servidor. Core valida la justificación, comprueba que
+   * quien firma sea `regulador_crue`, despacha y escribe el `evento_caso`. Si
+   * algo de eso falla, aquí no queda ningún estado diciendo que se hizo: lo
+   * contrario —lo que hacía `localStorage`— era una consola afirmando cosas
+   * que el servidor nunca vio.
+   */
+  async function forzar(
+    candidato: Candidato,
+    justificacion: string,
+    claveIdempotencia: string,
+  ) {
+    setCargandoAccion(true);
+    try {
+      const { repetido } = await registrarOverride({
+        casoId: caso.id,
+        sedeCodigo: candidato.sede.codigo,
+        sedeNombre: candidato.sede.nombre,
+        justificacion,
+        regulador: regulador || "(sin nombre)",
+        saltaRegla: candidato.motivoDescarte,
+        radioKm: radioAplicado,
+        claveIdempotencia,
+      });
+      await recargarBitacora();
+      setMensaje(
+        repetido
+          ? `Ese override ya estaba registrado: no se envió una segunda solicitud.`
+          : `Override registrado y solicitud enviada a ${candidato.sede.nombre}`,
+      );
+      setForzarAbierto(false);
+    } catch (e) {
+      setMensaje(
+        `No se registró el override: ${e instanceof Error ? e.message : "error"}`,
       );
     } finally {
       setCargandoAccion(false);
@@ -179,8 +243,9 @@ export default function PanelCaso({
     for (const e of bitacora) {
       linea.push({
         en: e.ts,
-        texto: `${e.texto} — ${e.regulador} (registro local)`,
-        critico: e.tipo === "override",
+        // Sin el rótulo "(registro local)": esto ya vive en el servidor.
+        texto: `${e.texto} — ${e.actor}`,
+        critico: e.critico,
       });
     }
     if (motivoEscalamiento) {
@@ -261,8 +326,6 @@ export default function PanelCaso({
                 despachar({
                   sedeCodigo: siguienteCandidato.sede.codigo,
                   sedeNombre: siguienteCandidato.sede.nombre,
-                  tipo: "siguiente",
-                  detalle: `Reenvió al siguiente candidato: ${siguienteCandidato.sede.nombre} (#${siguienteCandidato.rank}, ${Math.round(siguienteCandidato.etaMin)}′)`,
                 })
               }
               disabled={!siguienteCandidato || cargandoAccion}
@@ -513,9 +576,19 @@ export default function PanelCaso({
 
       {/* ── Línea de tiempo ── */}
       <section className="space-y-2 pb-6">
-        <h3 className="text-xs uppercase tracking-wide text-[color:var(--color-texto-tenue)]">
-          Línea de tiempo
-        </h3>
+        <div className="flex items-baseline justify-between gap-2">
+          <h3 className="text-xs uppercase tracking-wide text-[color:var(--color-texto-tenue)]">
+            Línea de tiempo
+          </h3>
+          {/* El expediente completo: evidencia del ruteo, correcciones y
+              exportación. Abrirlo queda registrado como un acceso más. */}
+          <Link
+            href={`/auditoria/casos/${caso.id}`}
+            className="text-[11px] underline text-[color:var(--color-info)]"
+          >
+            Ver expediente forense →
+          </Link>
+        </div>
         <ol className="space-y-1.5">
           {eventos.map((e, i) => (
             <li key={i} className="flex gap-2 text-xs items-baseline">
@@ -532,6 +605,18 @@ export default function PanelCaso({
             </li>
           ))}
         </ol>
+        {errorBitacora && (
+          <p className="text-[11px] text-[color:var(--color-alerta)]">
+            No se pudo leer el registro del servidor ({errorBitacora}). Lo que
+            ves arriba sale solo de las solicitudes en curso.
+          </p>
+        )}
+        {modoRegistro === "memoria" && (
+          <p className="text-[11px] text-[color:var(--color-texto-tenue)]">
+            Registro en el servidor, en memoria: sobrevive a recargar y a
+            cambiar de máquina, no a reiniciar core.
+          </p>
+        )}
       </section>
 
       {/* ── Pop-up: dictado original vs. extracción ── */}
@@ -599,16 +684,7 @@ export default function PanelCaso({
         cargando={cargandoAccion}
         solicitudEnCurso={vivo ? nombreSede(vivo.sedeCodigo) : null}
         onCerrar={() => setForzarAbierto(false)}
-        onConfirmar={(c, justificacion) =>
-          despachar({
-            sedeCodigo: c.sede.codigo,
-            sedeNombre: c.sede.nombre,
-            tipo: "override",
-            detalle:
-              `Forzó asignación a ${c.sede.nombre}. Justificación: "${justificacion}"` +
-              (c.motivoDescarte ? ` · SALTÓ REGLA DURA: ${c.motivoDescarte}` : ""),
-          })
-        }
+        onConfirmar={(c, justificacion, clave) => forzar(c, justificacion, clave)}
       />
 
       <PopupPerimetro
@@ -618,13 +694,11 @@ export default function PanelCaso({
         onAplicar={(m, radio) => {
           setCandidatos(m.candidatos);
           setCompatibles(m.compatibles);
-          registrarEvento({
-            casoId: caso.id,
-            tipo: "perimetro",
-            regulador: regulador || "(sin nombre)",
-            texto: `Amplió el perímetro de búsqueda a ${radio} km (${m.compatibles} compatibles de ${m.evaluadas})`,
-          });
-          setBitacora(listarEventos(caso.id));
+          // Ampliar el perímetro es explorar, no decidir: no genera evento por
+          // sí solo. El radio viaja pegado al override que sí se registra, que
+          // es donde explica por qué apareció una sede que el ranking original
+          // no traía.
+          setRadioAplicado(radio);
           setPerimetroAbierto(false);
           setMensaje(`Perímetro a ${radio} km: ${m.compatibles} compatibles`);
         }}
@@ -697,12 +771,24 @@ function PopupForzar({
   cargando: boolean;
   solicitudEnCurso: string | null;
   onCerrar: () => void;
-  onConfirmar: (c: Candidato, justificacion: string) => void;
+  onConfirmar: (
+    c: Candidato,
+    justificacion: string,
+    claveIdempotencia: string,
+  ) => void;
 }) {
   const [codigo, setCodigo] = useState<string | null>(null);
   const [justificacion, setJustificacion] = useState("");
   const [asumeRegla, setAsumeRegla] = useState(false);
   const [confirmando, setConfirmando] = useState(false);
+  /**
+   * Una clave por apertura del diálogo.
+   *
+   * Es lo que hace que el segundo toque en "Confirmar" —con guantes, en una
+   * sala de radio, con la red mala— devuelva el override que ya se registró en
+   * vez de mandar una segunda ambulancia.
+   */
+  const [clave, setClave] = useState("");
 
   // Cada apertura arranca limpia: un override no hereda el anterior.
   useEffect(() => {
@@ -711,6 +797,7 @@ function PopupForzar({
       setJustificacion("");
       setAsumeRegla(false);
       setConfirmando(false);
+      setClave(crypto.randomUUID());
     }
   }, [abierto]);
 
@@ -839,8 +926,9 @@ function PopupForzar({
               </p>
             </div>
             <p className="text-xs text-[color:var(--color-texto-tenue)]">
-              Se enviará la solicitud a la sede por consola. Esta acción queda
-              en la línea de tiempo del caso.
+              Se enviará la solicitud a la sede por consola. La decisión y su
+              justificación quedan registradas en el servidor, con tu sesión y
+              la hora: no se pueden editar ni borrar después.
             </p>
             <div className="grid grid-cols-2 gap-2">
               <button
@@ -850,7 +938,7 @@ function PopupForzar({
                 Volver
               </button>
               <button
-                onClick={() => onConfirmar(elegida, justificacion.trim())}
+                onClick={() => onConfirmar(elegida, justificacion.trim(), clave)}
                 disabled={cargando}
                 className="rounded-full font-semibold bg-[color:var(--color-critico)] text-white disabled:opacity-40"
               >

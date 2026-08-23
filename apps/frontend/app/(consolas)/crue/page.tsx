@@ -19,6 +19,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Ban, Bell, Check } from "lucide-react";
@@ -261,6 +262,16 @@ export default function Crue() {
         </button>
 
         <div className="ml-auto flex items-center gap-3 flex-wrap">
+          {/*
+            La cobertura de flota (3.7) se construyo sin poder tocar este
+            archivo. Sin esta entrada la vista existe y no la alcanza nadie.
+          */}
+          <Link
+            href="/crue/cobertura"
+            className="px-4 py-2 rounded-full border border-[color:var(--color-borde)] bg-[color:var(--color-superficie)] text-sm"
+          >
+            Cobertura de flota
+          </Link>
           <button
             onClick={() => setBandejaAbierta((v) => !v)}
             className={`relative px-4 py-2 rounded-full border text-sm ${

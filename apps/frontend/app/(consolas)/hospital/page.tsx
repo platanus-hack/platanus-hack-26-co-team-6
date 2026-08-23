@@ -108,6 +108,17 @@ export default function Hospital() {
     <main className="min-h-screen max-w-2xl mx-auto p-4">
       <Cabecera pendientes={pendientes.length} conectado={conectado} />
 
+      {/*
+        Las dos puertas de la consola. Sin ellas, capacidad (3.4) y recepcion
+        (4.3) solo se alcanzan pegando la URL a mano, que es tanto como no
+        existir: cada tarea se construyo sin poder tocar este archivo, que
+        tenia otro dueno en la ola.
+      */}
+      <nav aria-label="Vistas de urgencias" className="mb-4 grid gap-2 sm:grid-cols-2">
+        <a href="/hospital/capacidad" className="flex min-h-14 items-center justify-center rounded-xl border border-[color:var(--color-borde)] bg-[color:var(--color-superficie-alta)] px-4 text-center font-semibold">Declarar capacidad y estado operativo</a>
+        <a href="/hospital/recepcion" className="flex min-h-14 items-center justify-center rounded-xl border border-[color:var(--color-borde)] bg-[color:var(--color-superficie-alta)] px-4 text-center font-semibold">Prearribos en camino</a>
+      </nav>
+
       {aviso && (
         <div
           role="alert"

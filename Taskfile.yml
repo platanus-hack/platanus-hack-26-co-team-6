@@ -199,6 +199,7 @@ tasks:
     desc: Run the test suites that exist today.
     cmds:
       - task: test:tipos
+      - task: test:frontend
       - task: test:core
       - task: test:ai-core
       - task: test:voz
@@ -209,6 +210,14 @@ tasks:
       # node --test, no jest/vitest: the repo root has no test runner and
       # adding one for two files would cost more than the problem.
       - node --test scripts/verificar-tipos.test.mts
+
+  test:frontend:
+    desc: Frontend logic that must not be wrong. No runner: node --test.
+    dir: "{{.FRONTEND}}"
+    cmds:
+      # Solo lo que se puede probar sin DOM: el modelo de sesión (quien puede
+      # que y a donde va). Las vistas se prueban en el telefono del demo.
+      - pnpm test
 
   test:core:
     dir: "{{.CORE}}"
