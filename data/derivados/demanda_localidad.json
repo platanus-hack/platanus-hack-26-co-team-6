@@ -646,7 +646,7 @@
       "fraccionDemanda": 0.04073
     },
     {
-      "localidad": "USAQUN",
+      "localidad": "USAQUEN",
       "codigo": "1",
       "llamadas": 372,
       "llamadasPrioritarias": 313,
@@ -1094,7 +1094,7 @@
       "fraccionDemanda": 0.02259
     },
     {
-      "localidad": "ANTONIO NARIÑO",
+      "localidad": "ANTONIO NARINO",
       "codigo": "15",
       "llamadas": 153,
       "llamadasPrioritarias": 127,

@@ -11,6 +11,7 @@ cual corrio.
 """
 
 import logging
+from functools import lru_cache
 
 from anthropic import AsyncAnthropic
 
@@ -57,9 +58,18 @@ REGLAS:
 6. NUNCA inventes un codigo CIE-10. Si no estas seguro, devuelve null en dxCie10 y describe el cuadro en dxDescripcion."""
 
 
+@lru_cache(maxsize=1)
 def _cliente() -> AsyncAnthropic:
-    # Timeout por debajo del presupuesto de 30s que core le concede a ai-core:
-    # queremos caer a la heuristica antes de que el gateway nos corte.
+    """Uno por proceso, no uno por request.
+
+    Cada `AsyncAnthropic()` abre su propio pool de conexiones. Crear uno por
+    dictado y no cerrarlo deja sockets colgando — se ve como
+    `RuntimeError: Event loop is closed` al terminar, y en un servicio de
+    verdad se ve como conexiones que no bajan nunca.
+
+    Timeout por debajo del presupuesto de 30s que core le concede a ai-core:
+    queremos caer a la heuristica antes de que el gateway nos corte.
+    """
     return AsyncAnthropic(api_key=settings.anthropic_api_key, timeout=25.0)
 
 

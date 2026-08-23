@@ -17,8 +17,15 @@ LO QUE NO TIENE, Y HAY QUE SABERLO
      ni desempeño.
   ⚠️ Es un corte histórico, no un flujo vivo.
 
-El archivo viene en latin-1, no en UTF-8. Leerlo como UTF-8 rompe cada ñ y
-cada tilde, y "ENGATIVA" deja de casar con "ENGATIVÁ" al cruzarlo.
+⚠️ EL ARCHIVO TIENE CODIFICACION MIXTA. No es latin-1 ni cp850: conviven
+   `\x90` (É en cp850, invalido en latin-1) y `\xD1` (Ñ en latin-1, Ð en
+   cp850). Decodificar con cualquiera de las dos rompe la mitad de los
+   nombres — y los rompe en SILENCIO, produciendo una localidad fantasma que
+   nadie cubre.
+
+   Por eso el nombre se normaliza a ASCII sin tildes: USAQUEN, ANTONIO NARINO.
+   Es feo de leer y es lo unico que cruza bien contra cualquier catalogo.
+   El nombre bonito se pone al pintarlo, no al agregarlo.
 """
 
 # El python del sistema en muchos macs es 3.9: sin esto, `datetime | None`
@@ -27,6 +34,7 @@ from __future__ import annotations
 
 import collections
 import csv
+import unicodedata
 import json
 import pathlib
 import sys
@@ -39,6 +47,32 @@ SALIDA = RAIZ / "data/derivados/demanda_localidad.json"
 #: Prioridades que el NUSE marca como urgentes de verdad. Son las que mueven
 #: una ambulancia con prisa; las bajas se pueden diferir.
 PRIORIDADES_ALTAS = {"alta", "media alta", "critica", "crítica"}
+
+
+#: Los bytes 0x80-0x9F son letras acentuadas en cp850 y caracteres de CONTROL
+#: en latin-1. Como el archivo mezcla las dos codificaciones, hay que
+#: rescatarlos a mano: sin esto, "USAQUÉN" se lee "USAQUN" —sin la E— y esa
+#: localidad desaparece del reparto de cobertura sin que nadie lo note.
+_CP850_ALTO = {
+    chr(b): bytes([b]).decode("cp850") for b in range(0x80, 0xA0)
+}
+
+
+def normalizar(nombre: str) -> str:
+    """"USAQU\x90N" y "USAQUÉN" → "USAQUEN".
+
+    Tres pasos, y los tres hacen falta:
+      1. Rescatar los bytes cp850 que latin-1 dejó como controles.
+      2. Descomponer las tildes (NFKD) y descartar los acentos.
+      3. Quedarse solo con ASCII imprimible.
+
+    Es la única forma de que la misma localidad no aparezca dos veces por
+    culpa de la codificación.
+    """
+    rescatado = "".join(_CP850_ALTO.get(c, c) for c in nombre)
+    limpio = unicodedata.normalize("NFKD", rescatado)
+    ascii_ = "".join(c for c in limpio if 32 <= ord(c) < 127)
+    return " ".join(ascii_.split()).upper()
 
 
 def leer_fecha(crudo: str) -> datetime | None:
@@ -62,7 +96,7 @@ def main() -> int:
 
     with ENTRADA.open(encoding="latin-1") as f:
         for fila in csv.DictReader(f, delimiter=";"):
-            loc = (fila.get("LOCALIDAD") or "").strip().upper()
+            loc = normalizar(fila.get("LOCALIDAD") or "")
             if not loc or loc in ("N/A", "SIN DATO"):
                 continue
 
