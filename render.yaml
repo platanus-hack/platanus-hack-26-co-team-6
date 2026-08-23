@@ -1,63 +1,243 @@
-# Blueprint de Render para el canal público de PULSO.
+# Blueprint de Render para PULSO.
 #
-#   render.com → New → Blueprint → apuntar a este repo
+#   render.com → New → Blueprint → apuntar a este repo, rama main
 #
-# Sólo `voz` va aquí a propósito: es el ÚNICO servicio que necesita cara
-# pública. `core` y `ai-core` son internos y no deben quedar expuestos —
-# ai-core tiene las credenciales de los proveedores de IA.
+# TRES servicios, y sólo UNO con cara pública:
+#
+#   pulso-voz      web   :8090  ← Meta/Kapso y Twilio lo alcanzan desde internet
+#   pulso-core     pserv :3001  ← interno. Sin URL pública.
+#   pulso-ai-core  pserv :8000  ← interno. Tiene las llaves de Anthropic y ElevenLabs.
+#
+# `pserv` (private service) es lo que hace cumplir "core y ai-core no se
+# exponen": Render no les asigna subdominio .onrender.com y no son alcanzables
+# desde internet. Sólo se ven entre ellos, por el nombre del servicio.
+#
+# ⚠️ LOS TRES TIENEN QUE ESTAR EN LA MISMA `region` Y EL MISMO WORKSPACE.
+#    La red privada de Render es por región + workspace. Si core queda en
+#    oregon y ai-core en frankfurt, no se ven y el blueprint no avisa.
+#
+# ⚠️ `plan: free` NO EXISTE PARA `pserv`. El instance type gratuito sólo
+#    cubre web services, Postgres y Key Value. Mantener core y ai-core fuera
+#    de internet cuesta el instance type pagado más barato (starter) por cada
+#    uno. No hay tercera opción: o son privados y pagados, o son web services
+#    gratuitos y quedan expuestos.
+#
+# Las URLs internas van como literales, no con `fromService`: el blueprint no
+# sabe concatenar, `fromService` devuelve `host` o `host:puerto` sin esquema,
+# y tanto core (`fetch(\`${base}${ruta}\`)`) como voz (httpx) necesitan el
+# `http://` delante. El hostname interno es el nombre del servicio — no es un
+# secreto, pero VERIFÍCALO en el dashboard después del primer deploy: si el
+# nombre chocaba con otro del workspace, Render le pone sufijo.
+
 services:
+  # ── ai-core ───────────────────────────────────────────────────────────
+  # Primero en el archivo porque es el que no depende de nadie.
+  - type: pserv
+    name: pulso-ai-core
+    runtime: docker
+    dockerfilePath: ./apps/backend/ai-core/Dockerfile
+    # La RAÍZ del repo, no la carpeta del servicio: la imagen lleva data/.
+    dockerContext: .
+    plan: starter
+    region: oregon
+    autoDeployTrigger: "off"
+
+    envVars:
+      - key: PORT
+        value: 8000
+
+      # ── Las llaves de proveedor. Viven AQUÍ y sólo aquí ────────────────
+      # Vacías, ai-core arranca igual: /v1/triage cae al extractor heurístico
+      # (confianza 0.35). La excepción es /v1/transcribir, que sin
+      # ELEVENLABS_API_KEY responde 503 explícito — el audio de WhatsApp no
+      # tiene heurística a la que caer.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ELEVENLABS_API_KEY
+        sync: false
+
+  # ── core ──────────────────────────────────────────────────────────────
+  - type: pserv
+    name: pulso-core
+    runtime: docker
+    dockerfilePath: ./apps/backend/core/Dockerfile
+    # La RAÍZ del repo, no la carpeta del servicio.
+    dockerContext: .
+    plan: starter
+    region: oregon
+    autoDeployTrigger: "off"
+
+    envVars:
+      - key: PORT
+        value: 3001
+
+      # Hacia adentro, por la red privada.
+      - key: AI_CORE_BASE_URL
+        value: http://pulso-ai-core:8000
+      # Ojo al sufijo /interno: es el prefijo del router que core consume en
+      # voz, y voz.client.ts hace `${base}/seguimiento` sin agregarlo.
+      - key: VOZ_BASE_URL
+        value: http://pulso-voz:8090/interno
+
+      # ── Sesión de operador ────────────────────────────────────────────
+      # ⚠️ Si estas dos van vacías, core arranca igual pero se inventa
+      #    credenciales aleatorias en CADA reinicio y las escupe al log: las
+      #    sesiones mueren en cada deploy y nadie puede entrar dos veces
+      #    seguidas con la misma clave.
+      #
+      # ⚠️ OPERADOR_PASSWORD TIENE QUE SER IDÉNTICA a CORE_PASSWORD de
+      #    pulso-voz. voz se autentica contra core con POST /auth/login usando
+      #    esa contraseña. Si no coinciden, el flujo de WhatsApp muere en 401 y
+      #    el log sólo dice «core rechazó el login».
+      - key: OPERADOR_PASSWORD
+        sync: false
+      # openssl rand -hex 32
+      - key: SESION_SECRET
+        sync: false
+      # ⚠️ TIENE QUE SER IDÉNTICO a SECRETO_ENDPOINT de pulso-voz: es el
+      #    header X-Secreto con el que core llama a los endpoints /interno de
+      #    voz. Distinto secreto = 403 silencioso (voz.client.ts no lanza,
+      #    sólo loguea «voz /… devolvió 403»).
+      - key: VOZ_SECRETO
+        sync: false
+
+      # ── Origen del navegador ──────────────────────────────────────────
+      # NUNCA '*': core manda cookie de sesión y con credenciales el navegador
+      # exige un origen exacto. Poner la URL del frontend cuando exista; hasta
+      # entonces ninguna consola puede hablar con core (ver la nota del final).
+      - key: CORS_ORIGIN
+        sync: false
+      # Front y core en dominios distintos ⇒ SameSite=None + HTTPS.
+      - key: COOKIE_CROSS_SITE
+        value: "true"
+
+      # ── Credenciales de servidor ──────────────────────────────────────
+      # Sin Supabase, core sirve las 84 sedes desde semillas compiladas.
+      # Sin Mapbox, el ETA se estima por distancia. Las dos degradaciones son
+      # la regla, no un bug: GET /capacidades las hace visibles.
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: MAPBOX_TOKEN
+        sync: false
+
+      # ── Estado del ruteo ──────────────────────────────────────────────
+      # Sin esto el estado vive en un Map en RAM (tarea 1.2): reiniciar core
+      # borra casos, handshakes y el historial por sede. Es la MISMA base que
+      # usa voz para deduplicar webhooks.
+      - key: PULSO_ROUTING_DATABASE_URL
+        sync: false
+
+  # ── voz ───────────────────────────────────────────────────────────────
+  # El ÚNICO público. Meta/Kapso le mandan webhooks y Twilio le abre un
+  # WebSocket (WS /telefonia/twilio) inmediatamente después de marcar.
   - type: web
     name: pulso-voz
     runtime: docker
     dockerfilePath: ./apps/services/voz/Dockerfile
+    # voz no lee data/, así que su contexto sí puede ser su propia carpeta.
     dockerContext: ./apps/services/voz
-    plan: free
+    # ⚠️ NO LO BAJES A `free`. Render duerme un web service gratuito a los 15
+    #    minutos sin tráfico y despertarlo tarda ~1 minuto. Twilio abre el
+    #    WebSocket justo después de marcar: con el servicio dormido la llamada
+    #    se cae sin audio, y el primer WhatsApp del demo se pierde. Render
+    #    soporta WebSocket en todos los planes, incluido el gratuito — el
+    #    problema no es el WS, es el sueño.
+    plan: starter
     region: oregon
     healthCheckPath: /health
-    autoDeploy: false
+    autoDeployTrigger: "off"
 
     envVars:
-      # Render lo inyecta; el Dockerfile lo lee.
       - key: PORT
         value: 8090
 
       # La URL pública de ESTE servicio. Twilio abre un WebSocket de vuelta
       # hacia acá, así que sin esto la telefonía no funciona.
-      # fromService se auto-rellena con la URL que Render asigne.
+      # `property: host` devuelve el hostname pelado (pulso-voz.onrender.com,
+      # sin esquema) y está bien: llamadas.py::_host_publico() lo quiere así
+      # para armar wss://{host}/telefonia/twilio.
       - key: URL_PUBLICA
         fromService:
           type: web
           name: pulso-voz
           property: host
 
-      # Hacia adentro. Cámbialas por las URLs internas cuando core y ai-core
-      # también estén en Render.
+      # Hacia adentro, por la red privada. CORE_BASE_URL es la RAÍZ de core
+      # (voz le pega a /auth/login), no /interno.
       - key: AI_CORE_BASE_URL
-        sync: false
+        value: http://pulso-ai-core:8000
       - key: CORE_BASE_URL
-        sync: false
+        value: http://pulso-core:3001
 
       # ── Secretos: se ponen a mano en el dashboard, NUNCA en este archivo ──
       # `sync: false` es justo eso: Render pide el valor y no lo versiona.
+
+      # ⚠️ IDÉNTICA a OPERADOR_PASSWORD de pulso-core. Si no coinciden, el
+      #    flujo de WhatsApp muere en 401: «core rechazó el login».
+      - key: CORE_PASSWORD
+        sync: false
+      # ⚠️ IDÉNTICO a VOZ_SECRETO de pulso-core. Protege los endpoints que
+      #    disparan acciones caras (llamar por teléfono). En Render ponlo
+      #    SIEMPRE: vacío significa abierto.
+      - key: SECRETO_ENDPOINT
+        sync: false
 
       # Postgres de core, donde vive `webhook_recibido` (migración 0003).
       # ⚠️ SIN ESTO LA DEDUPLICACIÓN DE WEBHOOKS ES EN MEMORIA, y en Render
       #    basta con que el plan escale a dos instancias para que un reintento
       #    de Meta despache DOS ambulancias al mismo paciente. `GET /listo`
       #    responde `deduplicacion.modo` — míralo después de cada deploy.
+      #    Es la misma cadena que PULSO_ROUTING_DATABASE_URL de core.
       - key: PULSO_WEBHOOK_DATABASE_URL
         sync: false
+
+      # ── WhatsApp ──────────────────────────────────────────────────────
+      # meta | kapso. Hoy sólo "meta" está implementado: canales/whatsapp.py
+      # habla con graph.facebook.com y nada lee kapso_api_key. Ver el reporte.
+      - key: WHATSAPP_PROVEEDOR
+        value: meta
+      # La cadena que TÚ inventas y le repites a Meta al registrar el webhook.
+      # Este repo es público: no la dejes en un valor conocido.
       - key: WHATSAPP_VERIFY_TOKEN
         sync: false
       - key: WHATSAPP_TOKEN
         sync: false
       - key: WHATSAPP_PHONE_NUMBER_ID
         sync: false
+      # Declarada en config.py, todavía sin código que la use.
+      - key: KAPSO_API_KEY
+        sync: false
+
+      # ── Twilio ────────────────────────────────────────────────────────
+      # TWILIO_PHONE_NUMBER acepta un Verified Caller ID: no hace falta
+      # comprar número para que funcione el `from`.
       - key: TWILIO_ACCOUNT_SID
         sync: false
       - key: TWILIO_AUTH_TOKEN
         sync: false
       - key: TWILIO_PHONE_NUMBER
         sync: false
-      - key: SECRETO_ENDPOINT
-        sync: false
+
+# ── apps/frontend NO ESTÁ EN ESTE BLUEPRINT, a propósito ────────────────
+#
+# Las tres consolas (/campo, /hospital, /crue) le pegan a core DESDE EL
+# NAVEGADOR: lib/api.ts lo dice en su encabezado — «Todas las llamadas salen
+# del navegador, así que la URL tiene que ser pública → NEXT_PUBLIC_API_URL».
+#
+# Con core como `pserv` no hay URL pública que poner ahí. Desplegar el front
+# tal cual sería desplegar tres pantallas que no cargan nada.
+#
+# Las tres salidas, en orden de preferencia:
+#
+#   1. Que el front deje de hablar con core desde el navegador: route
+#      handlers de Next (app/api/[...]/route.ts) que hagan de proxy contra
+#      http://pulso-core:3001 por la red privada. core sigue privado, la
+#      cookie de sesión sigue siendo HttpOnly y el bundle deja de necesitar
+#      NEXT_PUBLIC_API_URL. Es cambio de código, no de despliegue.
+#   2. Demo sólo por WhatsApp/teléfono: es lo que este blueprint despliega
+#      hoy, y el canal que el jurado va a tocar.
+#   3. Publicar core como `web` y confiar en OPERADOR_PASSWORD. Contradice
+#      la regla de no exponer core; ai-core seguiría privado. Si se toma esta
+#      salida, CORS_ORIGIN tiene que ser la URL exacta del front, nunca '*'.

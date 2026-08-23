@@ -1,0 +1,48 @@
+# Contexto de build para `core` y `ai-core`, que se construyen desde la RAÍZ
+# del repo (los dos necesitan `data/`). `voz` tiene su propio contexto y su
+# propio .dockerignore en apps/services/voz/.
+#
+# `data/` NO está aquí a propósito: es lo único que justifica el contexto raíz.
+
+# Secretos locales. Lo primero, y por eso: los .env están gitignoreados, así
+# que en Render no existen — pero un `docker build` en la máquina de alguien
+# sí los metería en la imagen.
+**/.env
+**/.env.local
+**/.env.*.local
+
+.git
+.github
+.gitignore
+
+# Se reinstalan/recompilan dentro de la imagen.
+**/node_modules
+**/dist
+**/build
+**/.next
+**/out
+**/__pycache__
+**/*.pyc
+**/.venv
+**/.pytest_cache
+**/*.tsbuildinfo
+
+# Nada de esto corre en producción.
+**/test
+**/tests
+**/evals
+docs
+openspec
+supabase
+scripts/etl
+.agents
+.codegraph
+.atl
+.claude
+
+# 1.3 MB de PNG que ninguna imagen necesita.
+*.png
+**/*.md
+!data/**/*.md
+
+**/.DS_Store
