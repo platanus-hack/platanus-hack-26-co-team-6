@@ -14,6 +14,7 @@
  *    necesita —quien soy, que puedo ver— se lo dice `GET /auth/yo`.
  */
 
+import type { Alcance } from './llaves';
 import type { Rol } from './roles';
 
 /** Claves cortas a proposito: el token viaja en cada request. */
@@ -61,4 +62,15 @@ export interface ActorSesion {
    * hay un turno compartido y no una persona. Se propaga a proposito.
    */
   legado: boolean;
+  /**
+   * Alcances de una LLAVE DE API — tarea 5.9. Solo lo traen los actores de
+   * tipo `servicio` que entraron con `pulso_sk_…`.
+   *
+   * Una persona no tiene alcances: tiene roles, y sus permisos salen de la
+   * matriz de §5.2. Una llave es al reves — no es nadie, solo puede hacer la
+   * lista corta de cosas que se le autorizo.
+   */
+  alcances?: Alcance[];
+  /** Id de la llave, si entro por llave. Sirve para auditar y para revocar. */
+  llaveId?: string;
 }

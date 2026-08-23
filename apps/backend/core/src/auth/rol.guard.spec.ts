@@ -10,7 +10,11 @@ import { ForbiddenException } from '@nestjs/common';
 import type { ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { ActorSesion } from './carga';
-import { CLAVE_ALCANCE_SEDE, CLAVE_ROLES } from './rol.decorator';
+import {
+  CLAVE_ALCANCE_LLAVE,
+  CLAVE_ALCANCE_SEDE,
+  CLAVE_ROLES,
+} from './rol.decorator';
 import { RolGuard } from './rol.guard';
 import { RegistroSesiones } from './sesiones';
 
@@ -26,7 +30,7 @@ const JEFE_DEL_SUR: ActorSesion = {
 
 /** Un contexto de Nest con lo justo: metadatos de la ruta y el request. */
 function contexto(
-  metadatos: { roles?: string[]; campoSede?: string },
+  metadatos: { roles?: string[]; campoSede?: string; alcances?: string[] },
   cuerpo: Record<string, unknown> = {},
   // `null` y no `undefined`: un `undefined` explicito dispara el valor por
   // defecto del parametro y el test se probaria a si mismo, no al guard.
@@ -38,7 +42,9 @@ function contexto(
         ? metadatos.roles
         : clave === CLAVE_ALCANCE_SEDE
           ? metadatos.campoSede
-          : undefined,
+          : clave === CLAVE_ALCANCE_LLAVE
+            ? metadatos.alcances
+            : undefined,
   } as unknown as Reflector;
 
   const ctx = {
@@ -139,5 +145,66 @@ describe('RolGuard', () => {
     expect(() =>
       new RolGuard(reflector, new RegistroSesiones()).canActivate(ctx),
     ).toThrow(ForbiddenException);
+  });
+});
+
+/**
+ * Tarea 5.9 — una llave de API no es una persona.
+ *
+ * Tiene una lista corta de cosas que puede hacer, y todo lo demas esta
+ * cerrado **incluyendo las rutas que nadie decoró**.
+ */
+describe('RolGuard · llaves de API (5.9)', () => {
+  const LLAVE: ActorSesion = {
+    id: 'llave:k1',
+    organizacionId: 'org-sur',
+    roles: ['servicio'],
+    sedes: [],
+    tipo: 'servicio',
+    sesionId: 'llave:k1',
+    legado: false,
+    alcances: ['caso:leer'],
+    llaveId: 'k1',
+  };
+
+  it('pasa en una ruta que pide justo su alcance', () => {
+    const { ctx, reflector } = contexto({ alcances: ['caso:leer'] }, {}, LLAVE);
+    expect(
+      new RolGuard(reflector, new RegistroSesiones()).canActivate(ctx),
+    ).toBe(true);
+  });
+
+  it('niega si la ruta pide un alcance que la llave no tiene', () => {
+    const { ctx, reflector } = contexto(
+      { alcances: ['capacidad:declarar'] },
+      {},
+      LLAVE,
+    );
+    expect(() =>
+      new RolGuard(reflector, new RegistroSesiones()).canActivate(ctx),
+    ).toThrow(ForbiddenException);
+  });
+
+  it('⭐ una ruta SIN @Alcance no la puede usar ninguna llave', () => {
+    // El minimo por defecto vale tambien para las rutas: olvidarse de abrir
+    // una se ve enseguida; haberlas dejado todas abiertas, no.
+    const { ctx, reflector } = contexto({}, {}, LLAVE);
+    expect(() =>
+      new RolGuard(reflector, new RegistroSesiones()).canActivate(ctx),
+    ).toThrow(ForbiddenException);
+  });
+
+  it('una ruta de rol tampoco se abre por tener el rol `servicio`', () => {
+    const { ctx, reflector } = contexto({ roles: ['servicio'] }, {}, LLAVE);
+    expect(() =>
+      new RolGuard(reflector, new RegistroSesiones()).canActivate(ctx),
+    ).toThrow(ForbiddenException);
+  });
+
+  it('una persona sigue pasando por las rutas sin decorar', () => {
+    const { ctx, reflector } = contexto({});
+    expect(
+      new RolGuard(reflector, new RegistroSesiones()).canActivate(ctx),
+    ).toBe(true);
   });
 });

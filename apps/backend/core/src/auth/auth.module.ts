@@ -18,6 +18,8 @@
 import { Global, Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthController } from './auth.controller';
+import { LlavesController } from './llaves.controller';
+import { LlavesService } from './llaves';
 import { RepoActoresMemoria } from './actores';
 import { BloqueoLogin } from './bloqueo';
 import { RolGuard } from './rol.guard';
@@ -27,15 +29,16 @@ import { RegistroSesiones } from './sesiones';
 
 @Global()
 @Module({
-  controllers: [AuthController],
+  controllers: [AuthController, LlavesController],
   providers: [
     SesionService,
     RegistroSesiones,
+    LlavesService,
     RepoActoresMemoria,
     BloqueoLogin,
     { provide: APP_GUARD, useClass: SesionGuard },
     { provide: APP_GUARD, useClass: RolGuard },
   ],
-  exports: [SesionService, RegistroSesiones, RepoActoresMemoria],
+  exports: [SesionService, RegistroSesiones, RepoActoresMemoria, LlavesService],
 })
 export class AuthModule {}

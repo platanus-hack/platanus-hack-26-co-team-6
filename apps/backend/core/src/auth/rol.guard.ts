@@ -26,7 +26,12 @@ import {
 import { Reflector } from '@nestjs/core';
 import type { Request } from 'express';
 import type { ActorSesion } from './carga';
-import { CLAVE_ALCANCE_SEDE, CLAVE_ROLES } from './rol.decorator';
+import type { Alcance } from './llaves';
+import {
+  CLAVE_ALCANCE_LLAVE,
+  CLAVE_ALCANCE_SEDE,
+  CLAVE_ROLES,
+} from './rol.decorator';
 import { ROLES_DE_RED, type Rol } from './roles';
 import { RegistroSesiones } from './sesiones';
 
@@ -48,10 +53,23 @@ export class RolGuard implements CanActivate {
       CLAVE_ALCANCE_SEDE,
       [contexto.getHandler(), contexto.getClass()],
     );
+    const alcancesRuta = this.reflector.getAllAndOverride<Alcance[]>(
+      CLAVE_ALCANCE_LLAVE,
+      [contexto.getHandler(), contexto.getClass()],
+    );
 
-    // Ruta sin decorar: el guard global ya exigio sesion y aqui no hay nada
-    // que decidir.
-    if (!roles?.length && !campoSede) return true;
+    // Ruta sin decorar: para una persona no hay nada que decidir —el guard
+    // global ya exigio sesion—, pero **una llave de API se niega igual**. El
+    // minimo por defecto vale tambien para las rutas: olvidarse de abrir una
+    // se ve enseguida; haberlas dejado todas abiertas, no.
+    if (!roles?.length && !campoSede && !alcancesRuta) {
+      const actorLibre = contexto
+        .switchToHttp()
+        .getRequest<Request & { actor?: ActorSesion }>().actor;
+      if (actorLibre?.alcances)
+        throw new ForbiddenException('Esta ruta no admite llaves de API');
+      return true;
+    }
 
     const req = contexto
       .switchToHttp()
@@ -61,6 +79,23 @@ export class RolGuard implements CanActivate {
     // Sin actor con una ruta decorada seria un fallo de cableado —
     // `RolGuard` corriendo sin `SesionGuard` delante. Se niega.
     if (!actor) throw new ForbiddenException('Sin actor en la sesion');
+
+    // ── Llaves de API (5.9) ──────────────────────────────────────
+    //
+    // Una llave no tiene roles: tiene una lista corta de cosas que puede
+    // hacer. Y **una ruta sin `@Alcance()` no la puede usar ninguna llave**,
+    // aunque lleve `@Rol('servicio')`: el minimo por defecto vale tambien
+    // para las rutas, porque el error de olvidarse de abrir una se ve
+    // enseguida y el de haberlas dejado todas abiertas no.
+    if (actor.alcances) {
+      if (!alcancesRuta?.length)
+        throw new ForbiddenException('Esta ruta no admite llaves de API');
+      if (!alcancesRuta.some((a) => actor.alcances!.includes(a)))
+        throw new ForbiddenException(
+          `La llave no tiene el alcance necesario (${alcancesRuta.join(' o ')})`,
+        );
+      return true;
+    }
 
     if (roles?.length && !roles.some((r) => actor.roles.includes(r))) {
       throw new ForbiddenException('Tu rol no permite esta accion');
