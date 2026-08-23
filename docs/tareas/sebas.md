@@ -4,7 +4,7 @@
 > **En este plan rota:** también le toca el core de identidad, Testcontainers, el shell de `/panel` y
 > los runbooks. **Es dueño de tipos en la ola 4.**
 
-**Ola 0** ✅ [0.1](#01--conectar-el-guard-de-aceptación-única) · ✅ [0.6](#06--motivos-de-rechazo-como-enum-versionado) — **Ola 1** ✅ [1.3](#13--sesión-con-actor-real) · [1.7](#17--testcontainers--aislamiento-de-inquilino) — **Ola 2** [2.3](#23--vista-afiliacionverificar) · [2.7](#27--shell-de-panel) · ✅ [2.11](#211--rate-limit--idempotency-key) — **Ola 3** [3.2](#32--cablear-los-22-eventos) · [3.5](#35--sede_canal--envío-dirigido) · [3.10](#310--reporte-del-traslado) — **Ola 4** [4.1](#41--tabla-recepcion--protocolos) · [4.5](#45--entrega-por-qr) · [4.10](#410--vista-de-firma-de-trámites) — **Ola 5** [5.2](#52--vista-panelwebhooks) · [5.5](#55--alertas-y-runbooks) · [5.9](#59--panelapi--llaves-con-alcance)
+**Ola 0** ✅ [0.1](#01--conectar-el-guard-de-aceptación-única) · ✅ [0.6](#06--motivos-de-rechazo-como-enum-versionado) — **Ola 1** ✅ [1.3](#13--sesión-con-actor-real) · [1.7](#17--testcontainers--aislamiento-de-inquilino) — **Ola 2** [2.3](#23--vista-afiliacionverificar) · [2.7](#27--shell-de-panel) · ✅ [2.11](#211--rate-limit--idempotency-key) — **Ola 3** [3.2](#32--cablear-los-22-eventos) · [3.5](#35--sede_canal--envío-dirigido) · [3.10](#310--reporte-del-traslado) — **Ola 4** [4.1](#41--tabla-recepcion--protocolos) · [4.5](#45--entrega-por-qr) · [4.10](#410--vista-de-firma-de-trámites) — **Ola 5** [5.2](#52--vista-panelwebhooks) · [5.5](#55--alertas-y-runbooks) · 🟡 [5.9](#59--panelapi--llaves-con-alcance)
 
 ---
 
@@ -417,9 +417,19 @@ Lo que hoy tapa el hueco es que el fan-out es secuencial. **El día que alguien 
 6. Rate limit por llave, independiente del de sesión.
 
 **Hecho cuando.**
-- [ ] Una llave solo hace lo de su alcance (probar el 403)
-- [ ] La rotación no tumba al integrador
-- [ ] El uso queda registrado
-- [ ] La llave no se puede volver a ver
+- [x] Una llave solo hace lo de su alcance (403 probado end-to-end) — y **una ruta sin `@Alcance()` no la admite ninguna llave**
+- [x] La rotación no tumba al integrador — 24 h de gracia, alcances heredados
+- [x] El uso queda registrado — conteo, última vez e IP; los intentos con una llave revocada también
+- [x] La llave no se puede volver a ver — se guarda solo el sha256 y los últimos 4 para la tabla
 
 **Trampas.** El prefijo `pulso_sk_` no es cosmético: permite que escáneres de secretos la detecten si alguien la commitea. Es una cortesía al integrador que cuesta cero.
+
+> **Estado: backend hecho, vista pendiente.** `core/src/auth/llaves.ts` +
+> `POST/GET/DELETE /auth/llaves` funcionan y están probados; `GET /estado` ya
+> acepta llaves con `caso:leer`. La vista `/panel/api` **cuelga del shell de
+> `/panel` (2.7)**, que a su vez espera `1.4`. Mientras tanto se administra con
+> `curl`, que es como lo va a usar el integrador de un HIS de todas formas.
+>
+> Dos cosas que hay que cerrar antes de repartir una llave fuera del equipo:
+> **`/estado` todavía no filtra por organización** (eso es 1.5/1.6), y las
+> llaves viven en memoria hasta que exista su tabla (1.2).

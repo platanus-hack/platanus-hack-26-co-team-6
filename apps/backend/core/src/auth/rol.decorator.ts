@@ -20,10 +20,12 @@ import { SetMetadata, createParamDecorator } from '@nestjs/common';
 import type { ExecutionContext } from '@nestjs/common';
 import type { Request } from 'express';
 import type { ActorSesion } from './carga';
+import type { Alcance as NombreDeAlcance } from './llaves';
 import type { Rol as NombreDeRol } from './roles';
 
 export const CLAVE_ROLES = 'pulso:roles';
 export const CLAVE_ALCANCE_SEDE = 'pulso:alcance-sede';
+export const CLAVE_ALCANCE_LLAVE = 'pulso:alcance-llave';
 
 /**
  * Roles que pueden entrar. Basta con UNO (es un `or`, no un `and`).
@@ -32,6 +34,16 @@ export const CLAVE_ALCANCE_SEDE = 'pulso:alcance-sede';
  * niega por defecto— pero no mira roles.
  */
 export const Rol = (...roles: NombreDeRol[]) => SetMetadata(CLAVE_ROLES, roles);
+
+/**
+ * Alcance que una LLAVE DE API necesita para esta ruta — tarea 5.9.
+ *
+ * Solo aplica a actores de tipo `servicio`: una persona pasa por `@Rol()`.
+ * Una ruta sin este decorador NO la puede usar una llave, y ese silencio es
+ * deliberado — el minimo por defecto vale tambien para las rutas.
+ */
+export const Alcance = (...alcances: NombreDeAlcance[]) =>
+  SetMetadata(CLAVE_ALCANCE_LLAVE, alcances);
 
 /**
  * La sede sobre la que actua la peticion tiene que estar en el alcance del

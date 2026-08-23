@@ -22,6 +22,7 @@ pnpm test:e2e
 | `GET /estado` | Estado vivo para `/hospital` y `/crue` (polling 2 s) | — |
 | `GET /capacidades` | En qué modo está cada integración | — |
 | `POST /auth/login` · `/refresh` · `/logout` · `GET /auth/sesion` · `/auth/yo` | Sesión con actor real: token con organización, roles y alcance | Sebas |
+| `GET/POST /auth/llaves` · `POST /auth/llaves/:id/rotar` · `DELETE /auth/llaves/:id` | Llaves de API con alcance para integraciones (`pulso_sk_…`) | Sebas |
 | `GET /health` | Liveness. No toca nada aguas abajo | — |
 | `POST /telegram/webhook` | Webhook de Telegram (`secret_token`) | Sebas |
 

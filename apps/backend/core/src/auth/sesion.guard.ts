@@ -25,6 +25,7 @@ import { Reflector } from '@nestjs/core';
 import type { Request } from 'express';
 import type { ActorSesion } from './carga';
 import { CLAVE_PUBLICO } from './publico.decorator';
+import { LlavesService, PREFIJO } from './llaves';
 import { SesionService, tokenDeCabeceras } from './sesion.service';
 
 @Injectable()
@@ -32,6 +33,7 @@ export class SesionGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly sesion: SesionService,
+    private readonly llaves: LlavesService,
   ) {}
 
   canActivate(contexto: ExecutionContext): boolean {
@@ -42,7 +44,41 @@ export class SesionGuard implements CanActivate {
     if (publico) return true;
 
     const req = contexto.switchToHttp().getRequest<Request>();
-    const carga = this.sesion.verificarAcceso(tokenDeCabeceras(req.headers));
+    const presentado = tokenDeCabeceras(req.headers);
+
+    // ── Llave de API (5.9) ───────────────────────────────────────
+    //
+    // `Authorization: Bearer pulso_sk_…` es una integracion, no una persona.
+    // Se resuelve aqui y no en un guard aparte para que la puerta siga
+    // siendo UNA: dos sitios donde se decide quien entra es el patron con el
+    // que se cuelan las cosas.
+    if (presentado?.startsWith(PREFIJO)) {
+      const verificacion = this.llaves.verificar(presentado, ipDe(req));
+      if (!verificacion.valida)
+        throw new UnauthorizedException('Llave de API invalida');
+
+      const llave = verificacion.llave;
+      const actorLlave: ActorSesion = {
+        // `llave:` delante, igual que `legado:`: en la auditoria de dentro de
+        // tres meses tiene que verse a simple vista que esto no es una
+        // persona. Ademas le da a cada llave su propio cubo de limite de
+        // tasa, independiente del de las sesiones (tarea 2.11).
+        id: `llave:${llave.id}`,
+        organizacionId: llave.organizacionId,
+        roles: ['servicio'],
+        sedes: [],
+        tipo: 'servicio',
+        sesionId: `llave:${llave.id}`,
+        legado: false,
+        alcances: llave.alcances,
+        llaveId: llave.id,
+      };
+      (req as Request & { actor?: ActorSesion }).actor = actorLlave;
+      (req as Request & { operador?: string }).operador = actorLlave.id;
+      return true;
+    }
+
+    const carga = this.sesion.verificarAcceso(presentado);
     if (!carga) {
       // Mismo 401 para token invalido, expirado y sesion revocada. Distinguir
       // los tres le diria a quien prueba en cual de las tres esta.
@@ -56,4 +92,11 @@ export class SesionGuard implements CanActivate {
     (req as Request & { operador?: string }).operador = actor.id;
     return true;
   }
+}
+
+/** La IP real detras del proxy de Render, o la del socket en local. */
+function ipDe(req: Request): string | undefined {
+  const reenviada = req.headers['x-forwarded-for'];
+  const primera = Array.isArray(reenviada) ? reenviada[0] : reenviada;
+  return (primera?.split(',')[0] ?? req.ip)?.trim();
 }
