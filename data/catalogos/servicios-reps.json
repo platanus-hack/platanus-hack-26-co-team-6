@@ -1,0 +1,34 @@
+{
+  "_fuente": "CodeSystem FHIR de MinSalud — REPShealthcareServices, CC-BY-4.0",
+  "_canonical": "https://fhir.minsalud.gov.co/rda/CodeSystem/REPShealthcareServices",
+  "_nota": "Fuente unica de los codigos REPS. Lo leen ai-core (Python) y core (TypeScript). Si agregas un codigo aqui, aparece en los dos motores y en el prompt sin tocar codigo.",
+  "servicios": {
+    "108": "Cuidado intensivo neonatal",
+    "109": "Cuidado intensivo pediátrico",
+    "110": "Cuidado intensivo adultos",
+    "201": "Cirugía de cabeza y cuello",
+    "203": "Cirugía general",
+    "245": "Neurocirugía",
+    "320": "Ginecobstetricia",
+    "408": "Radioterapia",
+    "709": "Quimioterapia",
+    "712": "Toma de muestras de laboratorio clínico",
+    "743": "Hemodinamia e intervencionismo",
+    "744": "Imágenes diagnósticas ionizantes",
+    "1102": "Urgencias"
+  },
+  "seleccionables": [
+    1102,
+    110,
+    109,
+    108,
+    743,
+    245,
+    203,
+    201,
+    320,
+    744,
+    712
+  ],
+  "urgencias": 1102
+}
