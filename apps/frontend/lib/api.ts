@@ -270,6 +270,46 @@ export function catalogoMotivosRechazo(): Promise<CatalogoMotivosResponse> {
   return pedir<CatalogoMotivosResponse>("/catalogo/motivos-rechazo");
 }
 
+/**
+ * Línea de tiempo de un caso — tarea 3.1.
+ *
+ * `evento_caso` es append-only: nada de lo que sale de aquí se puede editar.
+ * Una corrección es un evento nuevo que apunta al anterior.
+ */
+export function eventosCaso(casoId: string): Promise<{ eventos: EventoCaso[] }> {
+  return pedir(`/casos/${encodeURIComponent(casoId)}/eventos`, {
+    cache: "no-store",
+  });
+}
+
+/**
+ * Registra un evento que solo un humano sabe — tarea 3.2.
+ *
+ * Core acepta una lista corta de tipos por esta puerta (`override_crue`,
+ * llegadas, entrega, demora reportada, cierre). Todo lo demás lo escribe el
+ * servidor desde su transición real: un `POST` abierto a los 22 tipos dejaría
+ * que una consola escribiera "aceptado" sin que nadie haya aceptado nada.
+ *
+ * **La firma es el actor de la sesión**, no lo que diga el cuerpo.
+ */
+export function registrarEventoCaso(
+  casoId: string,
+  cuerpo: {
+    tipo: string;
+    detalle?: Record<string, unknown>;
+    codigoSede?: string;
+    movilId?: string;
+    claveIdempotencia?: string;
+    corrigeA?: number;
+  },
+): Promise<{ evento: EventoCaso | null }> {
+  return pedir(`/casos/${encodeURIComponent(casoId)}/eventos`, {
+    method: "POST",
+    body: JSON.stringify(cuerpo),
+    clave: cuerpo.claveIdempotencia,
+  });
+}
+
 export function estado(casoId?: string): Promise<EstadoResponse> {
   const query = casoId ? `?casoId=${encodeURIComponent(casoId)}` : "";
   return pedir<EstadoResponse>(`/estado${query}`, { cache: "no-store" });
@@ -382,6 +422,27 @@ export async function vivo(): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+/**
+ * Una fila de `evento_caso`. Espejo de `core/src/eventos/tipos.ts` — tarea 3.1.
+ *
+ * No vive en `lib/types.ts` por lo mismo que `ActorSesion`: `contracts/types.ts`
+ * recibe los tipos de evento en el PR de tipos de la ola 3, y ese es el sitio
+ * correcto. Aquí está lo mínimo que la UI necesita para pintar una línea de
+ * tiempo.
+ */
+export interface EventoCaso {
+  id: number;
+  casoId: string;
+  tipo: string;
+  actorId: string | null;
+  movilId: string | null;
+  codigoSede: string | null;
+  detalle: Record<string, unknown>;
+  ocurridoEn: string;
+  /** Id del evento que este corrige. El original NO se borra. */
+  corrigeA: number | null;
 }
 
 // ── Sesión ───────────────────────────────────────────────────────

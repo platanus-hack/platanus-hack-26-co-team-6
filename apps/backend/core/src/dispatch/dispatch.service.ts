@@ -14,6 +14,7 @@ import type {
   Handshake,
 } from '../contracts/types';
 import { AlmacenService } from '../almacen/almacen.service';
+import { RegistroService } from '../eventos/registro.service';
 import { SedesService } from '../sedes/sedes.service';
 import { EtaService } from '../eta/eta.service';
 import { CanalesService } from '../canales/canales.service';
@@ -29,6 +30,7 @@ export class DispatchService {
     private readonly eta: EtaService,
     private readonly canales: CanalesService,
     private readonly config: ConfigService,
+    private readonly registro: RegistroService,
   ) {}
 
   async despachar(cuerpo: DispatchRequest): Promise<DispatchResponse> {
@@ -78,6 +80,23 @@ export class DispatchService {
     this.log.log(
       `handshake ${handshake.id} → ${envio.canal} ${envio.detalle ?? ''}`,
     );
+
+    // Clave de idempotencia por (caso, sede): reintentar el mismo despacho
+    // —la cola offline de /campo lo hace— no escribe dos veces la misma
+    // linea. El re-ruteo a OTRA sede si es un despacho nuevo, y por eso la
+    // clave lleva la sede y no solo el caso.
+    await this.registro.registrar({
+      casoId: caso.id,
+      tipo: 'despachado',
+      codigoSede: sede.codigo,
+      movilId: caso.unidad?.id ?? null,
+      claveIdempotencia: `${caso.id}:${sede.codigo}`,
+      detalle: {
+        handshakeId: handshake.id,
+        canal: envio.canal,
+        etaMin: handshake.etaMinAlDespachar,
+      },
+    });
 
     return { handshake };
   }

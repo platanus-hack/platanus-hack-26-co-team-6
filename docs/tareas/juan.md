@@ -269,6 +269,32 @@
 
 **Trampas.** `core/src/escalamiento` lo toca Sebas en 3.2. **Mergea después de 3.2 y rebasa.**
 
+> ### ⚠️ La mitad de esta tarea ya está hecha — [PR #22](https://github.com/platanus-hack/platanus-hack-26-co-team-6/pull/22)
+>
+> La `3.2` necesitaba sacar `override_crue` de `localStorage` para poder cablearlo,
+> así que quedó hecho lo siguiente. **Juan: lo que falta es tuyo y es de verdad.**
+>
+> **Ya está:**
+> - `POST /casos/:id/eventos` acepta `override_crue` con **justificación obligatoria
+>   validada en el servidor** (400 si viene vacía o en blanco).
+> - Escribe `evento_caso` con `actor_id` **de la sesión** — no de lo que mande el
+>   cuerpo — y la justificación en `detalle`.
+> - **Solo `regulador_crue` (o `admin_plataforma`) puede hacerlo**: un jefe de
+>   urgencias saltándose el filtro duro recibe 403.
+> - `bitacora.ts` manda cada acción al servidor, con clave de idempotencia, y el
+>   rótulo "registro local" solo aparece si **no** llegó.
+>
+> **Falta, y es lo tuyo:**
+> - **`bitacora.ts` todavía LEE de `localStorage`**, no del servidor. El paso 3 de tu
+>   tarea —"pasa a leer del servidor"— no está: usa `GET /casos/:id/eventos`,
+>   ya existe. Hasta que lo hagas, el override **no sobrevive a cambiar de máquina**.
+> - **Ruta propia `POST /casos/:id/override`** si la quieres: hoy va por la genérica.
+>   Con ruta propia el rol se pone con `@Rol('regulador_crue')` y sale más limpio.
+> - **La UI todavía no exige la justificación antes de habilitar el botón** — hoy la
+>   valida el servidor y el error vuelve después de tocar. La doble confirmación que
+>   ya existe se conserva.
+> - `/auditoria/casos/:id` (4.12) para verlo con actor y hora.
+
 ---
 
 ## 4.3 · Vista `/hospital/recepcion/:casoId`

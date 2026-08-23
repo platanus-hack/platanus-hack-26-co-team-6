@@ -82,7 +82,8 @@ export default function Registro({ derivados, nombresSedes, flotante = false }: 
         ts: e.ts,
         tipo: "regulador",
         casoId: e.casoId,
-        actor: `${e.regulador} (registro local)`,
+        actor:
+          e.regulador + (e.pendiente ? " (sin confirmar en el servidor)" : ""),
         detalle: e.texto,
       });
     }

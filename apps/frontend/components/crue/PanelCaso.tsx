@@ -179,7 +179,11 @@ export default function PanelCaso({
     for (const e of bitacora) {
       linea.push({
         en: e.ts,
-        texto: `${e.texto} — ${e.regulador} (registro local)`,
+        // Tarea 3.2: ya se guarda en el servidor. El rótulo solo aparece
+        // cuando NO llegó — y entonces decirlo importa más que nunca.
+        texto:
+          `${e.texto} — ${e.regulador}` +
+          (e.pendiente ? " (sin confirmar en el servidor)" : ""),
         critico: e.tipo === "override",
       });
     }

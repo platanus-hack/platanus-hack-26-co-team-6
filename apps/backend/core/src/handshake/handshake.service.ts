@@ -19,6 +19,7 @@ import {
   MOTIVO_POR_DEFECTO,
 } from '../catalogo/motivos-rechazo';
 import { AlmacenService } from '../almacen/almacen.service';
+import { RegistroService } from '../eventos/registro.service';
 import { SedesService } from '../sedes/sedes.service';
 import { CongestionService } from '../scoring/congestion.service';
 import { RoutingService } from '../routing/routing.service';
@@ -33,6 +34,7 @@ export class HandshakeService {
     private readonly sedes: SedesService,
     private readonly congestion: CongestionService,
     private readonly routing: RoutingService,
+    private readonly registro: RegistroService,
     private readonly voz: VozClient,
   ) {}
 
@@ -136,6 +138,25 @@ export class HandshakeService {
       actualizado.latenciaS,
     );
 
+    // ⭐ La respuesta del hospital, que es el dato que se auto-etiqueta.
+    //
+    // El motivo va por CODIGO (tarea 0.6): agrupado dentro de tres meses
+    // sigue significando lo mismo aunque alguien reescriba la etiqueta.
+    await this.registro.registrar({
+      casoId: h.casoId,
+      tipo: cuerpo.decision,
+      codigoSede: h.sedeCodigo,
+      claveIdempotencia: `${h.id}:${cuerpo.decision}`,
+      detalle: {
+        handshakeId: h.id,
+        latenciaS: actualizado.latenciaS,
+        canal: h.canal,
+        ...(cuerpo.decision === 'rechazado'
+          ? { motivoCodigo: actualizado.motivoCodigo }
+          : {}),
+      },
+    });
+
     const congestionActualizada = await this.congestionDe(h.sedeCodigo);
 
     // ⭐ CIERRA EL BUCLE. Sin esto, el jefe de urgencias acepta y el
@@ -185,8 +206,7 @@ export class HandshakeService {
         );
       return {
         motivoCodigo: cuerpo.motivoCodigo,
-        motivoRechazo:
-          cuerpo.motivo ?? etiquetaDeMotivo(cuerpo.motivoCodigo),
+        motivoRechazo: cuerpo.motivo ?? etiquetaDeMotivo(cuerpo.motivoCodigo),
       };
     }
 
