@@ -39,9 +39,10 @@ nunca hablan hacia afuera. **Esa frontera es de seguridad y no se negocia.**
 
 ## Deuda
 
-`voz` se autentica con `CORE_PASSWORD`, la contraseña compartida de los operadores: **en la auditoría
-un bot y una persona son indistinguibles**, y `voz` puede hacer todo lo que puede un humano, incluido
-aceptar un traslado. Lo cierra la [tarea 1.8](../../../docs/tareas/juan.md#18--token-de-servicio-para-voz).
+~~`voz` se autenticaba con `CORE_PASSWORD`~~ — **cerrado por la tarea 1.8**: `voz` usa
+`CORE_SERVICE_TOKEN` (`sub: svc:voz`, alcance `caso:crear · caso:leer · notificar`), la auditoría
+distingue el bot de una persona, y `POST /handshake/respond` le responde 403. Sin token configurado,
+`/listo` lo dice y el despachador degrada a "reporta por radio al CRUE" — nunca a mandar sin cabecera.
 
 ```bash
 uv sync && uv run uvicorn app.main:app --port 8090 --reload
