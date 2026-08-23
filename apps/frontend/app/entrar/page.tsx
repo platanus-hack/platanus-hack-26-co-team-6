@@ -420,9 +420,11 @@ function SelectorOrganizacion({
 }
 
 /**
- * La consola que le toca a su rol todavía no existe (`/panel` llega con 2.7,
- * `/admin` con 5.11). Mandarlo a un 404 justo después de un login correcto es
- * la peor pantalla posible; mandarlo a otra sin decírselo, la segunda peor.
+ * La consola que le toca a su rol todavía no existe. Hoy no la dispara nadie
+ * —las seis rutas de `DESTINO` están construidas— pero se queda: es la red
+ * bajo el próximo rol que se agregue antes que su pantalla. Mandarlo a un 404
+ * justo después de un login correcto es la peor pantalla posible; mandarlo a
+ * otra sin decírselo, la segunda peor.
  */
 function ConsolaPendiente({
   suya,

@@ -29,6 +29,24 @@ const APPS = [
   { href: "/crue", label: "CRUE", quien: "regulador" },
 ];
 
+/**
+ * Las consolas que no son del demo: no se despacha ni se acepta nada en
+ * ellas, y core las cierra por rol. Van en su propio bloque y **apuntan al
+ * login con `?destino=`, no a la ruta directa**: quien las abra desde una
+ * landing pública casi nunca trae sesión, y un 403 en blanco es peor
+ * pantalla que el login que ya sabe volver aquí.
+ */
+const INTERNAS = [
+  { href: "/admin", label: "Admin", quien: "plataforma" },
+  { href: "/equipo", label: "Equipo", quien: "organización" },
+];
+
+// Auditoría no está aquí: su única ruta es `/auditoria/casos/:id` y no hay
+// índice que ofrecer. Se entra por el enlace del caso, desde el CRUE.
+
+const alLogin = (destino: string) =>
+  `/entrar?destino=${encodeURIComponent(destino)}`;
+
 export function HeaderLanding() {
   const [activa, setActiva] = useState("Inicio");
   const [abierto, setAbierto] = useState(false);
@@ -167,6 +185,33 @@ export function HeaderLanding() {
                       >
                         <Link
                           href={a.href}
+                          className="flex items-baseline gap-2 py-1.5 text-base font-medium text-white/70 transition-colors hover:text-white"
+                        >
+                          {a.label}
+                          <span className="text-xs text-white/40">· {a.quien}</span>
+                        </Link>
+                      </motion.li>
+                    ))}
+                  </ul>
+                  <div className="my-3 border-t border-white/10" />
+                  <p className="mb-2 text-[11px] uppercase tracking-widest text-white/40">
+                    Consolas internas
+                  </p>
+                  <ul className="flex flex-col gap-0.5">
+                    {INTERNAS.map((a, i) => (
+                      <motion.li
+                        key={a.href}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -10 }}
+                        transition={{
+                          duration: 0.3,
+                          delay: 0.05 * (SECCIONES.length + APPS.length + i),
+                          ease: EASE_FIRMA,
+                        }}
+                      >
+                        <Link
+                          href={alLogin(a.href)}
                           className="flex items-baseline gap-2 py-1.5 text-base font-medium text-white/70 transition-colors hover:text-white"
                         >
                           {a.label}
