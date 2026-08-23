@@ -149,6 +149,55 @@ export class EtaService {
   }
 
   /**
+   * Coordenadas → dirección legible. Geocodificación inversa de Mapbox.
+   *
+   * POR QUÉ HACE FALTA: un paramédico al volante no teclea «4.628, -74.155».
+   * El despacho por WhatsApp le tiene que decir «Calle 80 #68-15», que es lo
+   * que puede leer de un vistazo y meter en el navegador.
+   *
+   * `types=address,poi` deja fuera barrio, localidad y país: para un destino
+   * de emergencia, «Kennedy, Bogotá, Colombia» es peor que nada — parece una
+   * dirección y no lleva a ningún lado.
+   *
+   * Devuelve null sin token o si Mapbox no reconoce el punto. Quien llama
+   * decide: mostrar las coordenadas es feo pero honesto; inventar una
+   * dirección manda una ambulancia a otro sitio.
+   */
+  async direccionDe(coord: Coordenada): Promise<string | null> {
+    const token = this.token();
+    if (!token) return null;
+
+    const params = new URLSearchParams({
+      types: 'address,poi',
+      language: 'es',
+      limit: '1',
+      // Sin el sesgo por país, «Calle 80» resuelve en media Latinoamérica.
+      country: 'co',
+      access_token: token,
+    });
+    const url =
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/` +
+      `${coord.lng},${coord.lat}.json?${params.toString()}`;
+
+    try {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) {
+        this.log.warn(`Geocoding respondió ${res.status}`);
+        return null;
+      }
+      const json = (await res.json()) as { features?: Array<{ place_name?: string }> };
+      const nombre = json.features?.[0]?.place_name;
+      if (!nombre) return null;
+      // Mapbox devuelve «Calle 80 #68-15, Bogotá, Colombia». Los dos últimos
+      // tramos son ruido para alguien que ya está en Bogotá.
+      return nombre.split(',').slice(0, 2).join(',').trim();
+    } catch (e) {
+      this.log.warn(`Geocoding falló: ${String(e)}`);
+      return null;
+    }
+  }
+
+  /**
    * Geometría de la ruta al destino elegido, para pintarla en el mapa.
    * Devuelve un GeoJSON LineString, o null si no hay token.
    */

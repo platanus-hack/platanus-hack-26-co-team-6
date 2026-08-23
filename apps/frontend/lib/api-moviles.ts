@@ -72,6 +72,54 @@ export function reportarEstado(
   );
 }
 
+/** Un punto por el que pasó el móvil. Lo devuelve `GET /moviles/:id/recorrido`. */
+export interface PuntoRecorrido {
+  lat: number;
+  lng: number;
+  precisionM: number | null;
+  velocidadKmh: number | null;
+  disponible: boolean;
+  /** ISO 8601, sellado por el SERVIDOR: el reloj de una tablet se desfasa. */
+  reportadoEn: string;
+}
+
+export interface RespuestaRecorrido {
+  movilId: string;
+  /** Del más viejo al más nuevo: se dibuja de corrido, sin ordenar aquí. */
+  puntos: PuntoRecorrido[];
+  /**
+   * `false` = core no tiene base para la traza y solo conoce la última
+   * posición. La consola LO DICE en vez de pintar una línea de un solo punto
+   * como si fuera un recorrido.
+   */
+  persistente: boolean;
+}
+
+/**
+ * Por dónde pasó un móvil. La polilínea del mapa.
+ *
+ * `limite` lo topa el servidor en 1000 — un `?limite=999999` arrastraría la
+ * base y el navegador. `desde` (ISO 8601) recorta a la ventana que interesa:
+ * el turno, no la historia entera.
+ *
+ * ⚠️ Puede volver `puntos: []` con `persistente: true`. No es un error: es una
+ * ambulancia que todavía no ha reportado, o una ventana `desde` sin datos.
+ * Quien pinta decide — y no debe dibujar una línea con menos de dos puntos.
+ */
+export function recorrido(
+  movilId: string,
+  opciones: { limite?: number; desde?: string } = {},
+): Promise<RespuestaRecorrido> {
+  const q = new URLSearchParams();
+  if (opciones.limite) q.set("limite", String(opciones.limite));
+  if (opciones.desde) q.set("desde", opciones.desde);
+  const cola = q.toString();
+  return pedir<RespuestaRecorrido>(
+    `/moviles/${encodeURIComponent(movilId)}/recorrido${cola ? `?${cola}` : ""}`,
+    { cache: "no-store" },
+  );
+}
+
 /**
  * ¿Este error dice "no vuelvas a intentarlo"?
  *
