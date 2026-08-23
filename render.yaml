@@ -161,7 +161,24 @@ services:
       - key: COOKIE_CROSS_SITE
         value: "true"
 
+      # ── Identidad del turno (PR #23) ──────────────────────────────────
+      # Declaraciones DEL LADO DEL SERVIDOR: quien despliega decide qué rol
+      # acredita la contraseña de turno. Sin ellas la sesión no acredita
+      # NINGÚN rol y responden 403 el override del CRUE
+      # (POST /casos/:id/override) y la auditoría por caso. El log lo avisa al
+      # arrancar, pero no tumba el servicio: se descubre al usarlo.
+      - key: PULSO_ROLES_TURNO
+        value: admin_organizacion
+      - key: PULSO_ORGANIZACION_TURNO
+        value: org-demo
+
       # ── Credenciales de servidor ──────────────────────────────────────
+      # ⚠️ SUPABASE_URL TIENE QUE EMPEZAR POR https:// — es la URL del proyecto
+      #    (https://<ref>.supabase.co), NO la cadena de Postgres, que va en
+      #    PULSO_ROUTING_DATABASE_URL. Con un valor sin esquema, el cliente
+      #    lanza «Invalid supabaseUrl» en onModuleInit y core NO ARRANCA: eso
+      #    tumbó el primer deploy. Vacía sí es válido — ahí sí degrada a
+      #    semillas y lo dice en el log.
       # Sin Supabase, core sirve las 84 sedes desde semillas compiladas.
       # Sin Mapbox, el ETA se estima por distancia. Las dos degradaciones son
       # la regla, no un bug: GET /capacidades las hace visibles.
@@ -300,9 +317,13 @@ services:
     name: pulso-frontend
     runtime: node
     rootDir: apps/frontend
-    # corepack: apps/frontend/package.json fija pnpm@11.18.0 en packageManager,
-    # así que esto instala exactamente esa versión y respeta el lockfile.
-    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm build
+    # ⚠️ NADA DE `corepack enable` AQUÍ. La imagen de Render ya trae pnpm en
+    #    /usr/bin/pnpm y el filesystem es de sólo lectura, así que corepack
+    #    revienta al intentar reemplazar el symlink:
+    #      Internal Error: EROFS: read-only file system, unlink '/usr/bin/pnpm'
+    #    Eso tumbó el primer deploy. El pnpm de la imagen lee el lockfile 9.0
+    #    sin problema.
+    buildCommand: pnpm install --frozen-lockfile && pnpm build
     # `next start` lee PORT del entorno, que es lo que Render inyecta.
     startCommand: pnpm start
     plan: starter
