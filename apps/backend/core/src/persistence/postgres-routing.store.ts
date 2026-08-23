@@ -50,14 +50,19 @@ export class PostgresRoutingStore implements RoutingStore {
           'update pulso_routing_cases set accepted_destination = $2, accepted_at = now() where case_id = $1',
           [command.caseId, command.destinationCode],
         );
-        await client.query(
-          'insert into pulso_routing_decision_audit(case_id, destination_code, evidence) values ($1, $2, $3::jsonb)',
-          [
-            command.caseId,
-            command.destinationCode,
-            JSON.stringify(command.evidence),
-          ],
-        );
+        // Sin evidencia no se escribe auditoria: la tabla tiene checks que
+        // exigen modelVersion y configVersion, y rellenarlos con algo
+        // plausible seria falsificar el acta. La reserva del destino —que es
+        // lo que cierra la carrera— ya quedo hecha arriba.
+        if (command.evidence)
+          await client.query(
+            'insert into pulso_routing_decision_audit(case_id, destination_code, evidence) values ($1, $2, $3::jsonb)',
+            [
+              command.caseId,
+              command.destinationCode,
+              JSON.stringify(command.evidence),
+            ],
+          );
       }
       await client.query(
         'insert into pulso_routing_idempotency(request_key, fingerprint, result) values ($1, $2, $3::jsonb)',

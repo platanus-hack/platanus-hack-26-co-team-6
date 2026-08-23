@@ -143,14 +143,19 @@ export class TelegramController {
       });
 
       if (!resultado.aplicada) {
-        // La respuesta no cambió nada: o el plazo venció y el caso ya siguió
-        // a otra sede, o alguien ya había tocado el botón. Decirlo importa —
-        // si aquí saliera "ACEPTADO", este jefe de urgencias prepararía una
-        // cama para un paciente que va camino a otro hospital.
+        // La respuesta no cambió nada. Decirlo importa — si aquí saliera
+        // "ACEPTADO", este jefe de urgencias prepararía una cama para un
+        // paciente que va camino a otro hospital.
+        //
+        // Los tres motivos son distintos y hay que distinguirlos. El tercero
+        // NO se veía en `handshake.estado` (sigue en 'enviado') y salía como
+        // "esta solicitud ya estaba enviado", que no le dice nada a nadie.
         texto =
-          resultado.handshake.estado === 'timeout'
-            ? '⏱ Esta solicitud ya venció · PULSO la envió a otra sede'
-            : `Esta solicitud ya estaba ${resultado.handshake.estado}`;
+          resultado.codigo === 'PULSO_DESTINATION_ALREADY_ACCEPTED'
+            ? '🏥 Otra sede ya aceptó este caso · no prepare cama'
+            : resultado.handshake.estado === 'timeout'
+              ? '⏱ Esta solicitud ya venció · PULSO la envió a otra sede'
+              : `Esta solicitud ya estaba ${resultado.handshake.estado}`;
       } else {
         texto =
           decision === 'aceptado'

@@ -93,12 +93,19 @@ export default function Hospital() {
       // anticipa, pero el aviso se queda: entre el último tick y el toque
       // caben unos milisegundos, y quien lo tocó tiene que saber que no
       // preparara una cama para un paciente que no viene.
+      //
+      // Tarea 0.1: hay un tercer motivo que no se ve en el estado del
+      // handshake —sigue en "enviado"— y es el más importante de contar:
+      // otra sede ya aceptó este caso. Decir "ya estaba enviado" ahí es peor
+      // que no decir nada, porque no explica qué hacer.
       setAviso(
         r.aplicada
           ? null
-          : r.handshake.estado === "timeout"
-            ? "Esta solicitud ya había vencido. PULSO la envió a otra sede."
-            : `Esta solicitud ya estaba ${r.handshake.estado}.`,
+          : r.codigo === "PULSO_DESTINATION_ALREADY_ACCEPTED"
+            ? "Otra sede ya aceptó este traslado. No prepare cama para este paciente."
+            : r.handshake.estado === "timeout"
+              ? "Esta solicitud ya había vencido. PULSO la envió a otra sede."
+              : `Esta solicitud ya estaba ${r.handshake.estado}.`,
       );
     } catch {
       setAviso("No se pudo enviar la respuesta. Revisa la conexión con core.");

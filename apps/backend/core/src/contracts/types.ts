@@ -434,6 +434,16 @@ export interface RespondResponse {
    * reciben al mismo paciente es peor que un rechazo.
    */
   aplicada: boolean;
+  /**
+   * Por que NO se aplico. Solo viaja con `aplicada: false` — tarea 0.1.
+   *
+   * Sin esto, quien llama solo sabia mirar `handshake.estado`, y el caso que
+   * importa no se ve ahi: el handshake sigue en 'enviado' y lo que cambio es
+   * que OTRA sede ya acepto el caso (`PULSO_DESTINATION_ALREADY_ACCEPTED`).
+   * El webhook de Telegram respondia "esta solicitud ya estaba enviado", que
+   * no le dice nada al jefe de urgencias que acaba de tocar el boton.
+   */
+  codigo?: PulsoCode;
 }
 
 /** POST /api/escalamiento — el caso pasa a un regulador humano */

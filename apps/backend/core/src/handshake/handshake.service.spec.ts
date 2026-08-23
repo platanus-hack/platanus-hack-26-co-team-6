@@ -8,6 +8,8 @@
 
 import { AlmacenService } from '../almacen/almacen.service';
 import { CongestionService } from '../scoring/congestion.service';
+import { MemoryRoutingStore } from '../persistence/memory-routing.store';
+import { RoutingService } from '../routing/routing.service';
 import { SedesService } from '../sedes/sedes.service';
 import { VozClient } from '../voz/voz.client';
 import { HandshakeService } from './handshake.service';
@@ -26,7 +28,10 @@ const HANDSHAKE_BASE: Handshake = {
   latenciaS: null,
 };
 
-function montar(): { servicio: HandshakeService; almacen: AlmacenService } {
+function montar(store = new MemoryRoutingStore()): {
+  servicio: HandshakeService;
+  almacen: AlmacenService;
+} {
   const almacen = new AlmacenService();
   almacen.guardarHandshake({ ...HANDSHAKE_BASE });
 
@@ -38,7 +43,13 @@ function montar(): { servicio: HandshakeService; almacen: AlmacenService } {
   const voz = { configurado: () => false } as unknown as VozClient;
 
   return {
-    servicio: new HandshakeService(almacen, sedes, congestion, voz),
+    servicio: new HandshakeService(
+      almacen,
+      sedes,
+      congestion,
+      new RoutingService(store),
+      voz,
+    ),
     almacen,
   };
 }
@@ -140,5 +151,148 @@ describe('HandshakeService · motivo de rechazo (0.6)', () => {
 
     expect(segunda.aplicada).toBe(false);
     expect(segunda.handshake.motivoCodigo).toBe('SIN_ESPECIALISTA');
+  });
+});
+
+/**
+ * Tarea 0.1 — el guard de aceptacion unica, ya conectado.
+ *
+ * Lo que se prueba no es "se llama a RoutingService": es que dos hospitales
+ * no puedan preparar cama para el mismo paciente.
+ */
+describe('HandshakeService · aceptacion unica (0.1)', () => {
+  /** Segundo toque a la misma sede, o toque de otra sede sobre el mismo caso. */
+  const otroHandshake = (id: string, sedeCodigo: string): Handshake => ({
+    ...HANDSHAKE_BASE,
+    id,
+    sedeCodigo,
+  });
+
+  it('la segunda sede que acepta el mismo caso recibe aplicada:false', async () => {
+    const { servicio, almacen } = montar();
+    almacen.guardarHandshake(otroHandshake('hs-2', 'SEDE-B'));
+
+    const primera = await servicio.procesarRespuesta({
+      handshakeId: 'hs-1',
+      decision: 'aceptado',
+    });
+    const segunda = await servicio.procesarRespuesta({
+      handshakeId: 'hs-2',
+      decision: 'aceptado',
+    });
+
+    expect(primera.aplicada).toBe(true);
+    expect(segunda.aplicada).toBe(false);
+    expect(segunda.codigo).toBe('PULSO_DESTINATION_ALREADY_ACCEPTED');
+  });
+
+  it('el handshake perdedor NO queda en aceptado', async () => {
+    // Es lo que evita que la consola de SEDE-B pinte "traslado aceptado" y
+    // alguien empiece a preparar una cama para un paciente que va a otro lado.
+    const { servicio, almacen } = montar();
+    almacen.guardarHandshake(otroHandshake('hs-2', 'SEDE-B'));
+
+    await servicio.procesarRespuesta({ handshakeId: 'hs-1', decision: 'aceptado' });
+    await servicio.procesarRespuesta({ handshakeId: 'hs-2', decision: 'aceptado' });
+
+    expect(almacen.obtenerHandshake('hs-2')?.estado).toBe('enviado');
+    expect(almacen.obtenerHandshake('hs-2')?.respondidoEn).toBeNull();
+  });
+
+  it('la aceptacion que no se aplico NO ensucia el historial de la sede', async () => {
+    // El historial alimenta P(aceptacion) y el indice de congestion. Contar
+    // una aceptacion que nunca ocurrio le sube el puntaje a una sede por algo
+    // que el sistema le impidio hacer.
+    const { servicio, almacen } = montar();
+    almacen.guardarHandshake(otroHandshake('hs-2', 'SEDE-B'));
+
+    await servicio.procesarRespuesta({ handshakeId: 'hs-1', decision: 'aceptado' });
+    await servicio.procesarRespuesta({ handshakeId: 'hs-2', decision: 'aceptado' });
+
+    expect(almacen.historialSede('SEDE-B').aceptados).toBe(0);
+    expect(almacen.historialSede('SEDE-A').aceptados).toBe(1);
+  });
+
+  it('dos aceptaciones SIMULTANEAS: exactamente una se aplica', async () => {
+    // Concurrencia de verdad, no dos llamadas en fila. El store demora la
+    // reserva un turno del event loop, asi que las dos respuestas pasan el
+    // chequeo de estado ANTES de que ninguna reserve — que es exactamente la
+    // carrera que abre el fan-out paralelo, la optimizacion obvia que
+    // cualquiera va a activar.
+    class StoreLento extends MemoryRoutingStore {
+      override async respond(
+        ...args: Parameters<MemoryRoutingStore['respond']>
+      ): ReturnType<MemoryRoutingStore['respond']> {
+        await new Promise((r) => setTimeout(r, 0));
+        return super.respond(...args);
+      }
+    }
+
+    const { servicio, almacen } = montar(new StoreLento());
+    almacen.guardarHandshake(otroHandshake('hs-2', 'SEDE-B'));
+
+    const [a, b] = await Promise.all([
+      servicio.procesarRespuesta({ handshakeId: 'hs-1', decision: 'aceptado' }),
+      servicio.procesarRespuesta({ handshakeId: 'hs-2', decision: 'aceptado' }),
+    ]);
+
+    expect([a.aplicada, b.aplicada].filter(Boolean)).toHaveLength(1);
+    const perdedora = a.aplicada ? b : a;
+    expect(perdedora.codigo).toBe('PULSO_DESTINATION_ALREADY_ACCEPTED');
+  });
+
+  it('el doble toque sobre el MISMO handshake sigue siendo idempotente', async () => {
+    // El requestKey lleva handshake + decision: la segunda vez el guard
+    // devuelve su resultado guardado en vez de chocar consigo mismo. Y el
+    // chequeo de estado, que ya existia, sigue diciendo que no se aplico.
+    const { servicio } = montar();
+
+    const primera = await servicio.procesarRespuesta({
+      handshakeId: 'hs-1',
+      decision: 'aceptado',
+    });
+    const segunda = await servicio.procesarRespuesta({
+      handshakeId: 'hs-1',
+      decision: 'aceptado',
+    });
+
+    expect(primera.aplicada).toBe(true);
+    expect(segunda.aplicada).toBe(false);
+    expect(segunda.codigo).toBe('PULSO_ILLEGAL_TRANSITION');
+    expect(segunda.handshake.estado).toBe('aceptado');
+  });
+
+  it('rechazar no reserva el caso: otra sede todavia puede aceptarlo', async () => {
+    const { servicio, almacen } = montar();
+    almacen.guardarHandshake(otroHandshake('hs-2', 'SEDE-B'));
+
+    await servicio.procesarRespuesta({
+      handshakeId: 'hs-1',
+      decision: 'rechazado',
+      motivoCodigo: 'SIN_CAMAS_UCI',
+    });
+    const aceptada = await servicio.procesarRespuesta({
+      handshakeId: 'hs-2',
+      decision: 'aceptado',
+    });
+
+    expect(aceptada.aplicada).toBe(true);
+  });
+
+  it('acepta aunque no exista evidencia de ranking guardada', async () => {
+    // Degradacion declarada: el estado de ruteo vive en RAM hasta la 1.2, y
+    // un reinicio lo borra. Si la falta de evidencia bloqueara la aceptacion,
+    // reiniciar core dejaria al paramedico sin poder recibir un si. El guard
+    // cierra la carrera igual; lo unico que se pierde es la fila de auditoria,
+    // y eso queda dicho en el log en vez de inventarse.
+    const { servicio } = montar();
+
+    const r = await servicio.procesarRespuesta({
+      handshakeId: 'hs-1',
+      decision: 'aceptado',
+    });
+
+    expect(r.aplicada).toBe(true);
+    expect(r.codigo).toBeUndefined();
   });
 });

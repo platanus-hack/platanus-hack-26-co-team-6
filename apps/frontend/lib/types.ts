@@ -384,6 +384,25 @@ export interface DispatchResponse {
 }
 
 /** POST {API}/handshake/respond */
+/**
+ * Códigos de dominio de core. Espejo de `PulsoCode` — tarea 0.1.
+ *
+ * No son fallos técnicos: son decisiones del motor de ruteo que la pantalla
+ * tiene que saber contar. `lib/api.ts` declara `CodigoError` con el
+ * subconjunto que hoy llega por un 4xx; este es el conjunto completo, porque
+ * `RespondResponse.codigo` viaja dentro de un 200.
+ */
+export type PulsoCode =
+  | "PULSO_INVALID_INPUT"
+  | "PULSO_LOW_CONFIDENCE"
+  | "PULSO_INCONSISTENT_TRIAGE"
+  | "PULSO_NO_ELIGIBLE_DESTINATION"
+  | "PULSO_ILLEGAL_TRANSITION"
+  | "PULSO_INCOMPLETE_EVIDENCE"
+  | "PULSO_IDEMPOTENCY_CONFLICT"
+  | "PULSO_DESTINATION_ALREADY_ACCEPTED"
+  | "PULSO_INTERNAL";
+
 export interface RespondResponse {
   handshake: Handshake;
   /** Congestión de la sede DESPUÉS de procesar la respuesta. */
@@ -395,6 +414,16 @@ export interface RespondResponse {
    * MÍRALO antes de decirle a alguien que el traslado quedó aceptado.
    */
   aplicada: boolean;
+  /**
+   * Por qué NO se aplicó. Solo viaja con `aplicada: false` — tarea 0.1.
+   *
+   * El caso que importa no se ve en `handshake.estado`: el handshake sigue
+   * en 'enviado' y lo que cambió es que OTRA sede ya aceptó este caso
+   * (`PULSO_DESTINATION_ALREADY_ACCEPTED`). Sin este campo la pantalla decía
+   * "esta solicitud ya estaba enviado", que no le dice nada a quien acaba de
+   * tocar el botón.
+   */
+  codigo?: PulsoCode;
 }
 
 /** POST {API}/escalamiento */

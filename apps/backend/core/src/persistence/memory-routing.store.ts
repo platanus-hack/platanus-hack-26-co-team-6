@@ -16,7 +16,7 @@ export class MemoryRoutingStore implements RoutingStore {
     const winner = this.accepted.get(command.caseId);
     const result = winner && winner !== command.destinationCode ? routingRejection('PULSO_DESTINATION_ALREADY_ACCEPTED') : { accepted: true };
     this.requests.set(command.requestKey, { fingerprint: command.fingerprint, result });
-    if (result.accepted) { this.accepted.set(command.caseId, command.destinationCode); this.audits.push(structuredClone(command.evidence)); }
+    if (result.accepted) { this.accepted.set(command.caseId, command.destinationCode); if (command.evidence) this.audits.push(structuredClone(command.evidence)); }
     return result;
   }
   audit(): readonly RoutingDecisionEvidence[] { return this.audits; }

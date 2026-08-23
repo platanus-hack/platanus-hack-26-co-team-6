@@ -9,7 +9,20 @@ export type RoutingResponseCommand = {
   destinationCode: string;
   requestKey: string;
   fingerprint: string;
-  evidence: RoutingDecisionEvidence;
+  /**
+   * Evidencia del ranking que llevo a este destino, si la hay.
+   *
+   * OPCIONAL desde la tarea 0.1, y la razon importa: el guard de aceptacion
+   * unica tambien corre por el camino del handshake, donde la sede que acepta
+   * NO siempre es la #1 del ranking (el fan-out toca varias) y donde el
+   * estado de ruteo pudo perderse en un reinicio. Exigir evidencia ahi
+   * dejaria la carrera abierta justo cuando hay que cerrarla.
+   *
+   * Sin evidencia se reserva el destino igual, pero **no se escribe fila de
+   * auditoria**: un renglon de evidencia inventado es peor que un hueco, y el
+   * hueco queda declarado en el log.
+   */
+  evidence?: RoutingDecisionEvidence;
 };
 export type RoutingResponse = { accepted: boolean; error?: PulsoErrorEnvelope };
 export type StoredRoutingDecision = { caseId: string; state: 'matched' | 'escalated_to_crue'; evidence?: RoutingDecisionEvidence };
