@@ -1,0 +1,85 @@
+codigo_sede,nombre_sede,localidad,subred,complejidad,estado,motivo,declarado_en,vence_en,declarado_por
+110010532201,Clínica La Inmaculada,Chapinero,Norte,baja,recibiendo,,2026-08-22T19:08:00-05:00,,jefe_urgencias:110010532201
+110010559704,Centro de Atención En Salud Cafam Floresta,Barrios Unidos,Norte,baja,recibiendo,,2026-08-22T19:44:00-05:00,,jefe_urgencias:110010559704
+110010559711,Centro de Atención En Salud Cafam Suba,Suba,Norte,baja,recibiendo,,2026-08-22T19:00:00-05:00,,jefe_urgencias:110010559711
+110010561801,Fundación Santa Fe de Bogotá,Usaquén,Norte,alta,recibiendo,,2026-08-22T19:40:00-05:00,,jefe_urgencias:110010561801
+110010566801,Hospital Universitario Clínica San Rafael,San Cristóbal,Centro Oriente,alta,saturado,Sin camas UCI adultos,2026-08-22T19:04:00-05:00,2026-08-23T01:04:00-05:00,jefe_urgencias:110010566801
+110010568101,Fundación Hospital de La Misericordia,Los Mártires,Centro Oriente,alta,recibiendo,,2026-08-22T19:43:00-05:00,,jefe_urgencias:110010568101
+110010572501,Clínica de Nuestra Señora de La Paz,Kennedy,Sur Occidente,baja,recibiendo,,2026-08-22T19:22:00-05:00,,jefe_urgencias:110010572501
+110010606501,Instituto Nacional de Cancerología,San Cristóbal,Centro Oriente,media,contingencia,Falla de suministro de oxígeno en el piso 3,2026-08-22T19:24:00-05:00,2026-08-22T21:24:00-05:00,jefe_urgencias:110010606501
+110010644701,Fundación Abood Shaio,Suba,Norte,alta,recibiendo,,2026-08-22T19:43:00-05:00,,jefe_urgencias:110010644701
+110010645301,Cruz Roja Colombiana Seccional Cundinamarca Y Bogotá,Engativá,Norte,baja,recibiendo,,2026-08-22T19:16:00-05:00,,jefe_urgencias:110010645301
+110010645318,Cruz Roja Colombiana Seccional Cundinamarca Y Bogotá Sede Norte,Usaquén,Norte,baja,contingencia,Falla de suministro de oxígeno en el piso 3,2026-08-22T19:53:00-05:00,2026-08-22T21:53:00-05:00,jefe_urgencias:110010645318
+110010645319,Cruz Roja Colombiana Seccional Cundinamarca Y Bogotá Sede Alquería,Kennedy,Sur Occidente,baja,recibiendo,,2026-08-22T19:20:00-05:00,,jefe_urgencias:110010645319
+110010752101,Clínica Nueva,Teusaquillo,Norte,media,saturado,Sin camas UCI adultos,2026-08-22T19:10:00-05:00,2026-08-22T22:10:00-05:00,jefe_urgencias:110010752101
+110010778209,Salud Sura Calle 100 Bogotá,Chapinero,Norte,baja,recibiendo,,2026-08-22T19:48:00-05:00,,jefe_urgencias:110010778209
+110010793901,Clínica de La Mujer,Chapinero,Norte,media,saturado,Espera en puerta mayor a 4 horas,2026-08-22T19:18:00-05:00,2026-08-22T22:18:00-05:00,jefe_urgencias:110010793901
+110010817102,Clínica Infantil Colsubsidio,Chapinero,Norte,media,recibiendo,,2026-08-22T19:05:00-05:00,,jefe_urgencias:110010817102
+110010817103,Clínica Colsubsidio Ciudad Roma,Kennedy,Sur Occidente,media,recibiendo,,2026-08-22T19:03:00-05:00,,jefe_urgencias:110010817103
+110010817136,Centro Medico Colsubsidio Quiroga,Rafael Uribe Uribe,Centro Oriente,baja,recibiendo,,2026-08-22T19:24:00-05:00,,jefe_urgencias:110010817136
+110010843701,Clínica de Ortopedia Y Accidentes Laborales,Kennedy,Sur Occidente,baja,recibiendo,,2026-08-22T19:13:00-05:00,,jefe_urgencias:110010843701
+110010867901,Sociedad de Cirugía de Bogotá - Hospital de San José,Los Mártires,Centro Oriente,alta,cerrado,Cierre por brote intrahospitalario,2026-08-22T19:16:00-05:00,2026-08-22T23:16:00-05:00,jefe_urgencias:110010867901
+110010895201,Clínica Palermo,Teusaquillo,Norte,media,recibiendo,,2026-08-22T19:07:00-05:00,,jefe_urgencias:110010895201
+110010910401,Clínica Juan N Corpas Ltda,Suba,Norte,media,recibiendo,,2026-08-22T19:52:00-05:00,,jefe_urgencias:110010910401
+110010911101,Fundación Cardio Infantil Instituto de Cardiología,Usaquén,Norte,alta,recibiendo,,2026-08-22T19:17:00-05:00,,jefe_urgencias:110010911101
+110010917802,Centro Policlinico Del Olaya,Rafael Uribe Uribe,Centro Oriente,media,saturado,Sin especialista de turno en la noche,2026-08-22T19:16:00-05:00,2026-08-22T23:16:00-05:00,jefe_urgencias:110010917802
+110010918608,Clínica Reina Sofia,Usaquén,Norte,alta,recibiendo,,2026-08-22T19:28:00-05:00,,jefe_urgencias:110010918608
+110010918630,Clínica Universitaria Colombia,Teusaquillo,Norte,alta,saturado,Urgencias por encima del 130% de su capacidad,2026-08-22T19:27:00-05:00,2026-08-22T23:27:00-05:00,jefe_urgencias:110010918630
+110010918655,Clínica Reina Sofia Pediatrica Y Mujer,Usaquén,Norte,media,recibiendo,,2026-08-22T19:03:00-05:00,,jefe_urgencias:110010918655
+110010918668,Clínica Infantil Santa María Del Lago,Engativá,Norte,alta,saturado,Sin especialista de turno en la noche,2026-08-22T19:40:00-05:00,2026-08-22T21:40:00-05:00,jefe_urgencias:110010918668
+110010922401,Empresa Social Del Estado Hospital Universitario de La Samaritana,San Cristóbal,Centro Oriente,alta,saturado,Sin camas UCI adultos,2026-08-22T19:03:00-05:00,2026-08-22T22:03:00-05:00,jefe_urgencias:110010922401
+110010936101,Clínica de Marly,Chapinero,Norte,alta,contingencia,Tomógrafo fuera de servicio hasta las 06:00,2026-08-22T19:54:00-05:00,2026-08-23T01:54:00-05:00,jefe_urgencias:110010936101
+110010945601,Hospital Universitario San Ignacio,Chapinero,Norte,alta,recibiendo,,2026-08-22T19:47:00-05:00,,jefe_urgencias:110010945601
+110010952310,Virrey Solis I.P.S S.A. Americas,Puente Aranda,Sur Occidente,baja,recibiendo,,2026-08-22T19:21:00-05:00,,jefe_urgencias:110010952310
+110010952315,Virrey Solis IPS S.A - Clínica Suba,Suba,Norte,baja,recibiendo,,2026-08-22T19:22:00-05:00,,jefe_urgencias:110010952315
+110010952317,Virrey Solis IPS.S.A. Calle 98,Barrios Unidos,Norte,baja,saturado,Urgencias por encima del 130% de su capacidad,2026-08-22T19:37:00-05:00,2026-08-22T22:37:00-05:00,jefe_urgencias:110010952317
+110010959901,Clínica Del Country IPS,Chapinero,Norte,alta,saturado,Espera en puerta mayor a 4 horas,2026-08-22T19:53:00-05:00,2026-08-22T22:53:00-05:00,jefe_urgencias:110010959901
+110010966601,Clínica Del Occidente S.A.,Kennedy,Sur Occidente,alta,recibiendo,,2026-08-22T19:27:00-05:00,,jefe_urgencias:110010966601
+110011613301,Fundación Hospital Infantil Universitario de San Jose,Barrios Unidos,Norte,alta,saturado,Sin camas UCI adultos,2026-08-22T19:21:00-05:00,2026-08-23T01:21:00-05:00,jefe_urgencias:110011613301
+110011693801,Hospital Militar Central,Chapinero,Norte,alta,recibiendo,,2026-08-22T19:20:00-05:00,,jefe_urgencias:110011693801
+110011864201,Hospital Universitario Mayor-Mederi,Los Mártires,Centro Oriente,alta,saturado,Espera en puerta mayor a 4 horas,2026-08-22T19:46:00-05:00,2026-08-22T23:46:00-05:00,jefe_urgencias:110011864201
+110011864202,Hospital Universitario Barrios Unidos-Mederi,Barrios Unidos,Norte,media,recibiendo,,2026-08-22T19:33:00-05:00,,jefe_urgencias:110011864202
+110012156401,Medicentro Familiar IPS SAS,Fontibón,Sur Occidente,media,recibiendo,,2026-08-22T19:17:00-05:00,,jefe_urgencias:110012156401
+110012156404,Clínica Medicentro Familiar Sede Suba,Suba,Norte,media,recibiendo,,2026-08-22T19:22:00-05:00,,jefe_urgencias:110012156404
+110012215001,Clínica Medical S.A.S.,Kennedy,Sur Occidente,media,recibiendo,,2026-08-22T19:46:00-05:00,,jefe_urgencias:110012215001
+110012507001,Administradora Clínica La Colina SAS,Suba,Norte,alta,contingencia,Falla de suministro de oxígeno en el piso 3,2026-08-22T19:26:00-05:00,2026-08-23T01:26:00-05:00,jefe_urgencias:110012507001
+110012529701,Clínica Los Nogales SAS,Chapinero,Norte,alta,saturado,Sin camas UCI adultos,2026-08-22T19:51:00-05:00,2026-08-22T23:51:00-05:00,jefe_urgencias:110012529701
+110013028901,Unidad de Servicios de Salud Santa Clara Hospital Universitario,Antonio Nariño,Centro Oriente,alta,saturado,"Sala de reanimación ocupada, dos pacientes en espera de cama",2026-08-22T19:51:00-05:00,2026-08-23T01:51:00-05:00,jefe_urgencias:110013028901
+110013028902,Unidad de Servicios de Salud San Blas,San Cristóbal,Centro Oriente,media,cerrado,Cierre temporal de urgencias por obra,2026-08-22T19:45:00-05:00,2026-08-22T22:45:00-05:00,jefe_urgencias:110013028902
+110013028915,Unidad de Servicios de Salud Perseverancia,Santa Fe,Centro Oriente,baja,saturado,Sin especialista de turno en la noche,2026-08-22T19:40:00-05:00,2026-08-23T01:40:00-05:00,jefe_urgencias:110013028915
+110013028916,Unidad de Servicios de Salud Samper Mendoza,Los Mártires,Centro Oriente,baja,recibiendo,,2026-08-22T19:18:00-05:00,,jefe_urgencias:110013028916
+110013028917,Unidad de Servicios de Salud Jorge Eliecer Gaitan,Santa Fe,Centro Oriente,baja,recibiendo,,2026-08-22T19:53:00-05:00,,jefe_urgencias:110013028917
+110013028918,Unidad de Servicios de Salud Diana Turbay,Rafael Uribe Uribe,Centro Oriente,baja,recibiendo,,2026-08-22T19:07:00-05:00,,jefe_urgencias:110013028918
+110013028919,Unidad de Servicios de Salud Chircales,Rafael Uribe Uribe,Centro Oriente,baja,saturado,Sin especialista de turno en la noche,2026-08-22T19:31:00-05:00,2026-08-22T22:31:00-05:00,jefe_urgencias:110013028919
+110013028920,Unidad de Servicios de Salud Olaya,Rafael Uribe Uribe,Centro Oriente,baja,recibiendo,,2026-08-22T19:01:00-05:00,,jefe_urgencias:110013028920
+110013028929,Unidad de Servicios de Salud Victoria,San Cristóbal,Centro Oriente,media,recibiendo,,2026-08-22T19:09:00-05:00,,jefe_urgencias:110013028929
+110013029101,Unidad de Servicios de Salud Simón Bolívar,Usaquén,Norte,alta,saturado,Ocupación 159% — recibe solo con aceptación explícita,2026-08-22T19:07:00-05:00,2026-08-22T22:07:00-05:00,jefe_urgencias:110013029101
+110013029103,Unidad de Servicios de Salud Engativá Calle 80,Engativá,Norte,media,saturado,Sin especialista de turno en la noche,2026-08-22T19:15:00-05:00,2026-08-23T01:15:00-05:00,jefe_urgencias:110013029103
+110013029104,Unidad de Servicios de Salud Emaus,Engativá,Norte,baja,recibiendo,,2026-08-22T19:02:00-05:00,,jefe_urgencias:110013029104
+110013029114,Unidad de Servicios de Salud Centro de Servicios Especializado,Suba,Norte,media,recibiendo,,2026-08-22T19:40:00-05:00,,jefe_urgencias:110013029114
+110013029116,Unidad de Servicios de Salud Gaitana I,Suba,Norte,baja,recibiendo,,2026-08-22T19:16:00-05:00,,jefe_urgencias:110013029116
+110013029123,Unidad de Servicios de Salud Chapinero,Barrios Unidos,Norte,baja,recibiendo,,2026-08-22T19:38:00-05:00,,jefe_urgencias:110013029123
+110013029401,Unidad de Servicios de Salud El Tunal,Tunjuelito,Sur,alta,contingencia,Sobreocupación de urgencias 281% — sin camas de observación,2026-08-22T19:19:00-05:00,2026-08-22T22:19:00-05:00,jefe_urgencias:110013029401
+110013029402,Unidad de Servicios de Salud Meissen,Ciudad Bolívar,Sur,media,recibiendo,,2026-08-22T19:08:00-05:00,,jefe_urgencias:110013029402
+110013029407,Unidad de Servicios de Salud Ambulatoria Tunjuelito,Tunjuelito,Sur,baja,recibiendo,,2026-08-22T19:10:00-05:00,,jefe_urgencias:110013029407
+110013029413,Unidad de Servicios de Salud Jerusalen,Ciudad Bolívar,Sur,baja,recibiendo,,2026-08-22T19:28:00-05:00,,jefe_urgencias:110013029413
+110013029428,Unidad de Servicios de Salud Vista Hermosa,Ciudad Bolívar,Sur,baja,recibiendo,,2026-08-22T19:01:00-05:00,,jefe_urgencias:110013029428
+110013029430,Unidad de Servicios de Salud Usme,Usme,Sur,baja,recibiendo,,2026-08-22T19:52:00-05:00,,jefe_urgencias:110013029430
+110013029431,Unidad de Servicios de Salud Santa Librada I,Usme,Sur,baja,recibiendo,,2026-08-22T19:18:00-05:00,,jefe_urgencias:110013029431
+110013029446,Unidad de Servicios de Salud San Juan de Sumapáz,Sumapaz,Sur,baja,recibiendo,,2026-08-22T19:46:00-05:00,,jefe_urgencias:110013029446
+110013029449,Unidad de Servicios de Salud Nazareth,Sumapaz,Sur,baja,saturado,Sin camas UCI adultos,2026-08-22T19:28:00-05:00,2026-08-22T23:28:00-05:00,jefe_urgencias:110013029449
+110013029450,Hospital de Usme,Usme,Sur,baja,saturado,Urgencias por encima del 130% de su capacidad,2026-08-22T19:51:00-05:00,2026-08-23T01:51:00-05:00,jefe_urgencias:110013029450
+110013029601,Hospital Occidente de Kennedy,Kennedy,Sur Occidente,alta,contingencia,Sobreocupación de urgencias 281% — solo triage 1 con confirmación,2026-08-22T19:07:00-05:00,2026-08-23T01:07:00-05:00,jefe_urgencias:110013029601
+110013029603,Hospital Pediátrico Tintal,Kennedy,Sur Occidente,media,recibiendo,,2026-08-22T19:19:00-05:00,,jefe_urgencias:110013029603
+110013029604,Centro de Salud Patio Bonito,Kennedy,Sur Occidente,baja,recibiendo,,2026-08-22T19:31:00-05:00,,jefe_urgencias:110013029604
+110013029622,Centro de Salud Trinidad Galán,Puente Aranda,Sur Occidente,baja,recibiendo,,2026-08-22T19:13:00-05:00,,jefe_urgencias:110013029622
+110013029625,Hospital Fontibón,Fontibón,Sur Occidente,media,recibiendo,,2026-08-22T19:19:00-05:00,,jefe_urgencias:110013029625
+110013029654,Hospital de Bosa,Bosa,Sur Occidente,alta,saturado,Ocupación 138% — sin camas UCI adultos,2026-08-22T19:02:00-05:00,2026-08-22T21:02:00-05:00,jefe_urgencias:110013029654
+110013097001,Grupo Empresarial Jarbsalud IPS S.A.S.,Teusaquillo,Norte,baja,recibiendo,,2026-08-22T19:32:00-05:00,,jefe_urgencias:110013097001
+110013390301,Loscobos Medical Center SAS - Loscobos,Usaquén,Norte,alta,recibiendo,,2026-08-22T19:01:00-05:00,,jefe_urgencias:110013390301
+110013409101,Clininorte 161,Usaquén,Norte,baja,recibiendo,,2026-08-22T19:40:00-05:00,,jefe_urgencias:110013409101
+110013455201,Sociedad Medica Alcala SAS,Usaquén,Norte,baja,recibiendo,,2026-08-22T19:11:00-05:00,,jefe_urgencias:110013455201
+110013502501,Clínica Nueva El Lago S.A.S - Sede Calle 76,Chapinero,Norte,media,saturado,Sin camas UCI adultos,2026-08-22T19:36:00-05:00,2026-08-22T23:36:00-05:00,jefe_urgencias:110013502501
+110013627801,Clínica Azul,Barrios Unidos,Norte,media,recibiendo,,2026-08-22T19:16:00-05:00,,jefe_urgencias:110013627801
+110013630032,Central de Urgencias Norte,Usaquén,Norte,baja,recibiendo,,2026-08-22T19:39:00-05:00,,jefe_urgencias:110013630032
+110013630033,Unidad de Urgencias Puente Aranda,Puente Aranda,Sur Occidente,baja,recibiendo,,2026-08-22T19:52:00-05:00,,jefe_urgencias:110013630033
