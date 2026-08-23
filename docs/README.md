@@ -8,6 +8,7 @@
 | **II** | [pulso-plataforma-afiliacion-y-tramites.md](pulso-plataforma-afiliacion-y-tramites.md) | Modelo de datos completo, roles, afiliación autoverificada contra REPS, CRUD, recepción asistida, **los 15 trámites**, multitenancy, auditoría de eventos y de completitud del registro. |
 | **III** | [pulso-produccion-plan-maestro.md](pulso-produccion-plan-maestro.md) | Arquitectura objetivo, stack justificado, **34 vistas**, webhooks de entrada y salida, integración **IHCE/RDA (FHIR R4)**, seguridad, observabilidad, CI, y **el backlog de 64 tareas**. |
 | **IV** | [multitenancy-y-autenticacion.md](multitenancy-y-autenticacion.md) | La solución completa de identidad, login, RBAC, aislamiento de inquilinos y **los 19 casos límite**. |
+| **V** | [campo-agente-y-coordinacion.md](campo-agente-y-coordinacion.md) | El agente conversacional con contexto, el sector del móvil y la coordinación multi-unidad en un incidente. **Análisis del backend existente y 6 tareas nuevas (ola 6).** |
 
 > **El hallazgo que reordena el producto** está en [III §0](pulso-produccion-plan-maestro.md#0-el-hallazgo-que-reordena-el-producto):
 > Colombia tiene el modelo IHCE en operación desde el **15 de abril de 2026**, obligatorio para todo

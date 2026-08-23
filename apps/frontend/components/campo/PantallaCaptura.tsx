@@ -23,7 +23,10 @@ import { CASOS_REALES, type CasoReal } from "@/lib/casos-reales.generado";
 import { MENSAJE_FALLO, type FalloDictado } from "@/lib/useDictadoVoz";
 import { OrbeVoz, type EstadoOrbe } from "./OrbeVoz";
 
-const MINIMO_CARACTERES = 10;
+export const MINIMO_CARACTERES = 10;
+
+/** Espejo de VENTANA_AUTO_MS de la página, para dibujar la barra. */
+const SEGUNDOS_AUTO = 3;
 
 export function PantallaCaptura({
   texto,
@@ -42,6 +45,8 @@ export function PantallaCaptura({
   analizando,
   sinSenal,
   onCancelar,
+  autoRestaS,
+  onCancelarAuto,
 }: {
   texto: string;
   onTexto: (t: string) => void;
@@ -59,7 +64,12 @@ export function PantallaCaptura({
   analizando: boolean;
   sinSenal: boolean;
   onCancelar: () => void;
+  /** Segundos que faltan para el análisis automático. null si no hay cuenta. */
+  autoRestaS: number | null;
+  onCancelarAuto: () => void;
 }) {
+  const contando = autoRestaS !== null;
+
   const estadoOrbe: EstadoOrbe =
     analizando || transcribiendo
       ? "procesando"
@@ -175,21 +185,47 @@ export function PantallaCaptura({
         )}
       </div>
 
+      {/*
+        ── EL BOTÓN LO DICE SOLO ───────────────────────────────────────
+        Al terminar de dictar no hay que pulsar nada: el propio botón toma la
+        cuenta y arranca. Se enseña, con la barra vaciándose encima, porque un
+        sistema que se dispara sin avisar no se puede corregir — y un dictado
+        con prisa a veces necesita una palabra más.
+
+        «Cancelar» pasa a «Parar» mientras corre: lo que hay que poder detener
+        en ese momento no es el caso, es la cuenta.
+      */}
       <div className="mt-3 flex w-full gap-2">
         <button
-          onClick={onCancelar}
-          className="px-4 min-h-14 rounded-2xl border border-[color:var(--color-borde)]"
+          onClick={contando ? onCancelarAuto : onCancelar}
+          className="min-h-14 rounded-2xl border border-[color:var(--color-borde)] px-4"
         >
-          Cancelar
+          {contando ? "Parar" : "Cancelar"}
         </button>
+
         <button
           onClick={onAnalizar}
           disabled={!hayTexto || analizando}
-          className="flex-1 min-h-14 rounded-2xl font-bold text-base
+          className="relative min-h-14 flex-1 overflow-hidden rounded-2xl text-base font-bold
                      bg-[color:var(--color-info)] text-[#04121f]
                      disabled:opacity-40"
         >
-          {analizando ? "Analizando…" : "Analizar y rutear"}
+          {/* El tiempo que queda se ve sin leer el número, que es como se mira
+              una pantalla con guantes y con prisa. */}
+          {contando && (
+            <span
+              aria-hidden
+              className="absolute inset-y-0 left-0 bg-black/25 transition-[width] duration-200 ease-linear"
+              style={{ width: `${((autoRestaS ?? 0) / SEGUNDOS_AUTO) * 100}%` }}
+            />
+          )}
+          <span className="relative">
+            {analizando
+              ? "Analizando…"
+              : contando
+                ? `Buscando destino en ${autoRestaS}…`
+                : "Analizar y rutear"}
+          </span>
         </button>
       </div>
 
@@ -240,6 +276,7 @@ export function PantallaCaptura({
 
         {casoReal && <ProcedenciaCasoReal caso={casoReal} />}
       </div>
+
     </section>
   );
 }

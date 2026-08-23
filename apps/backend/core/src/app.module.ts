@@ -22,6 +22,13 @@ import { PulsoErrorFilter } from './common/pulso-error.filter';
 import { RoutingModule } from './routing/routing.module';
 import { EscalamientoModule } from './escalamiento/escalamiento.module';
 import { CapacidadesModule } from './capacidades/capacidades.module';
+import { AdminModule } from './admin/admin.module';
+import { EventosModule } from './eventos/eventos.module';
+import { AuditoriaModule } from './auditoria/auditoria.module';
+import { InvitacionesModule } from './invitaciones/invitaciones.module';
+import { RdaModule } from './rda/rda.module';
+import { AfiliacionModule } from './afiliacion/afiliacion.module';
+import { MovilesModule } from './moviles/moviles.module';
 
 @Module({
   imports: [
@@ -41,6 +48,12 @@ import { CapacidadesModule } from './capacidades/capacidades.module';
 
     // Estado de sesión (@Global): casos, handshakes e historial de aceptación.
     AlmacenModule,
+
+    // La línea de tiempo del caso (@Global). Punto único de escritura de
+    // evento_caso y el sitio donde se resuelve quién es el actor. Va antes de
+    // los módulos de dominio porque la tarea 3.2 va a inyectarlo en casi
+    // todos.
+    EventosModule,
 
     // Costura con el servicio interno de IA. Único dueño de AI_CORE_BASE_URL.
     AiCoreModule,
@@ -65,6 +78,25 @@ import { CapacidadesModule } from './capacidades/capacidades.module';
     EscalamientoModule,
     // En qué modo corre cada integración. Lo lee la barra de /campo.
     CapacidadesModule,
+
+    // Catálogos clínicos versionados y versiones de prompt/scoring (5.11).
+    // Solo admin_plataforma; todo cambio deja evento. Su guard es propio y
+    // corre DESPUÉS del global: aquí no basta con tener sesión.
+    AdminModule,
+    // El expediente forense de un caso: GET /auditoria/casos/:id.
+    AuditoriaModule,
+    // Cómo entra el segundo humano de una organización: equipo e invitaciones.
+    InvitacionesModule,
+    // Quién puede estar en el sistema: autoverificación contra el REPS y alta
+    // de organizaciones. Sus dos endpoints públicos están justificados en
+    // afiliacion.controller.ts.
+    AfiliacionModule,
+    // Posición del móvil en vivo y cobertura de ciudad (tarea 3.7).
+    MovilesModule,
+
+    // Pre-llenado del RDA en FHIR R4 (tarea 4.8). Pre-llena, NO reporta al
+    // IHCE: el borrador queda pendiente hasta que un humano lo firme.
+    RdaModule,
 
     // El que vigila el reloj: vence handshakes, re-rutea y detecta demoras.
     VigilanteModule,

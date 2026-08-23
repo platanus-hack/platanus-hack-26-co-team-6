@@ -257,40 +257,7 @@ def test_si_la_llamada_falla_no_se_pierde_el_aviso(monkeypatch):
 
 
 # ── Autenticación contra core ────────────────────────────────────
-
-
-async def test_expira_en_se_interpreta_en_milisegundos(monkeypatch):
-    # core lo arma con Date.now(): son MILISEGUNDOS. Tratarlo como segundos
-    # lo pone en el año 57000 y el token no se renovaría jamás.
-    import time as _t
-
-    from app.clientes import core as cliente_core
-
-    monkeypatch.setattr(settings, "core_password", "clave")
-    cliente_core._invalidar()
-
-    class ResFalsa:
-        status_code = 200
-        cookies = {"pulso_sesion": "tok-1"}
-
-        def json(self):
-            return {"ok": True, "expiraEn": (_t.time() + 3600) * 1000}
-
-    class ClienteFalso:
-        async def post(self, *a, **kw):
-            return ResFalsa()
-
-    tok = await cliente_core._token_valido(ClienteFalso())
-    assert tok == "tok-1"
-    # Dentro de la hora siguiente, no del año 57000.
-    assert _t.time() < cliente_core._expira_en < _t.time() + 7200
-    cliente_core._invalidar()
-
-
-async def test_sin_password_no_manda_authorization(monkeypatch):
-    from app.clientes import core as cliente_core
-
-    monkeypatch.setattr(settings, "core_password", "")
-    cliente_core._invalidar()
-
-    assert await cliente_core._token_valido(None) is None
+# `voz` ya no hace login con la contraseña de turno: se identifica con el token
+# de servicio `svc:voz` (tarea 1.8). Las pruebas de esa costura —el Bearer, el
+# 403 por alcance, el modo sin credencial y lo que reporta /listo— viven en
+# tests/test_token_servicio.py.
