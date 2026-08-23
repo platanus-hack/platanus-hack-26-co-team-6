@@ -73,6 +73,46 @@ export class RoutingService {
         );
   }
 
+  /**
+   * ⭐ EL GUARD DE ACEPTACION UNICA — el que impide dos hospitales para un paciente.
+   *
+   * Reserva el destino de un caso. Es idempotente por `requestKey` y, bajo
+   * Postgres, corre dentro de `pg_advisory_xact_lock` + `select … for update`:
+   * dos aceptaciones simultaneas se serializan y la segunda vuelve con
+   * `PULSO_DESTINATION_ALREADY_ACCEPTED`.
+   *
+   * POR QUE ESTE METODO EXISTE APARTE DE `respond`
+   *
+   *   `respond` exige primero evidencia de despacho para ESE destino, y esa
+   *   precondicion es del camino `POST /dispatch`, no del handshake: la sede
+   *   que acepta muchas veces NO es la #1 del ranking —el fan-out toca
+   *   varias, y el vigilante re-rutea a la siguiente cuando una no contesta—
+   *   y el estado de ruteo vive en RAM hasta la tarea 1.2. Encadenar la
+   *   reserva a esa precondicion dejaria la carrera abierta exactamente
+   *   cuando hay que cerrarla, que es cuando hay varias sedes tocadas.
+   *
+   *   Asi que la evidencia se ADJUNTA si existe (y entonces se audita) pero
+   *   no se exige. El guard es uno solo: `store.respond`. Aqui no se duplica
+   *   ni una linea de esa logica — dos mecanismos resolviendo la misma
+   *   carrera es peor que cualquiera de los dos por separado.
+   */
+  async aceptarDestino(
+    caseId: string,
+    destinationCode: string,
+    requestKey: string,
+    fingerprint: string,
+  ): Promise<RoutingResponse> {
+    const evidence = (await this.store.decision(caseId))?.evidence;
+    return this.store.respond({
+      caseId,
+      destinationCode,
+      requestKey,
+      fingerprint,
+      ...(evidence ? { evidence } : {}),
+    });
+  }
+
+  /** Aceptacion por el camino de despacho: ademas exige evidencia completa. */
   respond(
     caseId: string,
     destinationCode: string,
@@ -81,14 +121,8 @@ export class RoutingService {
   ): Promise<RoutingResponse> {
     return this.dispatch(caseId, destinationCode).then((decision) =>
       'evidence' in decision
-      ? this.store.respond({
-          caseId,
-          destinationCode,
-          requestKey,
-          fingerprint,
-          evidence: decision.evidence,
-        })
-      : { accepted: false, error: decision.error },
+        ? this.aceptarDestino(caseId, destinationCode, requestKey, fingerprint)
+        : { accepted: false, error: decision.error },
     );
   }
 }

@@ -21,6 +21,7 @@ import {
 import { AlmacenService } from '../almacen/almacen.service';
 import { SedesService } from '../sedes/sedes.service';
 import { CongestionService } from '../scoring/congestion.service';
+import { RoutingService } from '../routing/routing.service';
 import { VozClient } from '../voz/voz.client';
 
 @Injectable()
@@ -31,6 +32,7 @@ export class HandshakeService {
     private readonly almacen: AlmacenService,
     private readonly sedes: SedesService,
     private readonly congestion: CongestionService,
+    private readonly routing: RoutingService,
     private readonly voz: VozClient,
   ) {}
 
@@ -68,7 +70,48 @@ export class HandshakeService {
         handshake: h,
         congestionActualizada: await this.congestionDe(h.sedeCodigo),
         aplicada: false,
+        codigo: 'PULSO_ILLEGAL_TRANSITION',
       };
+    }
+
+    // ⭐ GUARD DE ACEPTACION UNICA — tarea 0.1.
+    //
+    // Hasta aqui solo se habia mirado el estado de ESTE handshake. Eso deja
+    // fuera la pregunta que importa: **¿ya acepto otra sede este caso?**
+    //
+    // Lo que tapaba el hueco era que el fan-out es secuencial. El dia que
+    // alguien active fan-out paralelo —que es la optimizacion obvia— dos
+    // hospitales preparan cama para el mismo paciente. El guard ya existia,
+    // estaba bien hecho y no lo llamaba nadie.
+    //
+    // El requestKey lleva handshake + decision para que el DOBLE TOQUE siga
+    // siendo idempotente: la segunda vez devuelve el mismo resultado guardado
+    // en vez de pelear con la reserva que ella misma hizo.
+    if (cuerpo.decision === 'aceptado') {
+      const reserva = await this.routing.aceptarDestino(
+        h.casoId,
+        h.sedeCodigo,
+        `${h.id}:${cuerpo.decision}`,
+        `${h.casoId}:${h.sedeCodigo}:${cuerpo.decision}`,
+      );
+
+      if (!reserva.accepted) {
+        const codigo = reserva.error?.error.code ?? 'PULSO_INTERNAL';
+        this.log.warn(
+          `aceptacion rechazada por el guard: ${h.sedeCodigo} sobre caso ` +
+            `${h.casoId} — ${codigo}`,
+        );
+        // El handshake NO se toca: sigue 'enviado' y vencera solo. Lo que
+        // cambia es que quien pregunto se entera de que el caso ya es de
+        // otra sede, y `codigo` se lo dice sin obligarle a adivinar mirando
+        // un estado que no cambio.
+        return {
+          handshake: h,
+          congestionActualizada: await this.congestionDe(h.sedeCodigo),
+          aplicada: false,
+          codigo,
+        };
+      }
     }
 
     const ahora = new Date();
