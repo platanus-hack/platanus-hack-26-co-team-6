@@ -94,6 +94,19 @@ services:
       # openssl rand -hex 32
       - key: SESION_SECRET
         sync: false
+
+      # ── Credencial de plataforma (tarea 1.8) ──────────────────────────
+      # Abre POST /auth/servicio, la ruta que emite el token con el que `voz`
+      # se identifica. SIN ESTA VARIABLE LA RUTA NIEGA A TODO EL MUNDO y no
+      # hay forma de emitir el token: el canal de WhatsApp no arranca.
+      # Es la excepción a la regla de degradación del repo, a propósito.
+      #   openssl rand -hex 32
+      - key: PULSO_ADMIN_TOKEN
+        sync: false
+      # Sólo al rotar SESION_SECRET: el anterior se deja aquí y core sigue
+      # aceptando 24 h los tokens ya emitidos, para que rotar no tumbe a voz.
+      # - key: SESION_SECRET_ANTERIOR
+      #   sync: false
       # ⚠️ TIENE QUE SER IDÉNTICO a SECRETO_ENDPOINT de pulso-voz: es el
       #    header X-Secreto con el que core llama a los endpoints /interno de
       #    voz. Distinto secreto = 403 silencioso (voz.client.ts no lanza,
@@ -174,9 +187,26 @@ services:
       # ── Secretos: se ponen a mano en el dashboard, NUNCA en este archivo ──
       # `sync: false` es justo eso: Render pide el valor y no lo versiona.
 
-      # ⚠️ IDÉNTICA a OPERADOR_PASSWORD de pulso-core. Si no coinciden, el
-      #    flujo de WhatsApp muere en 401: «core rechazó el login».
-      - key: CORE_PASSWORD
+      # ⚠️ ESTA VARIABLE NO SE PUEDE LLENAR ANTES DEL PRIMER DEPLOY.
+      #    Ya no es la contraseña de turno (eso hacía indistinguible un bot de
+      #    una persona en la auditoría). Es un token de servicio `svc:voz` con
+      #    alcance ['caso:crear','caso:leer','notificar'] que EMITE core, y core
+      #    exige PULSO_ADMIN_TOKEN para emitirlo. El orden es:
+      #
+      #      1. desplegar core con PULSO_ADMIN_TOKEN puesto
+      #      2. shell de Render en pulso-core:
+      #           curl -X POST http://localhost:3001/auth/servicio \
+      #                -H "x-pulso-admin-token: $PULSO_ADMIN_TOKEN" \
+      #                -H 'content-type: application/json' -d '{"nombre":"voz"}'
+      #         (desde fuera no se puede: core es pserv, no tiene URL pública)
+      #      3. pegar el `token` aquí y redesplegar voz
+      #
+      # ⚠️ DURA 24 HORAS Y NO SE RENUEVA SOLO (DURACION_SERVICIO_MS en
+      #    sesion.service.ts:59). Si el demo es más de un día después de
+      #    emitirlo, hay que volver a emitirlo o voz deja de hablarle a core.
+      #    Vacío no degrada a modo abierto: voz simplemente no llama a core y
+      #    lo dice en GET /listo → core.identidad.
+      - key: CORE_SERVICE_TOKEN
         sync: false
       # ⚠️ IDÉNTICO a VOZ_SECRETO de pulso-core. Protege los endpoints que
       #    disparan acciones caras (llamar por teléfono). En Render ponlo

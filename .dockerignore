@@ -46,3 +46,6 @@ scripts/etl
 !data/**/*.md
 
 **/.DS_Store
+
+# El arnés de carga (k6) no es parte de ninguna imagen.
+carga
