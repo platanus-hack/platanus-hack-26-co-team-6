@@ -40,6 +40,7 @@ from ..canales.modelos import MensajeEntrante
 from ..clientes import ai_core
 from ..config import settings
 from ..despachador import actualizar_posicion, despachar
+from .. import logistica, turno
 from ..sesiones import obtener
 from ..webhooks_recibidos import anotar_resultado, reclamar
 from .. import metricas
@@ -153,6 +154,23 @@ async def procesar(m: MensajeEntrante) -> None:
             # salga la ambulancia. La app muestra el dictado en pantalla;
             # por WhatsApp esta es la pantalla.
             await _eco_transcripcion(m, decision)
+        elif m.id_boton:
+            # Un botón NO pasa por el LLM: su id YA es la intención, sin
+            # ambigüedad. Va antes que la rama de texto porque un botón llega
+            # como tipo "texto"; si lo atrapa aquella, se paga latencia y
+            # riesgo de interpretación por un dato que ya viene estructurado.
+            t = turno.de_telefono(m.de)
+            if t and await logistica.confirmar(t.unidad_id, m.id_boton):
+                await _anotar(m, {"estado": "procesado", "accion": m.id_boton})
+            else:
+                await whatsapp.enviar_texto(
+                    m.de, "Ese botón ya no aplica. ¿En qué vas?"
+                )
+                await _anotar(
+                    m, {"estado": "ignorado", "accion": "boton_fuera_de_turno"}
+                )
+            return
+
         elif m.tipo == "texto":
             await _acusar(m, "Copiado, procesando…")
             decision = await ai_core.interpretar(

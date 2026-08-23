@@ -177,7 +177,11 @@ def _de_meta(m: dict[str, Any], contactos: dict[str, Any]) -> MensajeEntrante:
     # útil que descartar el mensaje.
     if tipo == "interactive":
         i = m.get("interactive") or {}
-        cuerpo = (i.get("button_reply") or i.get("list_reply") or {}).get("title", "")
+        respuesta = i.get("button_reply") or i.get("list_reply") or {}
+        cuerpo = respuesta.get("title", "")
+        # El id es la intención sin ambigüedad. El título es lo que el
+        # paramédico vio; el id es lo que quiso decir.
+        base["id_boton"] = respuesta.get("id")
         return MensajeEntrante(**base, tipo="texto", texto=cuerpo)
 
     if tipo == "button":
@@ -243,6 +247,39 @@ async def enviar_ubicacion(
                 "longitude": lng,
                 "name": nombre,
                 "address": direccion or nombre,
+            },
+        },
+        a,
+    )
+
+
+async def enviar_botones(
+    a: str, texto: str, botones: list[tuple[str, str]]
+) -> dict[str, Any]:
+    """Mensaje con botones de respuesta rápida.
+
+    Un paramédico con guantes, de noche, con un paciente al lado, no teclea:
+    toca. Y la respuesta llega estructurada (`button_reply.id`) en vez de como
+    texto libre que hay que volver a interpretar — menos LLM, menos error.
+
+    WhatsApp permite **máximo 3 botones** y **20 caracteres** por título. Pasarse
+    no da un error claro: la API rechaza el mensaje entero y el paramédico se
+    queda esperando. Por eso se recorta aquí.
+    """
+    if not botones:
+        return await enviar_texto(a, texto)
+
+    filas = [
+        {"type": "reply", "reply": {"id": bid, "title": titulo[:20]}}
+        for bid, titulo in botones[:3]
+    ]
+    return await _enviar(
+        {
+            "type": "interactive",
+            "interactive": {
+                "type": "button",
+                "body": {"text": texto[:1024]},
+                "action": {"buttons": filas},
             },
         },
         a,
