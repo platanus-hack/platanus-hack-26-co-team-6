@@ -6,6 +6,17 @@
  * de su vida (enviado → aceptado, o → timeout con su latencia), y el vigilante
  * puede reintentar. Insertar sin más duplicaría filas y `pAceptacion` contaría
  * dos veces la misma respuesta.
+ *
+ * ⚠️ DEPENDE DE QUE `sede` ESTÉ CARGADA. `handshake.codigo_sede` tiene FK a
+ *    `sede`, y hoy esa tabla está VACÍA porque el ETL del REPS no ha corrido.
+ *    Mientras tanto core sirve las 14 semillas de `semillas.ts`, cuyos códigos
+ *    no existen en la base — así que **ningún handshake se persiste** y el
+ *    fallo sale sólo en el log, porque `persistir()` no bloquea.
+ *
+ *    No es un bug de este archivo: es una dependencia de datos. Se resuelve
+ *    corriendo el ETL (carril de Zaid) o cargando las semillas en `sede`.
+ *    Verificado el 2026-08-23 contra la base real: caso sí persiste,
+ *    handshake falla con `handshake_codigo_sede_fkey`.
  */
 
 import { Logger } from '@nestjs/common';
@@ -41,7 +52,7 @@ export class PostgresRepositorio implements RepositorioPulso {
   async guardarCaso(c: Caso): Promise<void> {
     await this.pool.query(
       `insert into caso (
-         id, texto_crudo, resumen, triage, dx_cie, dx_descripcion,
+         id, texto_crudo, resumen, triage, dx_cie10, dx_descripcion,
          servicios_requeridos, complejidad_requerida, edad, sexo,
          signos_alarma, requiere_medico_abordo, confianza, tipo_movil,
          origen, creado_en, organizacion_id, movil_id, telefono_reporta
@@ -103,7 +114,7 @@ function aCaso(r: Record<string, unknown>): Caso {
     textoCrudo: String(r.texto_crudo ?? ''),
     resumen: String(r.resumen ?? ''),
     triage: Number(r.triage) as Caso['triage'],
-    dxCie10: (r.dx_cie as string) ?? null,
+    dxCie10: (r.dx_cie10 as string) ?? null,
     dxDescripcion: String(r.dx_descripcion ?? ''),
     serviciosRequeridos: (r.servicios_requeridos as number[]) ?? [],
     complejidadRequerida: (r.complejidad_requerida as Caso['complejidadRequerida']) ?? 'alta',

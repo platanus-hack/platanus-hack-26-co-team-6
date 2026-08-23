@@ -115,6 +115,23 @@ Y persiste `expiraEn`, que alguien agregó al contrato mientras tanto: sin eso,
 al reiniciar todos los handshakes pendientes quedan sin plazo y el vigilante
 no los vence nunca.
 
+**Verificado contra Postgres real (2026-08-23).** Las 9 migraciones aplicadas
+en un Supabase limpio, y probado escritura → «reinicio» → hidratación:
+upsert idempotente ✅, `organizacion_id` lleno ✅, PostGIS con `(lng,lat)` en
+el orden correcto ✅.
+
+Y ahí salió **un bug que los tests con dobles no podían ver**: la columna es
+`dx_cie10`, no `dx_cie`. Mi grep de exploración la truncó en el dígito. En
+producción cada caso habría fallado al persistir **en silencio**, porque
+`persistir()` no bloquea y solo deja el error en el log.
+
+🔴 **Dependencia operativa descubierta:** `handshake.codigo_sede` tiene FK a
+`sede`, y esa tabla está **vacía** — el ETL del REPS no ha corrido. core sirve
+las 14 semillas de `semillas.ts`, cuyos códigos no existen en la base, así que
+**hoy ningún handshake se persiste**. El caso sí. No es un bug de la 1.2: es
+una dependencia de datos que hay que resolver corriendo el ETL o cargando las
+semillas en `sede`. Carril de Zaid.
+
 ---
 
 ## 1.6 · Policies de RLS + `caso_acceso`
