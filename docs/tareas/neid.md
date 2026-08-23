@@ -211,7 +211,7 @@
 
 **Trampas.** La tentación es dejar que cada servicio inserte directo. **No.** Un solo punto de escritura es lo que permite el test de cobertura de eventos (5.12) y lo que evita que dentro de un mes haya eventos con formas distintas.
 
-> ### ⚠️ Esta tarea la hizo el carril de Sebas
+> ### ⚠️ Esta tarea la hizo el carril de Sebas — [PR #20](https://github.com/platanus-hack/platanus-hack-26-co-team-6/pull/20)
 >
 > **Neid: revísala como tuya.** Se hizo desde fuera de tu carril porque bloqueaba
 > cuatro tareas de Sebas (`3.2`, `3.10`, `4.1`, `4.5`) y la ola 3 no podía
