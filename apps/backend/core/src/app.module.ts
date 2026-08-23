@@ -5,6 +5,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { HealthController } from './health/health.controller';
 import { AuthModule } from './auth/auth.module';
 import { AlmacenModule } from './almacen/almacen.module';
+import { EventosModule } from './eventos/eventos.module';
 import { AiCoreModule } from './ai-core/ai-core.module';
 import { VozModule } from './voz/voz.module';
 import { VigilanteModule } from './vigilante/vigilante.module';
@@ -48,6 +49,10 @@ import { CatalogoModule } from './catalogo/catalogo.module';
 
     // Estado de sesión (@Global): casos, handshakes e historial de aceptación.
     AlmacenModule,
+
+    // evento_caso: el único punto de escritura de la línea de tiempo (3.1).
+    // @Global — lo inyecta medio dominio.
+    EventosModule,
 
     // Costura con el servicio interno de IA. Único dueño de AI_CORE_BASE_URL.
     AiCoreModule,
