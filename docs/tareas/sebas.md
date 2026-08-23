@@ -227,7 +227,7 @@ Lo que hoy tapa el hueco es que el fan-out es secuencial. **El día que alguien 
 
 **Trampas.** Toca cuatro módulos a la vez. **Hazlo en un PR por módulo**, no en uno grande: son los archivos más calientes del repo y tres personas más los van a tocar en esta ola.
 
-> ### Estado real del cableado
+> ### Estado real del cableado — [PR #22](https://github.com/platanus-hack/platanus-hack-26-co-team-6/pull/22), sobre la [#20](https://github.com/platanus-hack/platanus-hack-26-co-team-6/pull/20) (la `3.1` de Neid, hecha desde este carril)
 >
 > **Un solo PR y no cuatro**, a propósito: nadie más tenía trabajo en vuelo sobre
 > esos archivos en el momento de hacerlo (Neid iba por `voz` y `ai-core`, Zaid y
