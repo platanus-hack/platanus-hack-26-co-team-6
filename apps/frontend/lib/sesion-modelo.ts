@@ -153,17 +153,34 @@ export function alcanzaSede(
 // ── A dónde va cada rol ──────────────────────────────────────────
 
 /**
- * Consolas que existen hoy. `/panel` llega con 2.7 y `/admin` con 5.11: hasta
- * entonces mandar a un admin ahí es mandarlo a un 404 justo después de un
- * login correcto, que es la peor pantalla posible.
+ * Consolas que existen hoy. Existir es tener ruta: si un rol apunta a una que
+ * no está en este Set, `rutaPorRol` lo desvía y quien llame **tiene que
+ * decirlo** — un login correcto que aterriza en un 404 es la peor pantalla
+ * posible, y uno que desvía en silencio, la segunda peor.
+ *
+ * Estar aquí no es tener permiso: la autorización la hace core, que responde
+ * 403 igual. Esto solo evita mandar a alguien a una ruta que no existe.
  */
-export const CONSOLAS_CONSTRUIDAS = new Set(["/campo", "/hospital", "/crue"]);
+export const CONSOLAS_CONSTRUIDAS = new Set([
+  "/campo",
+  "/hospital",
+  "/crue",
+  "/admin",
+  "/equipo",
+]);
+
+// `/auditoria` NO está: la única ruta que existe es `/auditoria/casos/:id`, y
+// no hay índice porque core no expone listado (solo `GET /auditoria/casos/:id`).
+// Al auditor se le dice que su consola no está y se le deja entrar por el
+// enlace del caso, desde el panel del CRUE. Cuando haya listado, va aquí.
 
 export const DESTINO: Record<Rol, string> = {
   paramedico: "/campo",
   jefe_urgencias: "/hospital",
   regulador_crue: "/crue",
-  admin_organizacion: "/panel",
+  // El route group es `(panel)`, pero el paréntesis no sale en la URL: la
+  // ruta real es `/equipo`. Apuntar a `/panel` era un 404.
+  admin_organizacion: "/equipo",
   admin_plataforma: "/admin",
   auditor: "/auditoria",
   // No debería llegar aquí nunca: un token de servicio no abre una consola.
@@ -231,6 +248,12 @@ export const ROL_DE_CONSOLA: Record<string, Rol[]> = {
   "/campo": ["paramedico"],
   "/hospital": ["jefe_urgencias"],
   "/crue": ["regulador_crue"],
+  "/equipo": ["admin_organizacion"],
+  "/admin": ["admin_plataforma"],
+  // La vista forense la leen tres roles, cada uno con su alcance. QUE caso
+  // puede ver cada uno lo decide core; esto solo evita pintar media pantalla
+  // antes del 403.
+  "/auditoria": ["auditor", "regulador_crue", "admin_organizacion"],
 };
 
 /** `/campo/ruta/abc` → `/campo`. Lo usa la guarda de las consolas. */

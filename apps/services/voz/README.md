@@ -131,8 +131,7 @@ Telegram sí está bien: usa `secret_token` y sin él core ignora todos los upda
 
 ### Deuda conocida
 
-`voz` se autentica contra core con `CORE_PASSWORD`, la contraseña compartida de los operadores. Eso
-significa que **en la auditoría un bot y una persona son indistinguibles**, y que `voz` puede hacer
-todo lo que puede un humano — incluido aceptar un traslado. Lo cierra la
-[tarea 1.8](../../../docs/tareas/juan.md#18--token-de-servicio-para-voz) con un token de servicio de
-alcance limitado.
+~~`voz` se autenticaba contra core con `CORE_PASSWORD`~~ — **cerrado por la tarea 1.8**: ahora usa
+`CORE_SERVICE_TOKEN`, un token de servicio con `sub: svc:voz` y alcance limitado
+(`caso:crear · caso:leer · notificar`). La auditoría distingue el bot de una persona y
+`POST /handshake/respond` le responde 403. La emisión es `POST /auth/servicio` (ver `env.example`).

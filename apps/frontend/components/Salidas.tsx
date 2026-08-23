@@ -11,9 +11,10 @@
  * le pasaron por radio. La salida tiene que estar en la pantalla, no en su
  * memoria.
  *
- * Se pintan las tres consolas de operación y nada más. `/panel`, `/admin` y
+ * Se pintan las tres consolas de operación y nada más. `/equipo`, `/admin` y
  * `/auditoria` existen pero son de escritorio y con rol: ofrecérselas a quien
- * se perdió sería mandarlo a un 403.
+ * se perdió sería mandarlo a un 403. Quien las necesita entra por el menú de
+ * la landing, que pasa por `/entrar`.
  */
 
 import Link from "next/link";
