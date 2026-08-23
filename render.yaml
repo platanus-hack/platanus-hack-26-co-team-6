@@ -221,15 +221,22 @@ services:
         value: 8090
 
       # La URL pública de ESTE servicio. Twilio abre un WebSocket de vuelta
-      # hacia acá, así que sin esto la telefonía no funciona.
-      # `property: host` devuelve el hostname pelado (pulso-voz.onrender.com,
-      # sin esquema) y está bien: llamadas.py::_host_publico() lo quiere así
-      # para armar wss://{host}/telefonia/twilio.
+      # hacia acá, así que sin esto la telefonía no suena.
+      #
+      # ⚠️ SE PONE A MANO: https://pulso-voz.onrender.com
+      #
+      #    Aquí había un `fromService … property: host` y ESTÁ MAL. En el
+      #    primer deploy resolvió a "pulso-voz" pelado —el nombre interno del
+      #    servicio, no el hostname público— y con eso llamadas.py arma
+      #    `wss://pulso-voz/telefonia/twilio`, que no existe desde internet:
+      #    la llamada se conecta y se cae sin audio. Se vio en GET /listo,
+      #    campo url_publica.
+      #
+      #    llamadas.py::_host_publico() quita el esquema, así que da igual si
+      #    la pegas con https:// o sin él. Lo que NO puede faltar es el
+      #    dominio completo.
       - key: URL_PUBLICA
-        fromService:
-          type: web
-          name: pulso-voz
-          property: host
+        sync: false
 
       # Hacia adentro, por la red privada. CORE_BASE_URL es la RAÍZ de core
       # (voz le pega a /auth/login), no /interno.
@@ -285,7 +292,26 @@ services:
       # habla con graph.facebook.com y nada lee kapso_api_key. Ver el reporte.
       - key: WHATSAPP_PROVEEDOR
         value: meta
+      # ⚠️ SIN ESTO EL WEBHOOK PÚBLICO ACEPTA CUALQUIER COSA.
+      #    `entorno` vale "desarrollo" por defecto (config.py:98), y en
+      #    desarrollo la verificación de firma ADVIERTE Y PASA. O sea: en
+      #    Render, sin estas dos, cualquiera puede hacer POST a
+      #    /webhooks/whatsapp e inventar una urgencia — con un endpoint
+      #    público eso no es un modo degradado, es un agujero.
+      #
+      #    Con ENTORNO=produccion y sin secreto, responde 401 y el canal
+      #    muere. Van juntas o no van.
+      #
+      #    El App Secret sale de developers.facebook.com → tu App →
+      #    Configuración → Básico → Aplicar secreto.
+      - key: ENTORNO
+        value: produccion
+      - key: WHATSAPP_APP_SECRET
+        sync: false
+
       # La cadena que TÚ inventas y le repites a Meta al registrar el webhook.
+      # Es lo que Meta te devuelve en el GET de verificación; no protege el
+      # POST, para eso está WHATSAPP_APP_SECRET.
       # Este repo es público: no la dejes en un valor conocido.
       - key: WHATSAPP_VERIFY_TOKEN
         sync: false

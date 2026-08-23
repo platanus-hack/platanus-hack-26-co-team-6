@@ -29,17 +29,17 @@ export const IMAGENES: Record<string, RegistroImagen> = {
     nota: "Clip del paramédico dictando en la ambulancia (public/landing/dictado.mp4)",
   },
   triage: {
-    src: null,
+    src: "/landing/triage.png",
     alt: "Caso estructurado por la IA",
     nota: "Screenshot de la tarjeta del caso: CIE-10, triage y servicios requeridos",
   },
   ranking: {
-    src: null,
+    src: "/landing/ranking.png",
     alt: "Ranking de sedes con la #1 dominante",
     nota: "Screenshot de /campo: tarjeta #1 héroe y la más cercana descartada por servicios",
   },
   handshake: {
-    src: null,
+    src: "/landing/handshake.png",
     alt: "Hospital aceptando el caso",
     nota: "Screenshot de /hospital: la tarjeta entrante con los dos botones",
   },

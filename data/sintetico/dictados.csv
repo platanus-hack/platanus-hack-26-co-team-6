@@ -1,0 +1,121 @@
+caso_id,texto_crudo,canal,duracion_s,ambiguo,confianza_declarada,dictado_en
+CAS-0001,"dolor abdominal, femenino de 35, doce horas de evolución, defensa en cuadrante inferior derecho, signos vitales normales",whatsapp,14,false,0.66,2026-08-22T19:01:44-05:00
+CAS-0002,"crisis asmática, masculino de 41, satura ochenta y seis con oxígeno, sibilancias en todo el campo, ya lleva dos micronebulizaciones",whatsapp,14,false,0.66,2026-08-22T19:05:10-05:00
+CAS-0003,"masculino de 43, golpe en la cabeza, deterioro progresivo, glasgow ocho, anisocoria, vamos con TAM, cambio",consola,12,false,0.78,2026-08-22T19:08:05-05:00
+CAS-0004,"materna de 41 años, dolor en epigastrio, tensión alta, edema, sospecha de preeclampsia severa, cambio",whatsapp,12,false,0.72,2026-08-22T19:11:40-05:00
+CAS-0005,"posible ACV, femenino de 87, boca desviada, debilidad en brazo derecho, inicio de síntomas siete y media, necesita tomografía ya",whatsapp,14,false,0.71,2026-08-22T19:12:32-05:00
+CAS-0006,"atropellado, femenino de 47, trauma cerrado de tórax y abdomen, tensión ochenta sobre cuarenta, va inestable, necesitamos cirugía y UCI",consola,15,false,0.72,2026-08-22T19:19:39-05:00
+CAS-0007,"una señora dice que le duele todo desde ayer, no me sé la edad, se ve regular, cambio",whatsapp,11,true,0.41,2026-08-22T19:23:39-05:00
+CAS-0008,"masculino de 68, vomitó sangre dos veces, deposiciones negras desde ayer, pálido, tensión cien sobre sesenta",whatsapp,13,false,0.77,2026-08-22T19:31:52-05:00
+CAS-0009,"masculino de 15, episodio convulsivo, sin antecedente conocido, ahora somnoliento, estable",consola,11,false,0.7,2026-08-22T19:33:12-05:00
+CAS-0010,"gestante de 31, treinta y seis semanas, tensión ciento setenta sobre ciento diez, cefalea y ve lucecitas, requiere ginecobstetricia, cambio",whatsapp,15,false,0.96,2026-08-22T19:38:35-05:00
+CAS-0011,"atropellado, femenino de 51, trauma cerrado de tórax y abdomen, tensión ochenta sobre cuarenta, va inestable, necesitamos cirugía y UCI",whatsapp,15,false,0.66,2026-08-22T19:40:35-05:00
+CAS-0012,"menor de 2 años, cuadro gripal de tres días, hoy respira rápido, tiraje subcostal, cambio",consola,11,false,0.92,2026-08-22T19:41:30-05:00
+CAS-0013,"lactante de 0 años, dificultad respiratoria, satura ochenta y nueve, tiraje, no recibe seno, requiere pediatría",whatsapp,13,false,0.87,2026-08-22T19:43:06-05:00
+CAS-0014,"femenino de 31, no puede completar frases, tiraje, satura ochenta y ocho, antecedente de asma, cambio",whatsapp,12,false,0.86,2026-08-22T19:51:45-05:00
+CAS-0015,"lactante de 1 años, dificultad respiratoria, satura ochenta y nueve, tiraje, no recibe seno, requiere pediatría",consola,13,false,0.88,2026-08-22T19:55:00-05:00
+CAS-0016,"reporto femenino de 59, dolor de pecho desde hace media hora, se ve pálido, frío, tensión ochenta y cinco sobre cincuenta, requiere hemodinamia, cambio",whatsapp,16,false,0.71,2026-08-22T19:59:15-05:00
+CAS-0017,"una señora dice que le duele todo desde ayer, no me sé la edad, se ve regular, cambio",whatsapp,11,true,0.41,2026-08-22T20:08:34-05:00
+CAS-0018,"convulsión en vía pública, femenino de 63, duró unos tres minutos, ya cedió, está postictal, glasgow catorce",consola,13,false,0.9,2026-08-22T20:11:34-05:00
+CAS-0019,"femenino de 78, fiebre alta tres días, hoy confundida, tensión ochenta sobre cincuenta, no levanta con líquidos, sospecho sepsis urinaria",whatsapp,15,false,0.63,2026-08-22T20:13:38-05:00
+CAS-0020,"menor de 1 años, cuadro gripal de tres días, hoy respira rápido, tiraje subcostal, cambio",whatsapp,11,false,0.76,2026-08-22T20:15:53-05:00
+CAS-0021,"masculino de 34, herida en flanco izquierdo, consciente pero pálido, taquicárdico, necesita cirugía general urgente",consola,13,false,0.65,2026-08-22T20:21:12-05:00
+CAS-0022,"materna de 36 años, dolor en epigastrio, tensión alta, edema, sospecha de preeclampsia severa, cambio",whatsapp,12,false,0.67,2026-08-22T20:25:21-05:00
+CAS-0023,"femenino de 33, episodio convulsivo, sin antecedente conocido, ahora somnoliento, estable",whatsapp,11,false,0.69,2026-08-22T20:34:13-05:00
+CAS-0024,"femenino de 60, fiebre alta tres días, hoy confundida, tensión ochenta sobre cincuenta, no levanta con líquidos, sospecho sepsis urinaria",consola,15,false,0.78,2026-08-22T20:43:13-05:00
+CAS-0025,"caída en la vía, femenino de 64, pierna izquierda deformada, pulso distal presente, dolor ocho de diez, inmovilizada",whatsapp,13,false,0.96,2026-08-22T20:46:14-05:00
+CAS-0026,"femenino de 73, trauma de miembro inferior, sospecha de fractura de tibia, estable, requiere radiología",whatsapp,12,false,0.62,2026-08-22T20:48:31-05:00
+CAS-0027,"una señora dice que le duele todo desde ayer, no me sé la edad, se ve regular, cambio",consola,11,true,0.37,2026-08-22T20:54:35-05:00
+CAS-0028,"sangrado digestivo, masculino de 39, hematemesis en casa, consciente, taquicárdico, cambio",whatsapp,11,false,0.74,2026-08-22T20:55:14-05:00
+CAS-0029,"femenino de 28, episodio convulsivo, sin antecedente conocido, ahora somnoliento, estable",whatsapp,11,false,0.69,2026-08-22T20:56:20-05:00
+CAS-0030,"central, masculino de unos 75 y tantos, dolor precordial opresivo irradiado a brazo izquierdo, veinte minutos, sudoroso, tensión noventa sobre sesenta, cambio",consola,17,false,0.96,2026-08-22T20:59:22-05:00
+CAS-0031,"lactante de 1 años, dificultad respiratoria, satura ochenta y nueve, tiraje, no recibe seno, requiere pediatría",whatsapp,13,false,0.76,2026-08-22T21:02:01-05:00
+CAS-0032,"femenino de 26, episodio convulsivo, sin antecedente conocido, ahora somnoliento, estable",whatsapp,11,false,0.69,2026-08-22T21:04:12-05:00
+CAS-0033,"crisis asmática, femenino de 36, satura ochenta y seis con oxígeno, sibilancias en todo el campo, ya lleva dos micronebulizaciones",consola,14,false,0.82,2026-08-22T21:07:18-05:00
+CAS-0034,"masculino de 28, trauma de miembro inferior, sospecha de fractura de tibia, estable, requiere radiología",whatsapp,12,false,0.83,2026-08-22T21:13:48-05:00
+CAS-0035,"caída en la vía, masculino de 17, pierna izquierda deformada, pulso distal presente, dolor ocho de diez, inmovilizada",whatsapp,13,false,0.83,2026-08-22T21:17:01-05:00
+CAS-0036,"dolor abdominal, femenino de 11, doce horas de evolución, defensa en cuadrante inferior derecho, signos vitales normales",consola,14,false,0.96,2026-08-22T21:19:21-05:00
+CAS-0037,"una señora dice que le duele todo desde ayer, no me sé la edad, se ve regular, cambio",whatsapp,11,true,0.32,2026-08-22T21:22:04-05:00
+CAS-0038,"femenino de 60, vomitó sangre dos veces, deposiciones negras desde ayer, pálido, tensión cien sobre sesenta",whatsapp,12,false,0.95,2026-08-22T21:27:36-05:00
+CAS-0039,"accidente de moto en la Autopista Sur, masculino de 46, politrauma, fémur abierto, tórax con crepitación, frecuencia ciento treinta, glasgow doce, cambio",consola,16,false,0.74,2026-08-22T21:28:40-05:00
+CAS-0040,"femenino de 76, la familia dice que empezó hace cuarenta minutos, no mueve el lado derecho y no habla claro, glasgow trece, vamos con ventana, cambio",whatsapp,16,false,0.81,2026-08-22T21:40:41-05:00
+CAS-0041,"femenino de 38, no puede completar frases, tiraje, satura ochenta y ocho, antecedente de asma, cambio",whatsapp,12,false,0.94,2026-08-22T21:41:47-05:00
+CAS-0042,"masculino de 40, no puede completar frases, tiraje, satura ochenta y ocho, antecedente de asma, cambio",consola,12,false,0.96,2026-08-22T21:44:20-05:00
+CAS-0043,"sangrado digestivo, masculino de 48, hematemesis en casa, consciente, taquicárdico, cambio",whatsapp,11,false,0.76,2026-08-22T21:53:36-05:00
+CAS-0044,"dolor abdominal, femenino de 15, doce horas de evolución, defensa en cuadrante inferior derecho, signos vitales normales",whatsapp,14,false,0.93,2026-08-22T21:59:06-05:00
+CAS-0045,"femenino de 18, episodio convulsivo, sin antecedente conocido, ahora somnoliento, estable",consola,11,false,0.8,2026-08-22T22:08:04-05:00
+CAS-0046,"masculino de 85, la familia dice que empezó hace cuarenta minutos, no mueve el lado derecho y no habla claro, glasgow trece, vamos con ventana, cambio",whatsapp,16,false,0.95,2026-08-22T22:13:47-05:00
+CAS-0047,"una señora dice que le duele todo desde ayer, no me sé la edad, se ve regular, cambio",whatsapp,11,true,0.34,2026-08-22T22:15:47-05:00
+CAS-0048,"masculino de 56, trauma de miembro inferior, sospecha de fractura de tibia, estable, requiere radiología",consola,12,false,0.7,2026-08-22T22:20:38-05:00
+CAS-0049,"dolor abdominal, femenino de 42, doce horas de evolución, defensa en cuadrante inferior derecho, signos vitales normales",whatsapp,14,false,0.92,2026-08-22T22:23:35-05:00
+CAS-0050,"gestante de 20, treinta y seis semanas, tensión ciento setenta sobre ciento diez, cefalea y ve lucecitas, requiere ginecobstetricia, cambio",whatsapp,15,false,0.69,2026-08-22T22:39:20-05:00
+CAS-0051,"reporto masculino de 64, dolor de pecho desde hace media hora, se ve pálido, frío, tensión ochenta y cinco sobre cincuenta, requiere hemodinamia, cambio",consola,16,false,0.9,2026-08-22T22:40:11-05:00
+CAS-0052,"femenino de 27, no puede completar frases, tiraje, satura ochenta y ocho, antecedente de asma, cambio",whatsapp,12,false,0.79,2026-08-22T22:43:16-05:00
+CAS-0053,"femenino de 60, vomitó sangre dos veces, deposiciones negras desde ayer, pálido, tensión cien sobre sesenta",whatsapp,12,false,0.93,2026-08-22T22:45:17-05:00
+CAS-0054,"masculino de 35, trauma de miembro inferior, sospecha de fractura de tibia, estable, requiere radiología",consola,12,false,0.66,2026-08-22T22:47:56-05:00
+CAS-0055,"reporto femenino de 81, dolor de pecho desde hace media hora, se ve pálido, frío, tensión ochenta y cinco sobre cincuenta, requiere hemodinamia, cambio",whatsapp,16,false,0.86,2026-08-22T22:53:12-05:00
+CAS-0056,"femenino de 34, no puede completar frases, tiraje, satura ochenta y ocho, antecedente de asma, cambio",whatsapp,12,false,0.87,2026-08-22T22:58:25-05:00
+CAS-0057,"una señora dice que le duele todo desde ayer, no me sé la edad, se ve regular, cambio",consola,11,true,0.33,2026-08-22T22:59:39-05:00
+CAS-0058,"convulsión en vía pública, femenino de 46, duró unos tres minutos, ya cedió, está postictal, glasgow catorce",whatsapp,13,false,0.86,2026-08-22T23:03:38-05:00
+CAS-0059,"masculino de 22, trauma de miembro inferior, sospecha de fractura de tibia, estable, requiere radiología",whatsapp,12,false,0.7,2026-08-22T23:04:12-05:00
+CAS-0060,"gestante de 38, treinta y seis semanas, tensión ciento setenta sobre ciento diez, cefalea y ve lucecitas, requiere ginecobstetricia, cambio",consola,15,false,0.74,2026-08-22T23:05:04-05:00
+CAS-0061,"TEC severo, femenino de 52, caída de altura, glasgow siete, pupila derecha midriática, ya intubamos, requiere neurocirugía, cambio",whatsapp,14,false,0.84,2026-08-22T23:08:03-05:00
+CAS-0062,"masculino de 17, episodio convulsivo, sin antecedente conocido, ahora somnoliento, estable",whatsapp,11,false,0.65,2026-08-22T23:13:02-05:00
+CAS-0063,"sangrado digestivo, femenino de 50, hematemesis en casa, consciente, taquicárdico, cambio",consola,11,false,0.83,2026-08-22T23:16:00-05:00
+CAS-0064,"masculino de 14, no puede completar frases, tiraje, satura ochenta y ocho, antecedente de asma, cambio",whatsapp,12,false,0.66,2026-08-22T23:21:03-05:00
+CAS-0065,"herida penetrante en abdomen, masculino de 25, sangrado activo, abdomen en tabla, tensión no la tomo, pulso filiforme, quirófano ya",whatsapp,14,false,0.87,2026-08-22T23:34:37-05:00
+CAS-0066,"atropellado, masculino de 32, trauma cerrado de tórax y abdomen, tensión ochenta sobre cuarenta, va inestable, necesitamos cirugía y UCI",consola,15,false,0.65,2026-08-22T23:44:42-05:00
+CAS-0067,"una señora dice que le duele todo desde ayer, no me sé la edad, se ve regular, cambio",whatsapp,11,true,0.4,2026-08-22T23:51:31-05:00
+CAS-0068,"masculino de 35, vomitó sangre dos veces, deposiciones negras desde ayer, pálido, tensión cien sobre sesenta",whatsapp,13,false,0.72,2026-08-22T23:52:37-05:00
+CAS-0069,"atropellado, masculino de 28, trauma cerrado de tórax y abdomen, tensión ochenta sobre cuarenta, va inestable, necesitamos cirugía y UCI",consola,15,false,0.85,2026-08-22T23:57:18-05:00
+CAS-0070,"convulsión en vía pública, femenino de 44, duró unos tres minutos, ya cedió, está postictal, glasgow catorce",whatsapp,13,false,0.73,2026-08-23T00:06:00-05:00
+CAS-0071,"convulsión en vía pública, masculino de 44, duró unos tres minutos, ya cedió, está postictal, glasgow catorce",whatsapp,13,false,0.91,2026-08-23T00:11:35-05:00
+CAS-0072,"herida penetrante en abdomen, femenino de 41, sangrado activo, abdomen en tabla, tensión no la tomo, pulso filiforme, quirófano ya",consola,14,false,0.83,2026-08-23T00:15:33-05:00
+CAS-0073,"femenino de 87, fiebre alta tres días, hoy confundida, tensión ochenta sobre cincuenta, no levanta con líquidos, sospecho sepsis urinaria",whatsapp,15,false,0.81,2026-08-23T00:19:02-05:00
+CAS-0074,"masculino de 27, herida en flanco izquierdo, consciente pero pálido, taquicárdico, necesita cirugía general urgente",whatsapp,13,false,0.75,2026-08-23T00:29:36-05:00
+CAS-0075,"gestante de 20, treinta y seis semanas, tensión ciento setenta sobre ciento diez, cefalea y ve lucecitas, requiere ginecobstetricia, cambio",consola,15,false,0.84,2026-08-23T00:30:24-05:00
+CAS-0076,"femenino de 53, trauma de miembro inferior, sospecha de fractura de tibia, estable, requiere radiología",whatsapp,12,false,0.87,2026-08-23T00:33:08-05:00
+CAS-0077,"una señora dice que le duele todo desde ayer, no me sé la edad, se ve regular, cambio",whatsapp,11,true,0.43,2026-08-23T00:36:45-05:00
+CAS-0078,"central, masculino de unos 50 y tantos, dolor precordial opresivo irradiado a brazo izquierdo, veinte minutos, sudoroso, tensión noventa sobre sesenta, cambio",consola,17,false,0.65,2026-08-23T00:38:44-05:00
+CAS-0079,"dolor abdominal, femenino de 20, doce horas de evolución, defensa en cuadrante inferior derecho, signos vitales normales",whatsapp,14,false,0.73,2026-08-23T00:49:31-05:00
+CAS-0080,"masculino de 77, vomitó sangre dos veces, deposiciones negras desde ayer, pálido, tensión cien sobre sesenta",whatsapp,13,false,0.83,2026-08-23T00:58:26-05:00
+CAS-0081,"masculino de 41, trauma de miembro inferior, sospecha de fractura de tibia, estable, requiere radiología",consola,12,false,0.92,2026-08-23T01:01:29-05:00
+CAS-0082,"femenino de 41, no puede completar frases, tiraje, satura ochenta y ocho, antecedente de asma, cambio",whatsapp,12,false,0.66,2026-08-23T01:07:37-05:00
+CAS-0083,"adulto mayor, 83 años, decaimiento, fiebre, hipotenso, piel moteada, va para UCI probablemente, cambio",whatsapp,12,false,0.75,2026-08-23T01:34:05-05:00
+CAS-0084,"gestante de 34, treinta y seis semanas, tensión ciento setenta sobre ciento diez, cefalea y ve lucecitas, requiere ginecobstetricia, cambio",consola,15,false,0.8,2026-08-23T01:41:54-05:00
+CAS-0085,"herida penetrante en abdomen, femenino de 37, sangrado activo, abdomen en tabla, tensión no la tomo, pulso filiforme, quirófano ya",whatsapp,14,false,0.89,2026-08-23T01:42:16-05:00
+CAS-0086,"accidente de moto en la Avenida Primero de Mayo, masculino de 31, politrauma, fémur abierto, tórax con crepitación, frecuencia ciento treinta, glasgow doce, cambio",whatsapp,17,false,0.69,2026-08-23T01:49:32-05:00
+CAS-0087,"una señora dice que le duele todo desde ayer, no me sé la edad, se ve regular, cambio",consola,11,true,0.28,2026-08-23T01:51:14-05:00
+CAS-0088,"posible ACV, masculino de 90, boca desviada, debilidad en brazo derecho, inicio de síntomas siete y media, necesita tomografía ya",whatsapp,14,false,0.88,2026-08-23T01:56:29-05:00
+CAS-0089,"adulto mayor, 77 años, decaimiento, fiebre, hipotenso, piel moteada, va para UCI probablemente, cambio",whatsapp,12,false,0.84,2026-08-23T02:27:46-05:00
+CAS-0090,"femenino de 38, trauma de miembro inferior, sospecha de fractura de tibia, estable, requiere radiología",consola,12,false,0.78,2026-08-23T02:37:50-05:00
+CAS-0091,"caída en la vía, masculino de 69, pierna izquierda deformada, pulso distal presente, dolor ocho de diez, inmovilizada",whatsapp,13,false,0.74,2026-08-23T02:41:31-05:00
+CAS-0092,"masculino de 76, vomitó sangre dos veces, deposiciones negras desde ayer, pálido, tensión cien sobre sesenta",whatsapp,13,false,0.78,2026-08-23T02:47:33-05:00
+CAS-0093,"femenino de 51, vomitó sangre dos veces, deposiciones negras desde ayer, pálido, tensión cien sobre sesenta",consola,12,false,0.66,2026-08-23T02:51:54-05:00
+CAS-0094,"masculino de 13, no puede completar frases, tiraje, satura ochenta y ocho, antecedente de asma, cambio",whatsapp,12,false,0.66,2026-08-23T02:54:44-05:00
+CAS-0095,"caída en la vía, femenino de 55, pierna izquierda deformada, pulso distal presente, dolor ocho de diez, inmovilizada",whatsapp,13,false,0.84,2026-08-23T03:07:00-05:00
+CAS-0096,"TEC severo, masculino de 37, caída de altura, glasgow siete, pupila derecha midriática, ya intubamos, requiere neurocirugía, cambio",consola,14,false,0.67,2026-08-23T03:15:02-05:00
+CAS-0097,"una señora dice que le duele todo desde ayer, no me sé la edad, se ve regular, cambio",whatsapp,11,true,0.36,2026-08-23T03:31:31-05:00
+CAS-0098,"masculino de 75, fiebre alta tres días, hoy confundida, tensión ochenta sobre cincuenta, no levanta con líquidos, sospecho sepsis urinaria",whatsapp,15,false,0.89,2026-08-23T03:37:11-05:00
+CAS-0099,"masculino de 63, vomitó sangre dos veces, deposiciones negras desde ayer, pálido, tensión cien sobre sesenta",consola,13,false,0.91,2026-08-23T03:44:09-05:00
+CAS-0100,"herida penetrante en abdomen, femenino de 37, sangrado activo, abdomen en tabla, tensión no la tomo, pulso filiforme, quirófano ya",whatsapp,14,false,0.93,2026-08-23T03:52:30-05:00
+CAS-0101,"reporto masculino de 45, dolor de pecho desde hace media hora, se ve pálido, frío, tensión ochenta y cinco sobre cincuenta, requiere hemodinamia, cambio",whatsapp,16,false,0.8,2026-08-23T04:03:36-05:00
+CAS-0102,"masculino de 28, no puede completar frases, tiraje, satura ochenta y ocho, antecedente de asma, cambio",consola,12,false,0.66,2026-08-23T04:07:44-05:00
+CAS-0103,"caída en la vía, femenino de 46, pierna izquierda deformada, pulso distal presente, dolor ocho de diez, inmovilizada",whatsapp,13,false,0.69,2026-08-23T04:08:34-05:00
+CAS-0104,"convulsión en vía pública, femenino de 41, duró unos tres minutos, ya cedió, está postictal, glasgow catorce",whatsapp,13,false,0.84,2026-08-23T04:12:00-05:00
+CAS-0105,"masculino de 26, herida en flanco izquierdo, consciente pero pálido, taquicárdico, necesita cirugía general urgente",consola,13,false,0.63,2026-08-23T04:21:37-05:00
+CAS-0106,"crisis asmática, femenino de 12, satura ochenta y seis con oxígeno, sibilancias en todo el campo, ya lleva dos micronebulizaciones",whatsapp,14,false,0.75,2026-08-23T04:56:39-05:00
+CAS-0107,"una señora dice que le duele todo desde ayer, no me sé la edad, se ve regular, cambio",whatsapp,11,true,0.45,2026-08-23T05:04:17-05:00
+CAS-0108,"reporto masculino de 52, dolor de pecho desde hace media hora, se ve pálido, frío, tensión ochenta y cinco sobre cincuenta, requiere hemodinamia, cambio",consola,16,false,0.85,2026-08-23T05:20:34-05:00
+CAS-0109,"menor de 2 años, cuadro gripal de tres días, hoy respira rápido, tiraje subcostal, cambio",whatsapp,11,false,0.75,2026-08-23T05:21:29-05:00
+CAS-0110,"accidente de moto en la Calle 80, femenino de 23, politrauma, fémur abierto, tórax con crepitación, frecuencia ciento treinta, glasgow doce, cambio",whatsapp,16,false,0.95,2026-08-23T05:34:33-05:00
+CAS-0111,"masculino de 58, la familia dice que empezó hace cuarenta minutos, no mueve el lado derecho y no habla claro, glasgow trece, vamos con ventana, cambio",consola,16,false,0.85,2026-08-23T05:49:53-05:00
+CAS-0112,"dolor abdominal, femenino de 33, doce horas de evolución, defensa en cuadrante inferior derecho, signos vitales normales",whatsapp,14,false,0.95,2026-08-23T06:04:56-05:00
+CAS-0113,"atropellado, masculino de 33, trauma cerrado de tórax y abdomen, tensión ochenta sobre cuarenta, va inestable, necesitamos cirugía y UCI",whatsapp,15,false,0.78,2026-08-23T06:05:43-05:00
+CAS-0114,"materna de 25 años, dolor en epigastrio, tensión alta, edema, sospecha de preeclampsia severa, cambio",consola,12,false,0.8,2026-08-23T06:06:52-05:00
+CAS-0115,"femenino de 36, no puede completar frases, tiraje, satura ochenta y ocho, antecedente de asma, cambio",whatsapp,12,false,0.86,2026-08-23T06:30:55-05:00
+CAS-0116,"femenino de 31, herida en flanco izquierdo, consciente pero pálido, taquicárdico, necesita cirugía general urgente",whatsapp,13,false,0.89,2026-08-23T06:37:47-05:00
+CAS-0117,"una señora dice que le duele todo desde ayer, no me sé la edad, se ve regular, cambio",consola,11,true,0.41,2026-08-23T06:41:21-05:00
+CAS-0118,"TEC severo, femenino de 53, caída de altura, glasgow siete, pupila derecha midriática, ya intubamos, requiere neurocirugía, cambio",whatsapp,14,false,0.89,2026-08-23T06:42:11-05:00
+CAS-0119,"atropellado, masculino de 31, trauma cerrado de tórax y abdomen, tensión ochenta sobre cuarenta, va inestable, necesitamos cirugía y UCI",whatsapp,15,false,0.88,2026-08-23T06:44:34-05:00
+CAS-0120,"dolor abdominal, masculino de 26, doce horas de evolución, defensa en cuadrante inferior derecho, signos vitales normales",consola,14,false,0.75,2026-08-23T06:49:42-05:00

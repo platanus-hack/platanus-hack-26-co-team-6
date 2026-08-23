@@ -20,6 +20,7 @@ import {
   destinoInterno,
   normalizarSesion,
   rutaPorRol,
+  CONSOLAS_CONSTRUIDAS,
   tieneRol,
 } from "./sesion-modelo.ts";
 
@@ -128,9 +129,8 @@ describe("alcanzaSede", () => {
 
 describe("DESTINO", () => {
   it("cada rol de la tarea 1.4 tiene su consola declarada", () => {
-    // La tabla del paso 4 de la tarea, literal. Que `/panel` y `/admin` no
-    // estén construidas todavía se resuelve en `rutaPorRol`; el destino que le
-    // toca a cada rol no cambia por eso, y aquí queda escrito.
+    // La tabla del paso 4 de la tarea, literal. `admin_organizacion` va a
+    // `/equipo`, no a `/panel`: el route group `(panel)` no aparece en la URL.
     assert.deepEqual(
       {
         paramedico: DESTINO.paramedico,
@@ -138,13 +138,15 @@ describe("DESTINO", () => {
         regulador_crue: DESTINO.regulador_crue,
         admin_organizacion: DESTINO.admin_organizacion,
         admin_plataforma: DESTINO.admin_plataforma,
+        auditor: DESTINO.auditor,
       },
       {
         paramedico: "/campo",
         jefe_urgencias: "/hospital",
         regulador_crue: "/crue",
-        admin_organizacion: "/panel",
+        admin_organizacion: "/equipo",
         admin_plataforma: "/admin",
+        auditor: "/auditoria",
       },
     );
   });
@@ -157,14 +159,20 @@ describe("rutaPorRol", () => {
     assert.equal(rutaPorRol(["regulador_crue"]).destino, "/crue");
   });
 
-  it("las consolas que faltan se declaran una por una", () => {
-    for (const [rol, ruta] of [
-      ["admin_organizacion", "/panel"],
-      ["admin_plataforma", "/admin"],
-    ] as const) {
-      const r = rutaPorRol([rol]);
-      assert.equal(r.pendiente, ruta, `${rol} debe declarar ${ruta}`);
-      assert.notEqual(r.destino, ruta, "no se manda a nadie a un 404");
+  it("todo rol aterriza en una ruta que existe, sin desvíos", () => {
+    // La invariante que importa: ninguna entrada de DESTINO apunta a una ruta
+    // sin construir. Si alguien agrega un rol y olvida su pantalla, este test
+    // cae aquí y no en la cara de quien acaba de entrar bien.
+    for (const [rol, ruta] of Object.entries(DESTINO)) {
+      if (rol === "servicio") continue; // un token de servicio no abre consola
+      if (rol === "auditor") continue; // sin índice: ver el caso de abajo
+      assert.ok(
+        CONSOLAS_CONSTRUIDAS.has(ruta),
+        `${rol} apunta a ${ruta}, que no está construida`,
+      );
+      const r = rutaPorRol([rol as never]);
+      assert.equal(r.destino, ruta);
+      assert.equal(r.pendiente, undefined);
     }
   });
 
@@ -181,13 +189,15 @@ describe("rutaPorRol", () => {
     assert.equal(r.pendiente, undefined);
   });
 
-  it("una consola sin construir se declara, no se esconde", () => {
-    const r = rutaPorRol(["admin_organizacion"]);
-    assert.equal(r.pendiente, "/panel");
+  it("auditoría no tiene índice: se declara pendiente, no se esconde", () => {
+    // `/auditoria/casos/:id` existe, `/auditoria` no. Decírselo es mejor que
+    // un 404 después de un login correcto.
+    const r = rutaPorRol(["auditor"]);
+    assert.equal(r.pendiente, "/auditoria");
     assert.equal(r.destino, "/campo");
   });
 
-  it("si tiene otro rol con consola de verdad, ahí va, y lo dice igual", () => {
+  it("con varios roles no queda nada pendiente", () => {
     const r = rutaPorRol(["admin_plataforma", "regulador_crue"]);
     assert.equal(r.destino, "/crue");
     assert.equal(r.pendiente, undefined);
