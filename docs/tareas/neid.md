@@ -74,13 +74,46 @@
 5. Backfill: los casos previos se asignan a una organización "histórica". **Nunca `organizacion_id` nulo** — bajo RLS, un nulo es invisible o es visible para todos, y las dos opciones son malas.
 
 **Hecho cuando.**
-- [ ] Reiniciar core no pierde casos ni handshakes
-- [ ] `pAceptacion` sobrevive al reinicio
-- [ ] Sin credenciales sigue corriendo en memoria, avisando
-- [ ] Los tests existentes de `almacen` pasan contra las dos implementaciones
-- [ ] Ninguna fila queda con `organizacion_id` nulo
+- [x] Reiniciar core no pierde casos ni handshakes
+- [x] `pAceptacion` sobrevive al reinicio
+- [x] Sin credenciales sigue corriendo en memoria, avisando
+- [x] Los tests existentes de `almacen` pasan contra las dos implementaciones
+- [x] Ninguna fila queda con `organizacion_id` nulo
 
 **Trampas.** `AlmacenService` lo usan ocho servicios. Cambia la implementación **detrás de la misma interfaz** y no toques a los consumidores, o el PR se vuelve inmergeable.
+
+### ✅ Hecho — rama `feat/o1-1.2-persistir-caso-handshake`
+
+**Son dieciséis, no ocho** — los conté. Y la trampa era peor de lo que dice el
+enunciado: los dieciséis métodos son **síncronos** y Postgres es asíncrono.
+Volverlos async rompe a los dieciséis consumidores de golpe.
+
+**La salida: write-through con caché en proceso.** Se hidrata al arrancar, las
+lecturas salen de la caché y siguen siendo síncronas, las escrituras van a la
+caché y al repositorio sin bloquear. **Cero consumidores tocados.**
+
+Lo que arregla: la durabilidad. Lo que **no** arregla, y hay que decirlo: la
+coherencia entre instancias. Cada réplica ve lo que había al arrancar más lo
+que escribió ella. Es mejor que antes —donde una réplica no veía NUNCA lo de
+la otra— pero no es multi-instancia de verdad. Eso es la **3.8**.
+
+**El detalle que costó encontrar:** `@Inject(REPOSITORIO)` hace que Nest exija
+el token *aunque haya default en TypeScript*, y eso rompió 36 specs que arman
+`AlmacenService` sin importar el módulo. Con `@Optional()` el default vuelve a
+servir y no hubo que tocar un solo test. Volvió al baseline exacto de main:
+**8 fallos, los mismos de Postgres que ya estaban.**
+
+**Historial, ventana de rechazos y latencias son ahora proyecciones**, no
+estado aparte: se reconstruyen desde los handshakes al hidratar. Es lo que
+hace que `pAceptacion` sobreviva al reinicio, y es lo que siempre debieron ser.
+
+Migración `0009`. El backfill crea la organización histórica con `tipo` y
+`estado` **copiados del check de 0004** (`operador_ambulancia` en singular,
+`activa`) — un valor fuera del check aborta la migración entera.
+
+Y persiste `expiraEn`, que alguien agregó al contrato mientras tanto: sin eso,
+al reiniciar todos los handshakes pendientes quedan sin plazo y el vigilante
+no los vence nunca.
 
 ---
 
