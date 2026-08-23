@@ -4,7 +4,7 @@
 > **En este plan rota:** también le toca el core de identidad, Testcontainers, el shell de `/panel` y
 > los runbooks. **Es dueño de tipos en la ola 4.**
 
-**Ola 0** [0.1](#01--conectar-el-guard-de-aceptación-única) · [0.6](#06--motivos-de-rechazo-como-enum-versionado) — **Ola 1** [1.3](#13--sesión-con-actor-real) · [1.7](#17--testcontainers--aislamiento-de-inquilino) — **Ola 2** [2.3](#23--vista-afiliacionverificar) · [2.7](#27--shell-de-panel) · [2.11](#211--rate-limit--idempotency-key) — **Ola 3** [3.2](#32--cablear-los-22-eventos) · [3.5](#35--sede_canal--envío-dirigido) · [3.10](#310--reporte-del-traslado) — **Ola 4** [4.1](#41--tabla-recepcion--protocolos) · [4.5](#45--entrega-por-qr) · [4.10](#410--vista-de-firma-de-trámites) — **Ola 5** [5.2](#52--vista-panelwebhooks) · [5.5](#55--alertas-y-runbooks) · [5.9](#59--panelapi--llaves-con-alcance)
+**Ola 0** ✅ [0.1](#01--conectar-el-guard-de-aceptación-única) · ✅ [0.6](#06--motivos-de-rechazo-como-enum-versionado) — **Ola 1** [1.3](#13--sesión-con-actor-real) · [1.7](#17--testcontainers--aislamiento-de-inquilino) — **Ola 2** [2.3](#23--vista-afiliacionverificar) · [2.7](#27--shell-de-panel) · [2.11](#211--rate-limit--idempotency-key) — **Ola 3** [3.2](#32--cablear-los-22-eventos) · [3.5](#35--sede_canal--envío-dirigido) · [3.10](#310--reporte-del-traslado) — **Ola 4** [4.1](#41--tabla-recepcion--protocolos) · [4.5](#45--entrega-por-qr) · [4.10](#410--vista-de-firma-de-trámites) — **Ola 5** [5.2](#52--vista-panelwebhooks) · [5.5](#55--alertas-y-runbooks) · [5.9](#59--panelapi--llaves-con-alcance)
 
 ---
 
@@ -28,10 +28,10 @@ Lo que hoy tapa el hueco es que el fan-out es secuencial. **El día que alguien 
 5. Test de concurrencia: dos aceptaciones simultáneas sobre el mismo caso.
 
 **Hecho cuando.**
-- [ ] Dos sedes aceptan el mismo caso → la segunda recibe `aplicada: false`
-- [ ] El doble toque sigue siendo idempotente
-- [ ] El webhook de Telegram no dice "aceptado" cuando no se aplicó
-- [ ] Test de concurrencia real, no secuencial
+- [x] Dos sedes aceptan el mismo caso → la segunda recibe `aplicada: false`
+- [x] El doble toque sigue siendo idempotente
+- [x] El webhook de Telegram no dice "aceptado" cuando no se aplicó — dice "otra sede ya aceptó este caso · no prepare cama"
+- [x] Test de concurrencia real, no secuencial — dos `procesarRespuesta` en vuelo a la vez, con frontera asíncrona en el store: las dos pasan el chequeo de estado antes de que ninguna reserve. La concurrencia entre PROCESOS (dos clientes de Postgres) ya la cubre `postgres-routing.store.spec.ts`, que necesita `PULSO_TEST_DATABASE_URL` — se enciende en 1.7
 
 **Trampas.** No dupliques la lógica en `HandshakeService`. **Llama al guard que ya existe.** Dos mecanismos resolviendo la misma carrera es peor que cualquiera de los dos por separado — el propio `AlmacenService` documenta que ya pasó una vez con el vencimiento de handshakes.
 
@@ -55,10 +55,10 @@ Lo que hoy tapa el hueco es que el fan-out es secuencial. **El día que alguien 
 5. **Conservar la regla de producto que ya está bien puesta**: en triage I no se ofrece rechazo, escala directo al CRUE. Ley 1751/2015.
 
 **Hecho cuando.**
-- [ ] El handshake guarda código, no texto
-- [ ] Cambiar una etiqueta no rompe el histórico
-- [ ] La categoría administrativa existe y se puede reportar aparte
-- [ ] Triage I sigue sin botón de rechazo
+- [x] El handshake guarda código, no texto — `motivoCodigo`; el texto se conserva como la etiqueta congelada que se vio
+- [x] Cambiar una etiqueta no rompe el histórico
+- [x] La categoría administrativa existe y se puede reportar aparte — `SIN_CLARIDAD_PAGADOR`, con índice parcial en `handshake.motivo_codigo`
+- [x] Triage I sigue sin botón de rechazo
 
 **Trampas.** El quinto motivo es delicado en el pitch: es admitir que hay rechazos administrativos. **Es exactamente lo que hay que decir** — es la evidencia de la tesis, y medirlo es lo que permite atacarlo.
 
