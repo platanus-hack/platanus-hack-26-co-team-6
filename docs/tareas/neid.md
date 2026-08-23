@@ -314,12 +314,48 @@ conviene saberlo antes del deploy y no durante.
 6. **No repite el dictado crudo.** Es una síntesis, y el dictado crudo no sale del servidor.
 
 **Hecho cuando.**
-- [ ] Los cinco casos del corpus producen SBAR legible
-- [ ] Sin `ANTHROPIC_API_KEY` cae al fallback y lo marca
-- [ ] Nunca inventa un antecedente que el dictado no trae
-- [ ] Cabe en cuatro líneas
+- [x] Los cinco casos del corpus producen SBAR legible — los **14**, de hecho
+- [x] Sin `ANTHROPIC_API_KEY` cae al fallback y lo marca
+- [x] Nunca inventa un antecedente que el dictado no trae
+- [x] Cabe en cuatro líneas
 
 **Trampas.** Es lo primero que un clínico va a juzgar. Un SBAR que suena a resumen de LLM ("El paciente presenta un cuadro compatible con…") pierde credibilidad al instante. **Frases de radio, como el resto del sistema.**
+
+### ✅ Hecho — rama `feat/o4-4.2-sbar`
+
+⚠️ **Sale de `feat/o0-0.5-prompt-unico`, no de main.** Usa la infraestructura
+de prompts canónicos de la 0.5, así que **hay que mezclar el PR #18 primero**.
+
+`data/prompts/sbar.txt` con su golden, igual que el triaje. `render.py` ahora
+maneja los dos: agregar un prompt es agregar una línea a `NOMBRES`.
+
+**El respaldo no es un adorno.** Sin API key arma el SBAR desde los campos ya
+estructurados del caso, y lo declara (`motor: "plantilla"`). Un SBAR feo pero
+cierto sirve; uno bonito e inventado no. También reporta `versionPrompt: null`
+en ese modo — inventar una versión sería mentir justo en el campo que existe
+para auditar.
+
+**Contra el relleno de LLM.** Hay un test que rechaza cualquier línea que
+empiece con «El paciente presenta», «Se trata de», «Nos encontramos ante» o
+«cuadro compatible con», y corre sobre los 14 casos del corpus. El prompt lo
+prohíbe explícitamente; el test es la red por si el modelo no obedece.
+
+**Cuatro líneas es un contrato, no una sugerencia.** `_recortar()` aplana
+saltos y corta en el último espacio antes del tope. El modelo a veces devuelve
+un párrafo aunque el prompt pida una línea; recortar sale más barato que
+reintentar y garantiza el contrato pase lo que pase.
+
+**Lo que no sale:** hay tests de que el SBAR no repite el dictado crudo ni
+filtra las coordenadas del paciente. Es una síntesis, y esos dos campos son
+los más sensibles del sistema.
+
+**Al parser se le pasa el caso estructurado, no el dictado.** Además de que el
+dictado no sale del servidor, el trabajo de extraerlo ya se hizo: repetirlo
+invitaría al modelo a re-interpretarlo y a discrepar consigo mismo.
+
+Y un test fija que la versión del prompt de triaje **siguió siendo
+`b6b3e3556c87`**: si agregar el SBAR hubiera movido el prompt clínico, los
+evals dejarían de ser comparables con los de antes.
 
 ---
 

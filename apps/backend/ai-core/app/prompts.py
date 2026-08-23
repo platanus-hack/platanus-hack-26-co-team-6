@@ -22,8 +22,10 @@ from functools import lru_cache
 
 #: app/ → ai-core/ → backend/ → apps/ → raíz del repo
 RAIZ = pathlib.Path(__file__).resolve().parents[4]
-PLANTILLA = RAIZ / "data/prompts/triage.txt"
 CATALOGO = RAIZ / "data/catalogos/servicios-reps.json"
+PROMPTS = RAIZ / "data/prompts"
+#: Se conserva por compatibilidad con los tests de la 0.5.
+PLANTILLA = PROMPTS / "triage.txt"
 
 MARCADOR = "{{CATALOGO_SERVICIOS}}"
 
@@ -33,14 +35,14 @@ def catalogo() -> dict:
     return json.loads(CATALOGO.read_text(encoding="utf-8"))
 
 
-@lru_cache(maxsize=1)
-def prompt_triage() -> str:
-    """El prompt renderizado, con el catálogo interpolado.
+@lru_cache(maxsize=8)
+def prompt(nombre: str) -> str:
+    """Un prompt canónico renderizado, con el catálogo interpolado.
 
-    Tiene que dar EXACTAMENTE lo mismo que el render de TypeScript. Lo fija
-    `data/prompts/triage.rendered.txt` y lo verifica un test en cada lado.
+    `triage` tiene que dar EXACTAMENTE lo mismo que el render de TypeScript.
+    Lo fija `data/prompts/<nombre>.rendered.txt` y lo verifica un test.
     """
-    plantilla = PLANTILLA.read_text(encoding="utf-8")
+    plantilla = (PROMPTS / f"{nombre}.txt").read_text(encoding="utf-8")
     # Las líneas de comentario son para quien edita el archivo, no para el
     # modelo.
     cuerpo = "\n".join(
@@ -57,11 +59,19 @@ def prompt_triage() -> str:
     return cuerpo.replace(MARCADOR, lineas)
 
 
-@lru_cache(maxsize=1)
-def version_prompt() -> str:
+def prompt_triage() -> str:
+    return prompt("triage")
+
+
+def prompt_sbar() -> str:
+    return prompt("sbar")
+
+
+@lru_cache(maxsize=8)
+def version_prompt(nombre: str = "triage") -> str:
     """Identidad del prompt. Se deriva del contenido, así que cambiar el
     prompt cambia la versión sola — nadie tiene que acordarse de subirla.
 
     Prepara la tarea 3.12 (saber con qué prompt se extrajo cada caso).
     """
-    return hashlib.sha256(prompt_triage().encode("utf-8")).hexdigest()[:12]
+    return hashlib.sha256(prompt(nombre).encode("utf-8")).hexdigest()[:12]
