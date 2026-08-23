@@ -1,8 +1,9 @@
 /**
- * `GET /zonas` — el mapa de calor.
+ * `GET /zonas` — la grilla H3.
  *
- * El dato no es una estimación: son las 9.206 llamadas del NUSE 123. Si este
- * endpoint devuelve algo distinto, el mapa pinta una ciudad que no existe.
+ * No son las localidades: son hexágonos parametrizables, del tamaño que una
+ * ambulancia cubre en minutos. Si este endpoint devuelve otra cosa, el mapa
+ * pinta una ciudad que no existe y el reparto manda unidades a un páramo.
  */
 
 import { Test } from '@nestjs/testing';
@@ -18,29 +19,39 @@ describe('ZonasController', () => {
     ctrl = m.get(ZonasController);
   });
 
-  it('devuelve las 19 localidades con demanda', () => {
-    // Una localidad que se cae del mapa no da error: simplemente nadie la ve.
-    expect(ctrl.demanda().zonas).toHaveLength(19);
+  it('devuelve la grilla de hexágonos', () => {
+    const r = ctrl.zonas();
+    expect(r.total).toBeGreaterThan(1000);
+    expect(r.resolucion).toBe(8);
+  });
+
+  it('ningún hexágono tiene demanda cero', () => {
+    // Sumapaz son 780 km² rurales sin una sola llamada del 123 en el mes:
+    // 1.008 hexágonos, el 47% de la grilla. Una zona sin demanda no es una
+    // zona de cobertura, e incluirla le daría cupo a un páramo.
+    for (const z of ctrl.zonas().zonas) {
+      expect(z.demandaRelativa).toBeGreaterThan(0);
+    }
   });
 
   it('la demanda relativa suma 1', () => {
-    const total = ctrl.demanda().zonas.reduce((a, z) => a + z.demandaRelativa, 0);
+    const total = ctrl.zonas().zonas.reduce((a, z) => a + z.demandaRelativa, 0);
     expect(total).toBeGreaterThan(0.98);
     expect(total).toBeLessThan(1.02);
   });
 
-  it('Kennedy es la de más demanda, con ~15%', () => {
-    const top = ctrl
-      .demanda()
-      .zonas.reduce((a, b) => (a.demandaRelativa > b.demandaRelativa ? a : b));
-    expect(top.nombre).toBe('KENNEDY');
-    expect(top.demandaRelativa).toBeGreaterThan(0.14);
+  it('la densidad ordena distinto que el conteo', () => {
+    // Los Mártires tiene MENOS llamadas que Kennedy y MÁS por km². Estacionar
+    // por conteo en vez de por densidad te ubica mal.
+    const porLocalidad = new Map<string, number>();
+    for (const z of ctrl.zonas().zonas) porLocalidad.set(z.localidad, z.densidad);
+    const top = [...porLocalidad.entries()].sort((a, b) => b[1] - a[1])[0];
+    expect(top[0]).toBe('LOS MARTIRES');
   });
 
-  it('toda zona trae centroide utilizable', () => {
-    for (const z of ctrl.demanda().zonas) {
-      // Bogotá cabe holgadamente en este recuadro. Un centroide fuera de él
-      // pone una ambulancia en el mar.
+  it('todo hexágono cae dentro de Bogotá', () => {
+    // Un centroide fuera del recuadro manda una ambulancia al mar.
+    for (const z of ctrl.zonas().zonas) {
       expect(z.centroide.lat).toBeGreaterThan(4.0);
       expect(z.centroide.lat).toBeLessThan(4.9);
       expect(z.centroide.lng).toBeGreaterThan(-74.4);
@@ -48,27 +59,28 @@ describe('ZonasController', () => {
     }
   });
 
-  it('trae la curva por hora para animar el mapa', () => {
-    const z = ctrl.demanda().zonas[0];
-    expect(z.porHora).toHaveLength(24);
-    expect(z.horaPico).toBeGreaterThanOrEqual(0);
+  it('se puede filtrar por localidad', () => {
+    const r = ctrl.zonas('kennedy');
+    expect(r.total).toBeGreaterThan(0);
+    expect(r.zonas.every((z) => z.localidad === 'KENNEDY')).toBe(true);
   });
 
-  it('declara que los centroides son aproximados', () => {
-    // Pintar un punto aproximado con la misma tipografía que uno exacto
-    // miente por omisión. La consola tiene que poder decirlo.
-    expect(ctrl.demanda().geometria).toBe('centroide-aproximado');
+  it('una localidad que no existe devuelve vacío, no error', () => {
+    expect(ctrl.zonas('MEDELLIN').total).toBe(0);
   });
 
-  it('los nombres van en ASCII, como los normaliza el ETL', () => {
-    // El CSV del 123 tiene codificación mixta: una clave con tilde no cruza y
-    // esa localidad desaparece del mapa en silencio.
-    for (const z of ctrl.demanda().zonas) {
-      expect(z.nombre).toMatch(/^[A-Z ]+$/);
-    }
+  it('los polígonos oficiales traen las 20 localidades', () => {
+    const g = ctrl.localidades() as { features: unknown[] };
+    expect(g.features).toHaveLength(20);
+  });
+
+  it('declara que la demanda se reparte uniforme dentro de la localidad', () => {
+    // Presentar el mapa como medido cuando es interpolado es lo que un
+    // jurado técnico caza.
+    expect(String(ctrl.zonas()._advertencia)).toContain('UNIFORME');
   });
 
   it('cachea: dos lecturas no vuelven a tocar el disco', () => {
-    expect(ctrl.demanda().zonas).toBe(ctrl.demanda().zonas);
+    expect(ctrl.zonas().zonas).toBe(ctrl.zonas().zonas);
   });
 });

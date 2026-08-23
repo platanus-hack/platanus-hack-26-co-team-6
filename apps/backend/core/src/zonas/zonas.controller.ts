@@ -1,137 +1,121 @@
 /**
- * `GET /zonas` — las 19 localidades con su demanda histórica real.
+ * `GET /zonas` — la grilla de cobertura de Bogotá.
  *
- * Es lo que el mapa necesita para pintar el **mapa de calor**: cuánta
- * urgencia se atiende en cada zona, para colorearlas y filtrar.
+ * ⚠️ NO SON LAS LOCALIDADES. Son hexágonos H3 de resolución 8 (~0,74 km²),
+ * generados por `scripts/etl/grilla_h3.py`. Las localidades son divisiones
+ * administrativas de tamaños incomparables —Sumapaz 780 km², La Candelaria 2—
+ * y «manda una ambulancia a cubrir Sumapaz» no significa nada. Los hexágonos
+ * son parametrizables, comparables y subdivisibles, que es lo que hace falta
+ * para repartir una flota. Es el modelo de Uber, y H3 es su librería.
  *
- * El dato NO es una estimación: sale de las **9.206 llamadas del NUSE 123**
- * procesadas por `scripts/etl/demanda_123.py`. Kennedy concentra el 15,0% de
- * la demanda de la ciudad; Sumapaz el 0,08%.
+ * Un hexágono tiene 6 vecinos TODOS a la misma distancia. Un cuadrado tiene 4
+ * de lado y 4 en diagonal, un 41% más lejos: cualquier cálculo de «la zona de
+ * al lado» queda sesgado.
  *
- * ⚠️ SIN POLÍGONOS. Se devuelve `centroide`, no geometría: las llamadas del
- *    123 no traen coordenadas —la unidad más fina es la localidad— y en el
- *    repo no hay polígonos de localidad. El mapa puede pintar círculos
- *    proporcionales a la demanda; para coropletas de verdad hacen falta los
- *    polígonos de datos abiertos de Bogotá.
+ * LA DEMANDA sale de las 9.206 llamadas del NUSE 123, como **densidad por
+ * km²** de su localidad. Los Mártires lidera con 47,9 llamadas/km², no
+ * Kennedy — que tiene más llamadas totales pero está mucho más extendida.
+ * Esa diferencia es la que decide dónde conviene esperar.
  *
- * Público a propósito: son datos abiertos agregados, sin un solo paciente
- * adentro. Exigir sesión para pintar un mapa de calor de la ciudad sería
- * cerrar lo que ya es público.
+ * ⚠️ SE ASUME QUE LA DEMANDA SE REPARTE UNIFORME DENTRO DE CADA LOCALIDAD, y
+ *    no es cierto: el 123 no trae coordenadas. La comparación ENTRE
+ *    localidades sí es exacta; la de dos hexágonos de la misma, no. La
+ *    respuesta lo declara para que la consola pueda decirlo.
+ *
+ * Público a propósito: son datos abiertos agregados, sin un paciente adentro.
  */
 
-import { Controller, Get, Logger } from '@nestjs/common';
+import { Controller, Get, Logger, Query } from '@nestjs/common';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { Publico } from '../auth/publico.decorator';
 
 /** `core/src/zonas/` → `src/` → `core/` → `backend/` → `apps/` → raíz. */
 const RAIZ = join(__dirname, '..', '..', '..', '..', '..');
-const DEMANDA = join(RAIZ, 'data', 'derivados', 'demanda_localidad.json');
+const GRILLA = join(RAIZ, 'data', 'derivados', 'zonas_h3.json');
+const POLIGONOS = join(RAIZ, 'data', 'geo', 'localidades.geojson');
 
-/**
- * Centroides aproximados por localidad, en ASCII sin tildes — igual que los
- * normaliza el ETL. El CSV del 123 tiene codificación mixta y "USAQUÉN" llega
- * de dos formas distintas según la fila; una clave con tilde no cruza y esa
- * localidad desaparece del mapa en silencio.
- */
-const CENTROIDES: Record<string, [number, number]> = {
-  USAQUEN: [4.703, -74.03], CHAPINERO: [4.649, -74.058],
-  'SANTA FE': [4.608, -74.07], 'SAN CRISTOBAL': [4.557, -74.087],
-  USME: [4.479, -74.126], TUNJUELITO: [4.572, -74.132],
-  BOSA: [4.618, -74.195], KENNEDY: [4.628, -74.155],
-  FONTIBON: [4.674, -74.146], ENGATIVA: [4.706, -74.117],
-  SUBA: [4.744, -74.083], 'BARRIOS UNIDOS': [4.667, -74.083],
-  TEUSAQUILLO: [4.639, -74.092], 'LOS MARTIRES': [4.604, -74.09],
-  'ANTONIO NARINO': [4.591, -74.1], 'PUENTE ARANDA': [4.615, -74.115],
-  'LA CANDELARIA': [4.594, -74.074], 'RAFAEL URIBE URIBE': [4.558, -74.116],
-  'CIUDAD BOLIVAR': [4.531, -74.156], SUMAPAZ: [4.1, -74.3],
-};
+/** Lo que el ETL deja al lado de las zonas: procedencia y advertencias. */
+export interface MetaGrilla {
+  resolucion?: number;
+  celdas?: number;
+  _fuente?: string;
+  _demanda?: string;
+  _advertencia?: string;
+  _descartado?: string;
+  error?: string;
+}
 
-export interface ZonaDemanda {
+export interface ZonaH3 {
+  /** Índice H3. Opaco a propósito: cambiar de resolución no rompe a nadie. */
   id: string;
-  nombre: string;
-  /** Fracción de la demanda de la ciudad (0..1). El color del mapa. */
-  demandaRelativa: number;
-  llamadas: number;
-  /** Cuántas fueron prioridad alta o crítica. */
-  llamadasPrioritarias: number;
-  /** 24 valores. Permite animar el mapa por hora del día. */
-  porHora: number[];
-  /** Hora pico de esta zona. El dato que sorprende: no es la noche. */
-  horaPico: number;
+  localidad: string;
   centroide: { lat: number; lng: number };
+  /** Llamadas por km² de su localidad. El color del mapa de calor. */
+  densidad: number;
+  /** Normalizada, suma 1 sobre la grilla. Lo que usa el reparto. */
+  demandaRelativa: number;
 }
 
 @Controller('zonas')
 export class ZonasController {
   private readonly log = new Logger(ZonasController.name);
-  private cache: { zonas: ZonaDemanda[]; fuente: string; llamadas: number } | null =
-    null;
+  private grilla: { zonas: ZonaH3[]; meta: MetaGrilla } | null = null;
+  private poligonos: unknown | null = null;
 
+  /**
+   * `?localidad=KENNEDY` recorta. Sin filtro son 1.114 hexágonos (~167 KB):
+   * mucho para una consola móvil, bien para el tablero del CRUE.
+   */
   @Publico()
   @Get()
-  demanda() {
-    if (!this.cache) this.cache = this.cargar();
-    return {
-      ...this.cache,
-      // La consola LO DICE: los centroides son referencias, no geometría.
-      // Un mapa que pinta un punto aproximado con la misma tipografía que uno
-      // exacto miente por omisión.
-      geometria: 'centroide-aproximado',
-      nota:
-        'Demanda histórica del NUSE 123. Los centroides son referencias por ' +
-        'localidad, no polígonos: sirven para colorear, no para navegar.',
-    };
+  zonas(
+    @Query('localidad') localidad?: string,
+  ): MetaGrilla & { zonas: ZonaH3[]; total: number } {
+    if (!this.grilla) this.grilla = this.cargarGrilla();
+    const filtro = localidad?.trim().toUpperCase();
+    const zonas = filtro
+      ? this.grilla.zonas.filter((z) => z.localidad === filtro)
+      : this.grilla.zonas;
+
+    return { ...this.grilla.meta, zonas, total: zonas.length };
   }
 
-  private cargar() {
+  /**
+   * `GET /zonas/localidades` — los polígonos oficiales, para el contorno.
+   *
+   * La grilla pinta el calor; esto pinta las fronteras y los nombres. Un
+   * regulador del CRUE sabe «Kennedy», no `8a2a1072b59ffff`.
+   */
+  @Publico()
+  @Get('localidades')
+  localidades() {
+    if (!this.poligonos) {
+      try {
+        this.poligonos = JSON.parse(readFileSync(POLIGONOS, 'utf8'));
+      } catch (e) {
+        this.log.error(`no pude leer ${POLIGONOS}: ${String(e)}`);
+        this.poligonos = { type: 'FeatureCollection', features: [] };
+      }
+    }
+    return this.poligonos;
+  }
+
+  private cargarGrilla() {
     try {
-      const datos = JSON.parse(readFileSync(DEMANDA, 'utf8')) as {
-        llamadas: number;
-        fuente: string;
-        zonas: Array<Record<string, unknown>>;
-      };
-
-      const zonas: ZonaDemanda[] = [];
-      const sinCentroide: string[] = [];
-
-      for (const z of datos.zonas) {
-        const nombre = String(z.localidad);
-        const centro = CENTROIDES[nombre];
-        if (!centro) {
-          sinCentroide.push(nombre);
-          continue;
-        }
-        const porHora = (z.porHora as number[]) ?? [];
-        zonas.push({
-          id: String(z.codigo || nombre),
-          nombre,
-          demandaRelativa: Number(z.fraccionDemanda ?? 0),
-          llamadas: Number(z.llamadas ?? 0),
-          llamadasPrioritarias: Number(z.llamadasPrioritarias ?? 0),
-          porHora,
-          horaPico: porHora.length
-            ? porHora.indexOf(Math.max(...porHora))
-            : -1,
-          centroide: { lat: centro[0], lng: centro[1] },
-        });
-      }
-
-      // Una localidad sin centroide desaparece del mapa. Callarlo dejaría un
-      // hueco que nadie ve.
-      if (sinCentroide.length) {
-        this.log.warn(`localidades sin centroide: ${sinCentroide.join(', ')}`);
-      }
-
-      return { zonas, fuente: datos.fuente, llamadas: datos.llamadas };
+      const d = JSON.parse(readFileSync(GRILLA, 'utf8')) as {
+        zonas: ZonaH3[];
+      } & MetaGrilla;
+      const { zonas, ...meta } = d;
+      return { zonas, meta: meta as MetaGrilla };
     } catch (e) {
-      // Sin el archivo derivado no hay mapa de calor, pero el resto de core
+      // Sin la grilla no hay mapa de calor ni reparto, pero el resto de core
       // sigue vivo. Se avisa y se devuelve vacío, no se revienta.
       this.log.error(
-        `no pude leer ${DEMANDA}: ${String(e)}. ` +
-          'Corre: python3 scripts/etl/demanda_123.py',
+        `no pude leer ${GRILLA}: ${String(e)}. ` +
+          'Corre: python3 scripts/etl/grilla_h3.py',
       );
-      return { zonas: [], fuente: 'no disponible', llamadas: 0 };
+      return { zonas: [], meta: { error: 'grilla no disponible' } };
     }
   }
 }
