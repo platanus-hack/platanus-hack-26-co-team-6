@@ -15,6 +15,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
   Get,
   HttpCode,
   Param,
@@ -44,6 +45,9 @@ const EMITIBLES: readonly TipoEvento[] = [
   'demora_reportada',
   'cerrado',
 ];
+
+/** §5.2: el override es del regulador. `admin_plataforma` porque administra el CRUE. */
+const PUEDEN_OVERRIDE = ['regulador_crue', 'admin_plataforma'] as const;
 
 interface CrearEventoRequest {
   tipo?: string;
@@ -83,12 +87,26 @@ export class EventosController {
           'El resto los escribe el servidor desde su transicion real.',
       );
 
-    // El override del CRUE sin justificacion no es un override: es un salto
-    // de regla sin firma. Invariante 2 de §5.3.
-    if (tipo === 'override_crue' && !textoDe(cuerpo.detalle?.justificacion))
-      throw new BadRequestException(
-        'Un override exige justificacion: es lo que lo separa de saltarse una regla',
-      );
+    if (tipo === 'override_crue') {
+      // El override del CRUE sin justificacion no es un override: es un salto
+      // de regla sin firma. Invariante 2 de §5.3.
+      if (!textoDe(cuerpo.detalle?.justificacion))
+        throw new BadRequestException(
+          'Un override exige justificacion: es lo que lo separa de saltarse una regla',
+        );
+
+      // Y lo hace quien tiene la potestad de hacerlo. La ley se la atribuye al
+      // regulador; un jefe de urgencias saltandose el filtro duro "porque
+      // igual va a llegar" es exactamente lo que esto tiene que impedir.
+      //
+      // Va aqui y no con `@Rol()` porque la ruta admite siete tipos y solo
+      // este exige el rol. Cuando 3.11 (Juan) le de ruta propia a
+      // `/casos/:id/override`, ahi el decorador es mas limpio y esto sobra.
+      if (!PUEDEN_OVERRIDE.some((rol) => actor?.roles.includes(rol)))
+        throw new ForbiddenException(
+          'Solo un regulador del CRUE puede saltar una regla dura',
+        );
+    }
 
     return {
       evento: await this.registro.registrar({

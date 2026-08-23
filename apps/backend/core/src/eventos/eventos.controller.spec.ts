@@ -5,7 +5,7 @@
  * tipo, el registro de auditoría vale lo que vale un campo de texto.
  */
 
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import type { ActorSesion } from '../auth/carga';
 import { EventosMemoria } from './almacen-eventos';
 import { EventosController } from './eventos.controller';
@@ -110,6 +110,44 @@ describe('EventosController', () => {
     );
 
     expect(evento!.actorId).toBe('actor-crue');
+  });
+
+  it('⭐ un jefe de urgencias no puede hacer un override del CRUE', async () => {
+    // La ley le atribuye la regulacion al CRUE. Un jefe de urgencias
+    // saltandose el filtro duro "porque igual va a llegar" es justo lo que
+    // esto impide. (Parte de la 3.11 de Juan; se cierra aqui porque el
+    // endpoint es de esta tarea.)
+    const { controlador } = montar();
+    const jefe: ActorSesion = {
+      ...REGULADOR,
+      id: 'actor-hospital',
+      roles: ['jefe_urgencias'],
+    };
+
+    await expect(
+      controlador.crear(
+        'caso-1',
+        { tipo: 'override_crue', detalle: { justificacion: 'me parece' } },
+        jefe,
+      ),
+    ).rejects.toThrow(ForbiddenException);
+  });
+
+  it('los demas tipos no exigen rol de regulador', async () => {
+    // Una llegada la reporta el paramedico, no el CRUE.
+    const { controlador } = montar();
+    const paramedico: ActorSesion = {
+      ...REGULADOR,
+      id: 'actor-movil',
+      roles: ['paramedico'],
+    };
+
+    const { evento } = await controlador.crear(
+      'caso-1',
+      { tipo: 'llegada_puerta' },
+      paramedico,
+    );
+    expect(evento!.tipo).toBe('llegada_puerta');
   });
 
   it('el mismo toque dos veces es un solo evento', async () => {
