@@ -1,0 +1,21 @@
+organizacion_id,tipo,razon_social,nombre_corto,nit,estado,verificacion,codigo_sede
+ORG-000,crue,Centro Regulador de Urgencias y Emergencias de Bogotá (demo),CRUE Bogotá,900000000-0,activa,manual,
+ORG-001,ips,Fundación Santa Fe de Bogotá,Fundación Santa Fe de Bogotá,900010000-0,activa,reps_automatico,110010561801
+ORG-002,ips,Hospital Universitario Clínica San Rafael,Hospital Universitario Clínica San Rafae,900010001-1,activa,reps_automatico,110010566801
+ORG-003,ips,Fundación Hospital de La Misericordia,Fundación Hospital de La Misericordia,900010002-2,activa,reps_automatico,110010568101
+ORG-004,ips,Fundación Abood Shaio,Fundación Abood Shaio,900010003-3,activa,reps_automatico,110010644701
+ORG-005,ips,Sociedad de Cirugía de Bogotá - Hospital de San José,Sociedad de Cirugía de Bogotá - Hospital,900010004-4,activa,reps_automatico,110010867901
+ORG-006,ips,Fundación Cardio Infantil Instituto de Cardiología,Fundación Cardio Infantil Instituto de C,900010005-5,activa,reps_automatico,110010911101
+ORG-007,ips,Clínica Reina Sofia,Clínica Reina Sofia,900010006-6,activa,reps_automatico,110010918608
+ORG-008,ips,Clínica Universitaria Colombia,Clínica Universitaria Colombia,900010007-7,activa,reps_automatico,110010918630
+ORG-009,ips,Clínica Infantil Santa María Del Lago,Clínica Infantil Santa María Del Lago,900010008-8,activa,reps_automatico,110010918668
+ORG-010,ips,Empresa Social Del Estado Hospital Universitario de La Samaritana,Empresa Social Del Estado Hospital Unive,900010009-9,activa,reps_automatico,110010922401
+ORG-011,ips,Clínica de Marly,Clínica de Marly,900010010-0,activa,reps_automatico,110010936101
+ORG-012,ips,Hospital Universitario San Ignacio,Hospital Universitario San Ignacio,900010011-1,activa,reps_automatico,110010945601
+ORG-100,operador_ambulancia,AEROMAS SAS,AEROMAS SAS,900020000-0,activa,manual,
+ORG-101,operador_ambulancia,AMBULANCIAS AEREAS DE COLOMBIA S.A.S.,AMBULANCIAS AEREAS DE COLOMBIA S.A.S.,900020001-1,activa,manual,
+ORG-102,operador_ambulancia,AMBULANCIAS PRIMEROS AUXILIOS LTDA,AMBULANCIAS PRIMEROS AUXILIOS LTDA,900020002-2,activa,manual,
+ORG-103,operador_ambulancia,AMBULANCIAS PRIMEROS AUXILIOS LTDA,AMBULANCIAS PRIMEROS AUXILIOS LTDA,900020003-3,activa,manual,
+ORG-104,operador_ambulancia,AMBULANCIAS Y SERVICIOS MEDICOS S A,AMBULANCIAS Y SERVICIOS MEDICOS S A,900020004-4,activa,manual,
+ORG-105,operador_ambulancia,AMBULANCIAS Y SERVICIOS MEDICOS S A,AMBULANCIAS Y SERVICIOS MEDICOS S A,900020005-5,activa,manual,
+ORG-106,operador_ambulancia,Ambulife sas,Ambulife sas,900020006-6,activa,manual,

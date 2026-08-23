@@ -1,0 +1,41 @@
+movil_id,tipo,operador,placa,base_localidad,tripulacion,disponible,turno
+AMB-001,TAM,AEROMAS SAS,WGX100,Chapinero,Aurelia Dorado / Néstor Cifuentes,false,noche
+AMB-002,TAM,AMBULANCIAS AEREAS DE COLOMBIA S.A.S.,WGX101,Los Mártires,Bernardo Lozano / Olga Jaramillo,true,noche
+AMB-003,TAM,AMBULANCIAS PRIMEROS AUXILIOS LTDA,WGX102,Usaquén,Cecilia Sarmiento / Prudencio Rincón,true,noche
+AMB-004,TAM,AMBULANCIAS PRIMEROS AUXILIOS LTDA,WGX103,Chapinero,Damián Bermúdez / Quintina Aristizábal,true,noche
+AMB-005,TAM,AMBULANCIAS Y SERVICIOS MEDICOS S A,WGX104,Teusaquillo,Elvira Izquierdo / Rosalba Hurtado,false,noche
+AMB-006,TAM,AMBULANCIAS Y SERVICIOS MEDICOS S A,WGX105,Teusaquillo,Fabián Quiroga / Saúl Peñaloza,true,noche
+AMB-007,TAM,Ambulife sas,WGX106,Chapinero,Gladys Zambrano / Teodora Yepes,true,noche
+AMB-008,TAM,Ambulife sas,WGX107,Kennedy,Horacio Guarnizo / Ulises Fandiño,true,noche
+AMB-009,TAM,AMBU-SANAR S.A.S SIGLA AMBUSAS,WGX108,Fontibón,Irene Ocampo / Vilma Nempeque,false,noche
+AMB-010,TAM,AMBU-SANAR S.A.S SIGLA AMBUSAS,WGX109,Antonio Nariño,Joaquín Valbuena / Wilmar Umaña,true,noche
+AMB-011,TAM,APPSEMI S.A.S,WGX110,Rafael Uribe Uribe,Karina Escalante / Ximena Dorado,true,noche
+AMB-012,TAM,APPSEMI S.A.S,WGX111,Engativá,Leonel Mahecha / Yolanda Lozano,true,noche
+AMB-013,TAB,333 ASISTENCIAS MEDICAS SAS SIGLA 333 AM,WGX112,Tunjuelito,Marcela Tibaquirá / Zacarías Sarmiento,false,noche
+AMB-014,TAB,aerosanidad sas,WGX113,Usme,Néstor Cifuentes / Aurelia Bermúdez,true,noche
+AMB-015,TAB,Alianza Codigo Rojo IPS SAS,WGX114,Kennedy,Olga Jaramillo / Bernardo Izquierdo,true,noche
+AMB-016,TAB,ALIANZA DE AMBULANCIAS MEDICA SAS,WGX115,Bosa,Prudencio Rincón / Cecilia Quiroga,true,noche
+AMB-017,TAB,ALIANZA DE AMBULANCIAS MEDICA SAS,WGX116,Chapinero,Quintina Aristizábal / Damián Zambrano,false,noche
+AMB-018,TAB,ambucol sociedad por acciones simplificadas - ambucol sas,WGX117,Barrios Unidos,Rosalba Hurtado / Elvira Guarnizo,true,noche
+AMB-019,TAB,AMBULANCIAS EMERGENCIAS & SERVICIOS ASISTENCIALES SAS SIGLA AMBULANCIAS E.S.A S.A.S,WGX118,Kennedy,Saúl Peñaloza / Fabián Ocampo,true,noche
+AMB-020,TAB,AMBULANCIAS FUERZA VITAL SAS,WGX119,Kennedy,Teodora Yepes / Gladys Valbuena,true,noche
+AMB-021,TAB,AMBULANCIAS INTEGRALES DE COLOMBIA A.I.C. SAS,WGX120,Kennedy,Ulises Fandiño / Horacio Escalante,false,noche
+AMB-022,TAB,AMBULANCIAS MEDICAS PROFESIONALES S.A.S,WGX121,Suba,Vilma Nempeque / Irene Mahecha,true,noche
+AMB-023,TAB,AMBULANCIAS PRIMEROS AUXILIOS LTDA,WGX122,Usaquén,Wilmar Umaña / Joaquín Tibaquirá,true,noche
+AMB-024,TAB,AMBULANCIAS PRIMEROS AUXILIOS LTDA,WGX123,Puente Aranda,Ximena Dorado / Karina Cifuentes,true,noche
+AMB-025,TAB,AMBULANCIAS SEGUNDOS DE VIDA SAS,WGX124,Barrios Unidos,Yolanda Lozano / Leonel Jaramillo,false,noche
+AMB-026,TAB,AMBULANCIAS Y SERVICIOS MEDICOS S A,WGX125,Suba,Zacarías Sarmiento / Marcela Rincón,true,noche
+AMB-027,TAB,AMBULANCIAS Y SERVICIOS MEDICOS S A,WGX126,San Cristóbal,Aurelia Bermúdez / Néstor Aristizábal,true,noche
+AMB-028,TAB,Ambulife sas,WGX127,Rafael Uribe Uribe,Bernardo Izquierdo / Olga Hurtado,true,noche
+AMB-029,TAB,Ambulife sas,WGX128,Engativá,Cecilia Quiroga / Prudencio Peñaloza,false,noche
+AMB-030,TAB,AMBUMED SAS,WGX129,Ciudad Bolívar,Damián Zambrano / Quintina Yepes,true,noche
+AMB-031,TAB,AMBUSALUD RCP SAS,WGX130,Usme,Elvira Guarnizo / Rosalba Fandiño,true,noche
+AMB-032,TAB,AMBU-SANAR S.A.S SIGLA AMBUSAS,WGX131,Kennedy,Fabián Ocampo / Saúl Nempeque,true,noche
+AMB-033,TAB,AMBU-SANAR S.A.S SIGLA AMBUSAS,WGX132,Teusaquillo,Gladys Valbuena / Teodora Umaña,false,noche
+AMB-034,TAB,AMBUSURE IPS S.A.S.,WGX133,Barrios Unidos,Horacio Escalante / Ulises Dorado,true,noche
+AMB-035,TAB,APPSEMI S.A.S,WGX134,Suba,Irene Mahecha / Vilma Lozano,true,noche
+AMB-036,TAB,APPSEMI S.A.S,WGX135,San Cristóbal,Joaquín Tibaquirá / Wilmar Sarmiento,true,noche
+AMB-037,TAB,ASISTENCIA MEDICA EN LINEA SAS,WGX136,Teusaquillo,Karina Cifuentes / Ximena Bermúdez,false,noche
+AMB-038,TAB,ASISTENCIA MEDICA EN LINEA SAS,WGX137,Rafael Uribe Uribe,Leonel Jaramillo / Yolanda Izquierdo,true,noche
+AMB-039,TAB,ASISTENCIA MEDICA ESPECIAL EN SALUD IPS SAS SIGLA AMESALUD IPS SAS,WGX138,Usaquén,Marcela Rincón / Zacarías Quiroga,true,noche
+AMB-040,TAB,ASOCIACION DE AMIGOS CONTRA EL CANCER PROSEGUIR,WGX139,Engativá,Néstor Aristizábal / Aurelia Zambrano,true,noche

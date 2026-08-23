@@ -1,0 +1,151 @@
+wamid,proveedor,direccion,telefono,caso_id,cuerpo,ts
+wamid.DEMO000001,whatsapp,entrada,+5716015550101,CAS-0001,[audio 0:02] dictado del paramédico,2026-08-22T19:01:44-05:00
+wamid.DEMO000002,whatsapp,salida,+5716015550101,CAS-0001,"PULSO · CAS-0001: sin aceptación aún, el caso pasó al CRUE.",2026-08-22T19:03:19-05:00
+wamid.DEMO000003,whatsapp,entrada,+5716015550102,CAS-0002,[audio 0:04] dictado del paramédico,2026-08-22T19:05:10-05:00
+wamid.DEMO000004,whatsapp,salida,+5716015550102,CAS-0002,PULSO · CAS-0002: Instituto Nacional de Cancerología ACEPTÓ. ETA 7.6 min.,2026-08-22T19:06:45-05:00
+wamid.DEMO000005,whatsapp,entrada,+5716015550103,CAS-0003,[audio 0:06] dictado del paramédico,2026-08-22T19:08:05-05:00
+wamid.DEMO000006,whatsapp,salida,+5716015550103,CAS-0003,PULSO · CAS-0003: Hospital de Bosa ACEPTÓ. ETA 1.0 min.,2026-08-22T19:09:40-05:00
+wamid.DEMO000007,whatsapp,entrada,+5716015550104,CAS-0004,[audio 0:08] dictado del paramédico,2026-08-22T19:11:40-05:00
+wamid.DEMO000008,whatsapp,salida,+5716015550104,CAS-0004,PULSO · CAS-0004: Hospital Occidente de Kennedy ACEPTÓ. ETA 16.1 min.,2026-08-22T19:13:15-05:00
+wamid.DEMO000009,whatsapp,entrada,+5716015550105,CAS-0005,[audio 0:01] dictado del paramédico,2026-08-22T19:12:32-05:00
+wamid.DEMO000010,whatsapp,salida,+5716015550105,CAS-0005,PULSO · CAS-0005: Clínica Del Occidente S.A. ACEPTÓ. ETA 2.8 min.,2026-08-22T19:14:07-05:00
+wamid.DEMO000011,whatsapp,entrada,+5716015550106,CAS-0006,[audio 0:03] dictado del paramédico,2026-08-22T19:19:39-05:00
+wamid.DEMO000012,whatsapp,salida,+5716015550106,CAS-0006,PULSO · CAS-0006: Sociedad de Cirugía de Bogotá - Hospital de San José ACEPTÓ. ETA 3.2 min.,2026-08-22T19:21:14-05:00
+wamid.DEMO000013,whatsapp,entrada,+5716015550107,CAS-0007,[audio 0:05] dictado del paramédico,2026-08-22T19:23:39-05:00
+wamid.DEMO000014,whatsapp,salida,+5716015550107,CAS-0007,PULSO · CAS-0007: Clínica Colsubsidio Ciudad Roma ACEPTÓ. ETA 13.6 min.,2026-08-22T19:25:14-05:00
+wamid.DEMO000015,whatsapp,entrada,+5716015550108,CAS-0008,[audio 0:07] dictado del paramédico,2026-08-22T19:31:52-05:00
+wamid.DEMO000016,whatsapp,salida,+5716015550108,CAS-0008,PULSO · CAS-0008: Unidad de Servicios de Salud Santa Clara Hospital Universitario ACEPTÓ. ETA 0.7 min.,2026-08-22T19:33:27-05:00
+wamid.DEMO000017,whatsapp,entrada,+5716015550109,CAS-0009,[audio 0:09] dictado del paramédico,2026-08-22T19:33:12-05:00
+wamid.DEMO000018,whatsapp,salida,+5716015550109,CAS-0009,PULSO · CAS-0009: Clínica Infantil Santa María Del Lago ACEPTÓ. ETA 3.3 min.,2026-08-22T19:34:47-05:00
+wamid.DEMO000019,whatsapp,entrada,+5716015550110,CAS-0010,[audio 0:02] dictado del paramédico,2026-08-22T19:38:35-05:00
+wamid.DEMO000020,whatsapp,salida,+5716015550110,CAS-0010,PULSO · CAS-0010: Clínica Infantil Santa María Del Lago ACEPTÓ. ETA 4.2 min.,2026-08-22T19:40:10-05:00
+wamid.DEMO000021,whatsapp,entrada,+5716015550111,CAS-0011,[audio 0:04] dictado del paramédico,2026-08-22T19:40:35-05:00
+wamid.DEMO000022,whatsapp,salida,+5716015550111,CAS-0011,PULSO · CAS-0011: Clínica Infantil Santa María Del Lago ACEPTÓ. ETA 3.0 min.,2026-08-22T19:42:10-05:00
+wamid.DEMO000023,whatsapp,entrada,+5716015550112,CAS-0012,[audio 0:06] dictado del paramédico,2026-08-22T19:41:30-05:00
+wamid.DEMO000024,whatsapp,salida,+5716015550112,CAS-0012,"PULSO · CAS-0012: sin aceptación aún, el caso pasó al CRUE.",2026-08-22T19:43:05-05:00
+wamid.DEMO000025,whatsapp,entrada,+5716015550113,CAS-0013,[audio 0:08] dictado del paramédico,2026-08-22T19:43:06-05:00
+wamid.DEMO000026,whatsapp,salida,+5716015550113,CAS-0013,PULSO · CAS-0013: Fundación Hospital Infantil Universitario de San Jose ACEPTÓ. ETA 1.3 min.,2026-08-22T19:44:41-05:00
+wamid.DEMO000027,whatsapp,entrada,+5716015550114,CAS-0014,[audio 0:01] dictado del paramédico,2026-08-22T19:51:45-05:00
+wamid.DEMO000028,whatsapp,salida,+5716015550114,CAS-0014,PULSO · CAS-0014: Clínica Medical S.A.S. ACEPTÓ. ETA 1.6 min.,2026-08-22T19:53:20-05:00
+wamid.DEMO000029,whatsapp,entrada,+5716015550115,CAS-0015,[audio 0:03] dictado del paramédico,2026-08-22T19:55:00-05:00
+wamid.DEMO000030,whatsapp,salida,+5716015550115,CAS-0015,PULSO · CAS-0015: Clínica Del Occidente S.A. ACEPTÓ. ETA 5.0 min.,2026-08-22T19:56:35-05:00
+wamid.DEMO000031,whatsapp,entrada,+5716015550116,CAS-0016,[audio 0:05] dictado del paramédico,2026-08-22T19:59:15-05:00
+wamid.DEMO000032,whatsapp,salida,+5716015550116,CAS-0016,PULSO · CAS-0016: Clínica Del Occidente S.A. ACEPTÓ. ETA 1.7 min.,2026-08-22T20:00:50-05:00
+wamid.DEMO000033,whatsapp,entrada,+5716015550117,CAS-0017,[audio 0:07] dictado del paramédico,2026-08-22T20:08:34-05:00
+wamid.DEMO000034,whatsapp,salida,+5716015550117,CAS-0017,PULSO · CAS-0017: Unidad de Servicios de Salud Victoria ACEPTÓ. ETA 17.7 min.,2026-08-22T20:10:09-05:00
+wamid.DEMO000035,whatsapp,entrada,+5716015550118,CAS-0018,[audio 0:09] dictado del paramédico,2026-08-22T20:11:34-05:00
+wamid.DEMO000036,whatsapp,salida,+5716015550118,CAS-0018,PULSO · CAS-0018: Clínica Del Occidente S.A. ACEPTÓ. ETA 5.4 min.,2026-08-22T20:13:09-05:00
+wamid.DEMO000037,whatsapp,entrada,+5716015550119,CAS-0019,[audio 0:02] dictado del paramédico,2026-08-22T20:13:38-05:00
+wamid.DEMO000038,whatsapp,salida,+5716015550119,CAS-0019,PULSO · CAS-0019: Hospital de Bosa ACEPTÓ. ETA 1.6 min.,2026-08-22T20:15:13-05:00
+wamid.DEMO000039,whatsapp,entrada,+5716015550120,CAS-0020,[audio 0:04] dictado del paramédico,2026-08-22T20:15:53-05:00
+wamid.DEMO000040,whatsapp,salida,+5716015550120,CAS-0020,"PULSO · CAS-0020: sin aceptación aún, el caso pasó al CRUE.",2026-08-22T20:17:28-05:00
+wamid.DEMO000041,whatsapp,entrada,+5716015550121,CAS-0021,[audio 0:06] dictado del paramédico,2026-08-22T20:21:12-05:00
+wamid.DEMO000042,whatsapp,salida,+5716015550121,CAS-0021,PULSO · CAS-0021: Sociedad de Cirugía de Bogotá - Hospital de San José ACEPTÓ. ETA 6.3 min.,2026-08-22T20:22:47-05:00
+wamid.DEMO000043,whatsapp,entrada,+5716015550122,CAS-0022,[audio 0:08] dictado del paramédico,2026-08-22T20:25:21-05:00
+wamid.DEMO000044,whatsapp,salida,+5716015550122,CAS-0022,PULSO · CAS-0022: Clínica Del Occidente S.A. ACEPTÓ. ETA 3.9 min.,2026-08-22T20:26:56-05:00
+wamid.DEMO000045,whatsapp,entrada,+5716015550123,CAS-0023,[audio 0:01] dictado del paramédico,2026-08-22T20:34:13-05:00
+wamid.DEMO000046,whatsapp,salida,+5716015550123,CAS-0023,PULSO · CAS-0023: Clínica Del Occidente S.A. ACEPTÓ. ETA 3.5 min.,2026-08-22T20:35:48-05:00
+wamid.DEMO000047,whatsapp,entrada,+5716015550124,CAS-0024,[audio 0:03] dictado del paramédico,2026-08-22T20:43:13-05:00
+wamid.DEMO000048,whatsapp,salida,+5716015550124,CAS-0024,PULSO · CAS-0024: Hospital de Bosa ACEPTÓ. ETA 2.1 min.,2026-08-22T20:44:48-05:00
+wamid.DEMO000049,whatsapp,entrada,+5716015550125,CAS-0025,[audio 0:05] dictado del paramédico,2026-08-22T20:46:14-05:00
+wamid.DEMO000050,whatsapp,salida,+5716015550125,CAS-0025,PULSO · CAS-0025: Unidad de Servicios de Salud Engativá Calle 80 ACEPTÓ. ETA 3.3 min.,2026-08-22T20:47:49-05:00
+wamid.DEMO000051,whatsapp,entrada,+5716015550126,CAS-0026,[audio 0:07] dictado del paramédico,2026-08-22T20:48:31-05:00
+wamid.DEMO000052,whatsapp,salida,+5716015550126,CAS-0026,PULSO · CAS-0026: Clínica Colsubsidio Ciudad Roma ACEPTÓ. ETA 10.9 min.,2026-08-22T20:50:06-05:00
+wamid.DEMO000053,whatsapp,entrada,+5716015550127,CAS-0027,[audio 0:09] dictado del paramédico,2026-08-22T20:54:35-05:00
+wamid.DEMO000054,whatsapp,salida,+5716015550127,CAS-0027,PULSO · CAS-0027: Sociedad de Cirugía de Bogotá - Hospital de San José ACEPTÓ. ETA 2.3 min.,2026-08-22T20:56:10-05:00
+wamid.DEMO000055,whatsapp,entrada,+5716015550128,CAS-0028,[audio 0:02] dictado del paramédico,2026-08-22T20:55:14-05:00
+wamid.DEMO000056,whatsapp,salida,+5716015550128,CAS-0028,PULSO · CAS-0028: Clínica Universitaria Colombia ACEPTÓ. ETA 3.8 min.,2026-08-22T20:56:49-05:00
+wamid.DEMO000057,whatsapp,entrada,+5716015550129,CAS-0029,[audio 0:04] dictado del paramédico,2026-08-22T20:56:20-05:00
+wamid.DEMO000058,whatsapp,salida,+5716015550129,CAS-0029,PULSO · CAS-0029: Hospital Pediátrico Tintal ACEPTÓ. ETA 5.7 min.,2026-08-22T20:57:55-05:00
+wamid.DEMO000059,whatsapp,entrada,+5716015550130,CAS-0030,[audio 0:06] dictado del paramédico,2026-08-22T20:59:22-05:00
+wamid.DEMO000060,whatsapp,salida,+5716015550130,CAS-0030,PULSO · CAS-0030: Clínica Infantil Santa María Del Lago ACEPTÓ. ETA 5.2 min.,2026-08-22T21:00:57-05:00
+wamid.DEMO000061,whatsapp,entrada,+5716015550131,CAS-0031,[audio 0:08] dictado del paramédico,2026-08-22T21:02:01-05:00
+wamid.DEMO000062,whatsapp,salida,+5716015550131,CAS-0031,PULSO · CAS-0031: Hospital Occidente de Kennedy ACEPTÓ. ETA 14.5 min.,2026-08-22T21:03:36-05:00
+wamid.DEMO000063,whatsapp,entrada,+5716015550132,CAS-0032,[audio 0:01] dictado del paramédico,2026-08-22T21:04:12-05:00
+wamid.DEMO000064,whatsapp,salida,+5716015550132,CAS-0032,PULSO · CAS-0032: Clínica Palermo ACEPTÓ. ETA 2.0 min.,2026-08-22T21:05:47-05:00
+wamid.DEMO000065,whatsapp,entrada,+5716015550133,CAS-0033,[audio 0:03] dictado del paramédico,2026-08-22T21:07:18-05:00
+wamid.DEMO000066,whatsapp,salida,+5716015550133,CAS-0033,PULSO · CAS-0033: Clínica Infantil Santa María Del Lago ACEPTÓ. ETA 3.7 min.,2026-08-22T21:08:53-05:00
+wamid.DEMO000067,whatsapp,entrada,+5716015550134,CAS-0034,[audio 0:05] dictado del paramédico,2026-08-22T21:13:48-05:00
+wamid.DEMO000068,whatsapp,salida,+5716015550134,CAS-0034,PULSO · CAS-0034: Administradora Clínica La Colina SAS ACEPTÓ. ETA 5.4 min.,2026-08-22T21:15:23-05:00
+wamid.DEMO000069,whatsapp,entrada,+5716015550135,CAS-0035,[audio 0:07] dictado del paramédico,2026-08-22T21:17:01-05:00
+wamid.DEMO000070,whatsapp,salida,+5716015550135,CAS-0035,PULSO · CAS-0035: Hospital Fontibón ACEPTÓ. ETA 0.5 min.,2026-08-22T21:18:36-05:00
+wamid.DEMO000071,whatsapp,entrada,+5716015550136,CAS-0036,[audio 0:09] dictado del paramédico,2026-08-22T21:19:21-05:00
+wamid.DEMO000072,whatsapp,salida,+5716015550136,CAS-0036,PULSO · CAS-0036: Hospital de Bosa ACEPTÓ. ETA 2.4 min.,2026-08-22T21:20:56-05:00
+wamid.DEMO000073,whatsapp,entrada,+5716015550137,CAS-0037,[audio 0:02] dictado del paramédico,2026-08-22T21:22:04-05:00
+wamid.DEMO000074,whatsapp,salida,+5716015550137,CAS-0037,PULSO · CAS-0037: Loscobos Medical Center SAS - Loscobos ACEPTÓ. ETA 6.3 min.,2026-08-22T21:23:39-05:00
+wamid.DEMO000075,whatsapp,entrada,+5716015550138,CAS-0038,[audio 0:04] dictado del paramédico,2026-08-22T21:27:36-05:00
+wamid.DEMO000076,whatsapp,salida,+5716015550138,CAS-0038,PULSO · CAS-0038: Clínica Medical S.A.S. ACEPTÓ. ETA 2.3 min.,2026-08-22T21:29:11-05:00
+wamid.DEMO000077,whatsapp,entrada,+5716015550139,CAS-0039,[audio 0:06] dictado del paramédico,2026-08-22T21:28:40-05:00
+wamid.DEMO000078,whatsapp,salida,+5716015550139,CAS-0039,"PULSO · CAS-0039: sin aceptación aún, el caso pasó al CRUE.",2026-08-22T21:30:15-05:00
+wamid.DEMO000079,whatsapp,entrada,+5716015550140,CAS-0040,[audio 0:08] dictado del paramédico,2026-08-22T21:40:41-05:00
+wamid.DEMO000080,whatsapp,salida,+5716015550140,CAS-0040,PULSO · CAS-0040: Unidad de Servicios de Salud Engativá Calle 80 ACEPTÓ. ETA 3.2 min.,2026-08-22T21:42:16-05:00
+wamid.DEMO000081,whatsapp,entrada,+5716015550141,CAS-0041,[audio 0:01] dictado del paramédico,2026-08-22T21:41:47-05:00
+wamid.DEMO000082,whatsapp,salida,+5716015550141,CAS-0041,PULSO · CAS-0041: Hospital Fontibón ACEPTÓ. ETA 1.3 min.,2026-08-22T21:43:22-05:00
+wamid.DEMO000083,whatsapp,entrada,+5716015550142,CAS-0042,[audio 0:03] dictado del paramédico,2026-08-22T21:44:20-05:00
+wamid.DEMO000084,whatsapp,salida,+5716015550142,CAS-0042,PULSO · CAS-0042: Hospital Occidente de Kennedy ACEPTÓ. ETA 18.0 min.,2026-08-22T21:45:55-05:00
+wamid.DEMO000085,whatsapp,entrada,+5716015550143,CAS-0043,[audio 0:05] dictado del paramédico,2026-08-22T21:53:36-05:00
+wamid.DEMO000086,whatsapp,salida,+5716015550143,CAS-0043,PULSO · CAS-0043: Hospital de Bosa ACEPTÓ. ETA 0.4 min.,2026-08-22T21:55:11-05:00
+wamid.DEMO000087,whatsapp,entrada,+5716015550144,CAS-0044,[audio 0:07] dictado del paramédico,2026-08-22T21:59:06-05:00
+wamid.DEMO000088,whatsapp,salida,+5716015550144,CAS-0044,PULSO · CAS-0044: Unidad de Servicios de Salud El Tunal ACEPTÓ. ETA 1.5 min.,2026-08-22T22:00:41-05:00
+wamid.DEMO000089,whatsapp,entrada,+5716015550145,CAS-0045,[audio 0:09] dictado del paramédico,2026-08-22T22:08:04-05:00
+wamid.DEMO000090,whatsapp,salida,+5716015550145,CAS-0045,PULSO · CAS-0045: Hospital Occidente de Kennedy ACEPTÓ. ETA 15.7 min.,2026-08-22T22:09:39-05:00
+wamid.DEMO000091,whatsapp,entrada,+5716015550146,CAS-0046,[audio 0:02] dictado del paramédico,2026-08-22T22:13:47-05:00
+wamid.DEMO000092,whatsapp,salida,+5716015550146,CAS-0046,PULSO · CAS-0046: Clínica Universitaria Colombia ACEPTÓ. ETA 4.0 min.,2026-08-22T22:15:22-05:00
+wamid.DEMO000093,whatsapp,entrada,+5716015550147,CAS-0047,[audio 0:04] dictado del paramédico,2026-08-22T22:15:47-05:00
+wamid.DEMO000094,whatsapp,salida,+5716015550147,CAS-0047,"PULSO · CAS-0047: sin aceptación aún, el caso pasó al CRUE.",2026-08-22T22:17:22-05:00
+wamid.DEMO000095,whatsapp,entrada,+5716015550148,CAS-0048,[audio 0:06] dictado del paramédico,2026-08-22T22:20:38-05:00
+wamid.DEMO000096,whatsapp,salida,+5716015550148,CAS-0048,PULSO · CAS-0048: Hospital Occidente de Kennedy ACEPTÓ. ETA 18.2 min.,2026-08-22T22:22:13-05:00
+wamid.DEMO000097,whatsapp,entrada,+5716015550149,CAS-0049,[audio 0:08] dictado del paramédico,2026-08-22T22:23:35-05:00
+wamid.DEMO000098,whatsapp,salida,+5716015550149,CAS-0049,PULSO · CAS-0049: Clínica Infantil Santa María Del Lago ACEPTÓ. ETA 2.3 min.,2026-08-22T22:25:10-05:00
+wamid.DEMO000099,whatsapp,entrada,+5716015550150,CAS-0050,[audio 0:01] dictado del paramédico,2026-08-22T22:39:20-05:00
+wamid.DEMO000100,whatsapp,salida,+5716015550150,CAS-0050,PULSO · CAS-0050: Clínica Juan N Corpas Ltda ACEPTÓ. ETA 7.5 min.,2026-08-22T22:40:55-05:00
+wamid.DEMO000101,whatsapp,entrada,+5716015550151,CAS-0051,[audio 0:03] dictado del paramédico,2026-08-22T22:40:11-05:00
+wamid.DEMO000102,whatsapp,salida,+5716015550151,CAS-0051,PULSO · CAS-0051: Clínica Infantil Santa María Del Lago ACEPTÓ. ETA 5.3 min.,2026-08-22T22:41:46-05:00
+wamid.DEMO000103,whatsapp,entrada,+5716015550152,CAS-0052,[audio 0:05] dictado del paramédico,2026-08-22T22:43:16-05:00
+wamid.DEMO000104,whatsapp,salida,+5716015550152,CAS-0052,PULSO · CAS-0052: Hospital de Bosa ACEPTÓ. ETA 1.7 min.,2026-08-22T22:44:51-05:00
+wamid.DEMO000105,whatsapp,entrada,+5716015550153,CAS-0053,[audio 0:07] dictado del paramédico,2026-08-22T22:45:17-05:00
+wamid.DEMO000106,whatsapp,salida,+5716015550153,CAS-0053,PULSO · CAS-0053: Hospital Occidente de Kennedy ACEPTÓ. ETA 2.4 min.,2026-08-22T22:46:52-05:00
+wamid.DEMO000107,whatsapp,entrada,+5716015550154,CAS-0054,[audio 0:09] dictado del paramédico,2026-08-22T22:47:56-05:00
+wamid.DEMO000108,whatsapp,salida,+5716015550154,CAS-0054,PULSO · CAS-0054: Clínica Medicentro Familiar Sede Suba ACEPTÓ. ETA 1.2 min.,2026-08-22T22:49:31-05:00
+wamid.DEMO000109,whatsapp,entrada,+5716015550155,CAS-0055,[audio 0:02] dictado del paramédico,2026-08-22T22:53:12-05:00
+wamid.DEMO000110,whatsapp,salida,+5716015550155,CAS-0055,PULSO · CAS-0055: Administradora Clínica La Colina SAS ACEPTÓ. ETA 8.6 min.,2026-08-22T22:54:47-05:00
+wamid.DEMO000111,whatsapp,entrada,+5716015550156,CAS-0056,[audio 0:04] dictado del paramédico,2026-08-22T22:58:25-05:00
+wamid.DEMO000112,whatsapp,salida,+5716015550156,CAS-0056,PULSO · CAS-0056: Unidad de Servicios de Salud Meissen ACEPTÓ. ETA 7.0 min.,2026-08-22T23:00:00-05:00
+wamid.DEMO000113,whatsapp,entrada,+5716015550157,CAS-0057,[audio 0:06] dictado del paramédico,2026-08-22T22:59:39-05:00
+wamid.DEMO000114,whatsapp,salida,+5716015550157,CAS-0057,PULSO · CAS-0057: Clínica Medicentro Familiar Sede Suba ACEPTÓ. ETA 1.8 min.,2026-08-22T23:01:14-05:00
+wamid.DEMO000115,whatsapp,entrada,+5716015550158,CAS-0058,[audio 0:08] dictado del paramédico,2026-08-22T23:03:38-05:00
+wamid.DEMO000116,whatsapp,salida,+5716015550158,CAS-0058,"PULSO · CAS-0058: sin aceptación aún, el caso pasó al CRUE.",2026-08-22T23:05:13-05:00
+wamid.DEMO000117,whatsapp,entrada,+5716015550159,CAS-0059,[audio 0:01] dictado del paramédico,2026-08-22T23:04:12-05:00
+wamid.DEMO000118,whatsapp,salida,+5716015550159,CAS-0059,PULSO · CAS-0059: Unidad de Servicios de Salud Meissen ACEPTÓ. ETA 2.5 min.,2026-08-22T23:05:47-05:00
+wamid.DEMO000119,whatsapp,entrada,+5716015550160,CAS-0060,[audio 0:03] dictado del paramédico,2026-08-22T23:05:04-05:00
+wamid.DEMO000120,whatsapp,salida,+5716015550160,CAS-0060,PULSO · CAS-0060: Clínica Del Occidente S.A. ACEPTÓ. ETA 1.1 min.,2026-08-22T23:06:39-05:00
+wamid.DEMO000121,whatsapp,entrada,+5716015550161,CAS-0061,[audio 0:05] dictado del paramédico,2026-08-22T23:08:03-05:00
+wamid.DEMO000122,whatsapp,salida,+5716015550161,CAS-0061,PULSO · CAS-0061: Unidad de Servicios de Salud Santa Clara Hospital Universitario ACEPTÓ. ETA 4.7 min.,2026-08-22T23:09:38-05:00
+wamid.DEMO000123,whatsapp,entrada,+5716015550162,CAS-0062,[audio 0:07] dictado del paramédico,2026-08-22T23:13:02-05:00
+wamid.DEMO000124,whatsapp,salida,+5716015550162,CAS-0062,PULSO · CAS-0062: Clínica Medical S.A.S. ACEPTÓ. ETA 2.9 min.,2026-08-22T23:14:37-05:00
+wamid.DEMO000125,whatsapp,entrada,+5716015550163,CAS-0063,[audio 0:09] dictado del paramédico,2026-08-22T23:16:00-05:00
+wamid.DEMO000126,whatsapp,salida,+5716015550163,CAS-0063,PULSO · CAS-0063: Unidad de Servicios de Salud Engativá Calle 80 ACEPTÓ. ETA 2.1 min.,2026-08-22T23:17:35-05:00
+wamid.DEMO000127,whatsapp,entrada,+5716015550164,CAS-0064,[audio 0:02] dictado del paramédico,2026-08-22T23:21:03-05:00
+wamid.DEMO000128,whatsapp,salida,+5716015550164,CAS-0064,PULSO · CAS-0064: Sociedad de Cirugía de Bogotá - Hospital de San José ACEPTÓ. ETA 6.8 min.,2026-08-22T23:22:38-05:00
+wamid.DEMO000129,whatsapp,entrada,+5716015550165,CAS-0065,[audio 0:04] dictado del paramédico,2026-08-22T23:34:37-05:00
+wamid.DEMO000130,whatsapp,salida,+5716015550165,CAS-0065,PULSO · CAS-0065: Hospital de Bosa ACEPTÓ. ETA 1.8 min.,2026-08-22T23:36:12-05:00
+wamid.DEMO000131,whatsapp,entrada,+5716015550166,CAS-0066,[audio 0:06] dictado del paramédico,2026-08-22T23:44:42-05:00
+wamid.DEMO000132,whatsapp,salida,+5716015550166,CAS-0066,"PULSO · CAS-0066: sin aceptación aún, el caso pasó al CRUE.",2026-08-22T23:46:17-05:00
+wamid.DEMO000133,whatsapp,entrada,+5716015550167,CAS-0067,[audio 0:08] dictado del paramédico,2026-08-22T23:51:31-05:00
+wamid.DEMO000134,whatsapp,salida,+5716015550167,CAS-0067,PULSO · CAS-0067: Hospital de Bosa ACEPTÓ. ETA 0.9 min.,2026-08-22T23:53:06-05:00
+wamid.DEMO000135,whatsapp,entrada,+5716015550168,CAS-0068,[audio 0:01] dictado del paramédico,2026-08-22T23:52:37-05:00
+wamid.DEMO000136,whatsapp,salida,+5716015550168,CAS-0068,PULSO · CAS-0068: Clínica Azul ACEPTÓ. ETA 1.7 min.,2026-08-22T23:54:12-05:00
+wamid.DEMO000137,whatsapp,entrada,+5716015550169,CAS-0069,[audio 0:03] dictado del paramédico,2026-08-22T23:57:18-05:00
+wamid.DEMO000138,whatsapp,salida,+5716015550169,CAS-0069,PULSO · CAS-0069: Unidad de Servicios de Salud San Blas ACEPTÓ. ETA 3.6 min.,2026-08-22T23:58:53-05:00
+wamid.DEMO000139,whatsapp,entrada,+5716015550170,CAS-0070,[audio 0:05] dictado del paramédico,2026-08-23T00:06:00-05:00
+wamid.DEMO000140,whatsapp,salida,+5716015550170,CAS-0070,PULSO · CAS-0070: Clínica Del Occidente S.A. ACEPTÓ. ETA 1.0 min.,2026-08-23T00:07:35-05:00
+wamid.DEMO000141,whatsapp,entrada,+5716015550171,CAS-0071,[audio 0:07] dictado del paramédico,2026-08-23T00:11:35-05:00
+wamid.DEMO000142,whatsapp,salida,+5716015550171,CAS-0071,PULSO · CAS-0071: Hospital de Bosa ACEPTÓ. ETA 1.6 min.,2026-08-23T00:13:10-05:00
+wamid.DEMO000143,whatsapp,entrada,+5716015550172,CAS-0072,[audio 0:09] dictado del paramédico,2026-08-23T00:15:33-05:00
+wamid.DEMO000144,whatsapp,salida,+5716015550172,CAS-0072,PULSO · CAS-0072: Hospital Universitario Clínica San Rafael ACEPTÓ. ETA 6.3 min.,2026-08-23T00:17:08-05:00
+wamid.DEMO000145,whatsapp,entrada,+5716015550173,CAS-0073,[audio 0:02] dictado del paramédico,2026-08-23T00:19:02-05:00
+wamid.DEMO000146,whatsapp,salida,+5716015550173,CAS-0073,PULSO · CAS-0073: Loscobos Medical Center SAS - Loscobos ACEPTÓ. ETA 3.3 min.,2026-08-23T00:20:37-05:00
+wamid.DEMO000147,whatsapp,entrada,+5716015550174,CAS-0074,[audio 0:04] dictado del paramédico,2026-08-23T00:29:36-05:00
+wamid.DEMO000148,whatsapp,salida,+5716015550174,CAS-0074,"PULSO · CAS-0074: sin aceptación aún, el caso pasó al CRUE.",2026-08-23T00:31:11-05:00
+wamid.DEMO000149,whatsapp,entrada,+5716015550175,CAS-0075,[audio 0:06] dictado del paramédico,2026-08-23T00:30:24-05:00
+wamid.DEMO000150,whatsapp,salida,+5716015550175,CAS-0075,PULSO · CAS-0075: Unidad de Servicios de Salud San Blas ACEPTÓ. ETA 5.8 min.,2026-08-23T00:31:59-05:00
