@@ -1,11 +1,17 @@
 /**
  * Guard global. Niega por defecto.
  *
- * Se registra como APP_GUARD en AuthModule, así que cubre TODA ruta nueva sin
+ * Se registra como APP_GUARD en AuthModule, asi que cubre TODA ruta nueva sin
  * que nadie se acuerde de decorarla. Para abrir una hay que marcarla con
- * @Publico() a propósito — ver publico.decorator.ts.
+ * @Publico() a proposito — ver publico.decorator.ts. Ese diseño es correcto y
+ * la tarea 1.3 lo conserva tal cual.
  *
- * Acepta la sesión por cookie (el navegador) o por `Authorization: Bearer`
+ * Lo que cambia en 1.3: ya no cuelga un string `operador` del request, cuelga
+ * el ACTOR — quien es, de que organizacion, con que roles y sobre que sedes.
+ * De ahi vive todo lo demas: `RolGuard`, `@Actor()`, y la respuesta a "quien
+ * acepto a este paciente".
+ *
+ * Acepta la sesion por cookie (el navegador) o por `Authorization: Bearer`
  * (curl, el script doctor, un futuro servicio). Es el mismo token firmado.
  */
 
@@ -17,6 +23,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { Request } from 'express';
+import type { ActorSesion } from './carga';
 import { CLAVE_PUBLICO } from './publico.decorator';
 import { SesionService, tokenDeCabeceras } from './sesion.service';
 
@@ -35,13 +42,18 @@ export class SesionGuard implements CanActivate {
     if (publico) return true;
 
     const req = contexto.switchToHttp().getRequest<Request>();
-    const carga = this.sesion.verificar(tokenDeCabeceras(req.headers));
+    const carga = this.sesion.verificarAcceso(tokenDeCabeceras(req.headers));
     if (!carga) {
-      throw new UnauthorizedException('Sesión requerida');
+      // Mismo 401 para token invalido, expirado y sesion revocada. Distinguir
+      // los tres le diria a quien prueba en cual de las tres esta.
+      throw new UnauthorizedException('Sesion requerida');
     }
 
-    // Disponible para quien lo necesite (atribuir una decisión, por ejemplo).
-    (req as Request & { operador?: string }).operador = carga.sub;
+    const actor = this.sesion.actorDeCarga(carga);
+    (req as Request & { actor?: ActorSesion }).actor = actor;
+    // Compatibilidad: habia codigo leyendo `req.operador`. Se conserva el
+    // campo con el id del actor para no romperlo mientras se migra.
+    (req as Request & { operador?: string }).operador = actor.id;
     return true;
   }
 }

@@ -4,7 +4,7 @@
 > **En este plan rota:** también le toca el core de identidad, Testcontainers, el shell de `/panel` y
 > los runbooks. **Es dueño de tipos en la ola 4.**
 
-**Ola 0** ✅ [0.1](#01--conectar-el-guard-de-aceptación-única) · ✅ [0.6](#06--motivos-de-rechazo-como-enum-versionado) — **Ola 1** [1.3](#13--sesión-con-actor-real) · [1.7](#17--testcontainers--aislamiento-de-inquilino) — **Ola 2** [2.3](#23--vista-afiliacionverificar) · [2.7](#27--shell-de-panel) · [2.11](#211--rate-limit--idempotency-key) — **Ola 3** [3.2](#32--cablear-los-22-eventos) · [3.5](#35--sede_canal--envío-dirigido) · [3.10](#310--reporte-del-traslado) — **Ola 4** [4.1](#41--tabla-recepcion--protocolos) · [4.5](#45--entrega-por-qr) · [4.10](#410--vista-de-firma-de-trámites) — **Ola 5** [5.2](#52--vista-panelwebhooks) · [5.5](#55--alertas-y-runbooks) · [5.9](#59--panelapi--llaves-con-alcance)
+**Ola 0** ✅ [0.1](#01--conectar-el-guard-de-aceptación-única) · ✅ [0.6](#06--motivos-de-rechazo-como-enum-versionado) — **Ola 1** ✅ [1.3](#13--sesión-con-actor-real) · [1.7](#17--testcontainers--aislamiento-de-inquilino) — **Ola 2** [2.3](#23--vista-afiliacionverificar) · [2.7](#27--shell-de-panel) · [2.11](#211--rate-limit--idempotency-key) — **Ola 3** [3.2](#32--cablear-los-22-eventos) · [3.5](#35--sede_canal--envío-dirigido) · [3.10](#310--reporte-del-traslado) — **Ola 4** [4.1](#41--tabla-recepcion--protocolos) · [4.5](#45--entrega-por-qr) · [4.10](#410--vista-de-firma-de-trámites) — **Ola 5** [5.2](#52--vista-panelwebhooks) · [5.5](#55--alertas-y-runbooks) · [5.9](#59--panelapi--llaves-con-alcance)
 
 ---
 
@@ -81,13 +81,19 @@ Lo que hoy tapa el hueco es que el fan-out es secuencial. **El día que alguien 
 8. 2FA (TOTP) para `regulador_crue`, `admin_plataforma` y `auditor`.
 
 **Hecho cuando.**
-- [ ] Un token lleva actor, organización, roles y alcance
-- [ ] Refresh reusado → cadena revocada + evento
-- [ ] Revocar un rol invalida la sesión al instante
-- [ ] Con `PULSO_AUTH_LEGACY=true` el demo sigue entrando como siempre
-- [ ] La cookie sigue siendo `HttpOnly` y el front nunca lee el token
+- [x] Un token lleva actor, organización, roles y alcance
+- [x] Refresh reusado → cadena revocada + evento (`refresh_reusado` en `RegistroSesiones`)
+- [x] Revocar un rol invalida la sesión al instante — `revocarDeActor()`; la lista de revocadas es un `Map`, no Redis, hasta 1.2
+- [x] Con `PULSO_AUTH_LEGACY=true` el demo sigue entrando como siempre — y viene encendido por defecto mientras no exista la tabla `actor`
+- [x] La cookie sigue siendo `HttpOnly` y el front nunca lee el token — ahora son dos, y la de refresco va con `path=/auth/refresh`
 
 **Trampas.** Es la tarea de la que dependen 12 más. **Mergéala pronto aunque esté incompleta en lo opcional** (2FA puede ir después). Lo que no puede faltar es la estructura del token.
+
+> **Lo que quedó fuera, y por qué.**
+> - **2FA (TOTP).** Es lo opcional de la tarea y no bloquea a nadie. Va aparte; la lista de roles que lo exigirán ya está declarada en `auth/roles.ts`.
+> - **Tabla `sesion` y actores en Postgres.** Dependen de `1.1`. Hoy viven en `Map` detrás de una interfaz: cuando 1.1 aterrice se agrega `RepoActoresPostgres` y ninguna ruta cambia.
+> - **Argon2id.** El código lo usa **si el módulo está**; sin él, scrypt (`N=2^15,r=8,p=3`), que también es memory-hard. No se agregó la dependencia porque el lockfile es de pnpm y no se puede regenerar desde aquí: `pnpm --filter core add argon2` y cada login migra su hash solo.
+> - **`@Rol()` sobre las rutas existentes.** La maquinaria está y probada; decorar cada ruta es de quien la conoce, en su tarea. Aplicarlas hoy sobre rutas que abría una contraseña compartida rompería el demo sin que nadie lo pida.
 
 ---
 

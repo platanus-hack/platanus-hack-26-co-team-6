@@ -77,17 +77,54 @@ export function alPerderSesion(fn: AlExpirar | null): void {
   alExpirar = fn;
 }
 
-async function pedir<T>(ruta: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${API}${ruta}`, {
-    ...init,
-    // Sin esto el navegador no manda la cookie de sesión a otro puerto y core
-    // responde 401 a todo. Es el único cambio que la autenticación exige aquí.
-    credentials: "include",
-    headers: { "Content-Type": "application/json", ...init?.headers },
-  });
+/**
+ * Renovación transparente — tarea 1.3.
+ *
+ * El access dura 15 minutos (antes eran 12 horas). Sin esto, cada consola
+ * echaría a su operador al login cuatro veces por turno, y a un paramédico
+ * eso le pasaría con el paciente en la camilla.
+ *
+ * Una sola renovación en vuelo: el polling de /hospital y /crue dispara
+ * varias peticiones a la vez y todas fallan juntas al expirar. Sin esta
+ * promesa compartida, cada una pediría su propio refresh y **la rotación
+ * marcaría las demás como reuso** — la sesión se cerraría sola justo por
+ * intentar mantenerla abierta.
+ */
+let renovando: Promise<boolean> | null = null;
 
-  // La sesión dura 12h; un turno largo puede pasarse. Avisamos una vez en vez
-  // de dejar la consola en un bucle de polling que falla en silencio.
+function renovar(): Promise<boolean> {
+  renovando ??= fetch(`${API}/auth/refresh`, {
+    method: "POST",
+    credentials: "include",
+  })
+    .then((r) => r.ok)
+    .catch(() => false)
+    .finally(() => {
+      renovando = null;
+    });
+  return renovando;
+}
+
+async function pedir<T>(ruta: string, init?: RequestInit): Promise<T> {
+  const enviar = () =>
+    fetch(`${API}${ruta}`, {
+      ...init,
+      // Sin esto el navegador no manda la cookie de sesión a otro puerto y
+      // core responde 401 a todo. Es el único cambio que la autenticación
+      // exige aquí.
+      credentials: "include",
+      headers: { "Content-Type": "application/json", ...init?.headers },
+    });
+
+  let res = await enviar();
+
+  // 401 = el access venció. Se intenta renovar UNA vez y se reintenta. Si el
+  // refresh tampoco vale (30 días, o la sesión fue revocada), ahí sí se avisa
+  // y se sale al login.
+  if (res.status === 401 && !ruta.startsWith("/auth/")) {
+    if (await renovar()) res = await enviar();
+  }
+
   if (res.status === 401) {
     alExpirar?.();
     throw new ErrorApi("Sesión expirada", 401);
@@ -298,11 +335,51 @@ export async function vivo(): Promise<boolean> {
 
 // ── Sesión ───────────────────────────────────────────────────────
 
-export function login(password: string): Promise<{ ok: true; expiraEn: number }> {
+/**
+ * Quién está operando. Espejo de `core/src/auth/carga.ts` — tarea 1.3.
+ *
+ * No vive en `lib/types.ts` a propósito: no es parte del contrato de dominio,
+ * es identidad. `contracts/types.ts` recibe los tipos de organización y rol
+ * en el PR de tipos de la ola 1 (Zaid, 1.1), y ese es el sitio correcto.
+ */
+export interface ActorSesion {
+  id: string;
+  organizacionId: string;
+  roles: string[];
+  /** Códigos de sede. Vacío = sin restricción dentro de su alcance. */
+  sedes: string[];
+  tipo: "humano" | "servicio";
+  sesionId: string;
+  /** true = entró con la contraseña de turno, no como persona. */
+  legado: boolean;
+}
+
+/**
+ * Entrar.
+ *
+ * `identificador` (correo o documento) entra como una PERSONA: el token que
+ * vuelve lleva su organización, sus roles y sus sedes, y la auditoría queda
+ * con nombre propio. Sin él es el login de turno compartido de siempre, que
+ * sigue funcionando mientras `PULSO_AUTH_LEGACY` esté encendido en core.
+ *
+ * En ninguno de los dos casos este archivo ve el token: vuelve como cookie
+ * HttpOnly y el front nunca la lee.
+ */
+export function login(
+  password: string,
+  identificador?: string,
+): Promise<{ ok: true; expiraEn: number; legado: boolean }> {
   return pedir("/auth/login", {
     method: "POST",
-    body: JSON.stringify({ password }),
+    body: JSON.stringify(
+      identificador ? { identificador, password } : { password },
+    ),
   });
+}
+
+/** Quién soy: organización, roles y alcance. Lo pinta el shell de /panel. */
+export function yo(): Promise<{ actor: ActorSesion }> {
+  return pedir("/auth/yo", { cache: "no-store" });
 }
 
 export function logout(): Promise<{ ok: true }> {
