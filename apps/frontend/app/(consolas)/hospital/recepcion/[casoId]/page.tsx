@@ -64,6 +64,7 @@ import {
 import { nombresServicios } from "@/lib/presentacion";
 import { useCapacidades } from "@/lib/useCapacidades";
 import { useSesion } from "@/lib/sesion";
+import { MarcaPulso } from "@/components/hospital/MarcaPulso";
 import { CabeceraPrearribo } from "@/components/hospital/recepcion/CabeceraPrearribo";
 import { BloqueSbar } from "@/components/hospital/recepcion/BloqueSbar";
 import { TresRelojes } from "@/components/hospital/recepcion/TresRelojes";
@@ -304,17 +305,26 @@ export default function Recepcion({
 function Marco({ children }: { children: React.ReactNode }) {
   return (
     <main className="mx-auto min-h-screen w-full max-w-[1600px] space-y-4 p-3 sm:p-5">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+      {/* La misma barra de píldoras glass del header de la landing: la marca,
+          la vuelta a solicitudes y la degradación del tiempo real, dicha
+          donde se mira el reloj. */}
+      <div className="flex flex-wrap items-center gap-3">
+        <MarcaPulso rotulo="prearribo" />
         <Link
           href="/hospital"
-          className="inline-flex items-center gap-1.5 text-sm text-[color:var(--color-texto-tenue)]"
+          className="inline-flex h-11 items-center gap-1.5 rounded-full border
+                     border-borde bg-superficie/70 px-4 text-sm font-medium
+                     backdrop-blur text-texto-tenue"
         >
           <ArrowLeft className="size-4 shrink-0" strokeWidth={2.2} />
           Solicitudes
         </Link>
 
-        {/* La degradación del tiempo real, dicha donde se mira el reloj. */}
-        <span className="ml-auto inline-flex items-center gap-1.5 text-[11px] sm:text-xs text-[color:var(--color-texto-tenue)]">
+        <span
+          className="ml-auto inline-flex h-11 items-center gap-1.5 rounded-full
+                     border border-borde bg-superficie/70 px-4 backdrop-blur
+                     text-[11px] sm:text-xs text-[color:var(--color-texto-tenue)]"
+        >
           <Radio className="size-3.5 shrink-0" strokeWidth={2.2} />
           Sondeo cada {SONDEO_MS / 1000} s · el canal en vivo llega con la tarea 3.9
         </span>

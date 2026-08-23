@@ -43,6 +43,7 @@ import {
   MOTIVO_OTRO,
   type EstadoOperativo,
 } from "@/lib/capacidad-modelo";
+import { MarcaPulso } from "@/components/hospital/MarcaPulso";
 import { useDeclaracion } from "@/components/hospital/capacidad/useDeclaracion";
 import { AvisoReversion } from "@/components/hospital/capacidad/AvisoReversion";
 import { BotonesEstado } from "@/components/hospital/capacidad/BotonesEstado";
@@ -207,19 +208,17 @@ function Cabecera({ nombreSede }: { nombreSede?: string }) {
   return (
     <header className="mb-4">
       <div className="flex items-center gap-2">
-        <span className="text-2xl" aria-hidden>
-          🏥
-        </span>
-        <span className="font-bold text-lg">PULSO</span>
+        <MarcaPulso rotulo="capacidad" />
         <Link
           href="/hospital"
-          className="ml-auto inline-flex min-h-14 items-center rounded-lg px-4
-                     border border-[color:var(--color-borde)]"
+          className="ml-auto inline-flex min-h-14 items-center rounded-full px-5
+                     border border-borde bg-superficie/70 backdrop-blur
+                     text-sm font-medium"
         >
           Solicitudes
         </Link>
       </div>
-      <h1 className="mt-2 text-xl font-bold">Capacidad declarada</h1>
+      <h1 className="mt-4 text-xl font-bold tracking-tight">Capacidad declarada</h1>
       {nombreSede && (
         <p className="text-sm text-[color:var(--color-texto-tenue)] truncate">
           {nombreSede}
