@@ -221,15 +221,22 @@ services:
         value: 8090
 
       # La URL pública de ESTE servicio. Twilio abre un WebSocket de vuelta
-      # hacia acá, así que sin esto la telefonía no funciona.
-      # `property: host` devuelve el hostname pelado (pulso-voz.onrender.com,
-      # sin esquema) y está bien: llamadas.py::_host_publico() lo quiere así
-      # para armar wss://{host}/telefonia/twilio.
+      # hacia acá, así que sin esto la telefonía no suena.
+      #
+      # ⚠️ SE PONE A MANO: https://pulso-voz.onrender.com
+      #
+      #    Aquí había un `fromService … property: host` y ESTÁ MAL. En el
+      #    primer deploy resolvió a "pulso-voz" pelado —el nombre interno del
+      #    servicio, no el hostname público— y con eso llamadas.py arma
+      #    `wss://pulso-voz/telefonia/twilio`, que no existe desde internet:
+      #    la llamada se conecta y se cae sin audio. Se vio en GET /listo,
+      #    campo url_publica.
+      #
+      #    llamadas.py::_host_publico() quita el esquema, así que da igual si
+      #    la pegas con https:// o sin él. Lo que NO puede faltar es el
+      #    dominio completo.
       - key: URL_PUBLICA
-        fromService:
-          type: web
-          name: pulso-voz
-          property: host
+        sync: false
 
       # Hacia adentro, por la red privada. CORE_BASE_URL es la RAÍZ de core
       # (voz le pega a /auth/login), no /interno.
