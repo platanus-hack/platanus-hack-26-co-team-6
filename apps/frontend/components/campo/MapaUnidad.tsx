@@ -140,7 +140,9 @@ export default function MapaUnidad({
   }
 
   return (
-    <div className="relative h-56 rounded-[1.75rem] overflow-hidden border border-[color:var(--color-borde)]">
+    // h-56 en el móvil, donde compite con el dictado; casi media pantalla en
+    // escritorio, donde sobraba espacio y el mapa era una postal.
+    <div className="relative h-56 lg:h-[min(60vh,34rem)] rounded-[1.75rem] overflow-hidden border border-[color:var(--color-borde)]">
       {/* Inline y no `absolute inset-0`: mapbox-gl.css llega después de
           Tailwind en el bundle y su `.mapboxgl-map{position:relative}` pisa la
           clase — el contenedor colapsaba a 0px de alto (mapa negro). */}
@@ -178,7 +180,7 @@ export default function MapaUnidad({
 function Marco({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className="h-56 rounded-[1.75rem] grid place-items-center text-center p-4
+      className="h-56 lg:h-[min(60vh,34rem)] rounded-[1.75rem] grid place-items-center text-center p-4
                  bg-[color:var(--color-superficie)]
                  border border-dashed border-[color:var(--color-borde)]"
     >

@@ -1,0 +1,163 @@
+# Prueba de carga (tarea 5.7). NO corre en cada PR.
+#
+# ── POR QUE BAJO ETIQUETA Y NO EN CADA PUSH ────────────────────────
+# Dura minutos, levanta core entero y su resultado es un juicio sobre el
+# despliegue, no sobre el diff. Un job lento y ruidoso en cada PR se ignora a
+# la semana, y un umbral que todo el mundo ignora no protege nada.
+#
+# Se dispara de dos maneras:
+#   · poniendole la etiqueta `carga` a un PR
+#   · a mano, desde la pestaña Actions (workflow_dispatch)
+#
+# ⚠️ MIENTRAS LA TAREA 1.2 NO ESTE HECHA, LO QUE MIDE ESTE JOB NO ES PULSO:
+#    el estado vive en un `Map` en RAM. El harness lo detecta solo y marca la
+#    corrida como no concluyente; aqui se le pasa CARGA_PERMITIR_MEMORIA=true
+#    para que el job pueda terminar y publicar numeros de referencia.
+#    **Cuando 1.2 aterrice, se borra esa linea** (esta marcada abajo) y este
+#    workflow empieza a decir la verdad.
+
+name: carga
+
+on:
+  pull_request:
+    types: [labeled, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      duracion:
+        description: 'Tiempo sostenido del escenario principal'
+        default: '5m'
+      vus:
+        description: 'Usuarios virtuales'
+        default: '50'
+
+jobs:
+  carga:
+    name: 50 casos simultaneos contra los SLOs del §7.1
+    # La etiqueta es la puerta. `workflow_dispatch` la salta a proposito.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      contains(github.event.pull_request.labels.*.name, 'carga')
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    env:
+      CARGA_BASE: http://localhost:3001
+      # Contraseña efimera del job. No es un secreto que valga nada: core corre
+      # aqui, sin datos, y muere con el runner. Lo que NO se hace es dejar core
+      # sin autenticacion — la regla 2 no aplica a la sesion.
+      CARGA_PASSWORD: carga-${{ github.run_id }}
+      SESION_SECRET: sesion-${{ github.run_id }}-${{ github.run_attempt }}
+      # Sin ANTHROPIC_API_KEY, sin MAPBOX_TOKEN, sin TELEGRAM_*: core degrada y
+      # lo dice, que es la regla del repo. La IA la sirve el doble de carga.
+      AI_CORE_BASE_URL: http://localhost:8000
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Dependencias de core
+        working-directory: apps/backend/core
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Compilar core
+        working-directory: apps/backend/core
+        run: pnpm build
+
+      - name: Instalar k6
+        # La accion oficial de Grafana. Si algun dia no esta disponible, el plan
+        # B es el tarball de github.com/grafana/k6/releases — pero entonces hay
+        # que fijar la version AQUI y anotarla en carga/RESULTADOS.md, porque el
+        # motor de percentiles es parte de lo que se esta reportando.
+        uses: grafana/setup-k6-action@v1
+
+      - name: Levantar el doble de ai-core
+        run: |
+          node carga/mock-ai-core.mjs > /tmp/mock-ai-core.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:8000/health && break
+            sleep 1
+          done
+          curl -sf http://localhost:8000/health
+
+      - name: Levantar core en modo degradado
+        working-directory: apps/backend/core
+        env:
+          PORT: '3001'
+          OPERADOR_PASSWORD: ${{ env.CARGA_PASSWORD }}
+          # 20 s en vez de 45: el escenario del vigilante tiene que ver vencer
+          # 50 handshakes dentro del presupuesto de tiempo del job.
+          HANDSHAKE_TIMEOUT_S: '20'
+        run: |
+          node dist/main.js > /tmp/core.log 2>&1 &
+          for i in $(seq 1 60); do
+            curl -sf http://localhost:3001/health && break
+            sleep 1
+          done
+          curl -sf http://localhost:3001/health
+
+      - name: Escenario principal — el ciclo completo
+        env:
+          CARGA_VUS: ${{ github.event.inputs.vus || '50' }}
+          CARGA_DURACION: ${{ github.event.inputs.duracion || '5m' }}
+          CARGA_COMMIT: ${{ github.sha }}
+          # ⬇️ BORRAR CUANDO LA TAREA 1.2 PERSISTA EL ESTADO EN POSTGRES ⬇️
+          CARGA_PERMITIR_MEMORIA: 'true'
+        run: k6 run carga/escenario-ciclo.js
+
+      - name: Escenario del vigilante — 50 handshakes vivos
+        env:
+          CARGA_COMMIT: ${{ github.sha }}
+          CARGA_PERMITIR_MEMORIA: 'true'
+        run: k6 run carga/escenario-vigilante.js
+
+      - name: Fuga de inquilino — caso limite 18
+        # ROJO ESPERADO HASTA 1.3 + 1.5: hoy hay UNA contraseña compartida y no
+        # existe `organizacion_id`, asi que la prueba no puede concluir que no
+        # hay fuga y por eso falla. Se deja visible en vez de esconderla.
+        # Cuando 1.3 aterrice: quitar `continue-on-error` y poner
+        # CARGA_INQUILINOS desde secrets con dos credenciales reales.
+        continue-on-error: true
+        env:
+          CARGA_COMMIT: ${{ github.sha }}
+          CARGA_PERMITIR_MEMORIA: 'true'
+        run: k6 run carga/escenario-fuga-inquilino.js
+
+      - name: Logs del servidor si algo se cayo
+        if: failure()
+        run: |
+          echo '── core ──'; tail -n 200 /tmp/core.log || true
+          echo '── doble de ai-core ──'; tail -n 50 /tmp/mock-ai-core.log || true
+
+      - name: Resultados
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: carga-${{ github.run_id }}
+          path: carga/resultados/
+          if-no-files-found: warn
+
+      - name: Nota en el resumen del job
+        if: always()
+        run: |
+          {
+            echo '## Prueba de carga'
+            echo
+            echo '> ⚠️ **La tarea 1.2 no esta hecha**: el estado de core vive en un `Map`'
+            echo '> en RAM. Estos numeros describen V8, no el sistema que se despliega.'
+            echo '> Sirven como referencia del harness, no como medicion de los SLOs.'
+            echo
+            for f in carga/resultados/*-resumen.txt; do
+              [ -f "$f" ] || continue
+              echo "### $(basename "$f" -resumen.txt)"
+              echo '```'
+              cat "$f"
+              echo '```'
+            done
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -4,17 +4,34 @@
  * Registro — la auditoría de la sesión (zona 9 de la spec, versión hackathon).
  *
  * Reconstruye la línea de tiempo global de la operación con lo que la consola
- * ya sabe: creación de casos, solicitudes y respuestas (de /estado) más las
- * acciones del regulador (bitácora local). Filtrable y exportable a CSV.
+ * ya sabe: creación de casos, solicitudes y respuestas (de /estado) más los
+ * `evento_caso` que guarda core. Filtrable y exportable a CSV.
  *
- * "Inmutable" de verdad exige persistencia en core (Supabase) — hasta
- * entonces esto se llama registro DE LA SESIÓN y no promete más de lo que es.
+ * ── QUÉ CAMBIÓ CON LA TAREA 3.11 ──────────────────────────────────
+ * Las acciones del regulador ya NO salen del `localStorage` del navegador:
+ * las escribe el servidor y las lee cualquiera que abra esta consola, en
+ * cualquier máquina. Por eso desapareció el rótulo "registro local" — dejó de
+ * ser verdad.
+ *
+ * Lo que todavía no promete: mientras core guarde los eventos en memoria
+ * (tarea 3.1), un reinicio se los lleva. La consola lo dice al pie en vez de
+ * dejar creer que es inmutable.
  */
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Handshake } from "@/lib/types";
 import type { CasoDerivado } from "./derivados";
-import { listarEventos } from "./bitacora";
+import { bitacoraReciente, type EventoBitacora } from "./bitacora";
+
+/**
+ * Cada cuánto se relee el registro del servidor.
+ *
+ * Más lento que el polling de /estado (2 s) a propósito: los eventos de
+ * auditoría no cambian cada dos segundos y esta consola ya tiene una petición
+ * en vuelo cada tick. Un override propio aparece de inmediato porque el panel
+ * del caso recarga su bitácora al confirmarlo.
+ */
+const CADA_MS = 10_000;
 
 interface Fila {
   ts: string;
@@ -42,6 +59,36 @@ export default function Registro({ derivados, nombresSedes, flotante = false }: 
   const [abierto, setAbierto] = useState(false);
   const [filtroTipo, setFiltroTipo] = useState<Fila["tipo"] | "todos">("todos");
   const [q, setQ] = useState("");
+
+  // Los eventos que guarda core. Antes esto era `listarEventos()` leyendo
+  // localStorage; ahora es la misma historia, pero del servidor.
+  const [eventos, setEventos] = useState<EventoBitacora[]>([]);
+  const [modo, setModo] = useState<"memoria" | "postgres" | null>(null);
+  const [errorRegistro, setErrorRegistro] = useState<string | null>(null);
+
+  useEffect(() => {
+    let vigente = true;
+    const leer = async () => {
+      try {
+        const bitacora = await bitacoraReciente();
+        if (!vigente) return;
+        setEventos(bitacora.eventos);
+        setModo(bitacora.modo);
+        setErrorRegistro(null);
+      } catch (e) {
+        if (!vigente) return;
+        // No se vacía la lista: lo último que se leyó sigue siendo cierto. Lo
+        // que cambia es que se avisa de que puede estar desactualizado.
+        setErrorRegistro(e instanceof Error ? e.message : "core no respondió");
+      }
+    };
+    void leer();
+    const id = setInterval(() => void leer(), CADA_MS);
+    return () => {
+      vigente = false;
+      clearInterval(id);
+    };
+  }, []);
 
   const nombreSede = (codigo: string) => nombresSedes.get(codigo) ?? codigo;
 
@@ -77,19 +124,20 @@ export default function Registro({ derivados, nombresSedes, flotante = false }: 
         }
       }
     }
-    for (const e of listarEventos()) {
+    for (const e of eventos) {
       todas.push({
         ts: e.ts,
         tipo: "regulador",
         casoId: e.casoId,
-        actor: `${e.regulador} (registro local)`,
+        // Sin "(registro local)": esto lo guarda el servidor. El rótulo que sí
+        // hace falta es otro — si fue una persona o un servicio automático.
+        actor: e.actor,
         detalle: e.texto,
       });
     }
     return todas.sort((a, b) => b.ts.localeCompare(a.ts));
-    // La bitácora local cambia junto con las acciones que ya mueven derivados.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [derivados, nombresSedes]);
+  }, [derivados, nombresSedes, eventos]);
 
   const visibles = filas.filter((f) => {
     if (filtroTipo !== "todos" && f.tipo !== filtroTipo) return false;
@@ -248,8 +296,11 @@ export default function Registro({ derivados, nombresSedes, flotante = false }: 
             </table>
           </div>
           <p className="p-2.5 text-[10px] text-[color:var(--color-texto-tenue)] border-t border-[color:var(--color-borde)]">
-            Registro de esta sesión. La versión inmutable (todas las sesiones,
-            todos los reguladores) llega con la persistencia de eventos en core.
+            {errorRegistro
+              ? `No se pudo releer el registro del servidor (${errorRegistro}): lo de arriba puede estar desactualizado.`
+              : modo === "memoria"
+                ? "Las acciones del regulador las guarda core y las ven todos los reguladores, en cualquier máquina. Hoy viven en memoria: un reinicio de core se las lleva."
+                : "Las acciones del regulador las guarda core: append-only, nadie las edita ni las borra."}
           </p>
         </div>
       )}

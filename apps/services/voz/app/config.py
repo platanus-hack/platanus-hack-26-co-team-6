@@ -30,9 +30,17 @@ class Settings(BaseSettings):
     timeout_ia_s: float = 30.0
     timeout_core_s: float = 10.0
     #: core niega por defecto: expone dictado clinico y coordenadas del
-    #: paciente. Es la misma contrasena de turno que usan las consolas.
-    #: Vacia = no se manda Authorization (core sin guard activo).
-    core_password: str = ""
+    #: paciente. `voz` se identifica con un TOKEN DE SERVICIO propio
+    #: (`sub: svc:voz`, tarea 1.8), no con la contrasena de turno de los
+    #: operadores: en la auditoria un bot y una persona tienen que ser
+    #: distinguibles, y este servicio no puede aceptar un traslado.
+    #:
+    #: Se emite en core con `POST /auth/servicio` y dura 24 h. Vacio = `voz`
+    #: NO llama a core y lo dice en `GET /listo`; no hay modo permisivo
+    #: (mandar el request sin cabecera y esperar que core no tenga guard es
+    #: justo el fallback abierto que la regla de degradacion prohibe en
+    #: autenticacion).
+    core_service_token: str = ""
 
     # ── URL publica ──────────────────────────────────────────────
     #: Donde Twilio y Meta pueden alcanzarnos. En Render es la URL del

@@ -17,6 +17,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Response
 
 from . import metricas, webhooks_recibidos
+from .clientes import core as cliente_core
 from .config import settings
 from .rutas import interno, whatsapp
 from .telefonia import rutas as telefonia
@@ -33,6 +34,15 @@ async def ciclo(_: FastAPI):
     # /listo: si arranca en memoria con dos instancias, hay que enterarse antes
     # de que Meta reintente, no después.
     log.info("[voz] deduplicación de webhooks: %s", webhooks_recibidos.modo())
+    # Con qué identidad habla con core. Sin token de servicio no habla: más
+    # vale que salga en la primera línea del log y no en un caso perdido.
+    if cliente_core.configurado():
+        log.info("[voz] identidad ante core: %s", cliente_core.identidad().get("identidad"))
+    else:
+        log.warning(
+            "[voz] SIN CORE_SERVICE_TOKEN: no se llamará a core. "
+            "Emítelo con POST /auth/servicio (ver GET /listo)."
+        )
     yield
     await webhooks_recibidos.cerrar()
 
@@ -68,6 +78,9 @@ def listo() -> dict[str, object]:
             "modo": webhooks_recibidos.modo(),
             "persistida": webhooks_recibidos.hay_base(),
         },
+        # Con qué identidad habla con core, y si puede hablarle. Sin token de
+        # servicio `voz` no llama a core: se dice aquí, no se disimula.
+        "core": cliente_core.identidad(),
         "url_publica": settings.url_publica or None,
         "aguas_abajo": {
             "ai_core": settings.ai_core_base_url,

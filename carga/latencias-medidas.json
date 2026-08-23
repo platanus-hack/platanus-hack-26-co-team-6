@@ -1,0 +1,33 @@
+{
+  "_comentario": [
+    "De aqui saca el doble de carga (mock-ai-core.mjs) cuanto tiene que tardar.",
+    "MIENTRAS estado sea 'sin-calibrar', NINGUN numero de este archivo es una",
+    "medicion: son las cotas que documenta el repo. Correr `node carga/calibrar.mjs`",
+    "contra un core con credenciales lo reemplaza por muestras reales y pone",
+    "estado en 'calibrado'. No editar a mano: se pierde la trazabilidad de donde",
+    "salio cada numero, que es la mitad del valor de este archivo."
+  ],
+  "estado": "sin-calibrar",
+  "medidoEn": null,
+  "medidoContra": null,
+  "commit": null,
+  "triage": {
+    "muestras": [],
+    "banda": {
+      "minMs": 4000,
+      "maxMs": 8000,
+      "procedencia": "plan maestro §4.1, regla 3: 'Hoy _registrar_caso hace triage + match + dispatch dentro del request: eso es 4-8 segundos con Claude'",
+      "derivacion": "La cifra del doc cubre triage+match+dispatch. En modo degradado (sin Mapbox, sin canal real) match y dispatch son milisegundos, asi que practicamente todo ese tiempo es la llamada al LLM. Es una COTA SUPERIOR razonada, no una medicion, y por eso el mock lo grita al arrancar.",
+      "confianza": "baja"
+    }
+  },
+  "match": {
+    "muestras": [],
+    "banda": {
+      "minMs": 0,
+      "maxMs": 0,
+      "procedencia": "no aplica: /match no llama a ai-core. Su unica dependencia externa es Mapbox, y sin MAPBOX_TOKEN el ETA se calcula por haversine dentro del proceso (eta.service.ts, 22 km/h). No hay nada que mockear.",
+      "confianza": "n/a"
+    }
+  }
+}

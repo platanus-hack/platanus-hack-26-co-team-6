@@ -11,6 +11,10 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    // Los tests de lib/*.test.mts los corre `node --test` con type stripping,
+    // y Node exige la extensión en el import. tsc solo necesita permitirlo:
+    // con "noEmit" no cambia nada de lo que Next compila.
+    "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "incremental": true,
     "plugins": [

@@ -22,11 +22,12 @@
  * de expiración de la solicitud y §7 la entrada manual estructurada.
  */
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import type {
   Caso,
   Candidato,
+  Coordenada,
   Handshake,
   RutaResponse,
 } from "@/lib/types";
@@ -40,18 +41,33 @@ import { useUnidad } from "@/lib/unidad";
 import { FondoOperativo } from "@/components/campo/FondoOperativo";
 import { BarraPersistente } from "@/components/campo/BarraPersistente";
 import { SelectorUnidad } from "@/components/campo/SelectorUnidad";
+import { PantallaInicio } from "@/components/campo/PantallaInicio";
+import { EstadoHospitales } from "@/components/campo/EstadoHospitales";
 import {
-  PantallaInicio,
-  type CasoActivo,
-} from "@/components/campo/PantallaInicio";
-import { PantallaCaptura } from "@/components/campo/PantallaCaptura";
+  armarTablero,
+  type CasoTablero,
+  type SedeEstado,
+} from "@/lib/tablero-modelo";
+import {
+  MINIMO_CARACTERES,
+  PantallaCaptura,
+} from "@/components/campo/PantallaCaptura";
+import { DetalleCaso } from "@/components/campo/DetalleCaso";
 import { PantallaRuta } from "@/components/campo/PantallaRuta";
-import { TarjetaCaso } from "@/components/campo/TarjetaCaso";
+import { InformePaciente } from "@/components/campo/InformePaciente";
 import { TarjetaCandidato } from "@/components/campo/TarjetaCandidato";
 import { RevisionRequerida } from "@/components/campo/RevisionRequerida";
+import { ChevronLeft, Send } from "lucide-react";
 import { FotoCalle } from "@/components/mapa/FotoCalle";
 import * as api from "@/lib/api";
 import { ErrorApi, type CodigoError } from "@/lib/api";
+import * as flota from "@/lib/api-moviles";
+import {
+  debeEnviar,
+  decidirRastreo,
+  INTERVALO_REPORTE_MS,
+  MENSAJE_SIN_RASTREO,
+} from "@/lib/posicion-modelo";
 
 // mapbox-gl toca window al importarse: solo en el navegador.
 const MapaDespacho = dynamic(() => import("@/components/campo/MapaDespacho"), {
@@ -78,6 +94,43 @@ type Fase =
   /** El motor se negó a rutear. No es un error: es una decisión suya. */
   | "revision";
 
+/**
+ * Dos columnas en escritorio, apiladas en móvil.
+ *
+ * La izquierda es la decisión —lo que se toca—; la derecha, el contexto que
+ * la sostiene: el mapa, el detalle del caso. En móvil `lateral` cae debajo,
+ * que es exactamente donde estaba antes de que existiera este componente:
+ * ningún orden cambia al encoger la pantalla.
+ *
+ * `lg:sticky` para que el mapa no se pierda mientras se recorre un ranking
+ * largo — es lo que hace que la columna derecha valga la pena y no sea solo
+ * relleno del ancho.
+ */
+function Columnas({
+  principal,
+  lateral,
+}: {
+  principal: React.ReactNode;
+  lateral?: React.ReactNode;
+}) {
+  return (
+    <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
+      <div className="min-w-0">{principal}</div>
+      {/*
+        La rejilla se mantiene aunque no haya nada a la derecha: si la columna
+        izquierda se estirara a todo el ancho, una fila de caso mediría metro y
+        medio y el botón principal se convertiría en una franja.
+      */}
+      {lateral && (
+        <div className="mt-6 min-w-0 lg:sticky lg:top-6 lg:mt-0">{lateral}</div>
+      )}
+    </div>
+  );
+}
+
+/** Ventana entre el fin del dictado y el análisis automático. */
+const VENTANA_AUTO_MS = 3000;
+
 export default function Campo() {
   const [texto, setTexto] = useState("");
   const [fase, setFase] = useState<Fase>("inicio");
@@ -99,6 +152,73 @@ export default function Campo() {
   const [pidiendoUnidad, setPidiendoUnidad] = useState(false);
 
   const sinSenal = conexion.estado === "sin-senal";
+
+  // ── Posición del móvil hacia el CRUE (tarea 3.7) ───────────────
+  //
+  // SOLO CON UN CASO ABIERTO. Un turno de 12 h con el GPS encendido de punta a
+  // punta es una batería muerta y, peor, el rastreo continuo de alguien que no
+  // está atendiendo a nadie: se rastrea el traslado, no al trabajador. La
+  // decisión vive en `decidirRastreo` —sin React y probada— y la pantalla dice
+  // por qué cuando no se está reportando.
+  const rastreo = decidirRastreo({
+    casoAbierto: caso !== null,
+    movilId: unidad?.id ?? null,
+    estadoGeo: geo.estado,
+  });
+  const [avisoPosicion, setAvisoPosicion] = useState<string | null>(null);
+  // Ref y no dependencias: `geo.origen` cambia con cada arreglo del GPS (uno o
+  // dos por segundo) y meterlo en el efecto reiniciaría el temporizador tan a
+  // menudo que el throttle no existiría.
+  const contextoRef = useRef({ geo, unidad });
+  // En un efecto sin dependencias —igual que `analizarRef` más abajo—: escribir
+  // un ref mientras se pinta es lo que React desaconseja, y así se refresca
+  // tras cada render, antes de que ningún temporizador lo lea.
+  useEffect(() => {
+    contextoRef.current = { geo, unidad };
+  });
+  const ultimoReporteRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!rastreo.rastreando) return;
+    let vivo = true;
+
+    const reportar = async () => {
+      const { geo: g, unidad: u } = contextoRef.current;
+      if (!vivo || !g.origen || !u) return;
+      // El temporizador solo despierta; quien decide si sale un reporte es
+      // `debeEnviar`. Así un GPS que parpadea (y reinicia este efecto) no
+      // puede convertirse en una ráfaga de peticiones.
+      if (!debeEnviar(ultimoReporteRef.current, Date.now())) return;
+      ultimoReporteRef.current = Date.now();
+
+      try {
+        await flota.reportarEstado(u.id, {
+          lat: g.origen.lat,
+          lng: g.origen.lng,
+          // El radio de error viaja: en interiores son cientos de metros y el
+          // mapa del CRUE tiene que poder dibujar esa duda.
+          precisionM: g.precisionM,
+          // Con un caso abierto el móvil está ocupado. Es lo único que este
+          // dispositivo puede afirmar sin inventarse nada.
+          disponible: false,
+        });
+        if (vivo) setAvisoPosicion(null);
+      } catch (e) {
+        // Un 4xx no se arregla repitiéndolo cada 15 s durante todo el turno.
+        if (flota.esDefinitivo(e)) {
+          vivo = false;
+          setAvisoPosicion(flota.mensajeDeError(e));
+        }
+      }
+    };
+
+    void reportar();
+    const id = setInterval(() => void reportar(), INTERVALO_REPORTE_MS);
+    return () => {
+      vivo = false;
+      clearInterval(id);
+    };
+  }, [rastreo.rastreando]);
 
   // ── Incidente real del 123 ─────────────────────────────────────
   const [casoReal, setCasoReal] = useState<CasoReal | null>(null);
@@ -137,12 +257,18 @@ export default function Campo() {
     return () => clearInterval(id);
   }, [t0, fase]);
 
-  // ── Casos activos del inicio ───────────────────────────────────
+  // ── Los casos del turno ────────────────────────────────────────
   //
   // Se piden solo mientras la pantalla de inicio está a la vista: es la única
   // que los muestra, y dejar el polling corriendo durante un dictado gastaría
   // datos en una zona donde puede que no haya.
-  const [activos, setActivos] = useState<CasoActivo[]>([]);
+  //
+  // Agrupar, ordenar y filtrar es de `lib/tablero-modelo.ts`. Aquí solo se
+  // trae la foto y se le pone la hora.
+  const [tablero, setTablero] = useState<CasoTablero[]>([]);
+  /** La congestión de las 84 sedes, que ya venía en /estado y nadie pintaba. */
+  const [red, setRed] = useState<SedeEstado[]>([]);
+
   useEffect(() => {
     if (fase !== "inicio") return;
 
@@ -150,27 +276,8 @@ export default function Campo() {
     const cargar = async () => {
       const d = await api.estado().catch(() => null);
       if (!vivo || !d) return;
-
-      const ahora = Date.now();
-      const abiertos = d.casos
-        .map((c) => {
-          // El más reciente manda: es el que refleja dónde está el caso ahora.
-          const h =
-            d.handshakes
-              .filter((x) => x.casoId === c.id)
-              .sort((a, b) => b.enviadoEn.localeCompare(a.enviadoEn))[0] ??
-            null;
-          return {
-            caso: c,
-            handshake: h,
-            transcurridoS: (ahora - new Date(c.creadoEn).getTime()) / 1000,
-          };
-        })
-        // Un caso aceptado ya no está "en curso": el paramédico va en camino y
-        // no necesita verlo compitiendo con el botón de caso nuevo.
-        .filter((x) => x.handshake?.estado !== "aceptado");
-
-      setActivos(abiertos);
+      setTablero(armarTablero(d.casos, d.handshakes, Date.now()));
+      setRed(d.congestion);
     };
 
     void cargar();
@@ -181,12 +288,95 @@ export default function Campo() {
     };
   }, [fase]);
 
+  // ── Dónde está el paciente ─────────────────────────────────────
+  //
+  // `GET /estado` NO devuelve `origen`: es uno de los dos campos que no salen
+  // del servidor (ver la lista blanca de `estado.service.ts`). Pero cuando
+  // este dispositivo dicta un caso, las coordenadas SÍ llegan en la respuesta
+  // de `POST /triage` — ya están en este navegador.
+  //
+  // Guardarlas aquí no expone nada nuevo: es memoria del proceso, no se
+  // persiste y muere al recargar. Es lo que permite que el detalle de un caso
+  // dictado en este turno enseñe dónde se recogió al paciente, sin inventarse
+  // un endpoint que todavía no existe.
+  // Estado y no `useRef`: un ref leído durante el render no vuelve a pintar
+  // cuando cambia, así que el detalle de un caso recién dictado se quedaría
+  // sin mapa hasta el siguiente render por otra causa.
+  const [origenes, setOrigenes] = useState<ReadonlyMap<string, Coordenada>>(
+    () => new Map(),
+  );
+
+  /** Qué caso está abierto en el panel de detalle del inicio. */
+  const [abierto, setAbierto] = useState<string | null>(null);
+
+  const detalle = useMemo(
+    () => tablero.find((t) => t.caso.id === abierto) ?? null,
+    [abierto, tablero],
+  );
+
   // ── Dictado por voz ────────────────────────────────────────────
   const anexarTranscrito = useCallback(
     (fragmento: string) => setTexto((t) => (t + " " + fragmento).trim()),
     [],
   );
-  const voz = useDictadoVoz(anexarTranscrito);
+
+  /**
+   * ── EL ANÁLISIS ARRANCA SOLO AL TERMINAR DE DICTAR ───────────────
+   *
+   * Tocar «Analizar y rutear» después de dictar era un gesto de más en la
+   * única parte del flujo donde los segundos se cuentan de verdad. El dictado
+   * termina, el sistema busca: CIE-10, servicios REPS y ranking, sin que nadie
+   * toque nada.
+   *
+   * Lo que NO cambia: **esto no despacha**. Extrae y rankea; elegir la sede y
+   * pulsar despachar sigue siendo del paramédico. La regla 6 del repo — PULSO
+   * propone, el humano decide — se aplica a lo que tiene consecuencia, y una
+   * lista ordenada no la tiene. Quitar un toque antes de la decisión es
+   * exactamente lo contrario de decidir por él.
+   *
+   * ── POR QUÉ HAY UNA VENTANA DE GRACIA ────────────────────────────
+   * Tres segundos, con la cuenta a la vista y un botón para cancelar:
+   *
+   *   1. `stop()` del reconocedor todavía puede entregar un último fragmento.
+   *      Analizar en el mismo tick se comería la última frase dictada.
+   *   2. Es la ventana para corregir una palabra mal entendida antes de que
+   *      viaje al modelo. Escribir en el textarea la cancela sola.
+   *
+   * Se mide contra un instante objetivo y no descontando de un número, igual
+   * que `useCuentaAtras`: si el navegador retrasa un tick, la cuenta no se
+   * queda corta.
+   */
+  const [autoFin, setAutoFin] = useState<number | null>(null);
+  const [autoRestaS, setAutoRestaS] = useState(0);
+
+  const alTerminarDictado = useCallback(
+    () => setAutoFin(Date.now() + VENTANA_AUTO_MS),
+    [],
+  );
+  const cancelarAuto = useCallback(() => setAutoFin(null), []);
+
+  const voz = useDictadoVoz(anexarTranscrito, alTerminarDictado);
+
+  // `analizar` se recrea en cada render; el ref evita que el temporizador se
+  // reinicie por eso y que dispare con un `texto` viejo.
+  const analizarRef = useRef<() => void>(() => {});
+
+  useEffect(() => {
+    if (autoFin === null) return;
+
+    const id = setInterval(() => {
+      const restanteMs = autoFin - Date.now();
+      setAutoRestaS(Math.max(0, Math.ceil(restanteMs / 1000)));
+      if (restanteMs <= 0) {
+        clearInterval(id);
+        setAutoFin(null);
+        analizarRef.current();
+      }
+    }, 200);
+
+    return () => clearInterval(id);
+  }, [autoFin]);
+
 
   // ── Flujo ──────────────────────────────────────────────────────
 
@@ -199,6 +389,11 @@ export default function Campo() {
   }
 
   async function analizar() {
+    // El disparo automático puede llegar con un dictado que no se entendió
+    // (ruido, un "eh" suelto). El mismo mínimo que deshabilita el botón.
+    if (texto.trim().length < MINIMO_CARACTERES) return;
+
+    setAutoFin(null);
     setError(null);
     setFase("analizando");
     setT0(Date.now());
@@ -218,6 +413,8 @@ export default function Campo() {
         unidad: unidad ?? undefined,
       });
       setCaso(c);
+      // Lo guarda para que el detalle del inicio pueda enseñarlo después.
+      setOrigenes((previo) => new Map(previo).set(c.id, c.origen));
 
       const m = await api.match({ caso: c, limite: 5 });
       setCandidatos(m.candidatos);
@@ -235,6 +432,13 @@ export default function Campo() {
       setFase("captura");
     }
   }
+
+  // En un efecto y no en el cuerpo del render: escribir un ref mientras se
+  // pinta es justo lo que React desaconseja. Sin array de dependencias corre
+  // tras cada render, que es lo que mantiene fresco el `texto` del cierre.
+  useEffect(() => {
+    analizarRef.current = () => void analizar();
+  });
 
   async function despachar(c: Candidato) {
     if (!caso) return;
@@ -270,6 +474,9 @@ export default function Campo() {
   }, [fase, handshake]);
 
   function reiniciar() {
+    // Salir de la captura cancela la cuenta: no puede dispararse un análisis
+    // sobre una pantalla que ya no está.
+    setAutoFin(null);
     setTexto("");
     setCaso(null);
     setCandidatos([]);
@@ -331,7 +538,13 @@ export default function Campo() {
     <div className="relative min-h-screen">
       <FondoOperativo />
 
-      <main className="relative z-10 max-w-lg mx-auto p-4 pb-24">
+      {/*
+        El ancho crece con la pantalla. Antes era `max-w-lg` siempre: en un
+        portátil quedaba una columna de teléfono centrada y dos tercios de
+        pantalla negra. La consola de campo se usa en el móvil, pero también en
+        el del CRUE y en el proyector del demo.
+      */}
+      <main className="relative z-10 mx-auto max-w-lg p-4 pb-24 lg:max-w-6xl lg:p-6">
         <BarraPersistente
           unidad={unidad}
           onCambiarUnidad={() => setPidiendoUnidad(true)}
@@ -343,6 +556,31 @@ export default function Campo() {
           onReubicar={geo.ubicar}
           capacidades={capacidades}
         />
+
+        {/* Rastreo: se dice SIEMPRE, esté activo o no. Un mapa que no reporta
+            y no lo explica hace creer al paramédico que el CRUE lo está
+            viendo. Ver MENSAJE_SIN_RASTREO en lib/posicion-modelo.ts. */}
+        <p className="-mt-2 mb-4 px-1 text-[11px] text-[color:var(--color-texto-tenue)]">
+          {avisoPosicion ? (
+            <span className="text-[color:var(--color-alerta)]">
+              Posición no reportada — {avisoPosicion}
+            </span>
+          ) : rastreo.rastreando ? (
+            <>Reportando posición al CRUE cada 15 s</>
+          ) : (
+            MENSAJE_SIN_RASTREO[rastreo.motivo]
+          )}
+        </p>
+
+        {fase !== "inicio" && (
+          <button
+            onClick={volverAlInicio}
+            className="mb-4 -ml-2 inline-flex min-h-11 items-center gap-1 rounded-xl px-2 text-sm text-[color:var(--color-texto-tenue)] transition-colors hover:text-[color:var(--color-texto)]"
+          >
+            <ChevronLeft className="size-4" strokeWidth={2.5} aria-hidden />
+            Inicio
+          </button>
+        )}
 
       {fase === "revision" && bloqueo && (
         <RevisionRequerida
@@ -377,134 +615,201 @@ export default function Campo() {
         )}
 
         {fase === "inicio" && (
-          <>
-            <PantallaInicio
-              casos={activos}
-              onNuevo={nuevoCaso}
-              // Reabrir un caso previo todavía no restaura su punto exacto del
-              // flujo — eso llega con §1 completo. Por ahora lleva a la captura,
-              // que es donde el paramédico puede actuar.
-              onAbrir={() => setFase("captura")}
-            />
-
-            {/* Dónde está la unidad, en vivo. Va al final y no arriba a
-                propósito: es contexto, no la acción. Lo primero que tiene que
-                encontrar el pulgar sigue siendo el botón de caso nuevo. */}
-            <section className="mt-6">
-              <MapaUnidad
-                posicion={geo.origen}
-                estado={geo.estado}
-                precisionM={geo.precisionM}
+          <Columnas
+            principal={
+              <PantallaInicio
+                items={tablero}
+                seleccionado={abierto}
+                onNuevo={nuevoCaso}
+                onSeleccionar={(id) => setAbierto((a) => (a === id ? null : id))}
               />
-            </section>
-          </>
-        )}
-
-        {(fase === "captura" || fase === "analizando") && (
-          <PantallaCaptura
-            texto={texto}
-            onTexto={setTexto}
-            onDictadoDemo={cargarDictado}
-            onCasoReal={cargarCasoReal}
-            casoReal={casoReal}
-            escuchando={voz.escuchando}
-            onMicrofono={voz.alternar}
-            vozSoportada={voz.soportado}
-            falloDictado={voz.fallo}
-            parcial={voz.parcial}
-            transcribiendo={voz.transcribiendo}
-            medidorRef={voz.medidorRef}
-            onAnalizar={analizar}
-            analizando={fase === "analizando"}
-            sinSenal={sinSenal}
-            onCancelar={volverAlInicio}
+            }
+            // Sin caso abierto, la columna derecha no se queda vacía: enseña
+            // cómo está la red. Es la pregunta que hoy se hace por radio.
+            lateral={
+              !detalle ? (
+                <EstadoHospitales sedes={red} />
+              ) : (
+                <DetalleCaso
+                  caso={detalle.caso}
+                  handshake={detalle.handshake}
+                  origen={origenes.get(detalle.caso.id) ?? null}
+                  mapa={
+                    origenes.has(detalle.caso.id) && (
+                      <MapaDespacho
+                        origen={origenes.get(detalle.caso.id)!}
+                        candidatos={[]}
+                        sedeSeleccionada={null}
+                        ubicacionDemo={false}
+                      />
+                    )
+                  }
+                  // Reabrir un caso previo todavía no restaura su punto exacto
+                  // del flujo — eso llega con §1 completo. Por ahora lleva a la
+                  // captura, que es donde el paramédico puede actuar.
+                  onContinuar={
+                    detalle.etapa === "aceptado"
+                      ? undefined
+                      : () => setFase("captura")
+                  }
+                  onCerrar={() => setAbierto(null)}
+                />
+              )
+            }
           />
         )}
 
-        {caso &&
-          fase !== "inicio" &&
-          fase !== "captura" &&
-          fase !== "analizando" && <TarjetaCaso caso={caso} />}
+        {(fase === "captura" || fase === "analizando") && (
+          <Columnas
+            principal={
+              <PantallaCaptura
+                texto={texto}
+                // Escribir es corregir: cancela el disparo automático para que
+                // nadie vea salir su caso a medio arreglar.
+                onTexto={(t) => {
+                  cancelarAuto();
+                  setTexto(t);
+                }}
+                onDictadoDemo={cargarDictado}
+                onCasoReal={cargarCasoReal}
+                casoReal={casoReal}
+                escuchando={voz.escuchando}
+                onMicrofono={() => {
+                  cancelarAuto();
+                  voz.alternar();
+                }}
+                vozSoportada={voz.soportado}
+                falloDictado={voz.fallo}
+                parcial={voz.parcial}
+                transcribiendo={voz.transcribiendo}
+                medidorRef={voz.medidorRef}
+                onAnalizar={analizar}
+                analizando={fase === "analizando"}
+                sinSenal={sinSenal}
+                onCancelar={volverAlInicio}
+                autoRestaS={autoFin === null ? null : autoRestaS}
+                onCancelarAuto={cancelarAuto}
+              />
+            }
+            // Va en esta pantalla y no en el inicio porque aquí SÍ se puede
+            // hacer algo con él: este punto es el `origen` que alimenta el
+            // ranking. Un GPS desviado se ve y se corrige antes de analizar;
+            // después ya viajó dentro de la decisión.
+            lateral={
+              <section>
+                <p className="mb-2 text-xs uppercase tracking-wide text-[color:var(--color-texto-tenue)]">
+                  El destino se busca desde aquí
+                </p>
+                <MapaUnidad
+                  posicion={geo.origen}
+                  estado={geo.estado}
+                  precisionM={geo.precisionM}
+                />
+              </section>
+            }
+          />
+        )}
 
-        {/* ── Mapa de despacho ── */}
-        {caso &&
-          (fase === "ranking" ||
-            fase === "esperando" ||
-            fase === "resuelto") && (
-            <section className="mb-4">
+        {/*
+          ── RANKING, ESPERA Y RUTA ──────────────────────────────────
+          Las tres comparten forma: a la izquierda la decisión, a la derecha el
+          mapa. En móvil se apilan en ese mismo orden, que es el de siempre.
+        */}
+        {caso && (fase === "ranking" || fase === "esperando") && (
+          <Columnas
+            principal={
+              <>
+                <InformePaciente caso={caso} />
+
+                {fase === "ranking" && (
+                  <section>
+                    <p className="text-xs text-[color:var(--color-texto-tenue)] mb-3">
+                      {meta.evaluadas} sedes evaluadas · {meta.compatibles} con
+                      los servicios requeridos habilitados
+                    </p>
+                    <div className="space-y-2">
+                      {candidatos.map((c) => (
+                        <TarjetaCandidato
+                          key={c.sede.codigo}
+                          candidato={c}
+                          onDespachar={despachar}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+                {fase === "esperando" && handshake && (
+                  <section className="p-6 rounded-xl border border-[color:var(--color-borde)] bg-[color:var(--color-superficie)] text-center">
+                    <div className="mb-3 flex justify-center latido" aria-hidden>
+                      <Send className="size-8 text-[color:var(--color-info)]" strokeWidth={2} />
+                    </div>
+                    <p className="font-semibold">Solicitud enviada</p>
+                    <p className="text-sm text-[color:var(--color-texto-tenue)] mt-1">
+                      Esperando confirmación del jefe de urgencias…
+                    </p>
+                  </section>
+                )}
+              </>
+            }
+            lateral={
               <MapaDespacho
                 origen={caso.origen}
                 candidatos={candidatos}
                 sedeSeleccionada={handshake?.sedeCodigo ?? null}
                 ubicacionDemo={ubicacionDemo}
               />
-            </section>
-          )}
-
-        {/* ── Ranking ── */}
-        {fase === "ranking" && (
-          <section>
-            <p className="text-xs text-[color:var(--color-texto-tenue)] mb-3">
-              {meta.evaluadas} sedes evaluadas · {meta.compatibles} con los
-              servicios requeridos habilitados
-            </p>
-            <div className="space-y-2">
-              {candidatos.map((c) => (
-                <TarjetaCandidato
-                  key={c.sede.codigo}
-                  candidato={c}
-                  onDespachar={despachar}
-                />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {fase === "esperando" && handshake && (
-          <section className="p-6 rounded-xl border border-[color:var(--color-borde)] bg-[color:var(--color-superficie)] text-center">
-            <div className="text-4xl mb-3 latido" aria-hidden>
-              📲
-            </div>
-            <p className="font-semibold">Solicitud enviada</p>
-            <p className="text-sm text-[color:var(--color-texto-tenue)] mt-1">
-              Esperando confirmación del jefe de urgencias…
-            </p>
-          </section>
+            }
+          />
         )}
 
         {fase === "resuelto" && handshake && caso && (
-          <>
-            <PantallaRuta
-              caso={caso}
-              candidato={candidatoAceptado}
-              ruta={ruta}
-              cargandoRuta={cargandoRuta}
-              transcurrido={transcurrido}
-              onEntregado={volverAlInicio}
-              // Reabrir el ruteo con el evento de auditoría es §6 completo y
-              // todavía no está: por ahora se vuelve al ranking, que es donde
-              // el paramédico puede elegir otra sede.
-              onNovedad={() => setFase("ranking")}
-            />
+          <Columnas
+            principal={
+              <>
+                <PantallaRuta
+                  caso={caso}
+                  candidato={candidatoAceptado}
+                  ruta={ruta}
+                  cargandoRuta={cargandoRuta}
+                  transcurrido={transcurrido}
+                  onEntregado={volverAlInicio}
+                  // Reabrir el ruteo con el evento de auditoría es §6 completo
+                  // y todavía no está: por ahora se vuelve al ranking, que es
+                  // donde el paramédico puede elegir otra sede.
+                  onNovedad={() => setFase("ranking")}
+                />
 
-            {/* La llegada, a nivel de calle: para reconocer la entrada de
-                urgencias antes de estar delante de ella. */}
-            {sedeAceptada && (
-              <FotoCalle
-                coord={sedeAceptada.coord}
-                titulo={sedeAceptada.nombre}
-              />
-            )}
+                {/* El número del pitch: del dictado a la cama confirmada. */}
+                <p className="mt-4 text-center text-xs text-[color:var(--color-texto-tenue)]">
+                  <span className="text-2xl font-bold tabular text-[color:var(--color-texto)]">
+                    {transcurrido.toFixed(0)}s
+                  </span>
+                  <br />
+                  del dictado a la cama confirmada
+                </p>
+              </>
+            }
+            lateral={
+              <>
+                <MapaDespacho
+                  origen={caso.origen}
+                  candidatos={candidatos}
+                  sedeSeleccionada={handshake.sedeCodigo}
+                  ubicacionDemo={ubicacionDemo}
+                />
 
-            {/* El número del pitch: del dictado a la cama confirmada. */}
-            <p className="mt-4 text-center text-xs text-[color:var(--color-texto-tenue)]">
-              <span className="text-2xl font-bold tabular text-[color:var(--color-texto)]">
-                {transcurrido.toFixed(0)}s
-              </span>
-              <br />
-              del dictado a la cama confirmada
-            </p>
-          </>
+                {/* La llegada, a nivel de calle: para reconocer la entrada de
+                    urgencias antes de estar delante de ella. */}
+                {sedeAceptada && (
+                  <FotoCalle
+                    coord={sedeAceptada.coord}
+                    titulo={sedeAceptada.nombre}
+                  />
+                )}
+              </>
+            }
+          />
         )}
       </main>
     </div>
