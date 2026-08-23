@@ -210,6 +210,9 @@ export default function Cobertura() {
             ahora={ahora}
             foco={foco}
             onMovil={(id) => setSeleccionado(id)}
+            // El mismo móvil que abre el panel lateral es el que deja rastro:
+            // seleccionar y "seguirle la pista" son un solo gesto, no dos.
+            movilEnfocado={seleccionado}
           />
         </div>
 

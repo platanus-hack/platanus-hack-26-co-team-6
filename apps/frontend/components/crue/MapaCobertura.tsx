@@ -29,7 +29,8 @@ import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import type { Coordenada } from "@/lib/types";
-import { ESTILO_MAPA } from "@/components/mapa/paleta";
+import { ESTILO_MAPA, RUTA_ROSA } from "@/components/mapa/paleta";
+import { recorrido as pedirRecorrido } from "@/lib/api-moviles";
 import {
   antiguedadS,
   frescuraDe,
@@ -39,6 +40,42 @@ import {
   type MovilCobertura,
 } from "@/lib/posicion-modelo";
 
+/**
+ * Convierte los puntos de `GET /moviles/:id/recorrido` en tramos LineString.
+ *
+ * Un tramo por par de puntos, y no un solo LineString, porque cada tramo lleva
+ * su propia `t` (0 = el más viejo, 1 = el más reciente) y con ella la capa
+ * interpola la opacidad. Mapbox sabe hacer degradados sobre una línea entera
+ * con `line-gradient`, pero eso exige `lineMetrics: true` en la fuente y
+ * recalcular la geometría completa en cada poll; por tramos el degradado sale
+ * igual y la fuente se actualiza sin tocar su configuración.
+ *
+ * Con menos de dos puntos devuelve vacío: una "línea" de un punto no es un
+ * recorrido, es un pin que ya está pintado.
+ */
+function tramosDeRecorrido(
+  puntos: readonly { lat: number; lng: number }[],
+): GeoJSON.Feature[] {
+  if (puntos.length < 2) return [];
+  const tramos: GeoJSON.Feature[] = [];
+  for (let i = 0; i < puntos.length - 1; i++) {
+    const a = puntos[i];
+    const b = puntos[i + 1];
+    tramos.push({
+      type: "Feature",
+      properties: { t: i / (puntos.length - 1) },
+      geometry: {
+        type: "LineString",
+        coordinates: [
+          [a.lng, a.lat],
+          [b.lng, b.lat],
+        ],
+      },
+    });
+  }
+  return tramos;
+}
+
 interface Props {
   moviles: MovilCobertura[];
   /** Reloj de la consola. null antes de montar (evita el desajuste de hidratación). */
@@ -47,6 +84,14 @@ interface Props {
   onMovil?: (id: string) => void;
   /** Centrar el mapa aquí ("Ver en el mapa" desde la lista por localidad). */
   foco?: Coordenada | null;
+  /**
+   * Móvil cuyo recorrido se dibuja. `null` = ninguno, y el mapa queda limpio.
+   *
+   * Se pinta UNO y no todos a propósito: con 40 ambulancias, cuarenta
+   * polilíneas sobre la ciudad son una maraña donde no se distingue ninguna.
+   * El CRUE elige a quién le sigue el rastro.
+   */
+  movilEnfocado?: string | null;
 }
 
 /** Libre y ocupado con los mismos tokens que el resto de las consolas. */
@@ -65,7 +110,13 @@ function etiquetaTipo(m: MovilCobertura): string {
   return m.tipo ?? "?";
 }
 
-export default function MapaCobertura({ moviles, ahora, onMovil, foco = null }: Props) {
+export default function MapaCobertura({
+  moviles,
+  ahora,
+  onMovil,
+  foco = null,
+  movilEnfocado = null,
+}: Props) {
   // El handler real se lee de un ref: los pins se crean una vez y viven entre
   // renders, así que su listener tiene que apuntar siempre al closure actual.
   // Se escribe en un efecto —y no durante el render— porque tocar un ref
@@ -115,6 +166,58 @@ export default function MapaCobertura({ moviles, ahora, onMovil, foco = null }: 
       // píxel son ~0.149 m, y la interpolación exponencial base 2 mantiene la
       // equivalencia en todos los zooms. Sin esto el círculo mediría lo mismo
       // en toda la ciudad y no significaría nada.
+      // ── El recorrido del móvil enfocado ─────────────────────────
+      // Va ANTES del radio de error a propósito: Mapbox pinta en orden de
+      // adición dentro del mismo slot, y la línea tiene que quedar DEBAJO del
+      // círculo de precisión y del pin. Si se pintara encima, la traza taparía
+      // justo el dato que el CRUE mira primero — dónde está ahora.
+      //
+      // Dos capas sobre la misma fuente: un halo oscuro ancho y la línea
+      // encima. Sobre satélite en `dusk`, una línea de un solo color se pierde
+      // en los tejados claros del centro y en el verde de los cerros; el halo
+      // la hace legible en las dos sin subir la opacidad hasta tapar la ciudad.
+      mapa.addSource("recorrido", {
+        type: "geojson",
+        data: { type: "FeatureCollection", features: [] },
+      });
+      mapa.addLayer({
+        id: "recorrido-halo",
+        type: "line",
+        source: "recorrido",
+        slot: "middle",
+        layout: { "line-cap": "round", "line-join": "round" },
+        paint: {
+          "line-color": "#0B0F14",
+          "line-opacity": 0.55,
+          "line-width": [
+            "interpolate", ["linear"], ["zoom"],
+            10, 4,
+            16, 9,
+          ],
+        },
+      });
+      mapa.addLayer({
+        id: "recorrido-linea",
+        type: "line",
+        source: "recorrido",
+        slot: "middle",
+        layout: { "line-cap": "round", "line-join": "round" },
+        paint: {
+          "line-color": RUTA_ROSA,
+          // Se desvanece hacia el pasado: el tramo viejo del turno importa
+          // menos que el minuto anterior, y un degradado lo dice sin leyenda.
+          // `line-gradient` exige `lineMetrics` en la fuente… que no lo tiene,
+          // así que el degradado se hace por tramo con la propiedad `t` que
+          // calcula `tramosDeRecorrido`.
+          "line-opacity": ["interpolate", ["linear"], ["get", "t"], 0, 0.25, 1, 0.95],
+          "line-width": [
+            "interpolate", ["linear"], ["zoom"],
+            10, 2,
+            16, 5,
+          ],
+        },
+      });
+
       mapa.addSource("precision-gps", {
         type: "geojson",
         data: { type: "FeatureCollection", features: [] },
@@ -259,6 +362,50 @@ export default function MapaCobertura({ moviles, ahora, onMovil, foco = null }: 
       });
     }
   }, [listo, moviles, ahora]);
+
+  // ── El recorrido del móvil seleccionado ────────────────────────
+  //
+  // Se recarga con `ahora` —el mismo reloj que ya hace latir la consola— para
+  // que la traza crezca con los reportes nuevos sin montar un segundo poll.
+  //
+  // `cancelado` corta la carrera clásica: si el CRUE cambia de móvil mientras
+  // una petición está en vuelo, la respuesta vieja llegaría después y pintaría
+  // el rastro del móvil equivocado sobre el nuevo.
+  useEffect(() => {
+    const mapa = mapaRef.current;
+    if (!mapa || !listo) return;
+
+    const fuente = () =>
+      mapa.getSource("recorrido") as mapboxgl.GeoJSONSource | undefined;
+
+    if (!movilEnfocado) {
+      fuente()?.setData({ type: "FeatureCollection", features: [] });
+      return;
+    }
+
+    let cancelado = false;
+    void (async () => {
+      try {
+        const r = await pedirRecorrido(movilEnfocado, { limite: 300 });
+        if (cancelado) return;
+        fuente()?.setData({
+          type: "FeatureCollection",
+          features: tramosDeRecorrido(r.puntos),
+        });
+      } catch {
+        // Un fallo aquí no puede tumbar el tablero: la traza es contexto, la
+        // posición actual es el dato. Se limpia la línea y el mapa sigue
+        // mostrando dónde está cada ambulancia.
+        if (!cancelado) {
+          fuente()?.setData({ type: "FeatureCollection", features: [] });
+        }
+      }
+    })();
+
+    return () => {
+      cancelado = true;
+    };
+  }, [listo, movilEnfocado, ahora]);
 
   // ── Foco pedido desde la lista ─────────────────────────────────
   useEffect(() => {
