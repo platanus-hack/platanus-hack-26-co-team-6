@@ -21,6 +21,7 @@ import {
   Controller,
   Get,
   Param,
+  Query,
   Put,
   Req,
 } from '@nestjs/common';
@@ -72,6 +73,27 @@ export class MovilesController {
     if (!leido.ok) throw new BadRequestException(leido.motivo);
 
     return await this.moviles.reportar(this.actor(req), movilId, leido.valor);
+  }
+
+  /**
+   * `GET /moviles/:id/recorrido?limite=200&desde=ISO`
+   *
+   * Los puntos por los que pasó, del más viejo al más nuevo — listos para
+   * dibujar una polilínea. Con los marcadores A/B/C/D encima, es el recorrido
+   * completo de un turno.
+   */
+  @Get(':id/recorrido')
+  recorrido(
+    @Req() req: Request,
+    @Param('id') id: string,
+    @Query('limite') limite?: string,
+    @Query('desde') desde?: string,
+  ) {
+    const movilId = normalizarMovilId(id ?? '');
+    if (!movilId) throw new BadRequestException('Falta el identificador del móvil');
+    // Tope duro: sin él, un `?limite=999999` arrastra la base y el navegador.
+    const n = Math.min(Math.max(Number(limite) || 200, 1), 1000);
+    return this.moviles.recorrido(this.actor(req), movilId, n, desde);
   }
 
   /** Único punto donde este controlador se pregunta quién está pidiendo. */

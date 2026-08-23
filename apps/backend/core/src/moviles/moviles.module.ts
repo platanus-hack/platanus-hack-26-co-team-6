@@ -10,6 +10,7 @@ import { Module } from '@nestjs/common';
 import { SedesModule } from '../sedes/sedes.module';
 import { MovilesController } from './moviles.controller';
 import { MovilesService } from './moviles.service';
+import { TrazaRepositorio } from './traza.repositorio';
 import { ALMACEN_MOVILES, MovilesMemoria } from './moviles.almacen';
 
 @Module({
@@ -20,6 +21,7 @@ import { ALMACEN_MOVILES, MovilesMemoria } from './moviles.almacen';
   providers: [
     MovilesService,
     { provide: ALMACEN_MOVILES, useClass: MovilesMemoria },
+    TrazaRepositorio,
   ],
   // Sale para 4.3 (ETA vivo desde la posición del móvil).
   exports: [MovilesService],
