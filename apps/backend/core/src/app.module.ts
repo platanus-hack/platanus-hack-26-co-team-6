@@ -6,6 +6,7 @@ import { HealthController } from './health/health.controller';
 import { AuthModule } from './auth/auth.module';
 import { AlmacenModule } from './almacen/almacen.module';
 import { AiCoreModule } from './ai-core/ai-core.module';
+import { ZonasModule } from './zonas/zonas.module';
 import { VozModule } from './voz/voz.module';
 import { VigilanteModule } from './vigilante/vigilante.module';
 import { SedesModule } from './sedes/sedes.module';
@@ -74,6 +75,9 @@ import { MovilesModule } from './moviles/moviles.module';
     EstadoModule,
     TriageModule,
     TelegramModule,
+
+    // Mapa de calor: demanda histórica del 123 por localidad.
+    ZonasModule,
     // Cuando el ruteo automático no cierra, el caso pasa a un regulador.
     EscalamientoModule,
     // En qué modo corre cada integración. Lo lee la barra de /campo.

@@ -69,6 +69,21 @@ services:
       # tiene heurística a la que caer.
       - key: ANTHROPIC_API_KEY
         sync: false
+
+      # ── Transcripción (STT) ───────────────────────────────────────────
+      # Dos proveedores detrás de la misma interfaz (transcripcion.py). BASTA
+      # UNA de las dos llaves. Con "auto" prefiere Deepgram si está, y si no
+      # cae a ElevenLabs; sin ninguna, /v1/transcribir responde 503 explícito
+      # — es el único punto de PULSO sin heurística a la que caer.
+      - key: STT_PROVEEDOR
+        value: auto
+      - key: DEEPGRAM_API_KEY
+        sync: false
+
+      # ⚠️ ElevenLabs cubre STT **y** TTS con la misma llave. Deepgram sólo
+      #    cubre STT: sintesis.py:46 es `bool(elevenlabs_api_key)` y no tiene
+      #    otro proveedor. Sin esta llave la transcripción funciona con
+      #    Deepgram, pero la llamada de seguimiento se queda sin voz.
       - key: ELEVENLABS_API_KEY
         sync: false
 

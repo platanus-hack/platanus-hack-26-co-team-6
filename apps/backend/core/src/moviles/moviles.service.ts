@@ -19,7 +19,12 @@
  * log de debug y uno de producción.
  */
 
-import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  Optional,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Sede, TipoMovil } from '../contracts/types';
 import { SedesService } from '../sedes/sedes.service';
@@ -36,6 +41,7 @@ import {
   type ModoIdentidad,
 } from './actor';
 import { localidadDe, type EstadoMovil, type ReporteEstado } from './posicion';
+import { TrazaRepositorio, type PuntoTraza } from './traza.repositorio';
 
 // ─────────────────────────────────────────────────────────────────
 // Forma de la respuesta HTTP
@@ -88,6 +94,12 @@ export class MovilesService {
     @Inject(ALMACEN_MOVILES) private readonly almacen: AlmacenMoviles,
     private readonly sedes: SedesService,
     private readonly config: ConfigService,
+    // @Optional() con default: sin él, todo TestingModule que arme
+    // MovilesService tendría que declarar TrazaRepositorio, y son varios
+    // specs. Es el mismo patrón que AlmacenService — la traza es aditiva y
+    // no debe obligar a tocar tests que no la usan.
+    @Optional()
+    private readonly traza: TrazaRepositorio = new TrazaRepositorio(),
   ) {}
 
   /** Lo que el servidor sabe de la sesión de turno. Ver `actor.ts`. */
@@ -153,7 +165,49 @@ export class MovilesService {
     };
 
     this.almacen.guardar(estado);
+
+    // La traza va aparte del estado: `almacen` guarda DÓNDE ESTÁ, esto
+    // guarda POR DÓNDE PASÓ. Sin lo segundo el mapa sólo puede pintar un
+    // punto que salta, no un recorrido.
+    // No se espera: perder un punto de telemetría no puede retrasar el
+    // reporte, que es lo que mantiene viva la flota.
+    void this.traza.anotar(movilId, organizacionId, {
+      lat: reporte.lat,
+      lng: reporte.lng,
+      precisionM: reporte.precisionM,
+      velocidadKmh: reporte.velocidadKmh,
+      disponible: reporte.disponible,
+      reportadoEn: estado.ultima?.reportadoEn ?? new Date().toISOString(),
+    });
+
     return this.visible(estado, await this.sedes.todas());
+  }
+
+  /**
+   * El recorrido de un móvil. Lo pinta el mapa como polilínea.
+   *
+   * Respeta el mismo alcance que `listar()`: un operador ve los suyos, el
+   * CRUE ve la ciudad. Un recorrido es más sensible que una posición —
+   * muestra dónde estuvo alguien todo el turno— así que el filtro va antes
+   * de tocar la base, no después.
+   */
+  async recorrido(
+    actor: ActorMovil,
+    movilId: string,
+    limite = 200,
+    desde?: string,
+  ): Promise<{ movilId: string; puntos: PuntoTraza[]; persistente: boolean }> {
+    const estado = this.almacen.obtener(movilId);
+    if (!puedeReportar(actor, estado?.movil.organizacionId ?? null)) {
+      throw new ForbiddenException('Este móvil no pertenece a su organización');
+    }
+    return {
+      movilId,
+      puntos: await this.traza.recorrido(movilId, limite, desde),
+      // La consola lo dice: un recorrido en memoria empieza en el último
+      // reinicio, y eso no se puede pintar como si fuera el turno completo.
+      persistente: this.traza.persistente,
+    };
   }
 
   /** La flota que le corresponde ver a este actor. Filtrado en el servidor. */
@@ -184,7 +238,7 @@ export class MovilesService {
             lng: estado.ultima.coord.lng,
             precisionM: estado.ultima.precisionM,
             velocidadKmh: estado.ultima.velocidadKmh,
-            reportadoEn: estado.ultima.reportadoEn,
+            reportadoEn: estado.ultima?.reportadoEn ?? new Date().toISOString(),
           }
         : null,
       localidad: estado.ultima ? localidadDe(estado.ultima.coord, sedes) : null,
