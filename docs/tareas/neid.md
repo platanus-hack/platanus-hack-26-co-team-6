@@ -4,7 +4,7 @@
 > **En este plan rota:** también le tocan persistencia en Postgres, policies de RLS, vistas de afiliación
 > en React y la política de retención. **Es dueño de tipos en la ola 3.**
 
-**Ola 0** [0.3](#03--responder-el-webhook-en--3-s) · [0.5](#05--un-solo-prompt-clínico) — **Ola 1** [1.2](#12--persistir-caso-y-handshake) · [1.6](#16--policies-de-rls--caso_acceso) — **Ola 2** [2.2](#22--vista-afiliacion) · [2.6](#26--cola-de-verificación-manual) · [2.10](#210--panelauditoria) — **Ola 3** [3.1](#31--evento_caso--registroservice) · [3.8](#38--vigilante-a-worker-con-lock-distribuido) · [3.12](#312--versionar-el-prompt-clínico) — **Ola 4** [4.2](#42--generador-de-sbar) · [4.7](#47--puertos-declarados-con-mock-honesto) · [4.9](#49--validar-el-rda-contra-la-ig-del-ihce) — **Ola 5** [5.4](#54--métricas-de-negocio) · [5.8](#58--política-de-retención) · [5.12](#512--endurecimiento-final)
+**Ola 0** [0.3](#03--responder-el-webhook-en--3-s) · [0.5](#05--un-solo-prompt-clínico) — **Ola 1** [1.2](#12--persistir-caso-y-handshake) · [1.6](#16--policies-de-rls--caso_acceso) — **Ola 2** [2.2](#22--vista-afiliacion) · [2.6](#26--cola-de-verificación-manual) · [2.10](#210--panelauditoria) — **Ola 3** ✅ᔆ [3.1](#31--evento_caso--registroservice) · [3.8](#38--vigilante-a-worker-con-lock-distribuido) · [3.12](#312--versionar-el-prompt-clínico) — **Ola 4** [4.2](#42--generador-de-sbar) · [4.7](#47--puertos-declarados-con-mock-honesto) · [4.9](#49--validar-el-rda-contra-la-ig-del-ihce) — **Ola 5** [5.4](#54--métricas-de-negocio) · [5.8](#58--política-de-retención) · [5.12](#512--endurecimiento-final)
 
 ---
 
@@ -204,12 +204,36 @@
 7. **Como dueño de tipos:** mergea primero los tipos `TipoEvento`, `EventoCaso`, `SedeEstado`, `CapacidadDeclarada` — todos opcionales donde toquen tipos existentes.
 
 **Hecho cuando.**
-- [ ] Un `UPDATE` sobre `evento_caso` lanza excepción
-- [ ] El mismo evento con la misma clave dos veces → una fila
-- [ ] Una corrección se lee como corrección, no borra el original
-- [ ] Los tipos están mergeados antes que el resto de la ola
+- [x] Un `UPDATE` sobre `evento_caso` lanza excepción — trigger calcado del de `0002`
+- [x] El mismo evento con la misma clave dos veces → una fila
+- [x] Una corrección se lee como corrección, no borra el original
+- [ ] Los tipos están mergeados antes que el resto de la ola — `TipoEvento` y `EventoCaso` viven en `core/src/eventos/tipos.ts`, **no en `contracts/types.ts`**: no cruzan el cable todavía. `SedeEstado` y `CapacidadDeclarada` siguen pendientes (son de `3.3`, Zaid)
 
 **Trampas.** La tentación es dejar que cada servicio inserte directo. **No.** Un solo punto de escritura es lo que permite el test de cobertura de eventos (5.12) y lo que evita que dentro de un mes haya eventos con formas distintas.
+
+> ### ⚠️ Esta tarea la hizo el carril de Sebas — [PR #20](https://github.com/platanus-hack/platanus-hack-26-co-team-6/pull/20)
+>
+> **Neid: revísala como tuya.** Se hizo desde fuera de tu carril porque bloqueaba
+> cuatro tareas de Sebas (`3.2`, `3.10`, `4.1`, `4.5`) y la ola 3 no podía
+> empezar sin ella. Si el diseño no te convence, cámbialo — lo que importaba
+> era desbloquear, no fijar la forma.
+>
+> **Qué quedó hecho:** `core/src/eventos/` con `RegistroService` (punto único de
+> escritura, no lanza nunca), los dos almacenes (memoria y Postgres),
+> `GET /casos/:id/eventos` y la migración `0006` con el trigger append-only, el
+> índice único parcial de idempotencia y `corrige_a`.
+>
+> **Qué NO quedó hecho, y por qué:**
+> - **Depende de `1.2`, que sigue sin existir.** Los eventos viven en memoria si
+>   no hay `PULSO_ROUTING_DATABASE_URL`, y el log lo dice. El paso 5 —"`evento_caso`
+>   en la misma transacción que el cambio de estado"— no se puede cumplir mientras
+>   el estado sea un `Map`; la firma para hacerlo está anotada en `registro.service.ts`.
+> - **`GET /casos/:id/eventos` no filtra por organización**: `caso` todavía no tiene
+>   dueño. Eso llega con `1.2` y las policies de `1.6`.
+> - **`actor_id` no lleva la FK a `actor(id)`**: esa tabla es de `1.1` (Zaid) y sin
+>   ella la migración no corre sola.
+> - **La migración no se probó contra un Postgres real** — no hay base en el entorno
+>   donde se escribió. El SQL está revisado a mano; córrelo tú antes de confiar.
 
 ---
 
