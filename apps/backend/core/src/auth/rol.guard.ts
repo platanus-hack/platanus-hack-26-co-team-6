@@ -33,6 +33,7 @@ import {
   CLAVE_ROLES,
 } from './rol.decorator';
 import { ROLES_DE_RED, type Rol } from './roles';
+import { RegistroService } from '../eventos/registro.service';
 import { RegistroSesiones } from './sesiones';
 
 @Injectable()
@@ -42,6 +43,12 @@ export class RolGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly registro: RegistroSesiones,
+    /**
+     * Tarea 3.2: un intento cruzado tambien es un evento DEL CASO, no solo
+     * una nota de seguridad. Opcional porque el guard se construye a mano en
+     * sus propios tests, y ahi no hay caso al que colgarlo.
+     */
+    private readonly eventos?: RegistroService,
   ) {}
 
   canActivate(contexto: ExecutionContext): boolean {
@@ -115,6 +122,20 @@ export class RolGuard implements CanActivate {
           detalle: `sede ${sede} fuera del alcance del actor`,
           en: new Date().toISOString(),
         });
+
+        // Y si la peticion nombraba un caso, tambien queda en SU linea de
+        // tiempo: quien audite ese traslado tiene que ver que alguien de otra
+        // sede intento tocarlo. `void` porque canActivate es sincrono y
+        // `registrar()` no lanza nunca.
+        const casoId = this.casoDe(req);
+        if (casoId)
+          void this.eventos?.registrar({
+            casoId,
+            tipo: 'intento_cruzado',
+            actorId: actor.id,
+            codigoSede: sede,
+            detalle: { organizacionActor: actor.organizacionId },
+          });
         throw new ForbiddenException('Esa sede no esta en tu alcance');
       }
     }
@@ -136,6 +157,13 @@ export class RolGuard implements CanActivate {
     if (actor.roles.some((r) => ROLES_DE_RED.includes(r))) return true;
     if (!actor.sedes.length) return true;
     return actor.sedes.includes(sede);
+  }
+
+  /** El caso que nombra la peticion, si lo nombra. */
+  private casoDe(req: Request): string | undefined {
+    const cuerpo = req.body as Record<string, unknown> | undefined;
+    const valor = cuerpo?.casoId ?? (req.params as Record<string, unknown>)?.id;
+    return typeof valor === 'string' ? valor : undefined;
   }
 
   private sedeDe(req: Request, campo: string): string | undefined {

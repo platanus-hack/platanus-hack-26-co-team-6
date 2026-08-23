@@ -8,6 +8,8 @@
 
 import { AlmacenService } from '../almacen/almacen.service';
 import { CongestionService } from '../scoring/congestion.service';
+import { EventosMemoria } from '../eventos/almacen-eventos';
+import { RegistroService } from '../eventos/registro.service';
 import { MemoryRoutingStore } from '../persistence/memory-routing.store';
 import { RoutingService } from '../routing/routing.service';
 import { SedesService } from '../sedes/sedes.service';
@@ -38,7 +40,9 @@ function montar(store = new MemoryRoutingStore()): {
   // Sin sede ni voz configuradas: el handshake tiene que funcionar igual.
   // Es la regla del repo — todo degrada, y aqui degradar no puede cambiar
   // lo que se guarda.
-  const sedes = { porCodigo: async () => undefined } as unknown as SedesService;
+  const sedes = {
+    porCodigo: () => Promise.resolve(undefined),
+  } as unknown as SedesService;
   const congestion = { indice: () => 0.4 } as unknown as CongestionService;
   const voz = { configurado: () => false } as unknown as VozClient;
 
@@ -48,6 +52,7 @@ function montar(store = new MemoryRoutingStore()): {
       sedes,
       congestion,
       new RoutingService(store),
+      new RegistroService(new EventosMemoria()),
       voz,
     ),
     almacen,
@@ -107,7 +112,9 @@ describe('HandshakeService · motivo de rechazo (0.6)', () => {
       motivo: 'el ascensor de urgencias esta dañado',
     });
 
-    expect(r.handshake.motivoRechazo).toBe('el ascensor de urgencias esta dañado');
+    expect(r.handshake.motivoRechazo).toBe(
+      'el ascensor de urgencias esta dañado',
+    );
     expect(r.handshake.motivoCodigo).toBeNull();
   });
 
@@ -192,8 +199,14 @@ describe('HandshakeService · aceptacion unica (0.1)', () => {
     const { servicio, almacen } = montar();
     almacen.guardarHandshake(otroHandshake('hs-2', 'SEDE-B'));
 
-    await servicio.procesarRespuesta({ handshakeId: 'hs-1', decision: 'aceptado' });
-    await servicio.procesarRespuesta({ handshakeId: 'hs-2', decision: 'aceptado' });
+    await servicio.procesarRespuesta({
+      handshakeId: 'hs-1',
+      decision: 'aceptado',
+    });
+    await servicio.procesarRespuesta({
+      handshakeId: 'hs-2',
+      decision: 'aceptado',
+    });
 
     expect(almacen.obtenerHandshake('hs-2')?.estado).toBe('enviado');
     expect(almacen.obtenerHandshake('hs-2')?.respondidoEn).toBeNull();
@@ -206,8 +219,14 @@ describe('HandshakeService · aceptacion unica (0.1)', () => {
     const { servicio, almacen } = montar();
     almacen.guardarHandshake(otroHandshake('hs-2', 'SEDE-B'));
 
-    await servicio.procesarRespuesta({ handshakeId: 'hs-1', decision: 'aceptado' });
-    await servicio.procesarRespuesta({ handshakeId: 'hs-2', decision: 'aceptado' });
+    await servicio.procesarRespuesta({
+      handshakeId: 'hs-1',
+      decision: 'aceptado',
+    });
+    await servicio.procesarRespuesta({
+      handshakeId: 'hs-2',
+      decision: 'aceptado',
+    });
 
     expect(almacen.historialSede('SEDE-B').aceptados).toBe(0);
     expect(almacen.historialSede('SEDE-A').aceptados).toBe(1);

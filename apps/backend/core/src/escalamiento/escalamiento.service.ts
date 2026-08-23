@@ -29,12 +29,16 @@ import type {
   EscalarResponse,
 } from '../contracts/types';
 import { AlmacenService } from '../almacen/almacen.service';
+import { RegistroService } from '../eventos/registro.service';
 
 @Injectable()
 export class EscalamientoService {
   private readonly log = new Logger(EscalamientoService.name);
 
-  constructor(private readonly almacen: AlmacenService) {}
+  constructor(
+    private readonly almacen: AlmacenService,
+    private readonly registro: RegistroService,
+  ) {}
 
   escalar(cuerpo: EscalarRequest): EscalarResponse {
     const caso = this.almacen.obtenerCaso(cuerpo.casoId);
@@ -80,12 +84,27 @@ export class EscalamientoService {
         `${cuerpo.motivo} · ${sedesIntentadas.length} sedes agotadas`,
     );
 
+    // `void` y no `await`: `escalar()` es sincrono y lo llaman el controlador
+    // y el vigilante. Volverlo async por el registro obligaria a cambiar los
+    // dos llamadores para ganar nada — `registrar()` no lanza nunca, asi que
+    // no hay rechazo suelto que se escape.
+    void this.registro.registrar({
+      casoId: cuerpo.casoId,
+      tipo: 'escalado',
+      // Idempotente por caso: escalar dos veces devuelve el mismo
+      // escalamiento (arriba) y ahora tampoco escribe dos eventos.
+      claveIdempotencia: escalamiento.id,
+      detalle: {
+        escalamientoId: escalamiento.id,
+        motivo: cuerpo.motivo,
+        sedesIntentadas: sedesIntentadas.length,
+      },
+    });
+
     return { escalamiento };
   }
 
-  atender(
-    cuerpo: AtenderEscalamientoRequest,
-  ): AtenderEscalamientoResponse {
+  atender(cuerpo: AtenderEscalamientoRequest): AtenderEscalamientoResponse {
     const e = this.almacen.obtenerEscalamiento(cuerpo.escalamientoId);
     if (!e) throw new NotFoundException('Escalamiento no encontrado');
 

@@ -4,7 +4,7 @@
 > **En este plan rota:** también le toca el core de identidad, Testcontainers, el shell de `/panel` y
 > los runbooks. **Es dueño de tipos en la ola 4.**
 
-**Ola 0** ✅ [0.1](#01--conectar-el-guard-de-aceptación-única) · ✅ [0.6](#06--motivos-de-rechazo-como-enum-versionado) — **Ola 1** ✅ [1.3](#13--sesión-con-actor-real) · [1.7](#17--testcontainers--aislamiento-de-inquilino) — **Ola 2** [2.3](#23--vista-afiliacionverificar) · [2.7](#27--shell-de-panel) · ✅ [2.11](#211--rate-limit--idempotency-key) — **Ola 3** [3.2](#32--cablear-los-22-eventos) · [3.5](#35--sede_canal--envío-dirigido) · [3.10](#310--reporte-del-traslado) — **Ola 4** [4.1](#41--tabla-recepcion--protocolos) · [4.5](#45--entrega-por-qr) · [4.10](#410--vista-de-firma-de-trámites) — **Ola 5** [5.2](#52--vista-panelwebhooks) · [5.5](#55--alertas-y-runbooks) · 🟡 [5.9](#59--panelapi--llaves-con-alcance)
+**Ola 0** ✅ [0.1](#01--conectar-el-guard-de-aceptación-única) · ✅ [0.6](#06--motivos-de-rechazo-como-enum-versionado) — **Ola 1** ✅ [1.3](#13--sesión-con-actor-real) · [1.7](#17--testcontainers--aislamiento-de-inquilino) — **Ola 2** [2.3](#23--vista-afiliacionverificar) · [2.7](#27--shell-de-panel) · ✅ [2.11](#211--rate-limit--idempotency-key) — **Ola 3** 🟡 [3.2](#32--cablear-los-22-eventos) · [3.5](#35--sede_canal--envío-dirigido) · [3.10](#310--reporte-del-traslado) — **Ola 4** [4.1](#41--tabla-recepcion--protocolos) · [4.5](#45--entrega-por-qr) · [4.10](#410--vista-de-firma-de-trámites) — **Ola 5** [5.2](#52--vista-panelwebhooks) · [5.5](#55--alertas-y-runbooks) · 🟡 [5.9](#59--panelapi--llaves-con-alcance)
 
 ---
 
@@ -220,12 +220,41 @@ Lo que hoy tapa el hueco es que el fan-out es secuencial. **El día que alguien 
 5. `evento_caso` en la misma transacción que el cambio de estado.
 
 **Hecho cuando.**
-- [ ] Los 22 eventos se escriben desde su punto real
-- [ ] `rerouteado` aparece en la línea de tiempo con la sede origen y destino
-- [ ] "Ya llegué" por WhatsApp produce un evento, no un log
-- [ ] Ninguna transición escribe estado sin evento
+- [~] Los 22 eventos se escriben desde su punto real — **12 sí**; 6 tienen la puerta abierta y esperan a `1.8` (token de servicio de `voz`); 6 necesitan funcionalidad que no existe (`4.1`, `4.6`). Tabla abajo
+- [x] `rerouteado` aparece en la línea de tiempo con la sede origen y destino
+- [ ] "Ya llegué" por WhatsApp produce un evento, no un log — **bloqueado**: `POST /casos/:id/eventos` ya lo acepta, pero `voz` no puede autenticarse contra core hasta `1.8` (Juan)
+- [x] Ninguna transición escribe estado sin evento — de las que existen hoy en core. El test que lo vuelve exigible es `5.12`
 
 **Trampas.** Toca cuatro módulos a la vez. **Hazlo en un PR por módulo**, no en uno grande: son los archivos más calientes del repo y tres personas más los van a tocar en esta ola.
+
+> ### Estado real del cableado
+>
+> **Un solo PR y no cuatro**, a propósito: nadie más tenía trabajo en vuelo sobre
+> esos archivos en el momento de hacerlo (Neid iba por `voz` y `ai-core`, Zaid y
+> Juan no habían abierto rama). Con la ola vacía, cuatro PRs encadenados sobre el
+> mismo `RegistroService` era ceremonia sin revisor.
+>
+> | Evento | Estado | Dónde |
+> |---|---|---|
+> | `caso_creado` | ✅ | `triage.controller.ts` |
+> | `revision_humana` | ✅ | `triage.controller.ts` — la compuerta clínica por fin deja rastro |
+> | `match_calculado` | ✅ | `match.controller.ts`, con la huella de la evidencia |
+> | `despachado` | ✅ | `dispatch.service.ts`, idempotente por (caso, sede) |
+> | `aceptado` · `rechazado` | ✅ | `handshake.service.ts`, con `motivoCodigo` de `0.6` |
+> | `timeout` | ✅ | `vigilante.service.ts` |
+> | `rerouteado` | ✅ | `vigilante.service.ts`, con sede origen **y** destino |
+> | `demora_detectada` | ✅ | `vigilante.service.ts` |
+> | `escalado` | ✅ | `escalamiento.service.ts` |
+> | `intento_cruzado` | ✅ | `rol.guard.ts` — en el registro de seguridad **y** en la línea del caso |
+> | `override_crue` | ✅ | `POST /casos/:id/eventos` + `crue/bitacora.ts`. **Salió de `localStorage`** |
+> | `llegada_escena` · `salida_escena` · `llegada_puerta` · `entrega` · `demora_reportada` · `cerrado` | 🚪 | La puerta existe y valida; falta que `voz` la llame — necesita el token de servicio de **`1.8` (Juan)** |
+> | `prearribo_enviado` · `preparacion_confirmada` | ❌ | Necesitan la recepción de **`4.1`** (mía, bloqueada por `3.1`) |
+> | `derechos_verificados` · `tramite_generado` · `tramite_firmado` · `contrarreferencia` | ❌ | Necesitan la tabla `tramite` de **`4.6` (Zaid)** |
+>
+> **Lo que un cliente puede escribir es una lista corta y cerrada.** Un `POST`
+> abierto a los 22 tipos dejaría que una consola escribiera `aceptado` sin que
+> nadie haya aceptado nada. Y el evento se firma con **el actor de la sesión**,
+> nunca con lo que venga en el cuerpo.
 
 ---
 
