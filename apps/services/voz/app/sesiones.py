@@ -31,6 +31,14 @@ class Sesion:
     sede_lat: float | None = None
     sede_lng: float | None = None
     sede_direccion: str | None = None
+    #: Punto A — qué móvil es y dónde está. Sin unidad declarada, PULSO no
+    #: puede ni ubicarlo en el mapa ni asignarle zona.
+    unidad_id: str | None = None
+    lat: float | None = None
+    lng: float | None = None
+    #: Punto D — la zona que se le asignó al quedar libre.
+    zona_id: str | None = None
+    zona_nombre: str | None = None
     actualizada_en: str = field(
         default_factory=lambda: datetime.now(timezone.utc).isoformat()
     )

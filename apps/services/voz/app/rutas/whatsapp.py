@@ -39,7 +39,7 @@ from ..canales.firma import FirmaInvalida
 from ..canales.modelos import MensajeEntrante
 from ..clientes import ai_core
 from ..config import settings
-from ..despachador import despachar
+from ..despachador import actualizar_posicion, despachar
 from ..sesiones import obtener
 from ..webhooks_recibidos import anotar_resultado, reclamar
 from .. import metricas
@@ -159,9 +159,11 @@ async def procesar(m: MensajeEntrante) -> None:
                 mensaje=m.texto, contexto=_contexto(m.de)
             )
         elif m.tipo == "ubicacion":
-            # Todavía no se usa la ubicación del paramédico como origen del
-            # ruteo. Cuando se use, entra por aquí.
-            await whatsapp.enviar_texto(m.de, "Ubicación recibida.")
+            # Punto A: la única posición confiable. La que el paramédico
+            # escribe en palabras («la 80 con 68») no es una coordenada.
+            if m.lat is not None and m.lng is not None:
+                await actualizar_posicion(m.de, m.lat, m.lng)
+            await whatsapp.enviar_texto(m.de, "📍 Ubicación recibida.")
             await _anotar(m, {"estado": "procesado", "accion": "ubicacion"})
             return
         else:
