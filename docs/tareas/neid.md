@@ -24,12 +24,70 @@
 5. Métrica `pulso_webhook_latencia_ms{proveedor}` con histograma.
 
 **Hecho cuando.**
-- [ ] p99 de la respuesta del webhook < 1 s
-- [ ] Un fallo en el procesamiento produce un mensaje al paramédico, no silencio
-- [ ] La métrica existe y se ve
-- [ ] Test que simula triage lento y verifica que el 200 sale igual
+- [x] p99 de la respuesta del webhook < 1 s
+- [x] Un fallo en el procesamiento produce un mensaje al paramédico, no silencio
+- [x] La métrica existe y se ve
+- [x] Test que simula triage lento y verifica que el 200 sale igual
 
 **Trampas.** Comparte servicio con 0.2 (Zaid). **Tú tocas `rutas/whatsapp.py` y `despachador.py`; él toca `canales/whatsapp.py` y `telefonia/`.** Coordinen quién mergea primero.
+
+### ✅ Hecho — rama `feat/o0-0.3-webhook-3s`
+
+`pulso_webhook_latencia_ms{proveedor}` como histograma, con cortes alrededor
+de 1 s y 3 s — sin buckets en el umbral, un histograma no responde la única
+pregunta que se le va a hacer. Se mide en **todas** las salidas de la ruta,
+incluida la del cuerpo ilegible: si esa rama no midiera, el p99 mentiría por
+omisión.
+
+**Los dos mensajes.** El paramédico recibe acuse inmediato y después el
+destino:
+
+| Entra | Acuse | Después |
+|---|---|---|
+| Texto | «Copiado, procesando…» | destino + ubicación |
+| Nota de voz | «🎙️ Nota recibida, transcribiendo…» | «Entendí: …» → destino |
+
+**El acuse del audio va ANTES de bajar el media**, y el orden está fijado por
+un test. Bajar el media de Meta son dos saltos autenticados más la
+transcripción: con el acuse después, el paramédico manda una nota y mira un
+chat mudo varios segundos con un paciente al lado.
+
+**El eco del transcript** es la pieza que no estaba en el enunciado y que hace
+falta: es la única forma de que un paramédico cace una transcripción mala
+**antes** de que salga la ambulancia. En la app el dictado se ve en pantalla;
+por WhatsApp, este mensaje *es* la pantalla. Solo se manda cuando la acción es
+un caso nuevo — repetirle «ya llegué» llena el chat de ruido justo cuando
+menos conviene.
+
+Un acuse que falla no tumba el traslado. Perder el acuse es molesto; perder el
+traslado es otra cosa.
+
+---
+
+## ⚠️ Aviso para 0.2 (Zaid) — la firma ya está escrita
+
+**No la escribas desde cero.** `apps/services/voz/app/canales/firma.py` existe
+en la rama `feat/cobertura-zonas`, commit `6d988f5`, y **no llegó a main**: el
+PR #8 se mezcló antes de ese commit.
+
+Lo que ya tiene, probado con 11 tests:
+
+- HMAC-SHA256 sobre el cuerpo **crudo** — sobre el JSON reserializado no
+  cuadra: un espacio o un cambio de orden de claves cambia el hash.
+- Las dos cabeceras: `X-Webhook-Signature` (Kapso) y `X-Hub-Signature-256`
+  (Meta, con el prefijo `sha256=`).
+- Comparación en tiempo constante. Un `==` normal filtra, por lo que tarda en
+  fallar, cuántos bytes del prefijo acertaste.
+- Sin secreto configurado no verifica **y lo grita en el log**, para que
+  «arranca sin configurar» no se vuelva «quedó abierto y nadie lo notó».
+
+Y trae un bug ya cazado que conviene no repetir: el handler del GET se llamaba
+`verificar` y **sombreaba** a la función importada del mismo nombre. El POST
+llamaba al handler equivocado y descartaba el resultado — el webhook quedaba
+sin verificar **pareciendo correcto**.
+
+Rescátalo con `git cherry-pick 6d988f5` y quédate con lo de `canales/` y
+`tests/test_firma.py`.
 
 ---
 

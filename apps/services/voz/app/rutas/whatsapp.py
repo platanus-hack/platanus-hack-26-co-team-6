@@ -6,18 +6,32 @@
 ⚠️ El POST responde 200 SIEMPRE, incluso si algo falló adentro. No es
    descuido: Meta reintenta ante un error y, si insiste, desactiva el webhook.
    Un 500 aquí no te avisa de un bug — te deja sin canal a mitad del demo.
+
+TAREA 0.3 · EL PRESUPUESTO DE 3 SEGUNDOS
+   Meta espera 2xx en ~3 s. Un triaje con Claude tarda 4-8 s. Hacerlo dentro
+   del request es la receta para que Meta lo dé por fallido, lo reintente, y
+   cada reintento cree otro caso.
+
+   Por eso el trabajo va a una tarea de fondo y el request solo reclama y
+   encola. Y por eso el paramédico recibe DOS mensajes: un acuse inmediato
+   ("copiado") y después el destino. No es un mensaje de más — es la
+   diferencia entre saber que llegó y mirar un chat mudo con un paciente al
+   lado.
 """
 
 import logging
+import time
 
 from fastapi import APIRouter, BackgroundTasks, Query, Request, Response
 
 from ..canales import whatsapp
 from ..canales.modelos import MensajeEntrante
 from ..clientes import ai_core
+from ..config import settings
 from ..despachador import despachar
 from ..sesiones import obtener
 from ..webhooks_recibidos import anotar_resultado, reclamar
+from .. import metricas
 
 log = logging.getLogger(__name__)
 
@@ -52,17 +66,28 @@ async def recibir(request: Request, tareas: BackgroundTasks) -> dict[str, str]:
     llave primaria: quien lo gana procesa, quien choca es un reintento de
     Meta y no vuelve a tocar core. Ver `webhooks_recibidos`.
     """
+    t0 = time.perf_counter()
+    proveedor = settings.whatsapp_proveedor
+
+    def responder(cuerpo: dict[str, str]) -> dict[str, str]:
+        metricas.observar(
+            "pulso_webhook_latencia_ms",
+            (time.perf_counter() - t0) * 1000,
+            proveedor=proveedor,
+        )
+        return cuerpo
+
     try:
         payload = await request.json()
     except Exception:
         log.warning("[voz] webhook con cuerpo ilegible")
-        return {"status": "ignorado"}
+        return responder({"status": "ignorado"})
 
     try:
         mensajes = whatsapp.normalizar(payload)
     except Exception:
         log.exception("[voz] no pude normalizar el webhook")
-        return {"status": "ignorado"}
+        return responder({"status": "ignorado"})
 
     duplicados = 0
     for m in mensajes:
@@ -72,11 +97,11 @@ async def recibir(request: Request, tareas: BackgroundTasks) -> dict[str, str]:
             continue
         tareas.add_task(procesar, m)
 
-    return {
+    return responder({
         "status": "ok",
         "mensajes": str(len(mensajes)),
         "duplicados": str(duplicados),
-    }
+    })
 
 
 async def procesar(m: MensajeEntrante) -> None:
@@ -88,11 +113,22 @@ async def procesar(m: MensajeEntrante) -> None:
     """
     try:
         if m.tipo == "audio" and m.id_media:
+            # El acuse va ANTES de bajar el audio: descargar el media de Meta
+            # son dos saltos autenticados y la transcripción otro más. Sin
+            # esto el paramédico manda una nota de voz y mira un chat mudo
+            # durante seis segundos, con un paciente al lado.
+            await _acusar(m, "🎙️ Nota recibida, transcribiendo…")
             audio, mime = await whatsapp.bajar_media(m.id_media)
             decision = await ai_core.interpretar(
                 audio=audio, audio_mime=mime, contexto=_contexto(m.de)
             )
+            # Devolverle lo que se oyó no es cortesía: es la única forma de
+            # que un paramédico cace una transcripción mala ANTES de que
+            # salga la ambulancia. La app muestra el dictado en pantalla;
+            # por WhatsApp esta es la pantalla.
+            await _eco_transcripcion(m, decision)
         elif m.tipo == "texto":
+            await _acusar(m, "Copiado, procesando…")
             decision = await ai_core.interpretar(
                 mensaje=m.texto, contexto=_contexto(m.de)
             )
@@ -122,6 +158,33 @@ async def procesar(m: MensajeEntrante) -> None:
             )
         except Exception:
             log.exception("[voz] tampoco pude avisar del fallo")
+
+
+async def _acusar(m: MensajeEntrante, texto: str) -> None:
+    """Acuse inmediato. Nunca tumba el procesamiento.
+
+    Es el segundo mensaje del par que exige la tarea 0.3: primero "llegó",
+    después el destino. Si el acuse falla, el trabajo sigue — perder el
+    acuse es molesto; perder el traslado es otra cosa.
+    """
+    try:
+        await whatsapp.enviar_texto(m.de, texto)
+        metricas.contar("pulso_acuse_enviado_total", tipo=m.tipo)
+    except Exception:
+        log.warning("[voz] no pude acusar recibo de %s", m.id_externo)
+
+
+async def _eco_transcripcion(m: MensajeEntrante, decision: dict) -> None:
+    """Le repite al paramédico lo que el STT entendió.
+
+    ⚠️ Solo cuando la acción es un caso nuevo. Repetirle "ya llegué" no
+    aporta nada y llena el chat de ruido justo cuando menos se necesita.
+    """
+    t = decision.get("transcripcion") or {}
+    texto = (t.get("texto") or "").strip()
+    if not texto or decision.get("accion") != "registrar_caso":
+        return
+    await _acusar(m, f"Entendí: «{texto}»")
 
 
 async def _anotar(m: MensajeEntrante, resultado: dict[str, str]) -> None:
