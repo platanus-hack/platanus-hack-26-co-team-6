@@ -292,7 +292,26 @@ services:
       # habla con graph.facebook.com y nada lee kapso_api_key. Ver el reporte.
       - key: WHATSAPP_PROVEEDOR
         value: meta
+      # ⚠️ SIN ESTO EL WEBHOOK PÚBLICO ACEPTA CUALQUIER COSA.
+      #    `entorno` vale "desarrollo" por defecto (config.py:98), y en
+      #    desarrollo la verificación de firma ADVIERTE Y PASA. O sea: en
+      #    Render, sin estas dos, cualquiera puede hacer POST a
+      #    /webhooks/whatsapp e inventar una urgencia — con un endpoint
+      #    público eso no es un modo degradado, es un agujero.
+      #
+      #    Con ENTORNO=produccion y sin secreto, responde 401 y el canal
+      #    muere. Van juntas o no van.
+      #
+      #    El App Secret sale de developers.facebook.com → tu App →
+      #    Configuración → Básico → Aplicar secreto.
+      - key: ENTORNO
+        value: produccion
+      - key: WHATSAPP_APP_SECRET
+        sync: false
+
       # La cadena que TÚ inventas y le repites a Meta al registrar el webhook.
+      # Es lo que Meta te devuelve en el GET de verificación; no protege el
+      # POST, para eso está WHATSAPP_APP_SECRET.
       # Este repo es público: no la dejes en un valor conocido.
       - key: WHATSAPP_VERIFY_TOKEN
         sync: false
