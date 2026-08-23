@@ -28,6 +28,8 @@ import {
   serviciosFaltantes,
 } from '../catalogo/servicios-reps';
 import { AlmacenService } from '../almacen/almacen.service';
+import { PulsoError } from '../common/pulso-error.filter';
+import { evaluateEligibility } from '../routing/eligibility-policy';
 import { CongestionService } from './congestion.service';
 import { compareMinuteCost } from './ranking-policy';
 
@@ -177,8 +179,18 @@ export class ScoringService {
   /**
    * Convierte sedes + ETAs en el ranking final.
    *
-   * Dos pasos, en este orden y no al revés:
-   *  1. FILTRO DURO   — servicios habilitados, complejidad, tipo de móvil.
+   * PRECONDICIÓN DE CASO, antes de tocar una sola sede: la compatibilidad
+   * móvil–paciente no depende de la sede (una sede no tiene la culpa de que
+   * el despacho haya salido con el móvil equivocado), así que se evalúa UNA
+   * vez y, si falla, se lanza `PulsoError('PULSO_MOVIL_INCOMPATIBLE', ...)` —
+   * el bucle de abajo no corre. `PulsoErrorFilter` (registrado global vía
+   * `APP_FILTER`) lo convierte en 400 antes de que ninguna sede reciba un
+   * `motivoDescarte` por una condición que es del caso, no de ella.
+   *
+   * Superado eso, dos pasos, en este orden y no al revés:
+   *  1. FILTRO DURO   — servicios habilitados, complejidad, y el conjunto
+   *                     `eligible` de `evaluateEligibility()` (con el
+   *                     filtro de camas apagado: ver eligibility-policy.ts).
    *                     Esto NO se pondera. Una sede sin hemodinamia no es
    *                     "peor opción", es NO OPCIÓN.
    *  2. RANKING BLANDO — costo en minutos sobre las que sobrevivieron.
@@ -194,8 +206,27 @@ export class ScoringService {
     opciones: { limite?: number; incluirDescartadas?: boolean } = {},
   ): Candidato[] {
     const { limite = 5, incluirDescartadas = true } = opciones;
+
+    if (!movilCompatible(caso.tipoMovil, caso.requiereMedicoABordo)) {
+      const identificador = caso.unidad?.id ?? 'el móvil despachado';
+      throw new PulsoError(
+        'PULSO_MOVIL_INCOMPATIBLE',
+        `Este paciente requiere TAM y ${identificador} es ${caso.tipoMovil}`,
+        undefined,
+        false,
+      );
+    }
+
     const fecha = new Date();
     const mapaEta = new Map(etas.map((e) => [e.codigo, e]));
+
+    // Batch, una sola vez: el móvil ya se comprobó arriba, así que aquí solo
+    // puede fallar por servicios o complejidad — dimensiones que la cadena en
+    // línea de abajo también cubre. La intersección nunca AFLOJA el filtro
+    // duro existente (design.md D1/§2): solo puede agregar una descartada de
+    // más, jamás quitar una.
+    const { eligible } = evaluateEligibility(caso, sedes, { checkBeds: false });
+    const elegibles = new Set(eligible.map((d) => d.codigo));
 
     const evaluados: Candidato[] = [];
 
@@ -208,7 +239,6 @@ export class ScoringService {
         sede.complejidad,
         caso.complejidadRequerida,
       );
-      const movilOk = movilCompatible(caso.tipoMovil, caso.requiereMedicoABordo);
 
       // El primer motivo que aparezca es el que se muestra. Un solo motivo
       // claro se lee mejor que una lista de tres.
@@ -217,8 +247,8 @@ export class ScoringService {
         motivoDescarte = `No tiene ${nombresServicios(faltantes)}`;
       } else if (!complejidadOk) {
         motivoDescarte = `Complejidad ${sede.complejidad}, el caso requiere ${caso.complejidadRequerida}`;
-      } else if (!movilOk) {
-        motivoDescarte = 'El paciente requiere médico a bordo (móvil TAM)';
+      } else if (!elegibles.has(sede.codigo)) {
+        motivoDescarte = 'No cumple una regla dura de elegibilidad';
       }
 
       const desglose = this.calcularDesglose(sede, eta.etaMin, fecha);

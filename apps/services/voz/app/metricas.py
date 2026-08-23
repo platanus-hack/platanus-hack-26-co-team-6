@@ -26,6 +26,9 @@ _AYUDA = {
     "pulso_webhook_recibidos_total": (
         "Webhooks entrantes aceptados para procesar (no duplicados).",
     ),
+    "pulso_webhook_firma_invalida_total": (
+        "Webhooks rechazados por firma ausente o invalida, por proveedor.",
+    ),
 }
 
 

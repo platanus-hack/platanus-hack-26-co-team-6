@@ -55,7 +55,9 @@ export type CodigoError =
   /** Otra sede ya aceptó este caso. */
   | "PULSO_DESTINATION_ALREADY_ACCEPTED"
   /** La solicitud ya no está en un estado que admita esta acción. */
-  | "PULSO_ILLEGAL_TRANSITION";
+  | "PULSO_ILLEGAL_TRANSITION"
+  /** El móvil despachado no puede trasladar lo que el caso requiere (TAM). */
+  | "PULSO_MOVIL_INCOMPATIBLE";
 
 export class ErrorApi extends Error {
   constructor(

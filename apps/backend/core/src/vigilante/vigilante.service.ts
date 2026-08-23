@@ -19,6 +19,7 @@ import { ConfigService } from '@nestjs/config';
 import { Interval } from '@nestjs/schedule';
 import type { Handshake } from '../contracts/types';
 import { AlmacenService } from '../almacen/almacen.service';
+import { PulsoError } from '../common/pulso-error.filter';
 import { SedesService } from '../sedes/sedes.service';
 import { MatchService } from '../match/match.service';
 import { DispatchService } from '../dispatch/dispatch.service';
@@ -153,6 +154,19 @@ export class VigilanteService {
       });
     } catch (e) {
       this.log.error(`no pude re-rutear el caso ${caso.id}: ${String(e)}`);
+
+      // Fase 2 hizo que rankear() pueda lanzar (p. ej. PULSO_MOVIL_INCOMPATIBLE
+      // si el móvil cambió entre el despacho y este re-ruteo). Antes de esto
+      // el catch solo logueaba: un log no lo ve nadie del otro lado del turno.
+      // Un silencio aquí es justo lo que la regla 3 de AGENTS.md prohíbe — el
+      // caso queda sin re-rutear Y sin escalar.
+      if (e instanceof PulsoError) {
+        this.escalamiento.escalar({
+          casoId: caso.id,
+          motivo: 'candidatos-agotados',
+          detalle: `rankear() rechazó el re-ruteo: ${e.message}`,
+        });
+      }
     }
   }
 

@@ -1,56 +1,61 @@
 schema: spec-driven
 
 context: |
-  Tech stack: Next.js 16.3.1 (App Router), React 19.2.8, TypeScript 5, Tailwind CSS 4
-  Package manager: pnpm@11.18.0, single app (no root pnpm workspace)
-  Architecture: apps/frontend (Next.js scaffold, default pages only), apps/Backend (empty)
-  Testing: no test runner installed (see testing: block below)
-  Style: ESLint 9 flat config (eslint-config-next), no Prettier config found
+  Tech stack: Next.js (App Router), React 19, TypeScript 5, Tailwind CSS 4 (apps/frontend);
+  NestJS + TypeScript (apps/backend/core, internal domain engine); FastAPI + Python 3.12
+  (apps/backend/ai-core, internal, has the LLM keys); FastAPI + Python 3.12 (apps/services/voz,
+  the ONLY public-facing service — WhatsApp and Twilio webhooks).
+  Package manager: pnpm for apps/frontend and apps/backend/core; uv for the two Python services.
+  Architecture: four apps behind apps/backend/core/src/contracts/types.ts as the shared contract
+  (manually mirrored, field-by-field, in apps/frontend/lib/types.ts).
+  Testing: apps/backend/core has Jest; apps/services/voz and apps/backend/ai-core have pytest;
+  apps/frontend has no test framework, only tsc --noEmit (see testing: block below).
+  Style: ESLint 9 flat config (eslint-config-next) for frontend, no Prettier config found.
 
 testing:
-  strict_tdd: true # per user global configuration; not yet enforceable, see notes
-  test_runner: none detected
-  test_command: ""
+  strict_tdd: true # per user global configuration; enforceable for core and voz, see notes
+  test_runner: "jest (apps/backend/core) + pytest (apps/services/voz, apps/backend/ai-core)"
+  test_command: |
+    cd apps/backend/core && pnpm test
+    cd apps/services/voz && uv run pytest
+    pnpm --dir apps/frontend exec tsc --noEmit   # frontend has no test runner, only the type checker
   coverage_command: ""
   layers:
-    unit: false
-    integration: false
+    unit: true
+    integration: true
     e2e: false
   quality:
     linter: "pnpm --dir apps/frontend lint"
-    type_checker: "pnpm --dir apps/frontend exec tsc --noEmit" # no dedicated script yet
+    type_checker: "pnpm --dir apps/frontend exec tsc --noEmit"
     formatter: none detected
   notes: |
-    apps/frontend has no test framework dependency and no "test" script.
-    apps/Backend has no files at all (no stack chosen yet).
-    Strict TDD Mode is enabled globally by the user's configuration but cannot
-    be enforced in practice until a test runner is added. Treat adding a test
-    runner (e.g. Vitest + React Testing Library) as a prerequisite task before
-    any TDD-gated sdd-apply work in apps/frontend.
+    There is no single root command that runs all three: apps/backend/core (Jest) and
+    apps/services/voz (pytest) each have their own real test runner and MUST be run from their
+    own directory. apps/frontend has no test framework dependency and no "test" script — its
+    only automated check is `tsc --noEmit`. CI does not run Jest or pytest; it only runs the
+    type-mirror check (`npm run verificar:tipos` at the repo root). A green CI does not mean the
+    test suites passed — `task test` (or the commands above) is the only real signal before merge.
 
 rules:
   proposal:
     - Include rollback plan for risky changes
-    - Flag when a change requires choosing/adding a backend stack (apps/Backend is currently empty)
   specs:
     - Use Given/When/Then for scenarios
     - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
   design:
     - Include sequence diagrams for complex flows
     - Document architecture decisions with rationale
-    - Document how frontend/backend will integrate once apps/Backend is implemented
   tasks:
     - Group by phase, use hierarchical numbering
     - Keep tasks completable in one session
-    - Include "add a test runner" as an explicit prerequisite task before TDD-gated work
   apply:
     guidelines:
       - Follow existing Next.js App Router conventions (apps/frontend/app/)
       - Follow existing code patterns
-    tdd: true # Strict TDD Mode enabled; no runner installed yet, see testing: block
-    test_command: ""
+    tdd: true # Strict TDD Mode enabled; both backends already have a real test runner
+    test_command: "cd apps/backend/core && pnpm test   |   cd apps/services/voz && uv run pytest"
   verify:
-    test_command: ""
+    test_command: "cd apps/backend/core && pnpm test   |   cd apps/services/voz && uv run pytest"
     build_command: "pnpm --dir apps/frontend build"
     coverage_threshold: 0
   archive:

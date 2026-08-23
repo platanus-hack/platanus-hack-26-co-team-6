@@ -10,7 +10,7 @@
 
 import logging
 
-from fastapi import APIRouter, BackgroundTasks, Query, Request, Response
+from fastapi import APIRouter, BackgroundTasks, Depends, Query, Request, Response
 
 from ..canales import whatsapp
 from ..canales.modelos import MensajeEntrante
@@ -40,7 +40,7 @@ def verificar(
         return Response(status_code=403)
 
 
-@router.post("/whatsapp")
+@router.post("/whatsapp", dependencies=[Depends(whatsapp.verificar_firma_meta)])
 async def recibir(request: Request, tareas: BackgroundTasks) -> dict[str, str]:
     """Acusa recibo YA y procesa aparte.
 

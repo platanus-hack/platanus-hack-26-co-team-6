@@ -11,6 +11,10 @@ Regla de clon fresco: todo default vive aca como literal, no solo en .env.
 from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+#: Lista blanca de desarrollo. Todo lo demas cuenta como produccion: cierra
+#: S1 del diseno de la Ola 0 (ver Settings.es_produccion).
+ENTORNOS_DESARROLLO = frozenset({"desarrollo", "dev", "local", "test", "ci"})
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
@@ -44,6 +48,10 @@ class Settings(BaseSettings):
     whatsapp_verify_token: str = ""
     whatsapp_token: str = ""
     whatsapp_phone_number_id: str = ""
+    #: App Secret de Meta (Configuracion de la app > Basico). Firma cada
+    #: webhook con HMAC-SHA256 sobre el cuerpo crudo. Vacio = sin verificar
+    #: (regla 2 de AGENTS.md: la excepcion es produccion, ver es_produccion).
+    whatsapp_app_secret: str = ""
     kapso_api_key: str = ""
     kapso_base_url: str = "https://app.kapso.ai/api/v1"
 
@@ -76,6 +84,22 @@ class Settings(BaseSettings):
     #: Protege los endpoints que disparan acciones costosas (llamar por
     #: telefono). Vacio en local = abierto; en Render ponlo SIEMPRE.
     secreto_endpoint: str = ""
+
+    #: Que literal usa Render para marcar produccion. Default "desarrollo"
+    #: para que un clon fresco sin .env arranque sin verificar firmas.
+    entorno: str = "desarrollo"
+
+    @property
+    def es_produccion(self) -> bool:
+        """Cierra S1 del diseno de la Ola 0: default invertido.
+
+        No es "esta en la lista de produccion", es "NO esta en la lista de
+        desarrollo". Un ENTORNO no previsto (staging, un typo, lo que sea)
+        cae del lado seguro: se trata como produccion y el guard de firma se
+        activa. Al reves seria el agujero: un valor no previsto abriria el
+        webhook solo.
+        """
+        return self.entorno.strip().lower() not in ENTORNOS_DESARROLLO
 
 
 settings = Settings()

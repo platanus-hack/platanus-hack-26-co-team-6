@@ -431,7 +431,8 @@ export type PulsoCode =
   | 'PULSO_INCOMPLETE_EVIDENCE'
   | 'PULSO_IDEMPOTENCY_CONFLICT'
   | 'PULSO_DESTINATION_ALREADY_ACCEPTED'
-  | 'PULSO_INTERNAL';
+  | 'PULSO_INTERNAL'
+  | 'PULSO_MOVIL_INCOMPATIBLE';
 export type CaseRoutingState = 'validated' | 'requires_human_review' | 'ready_for_matching' | 'matching' | 'escalated_to_crue' | 'dispatched' | 'closed';
 export type HandshakeRoutingState = 'pending' | 'accepted' | 'rejected' | 'timed_out';
 export interface PulsoErrorEnvelope { error: { code: PulsoCode; message: string; details?: unknown; retryable: boolean } }

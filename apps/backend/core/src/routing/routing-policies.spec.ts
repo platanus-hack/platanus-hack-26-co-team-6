@@ -22,4 +22,20 @@ describe('routing policies', () => {
   it('returns MOVIL_INCOMPATIBLE from production policy', () => {
     expect(evaluateEligibility({ ...eligibilityCase, requiereMedicoABordo: true }, [destination])).toEqual({ state: 'escalated_to_crue', eligible: [], failures: [{ codigo: 'restricted', reasons: ['MOVIL_INCOMPATIBLE'] }] });
   });
+  it('checkBeds: false opts out of NO_AVAILABLE_BED without touching the default (tarea 2.1)', () => {
+    const sinCamas = { ...destination, camas: [{ total: 1, ocupadasSnapshot: 1 }] };
+    // Con el opt-out explícito, la sede sin camas queda elegible: el filtro
+    // de camas quedó apagado para esta llamada.
+    expect(evaluateEligibility(eligibilityCase, [sinCamas], { checkBeds: false })).toMatchObject({
+      state: 'eligible',
+      eligible: [sinCamas],
+    });
+    // Sin el opt-out (comportamiento por defecto, sin tercer argumento), la
+    // MISMA sede sigue reportando NO_AVAILABLE_BED — el default no cambió.
+    expect(evaluateEligibility(eligibilityCase, [sinCamas])).toEqual({
+      state: 'escalated_to_crue',
+      eligible: [],
+      failures: [{ codigo: 'restricted', reasons: ['NO_AVAILABLE_BED'] }],
+    });
+  });
 });

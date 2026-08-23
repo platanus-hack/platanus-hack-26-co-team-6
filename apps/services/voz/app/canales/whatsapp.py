@@ -22,17 +22,24 @@ LA VENTANA DE 24 HORAS
   Eso es una ventaja del diseno, no un parche.
 """
 
+import hashlib
+import hmac
 import logging
 from typing import Any
 
 import httpx
+from fastapi import HTTPException, Request
 
+from .. import metricas
 from ..config import settings
 from .modelos import MensajeEntrante
 
 log = logging.getLogger(__name__)
 
 GRAPH = "https://graph.facebook.com/v25.0"
+
+#: Meta manda "sha256=<hexdigest>". Ver verificar_firma_meta().
+FIRMA_CABECERA = "X-Hub-Signature-256"
 
 
 class WhatsAppCaido(RuntimeError):
@@ -54,6 +61,61 @@ def verificar_webhook(modo: str | None, token: str | None, reto: str | None) -> 
     if modo != "subscribe" or not token or token != settings.whatsapp_verify_token:
         raise PermissionError("Token de verificación inválido")
     return reto or ""
+
+
+def _firma_valida(crudo: bytes, cabecera: str | None, secreto: str) -> bool:
+    """Compara en tiempo constante. Nunca `==`: timing attack sobre el HMAC.
+
+    El HMAC se calcula sobre `crudo` tal cual llega — nunca sobre un JSON
+    re-serializado, que puede diferir del original en espacios, orden de
+    claves o escape de unicode.
+    """
+    if not cabecera or not cabecera.startswith("sha256="):
+        return False
+    esperado = hmac.new(secreto.encode(), crudo, hashlib.sha256).hexdigest()
+    recibido = cabecera.removeprefix("sha256=")
+    return hmac.compare_digest(esperado, recibido)
+
+
+async def verificar_firma_meta(request: Request) -> None:
+    """Dependencia de FastAPI para `POST /webhooks/whatsapp`.
+
+    No devuelve nada: pasa, o lanza `HTTPException(401)` antes de que el
+    cuerpo de `recibir()` corra (tarea 0.3, fuera de alcance de esta ola).
+
+        Sin secreto:  desarrollo  -> advierte fuerte y pasa (regla 2 de AGENTS.md)
+                      produccion  -> 401, la excepcion a la regla 2 es esta
+        Con secreto:  firma ausente o distinta -> 401 en CUALQUIER entorno
+
+    Todo 401 de esta funcion incrementa
+    `pulso_webhook_firma_invalida_total{proveedor="whatsapp"}`.
+    """
+    crudo = await request.body()
+    cabecera = request.headers.get(FIRMA_CABECERA)
+    secreto = settings.whatsapp_app_secret
+
+    if not secreto:
+        if settings.es_produccion:
+            metricas.contar("pulso_webhook_firma_invalida_total", proveedor="whatsapp")
+            log.error(
+                "[voz] webhook de WhatsApp sin WHATSAPP_APP_SECRET en produccion "
+                "(entorno=%s): rechazado",
+                settings.entorno,
+            )
+            raise HTTPException(status_code=401, detail="Firma no verificable")
+        log.error(
+            "[voz] WHATSAPP_APP_SECRET no configurado (entorno=%s): aceptando SIN "
+            "verificar firma. Esto es inseguro en produccion.",
+            settings.entorno,
+        )
+        return
+
+    if not _firma_valida(crudo, cabecera, secreto):
+        metricas.contar("pulso_webhook_firma_invalida_total", proveedor="whatsapp")
+        log.error(
+            "[voz] firma de WhatsApp invalida o ausente (entorno=%s)", settings.entorno
+        )
+        raise HTTPException(status_code=401, detail="Firma invalida")
 
 
 def normalizar(payload: dict[str, Any]) -> list[MensajeEntrante]:

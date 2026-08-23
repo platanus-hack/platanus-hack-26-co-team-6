@@ -74,6 +74,13 @@ const GUION: Record<CodigoError, Guion> = {
     accion: "Vuelve al dictado para ver el estado al día.",
     critico: false,
   },
+  PULSO_MOVIL_INCOMPATIBLE: {
+    titulo: "El móvil no es compatible",
+    cuerpo:
+      "Este caso requiere transporte medicalizado (TAM) y el móvil que lo atiende no lo es. PULSO no rutea sobre un traslado que la ambulancia actual no puede hacer con seguridad.",
+    accion: "Solicita un móvil medicalizado (TAM) o escala al CRUE.",
+    critico: true,
+  },
 };
 
 export function RevisionRequerida({

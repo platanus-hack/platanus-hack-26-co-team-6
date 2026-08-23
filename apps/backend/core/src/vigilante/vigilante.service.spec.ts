@@ -10,6 +10,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import type { Caso, Handshake } from '../contracts/types';
 import { AlmacenService } from '../almacen/almacen.service';
+import { PulsoError } from '../common/pulso-error.filter';
 import { SedesService } from '../sedes/sedes.service';
 import { MatchService } from '../match/match.service';
 import { DispatchService } from '../dispatch/dispatch.service';
@@ -245,6 +246,24 @@ describe('VigilanteService', () => {
 
     await expect(vigilante.barrer()).resolves.toBeUndefined();
     expect(almacen.obtenerHandshake('h1')!.estado).toBe('timeout');
+  });
+
+  it('cuando rankear() lanza PulsoError, reRutear() escala en vez de solo loguear (tarea 2.6)', async () => {
+    // Fase 2 hace que rankear() pueda lanzar PulsoError (precondición de
+    // móvil). Un caso que llega a reRutear() en un estado donde esa
+    // precondición ya no se cumple no puede quedar sin re-rutear Y sin
+    // escalar — ese silencio es justo lo que la regla 3 de AGENTS.md prohíbe.
+    almacen.guardarHandshake(handshake());
+    match.rankear.mockRejectedValue(
+      new PulsoError('PULSO_MOVIL_INCOMPATIBLE', 'Este paciente requiere TAM y AMB-014 es TAB'),
+    );
+    avanzar(90);
+
+    await vigilante.barrer();
+
+    expect(escalamiento.escalar).toHaveBeenCalledWith(
+      expect.objectContaining({ casoId: 'caso-1', motivo: 'candidatos-agotados' }),
+    );
   });
 
   it('sin voz configurada sigue venciendo handshakes', async () => {
