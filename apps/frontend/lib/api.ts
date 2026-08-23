@@ -105,7 +105,26 @@ function renovar(): Promise<boolean> {
   return renovando;
 }
 
-async function pedir<T>(ruta: string, init?: RequestInit): Promise<T> {
+/**
+ * Clave de idempotencia por ACCIÓN — tarea 2.11.
+ *
+ * La spec §0 lo dice sin rodeos: *"Reintentos por mala conectividad de la
+ * ambulancia son la norma, no la excepción."* La clave identifica la acción,
+ * no la petición: el mismo despacho reintentado tres veces lleva la misma
+ * clave las tres, y core ejecuta **una**.
+ *
+ * Por eso se construye a partir de lo que hace única a la acción (el caso, la
+ * sede) y NO con un aleatorio por intento: un `randomUUID()` en cada reintento
+ * es exactamente el bug que esto viene a cerrar.
+ */
+export function claveIdempotencia(...partes: string[]): string {
+  return partes.join(":");
+}
+
+async function pedir<T>(
+  ruta: string,
+  init?: RequestInit & { clave?: string },
+): Promise<T> {
   const enviar = () =>
     fetch(`${API}${ruta}`, {
       ...init,
@@ -113,7 +132,11 @@ async function pedir<T>(ruta: string, init?: RequestInit): Promise<T> {
       // core responde 401 a todo. Es el único cambio que la autenticación
       // exige aquí.
       credentials: "include",
-      headers: { "Content-Type": "application/json", ...init?.headers },
+      headers: {
+        "Content-Type": "application/json",
+        ...(init?.clave ? { "Idempotency-Key": init.clave } : {}),
+        ...init?.headers,
+      },
     });
 
   let res = await enviar();
@@ -161,15 +184,27 @@ async function pedir<T>(ruta: string, init?: RequestInit): Promise<T> {
 
 // ─────────────────────────────────────────────────────────────────
 
-export function triage(cuerpo: {
-  texto: string;
-  origen?: Coordenada;
-  tipoMovil?: TipoMovil;
-  unidad?: Unidad;
-}): Promise<TriageResponse> {
+/**
+ * Dictado → caso.
+ *
+ * La clave la pone QUIEN LLAMA y no se deriva del texto: dos pacientes con el
+ * mismo cuadro en la misma esquina son dos emergencias, y colisionarlas haría
+ * desaparecer la segunda en silencio. `/campo` usa una clave por intento de
+ * dictado, que es la unidad real de "acción" aquí.
+ */
+export function triage(
+  cuerpo: {
+    texto: string;
+    origen?: Coordenada;
+    tipoMovil?: TipoMovil;
+    unidad?: Unidad;
+  },
+  clave?: string,
+): Promise<TriageResponse> {
   return pedir<TriageResponse>("/triage", {
     method: "POST",
     body: JSON.stringify(cuerpo),
+    clave,
   });
 }
 
@@ -184,6 +219,13 @@ export function match(cuerpo: {
   });
 }
 
+/**
+ * Dispara el handshake.
+ *
+ * Lleva clave de idempotencia derivada de caso + sede: es la mutación donde
+ * un duplicado se nota más — dos handshakes al mismo hospital por el mismo
+ * paciente, y un jefe de urgencias viendo dos tarjetas idénticas.
+ */
 export function dispatch(cuerpo: {
   casoId: string;
   sedeCodigo: string;
@@ -192,6 +234,7 @@ export function dispatch(cuerpo: {
   return pedir<DispatchResponse>("/dispatch", {
     method: "POST",
     body: JSON.stringify(cuerpo),
+    clave: claveIdempotencia("dispatch", cuerpo.casoId, cuerpo.sedeCodigo),
   });
 }
 
@@ -206,6 +249,13 @@ export function responder(cuerpo: {
   return pedir<RespondResponse>("/handshake/respond", {
     method: "POST",
     body: JSON.stringify(cuerpo),
+    // handshake + decisión: el doble toque del jefe de urgencias es un solo
+    // efecto, igual que en el guard de aceptación única (0.1).
+    clave: claveIdempotencia(
+      "respond",
+      cuerpo.handshakeId,
+      cuerpo.decision,
+    ),
   });
 }
 
@@ -243,6 +293,7 @@ export function escalar(cuerpo: {
   return pedir<EscalarResponse>("/escalamiento", {
     method: "POST",
     body: JSON.stringify(cuerpo),
+    clave: claveIdempotencia("escalar", cuerpo.casoId, cuerpo.motivo),
   });
 }
 

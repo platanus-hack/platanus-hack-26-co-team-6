@@ -13,6 +13,15 @@ export class PulsoError extends Error {
     message: string,
     readonly details?: unknown,
     readonly retryable = false,
+    /**
+     * Estado HTTP. Por omision 400, que es lo que devolvia siempre.
+     *
+     * Lo agrega la tarea 2.11: un conflicto de idempotencia es 409 y un
+     * limite de tasa es 429, y esos dos numeros son justo lo que un cliente
+     * mira para decidir si reintenta. Con todo en 400, la cola offline de
+     * /campo no puede distinguir "no insistas" de "espera y vuelve".
+     */
+    readonly estado: number = HttpStatus.BAD_REQUEST,
   ) {
     super(message);
   }
@@ -50,7 +59,7 @@ export class PulsoErrorFilter implements ExceptionFilter {
     response
       .status(
         exception instanceof PulsoError
-          ? HttpStatus.BAD_REQUEST
+          ? exception.estado
           : exception instanceof HttpException
             ? exception.getStatus()
             : HttpStatus.INTERNAL_SERVER_ERROR,
