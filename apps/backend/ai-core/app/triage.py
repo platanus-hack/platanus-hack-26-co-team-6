@@ -16,45 +16,14 @@ from anthropic import AsyncAnthropic
 
 from .config import settings
 from .schemas import ExtraccionClinica
-from .servicios_reps import (
-    CIRUGIA_GENERAL,
-    HEMODINAMIA,
-    IMAGENES_IONIZANTES,
-    NEUROCIRUGIA,
-    SERVICIOS_SELECCIONABLES,
-    UCI_ADULTOS,
-    UCI_PEDIATRICO,
-    nombre_servicio,
-)
+from .prompts import prompt_triage
+from .servicios_reps import SERVICIOS_SELECCIONABLES
 
 log = logging.getLogger(__name__)
 
-_CATALOGO = "\n".join(
-    f"  {c} = {nombre_servicio(c)}" for c in SERVICIOS_SELECCIONABLES
-)
-
-PROMPT_SISTEMA = f"""Eres el motor de extraccion clinica de PULSO, un sistema colombiano de ruteo de urgencias.
-
-Recibes el dictado de un paramedico o medico de urgencias, en espanol colombiano, con jerga clinica, abreviaturas y errores de transcripcion de voz. Devuelves entidades estructuradas.
-
-CONTEXTO NORMATIVO:
-- Triage segun Resolucion 5596 de 2015 (Colombia), 5 niveles.
-- Los servicios se identifican con codigos del REPS (Registro Especial de Prestadores de Servicios de Salud) de MinSalud.
-
-CODIGOS DE SERVICIO PERMITIDOS (no inventes otros):
-{_CATALOGO}
-
-REGLAS:
-1. Solo pide servicios que este caso realmente necesita para resolverse.
-   Un infarto con supradesnivel del ST necesita {HEMODINAMIA} (hemodinamia) y {UCI_ADULTOS} (UCI adultos).
-   Un ACV necesita {NEUROCIRUGIA} (neurocirugia), {UCI_ADULTOS} e {IMAGENES_IONIZANTES} (imagenes).
-   Un politrauma pediatrico necesita {CIRUGIA_GENERAL} (cirugia general) y {UCI_PEDIATRICO} (UCI pediatrica).
-   No pidas UCI si el paciente esta estable y no la necesita: pedir de mas descarta sedes viables.
-2. No incluyas 1102 (urgencias) en serviciosRequeridos: el sistema lo agrega siempre.
-3. Si el dictado no da la edad o el sexo, devuelve null / "desconocido". No inventes.
-4. Si el dictado es ambiguo o muy corto, baja la confianza. Es preferible confianza baja que un dato inventado.
-5. Ante duda entre dos niveles de triage, escoge el MAS grave. En urgencias el falso negativo mata.
-6. NUNCA inventes un codigo CIE-10. Si no estas seguro, devuelve null en dxCie10 y describe el cuadro en dxDescripcion."""
+#: El prompt vive en `data/prompts/triage.txt`, no aquí. Ver app/prompts.py:
+#: lo leen ESTE motor y el de TypeScript en core, desde el mismo archivo.
+PROMPT_SISTEMA = prompt_triage()
 
 
 def _cliente() -> AsyncAnthropic:

@@ -39,6 +39,7 @@ import { ORIGEN_DEMO } from '../sedes/semillas';
 import { AlmacenService } from '../almacen/almacen.service';
 import { AiCoreClient } from '../ai-core/ai-core.client';
 import { extraccionHeuristica } from './triage-heuristico';
+import { promptTriage } from '../prompts/prompt.clinico';
 import type { AiCoreTriageResponse } from '../ai-core/ai-core.types';
 
 // ─────────────────────────────────────────────────────────────────
@@ -92,28 +93,9 @@ const EsquemaExtraccion = z.object({
     .describe('Que tan seguro estas de esta extraccion, 0 a 1.'),
 });
 
-const PROMPT_SISTEMA = `Eres el motor de extraccion clinica de PULSO, un sistema colombiano de ruteo de urgencias.
-
-Recibes el dictado de un paramedico o medico de urgencias, en espanol colombiano, con jerga clinica, abreviaturas y errores de transcripcion de voz. Devuelves entidades estructuradas.
-
-CONTEXTO NORMATIVO:
-- Triage segun Resolucion 5596 de 2015 (Colombia), 5 niveles.
-- Los servicios se identifican con codigos del REPS (Registro Especial de Prestadores de Servicios de Salud) de MinSalud.
-
-CODIGOS DE SERVICIO PERMITIDOS (no inventes otros):
-${SERVICIOS_SELECCIONABLES.map((c) => `  ${c} = ${nombreServicio(c)}`).join('\n')}
-
-REGLAS:
-1. Solo pide servicios que este caso realmente necesita para resolverse.
-   Un infarto con supradesnivel del ST necesita ${S.HEMODINAMIA} (hemodinamia) y ${S.UCI_ADULTOS} (UCI adultos).
-   Un ACV necesita ${S.NEUROCIRUGIA} (neurocirugia), ${S.UCI_ADULTOS} e ${S.IMAGENES_IONIZANTES} (imagenes).
-   Un politrauma pediatrico necesita ${S.CIRUGIA_GENERAL} (cirugia general) y ${S.UCI_PEDIATRICO} (UCI pediatrica).
-   No pidas UCI si el paciente esta estable y no la necesita: pedir de mas descarta sedes viables.
-2. No incluyas 1102 (urgencias) en serviciosRequeridos: el sistema lo agrega siempre.
-3. Si el dictado no da la edad o el sexo, devuelve null / "desconocido". No inventes.
-4. Si el dictado es ambiguo o muy corto, baja la confianza. Es preferible confianza baja que un dato inventado.
-5. Ante duda entre dos niveles de triage, escoge el MAS grave. En urgencias el falso negativo mata.
-6. NUNCA inventes un codigo CIE-10. Si no estas seguro, devuelve null en dxCie10 y describe el cuadro en dxDescripcion.`;
+// El prompt vive en `data/prompts/triage.txt`, no aquí. Lo leen ESTE motor y
+// el de Python en ai-core, desde el mismo archivo. Ver src/prompts/.
+const PROMPT_SISTEMA = promptTriage();
 
 // ─────────────────────────────────────────────────────────────────
 

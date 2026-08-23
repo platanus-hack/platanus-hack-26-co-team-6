@@ -49,12 +49,47 @@
 5. Igual con el catálogo de servicios REPS, que también está duplicado.
 
 **Hecho cuando.**
-- [ ] Un solo archivo fuente para el prompt
-- [ ] El test de igualdad pasa
-- [ ] Los evals (`uv run python -m evals.run`) siguen dando lo mismo que antes
-- [ ] Cambiar el prompt en un solo lugar cambia los dos motores
+- [x] Un solo archivo fuente para el prompt
+- [x] El test de igualdad pasa
+- [x] Los evals (`uv run python -m evals.run`) siguen dando lo mismo que antes
+- [x] Cambiar el prompt en un solo lugar cambia los dos motores
 
 **Trampas.** El TypeScript es el **respaldo** cuando `ai-core` no está. No lo borres todavía: se borra el día que ai-core sea el único camino, y ese día no es hoy.
+
+### ✅ Hecho — rama `feat/o0-0.5-prompt-unico`
+
+| Archivo | Qué es |
+|---|---|
+| `data/prompts/triage.txt` | El prompt. Fuente única, con `{{CATALOGO_SERVICIOS}}` |
+| `data/catalogos/servicios-reps.json` | Los códigos REPS, canónicos |
+| `data/prompts/triage.rendered.txt` | El **golden**: el render que los dos motores deben producir |
+| `scripts/prompts/render.py` | Regenera el golden |
+| `ai-core/app/prompts.py` · `core/src/prompts/` | Los dos cargadores |
+
+**Por qué un golden y no comparar Python contra TypeScript.** Comparar los dos
+directamente exigiría levantar ambos runtimes en el mismo test. Con un golden,
+cada lado se verifica solo en su propio CI, y si uno se desvía el diff sale en
+su suite — no en un job cruzado que nadie mira.
+
+**Verificado que no hay regresión:** reconstruí el prompt viejo desde
+`git show main:...triage.py`, lo evalué, y el render nuevo es **idéntico
+carácter por carácter**. Los evals siguen dando 4/14 con la heurística.
+
+**La versión sale del contenido** (sha256 del render, 12 caracteres:
+`b6b3e3556c87`). Cambiar el prompt cambia la versión sola, sin que nadie tenga
+que acordarse de subir un número. Es la mitad de la 3.12 ya puesta.
+
+**El catálogo también era doble** y no lo unifiqué del todo: `servicios_reps.py`
+y `servicios-reps.ts` conservan su copia, porque los usan muchos sitios y
+cambiarlos es un PR aparte. Lo que sí hay es **un test en cada lado que los
+fija contra el JSON**: si alguien agrega un código en un solo lugar, falla. El
+día que los dos módulos lean del JSON, esos dos tests se vuelven triviales y
+se borran.
+
+**Nota para el despliegue:** los dos servicios leen `data/` en tiempo de
+arranque, así que **esa carpeta tiene que viajar en las imágenes de Docker**.
+Si no viaja, revientan al arrancar — que es el orden correcto para fallar, pero
+conviene saberlo antes del deploy y no durante.
 
 ---
 
