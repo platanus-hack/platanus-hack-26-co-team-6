@@ -112,6 +112,55 @@ HERRAMIENTAS: list[dict[str, Any]] = [
         [],
     ),
     _herramienta(
+        "declarar_unidad",
+        "El paramédico dice qué móvil es. Ejemplos: 'soy la AMB-014', "
+        "'unidad 014 en turno', 'habla el móvil 27'. "
+        "Sin esto PULSO no sabe qué ambulancia está del otro lado del "
+        "teléfono, y no puede ni ubicarla ni asignarle zona.",
+        {
+            "unidad_id": {
+                "type": "string",
+                "description": (
+                    "El identificador tal como lo dijo, ej 'AMB-014'. No lo "
+                    "reformatees: el CRUE lo reconoce por cómo lo escriben."
+                ),
+            },
+            "tripulante": {
+                "type": ["string", "null"],
+                "description": "Quién opera, si lo dijo. null si no.",
+            },
+        },
+        ["unidad_id", "tripulante"],
+    ),
+    _herramienta(
+        "reportar_posicion",
+        "El paramédico manda dónde está, en palabras. Ejemplos: 'estoy en la "
+        "calle 80 con 68', 'vamos por la NQS a la altura de la 45'. "
+        "NO uses esta herramienta cuando comparta su ubicación por el botón "
+        "de WhatsApp: eso llega como coordenadas y se procesa aparte.",
+        {
+            "referencia": {
+                "type": "string",
+                "description": (
+                    "La dirección o referencia TAL CUAL la dijo. No la "
+                    "traduzcas a coordenadas: eso lo hace el geocodificador, "
+                    "que sabe de Bogotá más que tú."
+                ),
+            }
+        },
+        ["referencia"],
+    ),
+    _herramienta(
+        "pedir_zona_cobertura",
+        "El paramédico quedó libre y pregunta a dónde ir, o avisa que está "
+        "disponible. Ejemplos: '¿a dónde me muevo?', 'quedé libre', "
+        "'disponible', 'ya entregué, ¿qué sigue?'. "
+        "Es el punto D del ciclo: dónde esperar para que la ciudad no quede "
+        "con un hueco de cobertura.",
+        {},
+        [],
+    ),
+    _herramienta(
         NO_ENTENDIDO,
         "El mensaje no encaja en ninguna de las otras acciones, o está "
         "demasiado incompleto para actuar. Es preferible esto a adivinar: "
@@ -156,6 +205,17 @@ Nunca:
 - Nunca inventes un dato que el mensaje no trae. `minutos_estimados` es null si no lo dijo — un estimado falso corrompe el promedio con el que se calcula la cobertura de la ciudad.
 - Nunca uses el CONTEXTO como si fuera el mensaje. El contexto es lo que ya se sabe; el mensaje es lo nuevo.
 
+EL CICLO COMPLETO DE UNA AMBULANCIA
+Cuatro puntos, y tu decides el paso entre ellos:
+
+  A  donde esta la ambulancia ahora        -> reportar_posicion
+  B  donde esta el paciente                -> registrar_caso
+  C  el hospital que la recibe             -> lo elige el motor, tu solo lo transportas
+  D  la zona que debe cubrir al quedar libre -> pedir_zona_cobertura
+
+Un turno normal recorre A -> B -> C -> D -> A otra vez. Los mensajes no llegan
+en ese orden y no importa: cada uno se clasifica solo.
+
 FLUJO
 Una sola decision, en este orden. La primera que aplique gana.
 1. Describe un PACIENTE (sintomas, mecanismo de lesion, signos vitales, edad, un cuadro clinico cualquiera) -> registrar_caso, con el texto original en `dictado`.
@@ -169,7 +229,13 @@ Una sola decision, en este orden. La primera que aplique gana.
    -> `motivo` en sus palabras. `minutos_estimados` solo si lo dijo.
 4. Pide la direccion o como llegar ("donde queda", "mandame la ubicacion", "no se llegar") -> pedir_ubicacion.
 5. Pregunta en que va su caso ("ya aceptaron", "que paso con el traslado") -> consultar_estado.
-6. Nada de lo anterior, o demasiado incompleto para actuar -> no_entendido, con el motivo en una linea.
+6. Dice que unidad es ("soy la AMB-014", "unidad 27 en turno") -> declarar_unidad.
+   -> Aplica aunque venga junto con otra cosa: sin saber que movil es, PULSO no puede ubicarlo ni asignarle zona. Si el mensaje ademas describe un paciente, gana registrar_caso — la unidad se puede preguntar despues, el paciente no espera.
+7. Quedo libre y pregunta a donde ir ("a donde me muevo", "disponible", "ya entregue que sigue") -> pedir_zona_cobertura.
+   -> Es el punto D. OJO: "ya entregue el paciente" a secas es confirmar_llegada; "ya entregue, que sigue" es pedir_zona_cobertura. La diferencia es si pregunta.
+8. Dice donde esta en palabras ("estoy en la 80 con 68") -> reportar_posicion.
+   -> Solo texto. Si comparte ubicacion por el boton de WhatsApp, eso llega como coordenadas y no pasa por ti.
+9. Nada de lo anterior, o demasiado incompleto para actuar -> no_entendido, con el motivo en una linea.
 
 SITUACIONES ESPECIALES
 Saludo suelto ("hola", "buenas") -> no_entendido. No es descortesia: no hay accion que ejecutar.

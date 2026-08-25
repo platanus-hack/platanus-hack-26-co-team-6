@@ -24,12 +24,70 @@
 5. Métrica `pulso_webhook_latencia_ms{proveedor}` con histograma.
 
 **Hecho cuando.**
-- [ ] p99 de la respuesta del webhook < 1 s
-- [ ] Un fallo en el procesamiento produce un mensaje al paramédico, no silencio
-- [ ] La métrica existe y se ve
-- [ ] Test que simula triage lento y verifica que el 200 sale igual
+- [x] p99 de la respuesta del webhook < 1 s
+- [x] Un fallo en el procesamiento produce un mensaje al paramédico, no silencio
+- [x] La métrica existe y se ve
+- [x] Test que simula triage lento y verifica que el 200 sale igual
 
 **Trampas.** Comparte servicio con 0.2 (Zaid). **Tú tocas `rutas/whatsapp.py` y `despachador.py`; él toca `canales/whatsapp.py` y `telefonia/`.** Coordinen quién mergea primero.
+
+### ✅ Hecho — rama `feat/o0-0.3-webhook-3s`
+
+`pulso_webhook_latencia_ms{proveedor}` como histograma, con cortes alrededor
+de 1 s y 3 s — sin buckets en el umbral, un histograma no responde la única
+pregunta que se le va a hacer. Se mide en **todas** las salidas de la ruta,
+incluida la del cuerpo ilegible: si esa rama no midiera, el p99 mentiría por
+omisión.
+
+**Los dos mensajes.** El paramédico recibe acuse inmediato y después el
+destino:
+
+| Entra | Acuse | Después |
+|---|---|---|
+| Texto | «Copiado, procesando…» | destino + ubicación |
+| Nota de voz | «🎙️ Nota recibida, transcribiendo…» | «Entendí: …» → destino |
+
+**El acuse del audio va ANTES de bajar el media**, y el orden está fijado por
+un test. Bajar el media de Meta son dos saltos autenticados más la
+transcripción: con el acuse después, el paramédico manda una nota y mira un
+chat mudo varios segundos con un paciente al lado.
+
+**El eco del transcript** es la pieza que no estaba en el enunciado y que hace
+falta: es la única forma de que un paramédico cace una transcripción mala
+**antes** de que salga la ambulancia. En la app el dictado se ve en pantalla;
+por WhatsApp, este mensaje *es* la pantalla. Solo se manda cuando la acción es
+un caso nuevo — repetirle «ya llegué» llena el chat de ruido justo cuando
+menos conviene.
+
+Un acuse que falla no tumba el traslado. Perder el acuse es molesto; perder el
+traslado es otra cosa.
+
+---
+
+## ⚠️ Aviso para 0.2 (Zaid) — la firma ya está escrita
+
+**No la escribas desde cero.** `apps/services/voz/app/canales/firma.py` existe
+en la rama `feat/cobertura-zonas`, commit `6d988f5`, y **no llegó a main**: el
+PR #8 se mezcló antes de ese commit.
+
+Lo que ya tiene, probado con 11 tests:
+
+- HMAC-SHA256 sobre el cuerpo **crudo** — sobre el JSON reserializado no
+  cuadra: un espacio o un cambio de orden de claves cambia el hash.
+- Las dos cabeceras: `X-Webhook-Signature` (Kapso) y `X-Hub-Signature-256`
+  (Meta, con el prefijo `sha256=`).
+- Comparación en tiempo constante. Un `==` normal filtra, por lo que tarda en
+  fallar, cuántos bytes del prefijo acertaste.
+- Sin secreto configurado no verifica **y lo grita en el log**, para que
+  «arranca sin configurar» no se vuelva «quedó abierto y nadie lo notó».
+
+Y trae un bug ya cazado que conviene no repetir: el handler del GET se llamaba
+`verificar` y **sombreaba** a la función importada del mismo nombre. El POST
+llamaba al handler equivocado y descartaba el resultado — el webhook quedaba
+sin verificar **pareciendo correcto**.
+
+Rescátalo con `git cherry-pick 6d988f5` y quédate con lo de `canales/` y
+`tests/test_firma.py`.
 
 ---
 
@@ -49,12 +107,47 @@
 5. Igual con el catálogo de servicios REPS, que también está duplicado.
 
 **Hecho cuando.**
-- [ ] Un solo archivo fuente para el prompt
-- [ ] El test de igualdad pasa
-- [ ] Los evals (`uv run python -m evals.run`) siguen dando lo mismo que antes
-- [ ] Cambiar el prompt en un solo lugar cambia los dos motores
+- [x] Un solo archivo fuente para el prompt
+- [x] El test de igualdad pasa
+- [x] Los evals (`uv run python -m evals.run`) siguen dando lo mismo que antes
+- [x] Cambiar el prompt en un solo lugar cambia los dos motores
 
 **Trampas.** El TypeScript es el **respaldo** cuando `ai-core` no está. No lo borres todavía: se borra el día que ai-core sea el único camino, y ese día no es hoy.
+
+### ✅ Hecho — rama `feat/o0-0.5-prompt-unico`
+
+| Archivo | Qué es |
+|---|---|
+| `data/prompts/triage.txt` | El prompt. Fuente única, con `{{CATALOGO_SERVICIOS}}` |
+| `data/catalogos/servicios-reps.json` | Los códigos REPS, canónicos |
+| `data/prompts/triage.rendered.txt` | El **golden**: el render que los dos motores deben producir |
+| `scripts/prompts/render.py` | Regenera el golden |
+| `ai-core/app/prompts.py` · `core/src/prompts/` | Los dos cargadores |
+
+**Por qué un golden y no comparar Python contra TypeScript.** Comparar los dos
+directamente exigiría levantar ambos runtimes en el mismo test. Con un golden,
+cada lado se verifica solo en su propio CI, y si uno se desvía el diff sale en
+su suite — no en un job cruzado que nadie mira.
+
+**Verificado que no hay regresión:** reconstruí el prompt viejo desde
+`git show main:...triage.py`, lo evalué, y el render nuevo es **idéntico
+carácter por carácter**. Los evals siguen dando 4/14 con la heurística.
+
+**La versión sale del contenido** (sha256 del render, 12 caracteres:
+`b6b3e3556c87`). Cambiar el prompt cambia la versión sola, sin que nadie tenga
+que acordarse de subir un número. Es la mitad de la 3.12 ya puesta.
+
+**El catálogo también era doble** y no lo unifiqué del todo: `servicios_reps.py`
+y `servicios-reps.ts` conservan su copia, porque los usan muchos sitios y
+cambiarlos es un PR aparte. Lo que sí hay es **un test en cada lado que los
+fija contra el JSON**: si alguien agrega un código en un solo lugar, falla. El
+día que los dos módulos lean del JSON, esos dos tests se vuelven triviales y
+se borran.
+
+**Nota para el despliegue:** los dos servicios leen `data/` en tiempo de
+arranque, así que **esa carpeta tiene que viajar en las imágenes de Docker**.
+Si no viaja, revientan al arrancar — que es el orden correcto para fallar, pero
+conviene saberlo antes del deploy y no durante.
 
 ---
 
@@ -74,13 +167,63 @@
 5. Backfill: los casos previos se asignan a una organización "histórica". **Nunca `organizacion_id` nulo** — bajo RLS, un nulo es invisible o es visible para todos, y las dos opciones son malas.
 
 **Hecho cuando.**
-- [ ] Reiniciar core no pierde casos ni handshakes
-- [ ] `pAceptacion` sobrevive al reinicio
-- [ ] Sin credenciales sigue corriendo en memoria, avisando
-- [ ] Los tests existentes de `almacen` pasan contra las dos implementaciones
-- [ ] Ninguna fila queda con `organizacion_id` nulo
+- [x] Reiniciar core no pierde casos ni handshakes
+- [x] `pAceptacion` sobrevive al reinicio
+- [x] Sin credenciales sigue corriendo en memoria, avisando
+- [x] Los tests existentes de `almacen` pasan contra las dos implementaciones
+- [x] Ninguna fila queda con `organizacion_id` nulo
 
 **Trampas.** `AlmacenService` lo usan ocho servicios. Cambia la implementación **detrás de la misma interfaz** y no toques a los consumidores, o el PR se vuelve inmergeable.
+
+### ✅ Hecho — rama `feat/o1-1.2-persistir-caso-handshake`
+
+**Son dieciséis, no ocho** — los conté. Y la trampa era peor de lo que dice el
+enunciado: los dieciséis métodos son **síncronos** y Postgres es asíncrono.
+Volverlos async rompe a los dieciséis consumidores de golpe.
+
+**La salida: write-through con caché en proceso.** Se hidrata al arrancar, las
+lecturas salen de la caché y siguen siendo síncronas, las escrituras van a la
+caché y al repositorio sin bloquear. **Cero consumidores tocados.**
+
+Lo que arregla: la durabilidad. Lo que **no** arregla, y hay que decirlo: la
+coherencia entre instancias. Cada réplica ve lo que había al arrancar más lo
+que escribió ella. Es mejor que antes —donde una réplica no veía NUNCA lo de
+la otra— pero no es multi-instancia de verdad. Eso es la **3.8**.
+
+**El detalle que costó encontrar:** `@Inject(REPOSITORIO)` hace que Nest exija
+el token *aunque haya default en TypeScript*, y eso rompió 36 specs que arman
+`AlmacenService` sin importar el módulo. Con `@Optional()` el default vuelve a
+servir y no hubo que tocar un solo test. Volvió al baseline exacto de main:
+**8 fallos, los mismos de Postgres que ya estaban.**
+
+**Historial, ventana de rechazos y latencias son ahora proyecciones**, no
+estado aparte: se reconstruyen desde los handshakes al hidratar. Es lo que
+hace que `pAceptacion` sobreviva al reinicio, y es lo que siempre debieron ser.
+
+Migración `0009`. El backfill crea la organización histórica con `tipo` y
+`estado` **copiados del check de 0004** (`operador_ambulancia` en singular,
+`activa`) — un valor fuera del check aborta la migración entera.
+
+Y persiste `expiraEn`, que alguien agregó al contrato mientras tanto: sin eso,
+al reiniciar todos los handshakes pendientes quedan sin plazo y el vigilante
+no los vence nunca.
+
+**Verificado contra Postgres real (2026-08-23).** Las 9 migraciones aplicadas
+en un Supabase limpio, y probado escritura → «reinicio» → hidratación:
+upsert idempotente ✅, `organizacion_id` lleno ✅, PostGIS con `(lng,lat)` en
+el orden correcto ✅.
+
+Y ahí salió **un bug que los tests con dobles no podían ver**: la columna es
+`dx_cie10`, no `dx_cie`. Mi grep de exploración la truncó en el dígito. En
+producción cada caso habría fallado al persistir **en silencio**, porque
+`persistir()` no bloquea y solo deja el error en el log.
+
+🔴 **Dependencia operativa descubierta:** `handshake.codigo_sede` tiene FK a
+`sede`, y esa tabla está **vacía** — el ETL del REPS no ha corrido. core sirve
+las 14 semillas de `semillas.ts`, cuyos códigos no existen en la base, así que
+**hoy ningún handshake se persiste**. El caso sí. No es un bug de la 1.2: es
+una dependencia de datos que hay que resolver corriendo el ETL o cargando las
+semillas en `sede`. Carril de Zaid.
 
 ---
 
@@ -279,12 +422,48 @@
 6. **No repite el dictado crudo.** Es una síntesis, y el dictado crudo no sale del servidor.
 
 **Hecho cuando.**
-- [ ] Los cinco casos del corpus producen SBAR legible
-- [ ] Sin `ANTHROPIC_API_KEY` cae al fallback y lo marca
-- [ ] Nunca inventa un antecedente que el dictado no trae
-- [ ] Cabe en cuatro líneas
+- [x] Los cinco casos del corpus producen SBAR legible — los **14**, de hecho
+- [x] Sin `ANTHROPIC_API_KEY` cae al fallback y lo marca
+- [x] Nunca inventa un antecedente que el dictado no trae
+- [x] Cabe en cuatro líneas
 
 **Trampas.** Es lo primero que un clínico va a juzgar. Un SBAR que suena a resumen de LLM ("El paciente presenta un cuadro compatible con…") pierde credibilidad al instante. **Frases de radio, como el resto del sistema.**
+
+### ✅ Hecho — rama `feat/o4-4.2-sbar`
+
+⚠️ **Sale de `feat/o0-0.5-prompt-unico`, no de main.** Usa la infraestructura
+de prompts canónicos de la 0.5, así que **hay que mezclar el PR #18 primero**.
+
+`data/prompts/sbar.txt` con su golden, igual que el triaje. `render.py` ahora
+maneja los dos: agregar un prompt es agregar una línea a `NOMBRES`.
+
+**El respaldo no es un adorno.** Sin API key arma el SBAR desde los campos ya
+estructurados del caso, y lo declara (`motor: "plantilla"`). Un SBAR feo pero
+cierto sirve; uno bonito e inventado no. También reporta `versionPrompt: null`
+en ese modo — inventar una versión sería mentir justo en el campo que existe
+para auditar.
+
+**Contra el relleno de LLM.** Hay un test que rechaza cualquier línea que
+empiece con «El paciente presenta», «Se trata de», «Nos encontramos ante» o
+«cuadro compatible con», y corre sobre los 14 casos del corpus. El prompt lo
+prohíbe explícitamente; el test es la red por si el modelo no obedece.
+
+**Cuatro líneas es un contrato, no una sugerencia.** `_recortar()` aplana
+saltos y corta en el último espacio antes del tope. El modelo a veces devuelve
+un párrafo aunque el prompt pida una línea; recortar sale más barato que
+reintentar y garantiza el contrato pase lo que pase.
+
+**Lo que no sale:** hay tests de que el SBAR no repite el dictado crudo ni
+filtra las coordenadas del paciente. Es una síntesis, y esos dos campos son
+los más sensibles del sistema.
+
+**Al parser se le pasa el caso estructurado, no el dictado.** Además de que el
+dictado no sale del servidor, el trabajo de extraerlo ya se hizo: repetirlo
+invitaría al modelo a re-interpretarlo y a discrepar consigo mismo.
+
+Y un test fija que la versión del prompt de triaje **siguió siendo
+`b6b3e3556c87`**: si agregar el SBAR hubiera movido el prompt clínico, los
+evals dejarían de ser comparables con los de antes.
 
 ---
 

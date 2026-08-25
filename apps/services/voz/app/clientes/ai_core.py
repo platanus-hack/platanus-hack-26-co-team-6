@@ -69,6 +69,22 @@ async def triage(
     return await _pedir("/v1/triage", cuerpo)
 
 
+async def cobertura(
+    zonas: list[dict[str, Any]],
+    unidades: list[dict[str, Any]],
+    locks: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Punto D: qué zona debe cubrir cada unidad libre.
+
+    Función pura del lado de ai-core: entra la foto de la flota, sale el
+    reparto. Quien guarda los locks es core.
+    """
+    return await _pedir(
+        "/v1/cobertura",
+        {"zonas": zonas, "unidades": unidades, "locks": locks or []},
+    )
+
+
 async def hablar(texto: str, voz_id: str | None = None) -> bytes:
     """Texto → bytes de audio. Devuelve el archivo, no JSON."""
     url = f"{settings.ai_core_base_url.rstrip('/')}/v1/hablar"

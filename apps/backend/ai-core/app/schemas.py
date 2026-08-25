@@ -142,6 +142,54 @@ class InterpretarResponse(ModeloCable):
     transcripcion: Transcripcion | None = None
 
 
+class Sbar(ModeloCable):
+    """La entrega estándar entre clínicos. CUATRO LÍNEAS, no cuatro párrafos.
+
+    La lee un médico de urgencias en una pantalla, a dos metros, mientras hace
+    otra cosa. Tiene entre cinco y diez segundos.
+    """
+
+    situacion: str = Field(
+        description=(
+            "S — quién es y qué le pasa AHORA. Una línea, frase de radio. "
+            "Nunca empieces con 'El paciente presenta' ni 'Se trata de'."
+        )
+    )
+    antecedente: str = Field(
+        description=(
+            "B — el antecedente que cambia la conducta. Una línea. "
+            "Si el caso no trae antecedentes, di 'Sin antecedentes referidos' "
+            "o pon el tiempo de evolución o el mecanismo. NUNCA lo inventes."
+        )
+    )
+    analisis: str = Field(
+        description=(
+            "A — qué se piensa que está pasando. Una línea. Si la confianza "
+            "de la extracción es baja, dilo aquí."
+        )
+    )
+    recomendacion: str = Field(
+        description=(
+            "R — qué hay que tener listo y con qué urgencia. Una línea. "
+            "Sale de los servicios requeridos del caso."
+        )
+    )
+
+
+class SbarRequest(ModeloCable):
+    caso: Caso
+
+
+class SbarResponse(ModeloCable):
+    sbar: Sbar
+    #: "claude" o "plantilla". El respaldo arma el SBAR desde los campos ya
+    #: estructurados del caso: peor redactado, igual de correcto.
+    motor: Literal["claude", "plantilla"]
+    latencia_ms: int
+    #: Versión del prompt con que se generó. Prepara la 3.12.
+    version_prompt: str | None = None
+
+
 class HablarRequest(ModeloCable):
     """Texto → audio, para la llamada de seguimiento."""
 

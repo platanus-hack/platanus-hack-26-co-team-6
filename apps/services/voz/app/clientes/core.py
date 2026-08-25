@@ -206,6 +206,41 @@ async def dispatch(
     )
 
 
+async def reportar_movil(
+    movil_id: str, lat: float, lng: float, disponible: bool = True
+) -> dict[str, Any]:
+    """Punto A: dónde está la ambulancia ahora.
+
+    `PUT /moviles/:id/estado`. Es la telemetría, no un evento auditable: core
+    la guarda en su tabla de posiciones y no en `evento_caso`.
+    """
+    return await _pedir(
+        "PUT",
+        f"/moviles/{movil_id}/estado",
+        json={"lat": lat, "lng": lng, "disponible": disponible},
+    )
+
+
+async def moviles() -> dict[str, Any]:
+    """La flota visible. Alimenta el cálculo de cobertura (punto D)."""
+    return await _pedir("GET", "/moviles")
+
+
+async def ruta(origen: dict[str, float], destino: dict[str, float]) -> dict[str, Any]:
+    """La geometría de una pata del turno, para resaltarla en el mapa.
+
+    Sale de Mapbox Directions vía core, que es quien tiene el token.
+    """
+    return await _pedir(
+        "POST", "/ruta/tramo", json={"origen": origen, "destino": destino}
+    )
+
+
+async def direccion(coord: dict[str, float]) -> dict[str, Any]:
+    """Coordenadas → dirección legible. Geocodificación inversa vía core."""
+    return await _pedir("POST", "/ruta/direccion", json={"coord": coord})
+
+
 async def estado(caso_id: str) -> dict[str, Any]:
     """Estado vivo de un caso: handshakes, sede aceptada, etc.
 
