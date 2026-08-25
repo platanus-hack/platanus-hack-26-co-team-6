@@ -8,6 +8,16 @@ describe('routing policies', () => {
     expect(classifyClinicalTriage({ ...clinical, confianza: 0.2 })).toEqual({ state: 'requires_human_review', reasons: ['PULSO_LOW_CONFIDENCE'] });
     expect(classifyClinicalTriage({ ...clinical, dxCie10: null, signosAlarma: [] })).toEqual({ state: 'requires_human_review', reasons: ['PULSO_INCONSISTENT_TRIAGE'] });
   });
+  it('a human review lifts the confidence gate but never the coherence gate', () => {
+    const revision = { por: 'AMB-01', en: '2026-08-23T00:00:00Z' };
+    // La heuristica firma 0.35; con revision humana el caso puede rutear.
+    expect(classifyClinicalTriage({ ...clinical, confianza: 0.35, revisionHumana: revision })).toEqual({ state: 'ready_for_matching', reasons: [] });
+    // Pero revisar no exime de tener diagnostico y servicios: sin eso el
+    // ranking no tiene con que filtrar sedes, lo confirme quien lo confirme.
+    expect(classifyClinicalTriage({ ...clinical, confianza: 0.35, dxDescripcion: '', revisionHumana: revision })).toEqual({ state: 'requires_human_review', reasons: ['PULSO_INCONSISTENT_TRIAGE'] });
+    // Y una revision vacia no es una revision.
+    expect(classifyClinicalTriage({ ...clinical, confianza: 0.35, revisionHumana: { por: '  ', en: '2026-08-23T00:00:00Z' } })).toEqual({ state: 'requires_human_review', reasons: ['PULSO_LOW_CONFIDENCE'] });
+  });
   it('keeps eligible destinations and escalates with all hard-rule reasons when none survive', () => {
     const caso = { serviciosRequeridos: [110], complejidadRequerida: 'media', tipoMovil: 'TAB', requiereMedicoABordo: false } as const;
     const eligible = { codigo: 'ok', servicios: [110], complejidad: 'alta', camas: [{ total: 2, ocupadasSnapshot: 1 }] } as const;

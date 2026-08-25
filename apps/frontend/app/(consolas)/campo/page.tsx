@@ -57,6 +57,8 @@ import { PantallaRuta } from "@/components/campo/PantallaRuta";
 import { InformePaciente } from "@/components/campo/InformePaciente";
 import { TarjetaCandidato } from "@/components/campo/TarjetaCandidato";
 import { RevisionRequerida } from "@/components/campo/RevisionRequerida";
+import { RevisionClinica } from "@/components/campo/RevisionClinica";
+import { confirmar as confirmarRevision, type CamposRevision } from "@/lib/revision-clinica";
 import { ChevronLeft, Send } from "lucide-react";
 import { FotoCalle } from "@/components/mapa/FotoCalle";
 import * as api from "@/lib/api";
@@ -302,7 +304,10 @@ export default function Campo() {
   // Estado y no `useRef`: un ref leído durante el render no vuelve a pintar
   // cuando cambia, así que el detalle de un caso recién dictado se quedaría
   // sin mapa hasta el siguiente render por otra causa.
-  const [origenes, setOrigenes] = useState<ReadonlyMap<string, Coordenada>>(
+  // `null` = ya se le preguntó a core y no lo tiene (caso reiniciado, 404).
+  // Distinguirlo de "todavía no se pregunta" es lo que evita re-pedir en bucle
+  // y lo que le permite al detalle decir "consultando" vs "no disponible".
+  const [origenes, setOrigenes] = useState<ReadonlyMap<string, Coordenada | null>>(
     () => new Map(),
   );
 
@@ -313,6 +318,29 @@ export default function Campo() {
     () => tablero.find((t) => t.caso.id === abierto) ?? null,
     [abierto, tablero],
   );
+
+  // Los casos que este dispositivo no dictó (el turno sintético, WhatsApp,
+  // otra tripulación) no traen origen en /estado — y no es un olvido. Se pide
+  // por caso a GET /casos/:id/origen, el endpoint con autorización propia que
+  // el contrato dejó previsto, y solo para el caso que el paramédico abrió:
+  // mirar uno deja rastro; raspar el listado no es posible.
+  useEffect(() => {
+    if (!abierto || origenes.has(abierto)) return;
+    const id = abierto;
+    let vivo = true;
+    api
+      .origenCaso(id)
+      .then((r) => {
+        if (vivo) setOrigenes((previo) => new Map(previo).set(id, r.origen));
+      })
+      .catch(() => {
+        // 404 o core caído: se anota el "no" para no re-preguntar en bucle.
+        if (vivo) setOrigenes((previo) => new Map(previo).set(id, null));
+      });
+    return () => {
+      vivo = false;
+    };
+  }, [abierto, origenes]);
 
   // ── Dictado por voz ────────────────────────────────────────────
   const anexarTranscrito = useCallback(
@@ -407,14 +435,23 @@ export default function Campo() {
       const origen = casoReal?.origen ?? geo.origen ?? undefined;
       setUbicacionDemo(!origen);
 
-      const { caso: c } = await api.triage({
+      const { caso: c, revision } = await api.triage({
         texto,
         origen,
         unidad: unidad ?? undefined,
+        // Aquí hay un humano delante: si la extracción no alcanza, queremos
+        // el caso para revisarlo, no un error. Regla 6 en acción.
+        permitirRevision: true,
       });
       setCaso(c);
       // Lo guarda para que el detalle del inicio pueda enseñarlo después.
       setOrigenes((previo) => new Map(previo).set(c.id, c.origen));
+
+      if (revision?.requerida) {
+        setBloqueo({ codigo: revision.motivo, detalle: "confianza del parser: " + c.confianza });
+        setFase("revision");
+        return;
+      }
 
       const m = await api.match({ caso: c, limite: 5 });
       setCandidatos(m.candidatos);
@@ -439,6 +476,40 @@ export default function Campo() {
   useEffect(() => {
     analizarRef.current = () => void analizar();
   });
+
+  /**
+   * El paramédico corrigió los campos y confirmó: el caso sale con
+   * `revisionHumana` y con eso la política de core lo deja pasar a /match.
+   * La confianza del parser no se toca — 0.35 queda en la auditoría.
+   */
+  async function confirmarYRutear(campos: CamposRevision) {
+    if (!caso) return;
+    const revisado = confirmarRevision(
+      caso,
+      campos,
+      unidad?.tripulante ?? unidad?.id ?? "paramedico-sin-identificar",
+      new Date().toISOString(),
+    );
+    setCaso(revisado);
+    setBloqueo(null);
+    setFase("analizando");
+    try {
+      const m = await api.match({ caso: revisado, limite: 5 });
+      setCandidatos(m.candidatos);
+      setMeta({ evaluadas: m.evaluadas, compatibles: m.compatibles });
+      setFase("ranking");
+    } catch (e) {
+      if (e instanceof ErrorApi && e.codigo) {
+        // p. ej. NO_ELIGIBLE_DESTINATION: se entendió bien y aun así no hay
+        // sede. Esa pantalla ya existe y dice qué hacer (escalar al CRUE).
+        setBloqueo({ codigo: e.codigo, detalle: e.message });
+        setFase("revision");
+        return;
+      }
+      setError(e instanceof Error ? e.message : "No se pudo rutear");
+      setFase("captura");
+    }
+  }
 
   async function despachar(c: Candidato) {
     if (!caso) return;
@@ -544,7 +615,7 @@ export default function Campo() {
         pantalla negra. La consola de campo se usa en el móvil, pero también en
         el del CRUE y en el proyector del demo.
       */}
-      <main className="relative z-10 mx-auto max-w-lg p-4 pb-24 lg:max-w-6xl lg:p-6">
+      <main className="relative z-10 mx-auto max-w-lg p-4 pb-24 lg:max-w-7xl lg:p-6 2xl:max-w-[96rem]">
         <BarraPersistente
           unidad={unidad}
           onCambiarUnidad={() => setPidiendoUnidad(true)}
@@ -582,17 +653,35 @@ export default function Campo() {
           </button>
         )}
 
-      {fase === "revision" && bloqueo && (
-        <RevisionRequerida
-          codigo={bloqueo.codigo}
-          detalle={bloqueo.detalle}
-          onVolver={() => {
-            setBloqueo(null);
-            setT0(null);
-            setFase("captura");
-          }}
-        />
-      )}
+      {fase === "revision" &&
+        bloqueo &&
+        // Los dos motivos que un humano puede resolver aquí mismo abren el
+        // formulario; el resto (p. ej. ninguna sede cumple) conserva su
+        // pantalla, porque corregir campos no los arregla.
+        (caso &&
+        (bloqueo.codigo === "PULSO_LOW_CONFIDENCE" ||
+          bloqueo.codigo === "PULSO_INCONSISTENT_TRIAGE") ? (
+          <RevisionClinica
+            caso={caso}
+            detalle={bloqueo.detalle}
+            onConfirmar={(campos) => void confirmarYRutear(campos)}
+            onVolver={() => {
+              setBloqueo(null);
+              setT0(null);
+              setFase("captura");
+            }}
+          />
+        ) : (
+          <RevisionRequerida
+            codigo={bloqueo.codigo}
+            detalle={bloqueo.detalle}
+            onVolver={() => {
+              setBloqueo(null);
+              setT0(null);
+              setFase("captura");
+            }}
+          />
+        ))}
 
       {pidiendoUnidad && (
         <SelectorUnidad
@@ -634,12 +723,15 @@ export default function Campo() {
                   caso={detalle.caso}
                   handshake={detalle.handshake}
                   origen={origenes.get(detalle.caso.id) ?? null}
+                  origenResuelto={origenes.has(detalle.caso.id)}
+                  posicionUnidad={geo.origen}
                   mapa={
-                    origenes.has(detalle.caso.id) && (
+                    !!origenes.get(detalle.caso.id) && (
                       <MapaDespacho
                         origen={origenes.get(detalle.caso.id)!}
                         candidatos={[]}
                         sedeSeleccionada={null}
+                        unidad={geo.origen}
                         ubicacionDemo={false}
                       />
                     )

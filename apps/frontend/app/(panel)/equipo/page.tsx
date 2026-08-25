@@ -31,8 +31,8 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as equipoApi from "@/lib/api-equipo";
+import { clasificar, describir, type Fallo } from "@/lib/fallo-core";
 import type { ActorEquipo, Equipo, InvitacionEquipo } from "@/lib/api-equipo";
-import { ErrorApi } from "@/lib/api";
 import { Bitacora } from "@/components/panel/Bitacora";
 import { FormularioInvitacion } from "@/components/panel/FormularioInvitacion";
 import {
@@ -54,7 +54,8 @@ type Estado =
   | { fase: "sin-sesion" }
   /** 403: la sesión existe pero no acredita lo necesario. `motivo` es de core. */
   | { fase: "sin-permiso"; motivo: string }
-  | { fase: "sin-core" };
+  /** Todo lo demás lo nombra `lib/fallo-core`: red, 404, 5xx no son lo mismo. */
+  | { fase: "fallo"; fallo: Fallo };
 
 export default function PaginaEquipo() {
   const [estado, setEstado] = useState<Estado>({ fase: "cargando" });
@@ -135,19 +136,19 @@ export default function PaginaEquipo() {
     );
   }
 
-  if (estado.fase === "sin-core") {
+  if (estado.fase === "fallo") {
+    const { titulo, detalle, reintentar } = describir(estado.fallo);
     return (
-      <Pagina titulo="Equipo" bajada="El servidor no respondió.">
+      <Pagina titulo="Equipo" bajada={titulo}>
         <div className="flex flex-col gap-4">
-          <Alerta>
-            No se pudo hablar con core. No es cosa tuya: vuelve a intentarlo y,
-            si sigue igual, el servicio está caído.
-          </Alerta>
-          <div>
-            <Boton type="button" onClick={() => void cargar()}>
-              Reintentar
-            </Boton>
-          </div>
+          <Alerta>{detalle}</Alerta>
+          {reintentar && (
+            <div>
+              <Boton type="button" onClick={() => void cargar()}>
+                Reintentar
+              </Boton>
+            </div>
+          )}
         </div>
       </Pagina>
     );
@@ -263,8 +264,9 @@ export default function PaginaEquipo() {
 }
 
 function interpretar(err: unknown): Estado {
-  if (!(err instanceof ErrorApi)) return { fase: "sin-core" };
-  if (err.status === 401) return { fase: "sin-sesion" };
-  if (err.status === 403) return { fase: "sin-permiso", motivo: err.message };
-  return { fase: "sin-core" };
+  const fallo = clasificar(err, "/organizaciones/…/equipo");
+  if (fallo.clase === "sesion") return { fase: "sin-sesion" };
+  if (fallo.clase === "prohibido")
+    return { fase: "sin-permiso", motivo: fallo.mensaje };
+  return { fase: "fallo", fallo };
 }

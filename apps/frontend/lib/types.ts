@@ -129,8 +129,26 @@ export interface ExtraccionClinica {
   confianza: number;
 }
 
+/**
+ * La confirmacion del paramedico cuando la extraccion no alcanzo sola.
+ *
+ * `confianza < 0.5` significa "la UI pide confirmacion" (ver arriba): este
+ * campo es esa confirmacion, registrada. No sube la confianza del parser —
+ * el 0.35 de la heuristica se queda escrito — sino que anota que un humano
+ * reviso los campos y decidio seguir. Regla 6: PULSO propone, el humano
+ * decide, y la decision queda registrada.
+ */
+export interface RevisionHumana {
+  /** Quien confirmo: tripulante o unidad. Hasta 1.3 no hay mas identidad. */
+  por: string;
+  /** Cuando, ISO-8601. */
+  en: string;
+}
+
 export interface Caso extends ExtraccionClinica {
   id: string;
+  /** Presente solo si un humano reviso y confirmo la extraccion. */
+  revisionHumana?: RevisionHumana;
   /**
    * Telefono desde el que se reporto, si entro por WhatsApp. Es lo que
    * permite avisarle al paramedico cuando el hospital responde.
@@ -330,6 +348,15 @@ export interface TriageResponse {
   motor?: "claude" | "heuristica";
   /** Dónde corrió. `ai-core` solo aparece si AI_CORE_BASE_URL está puesta. */
   via?: "core" | "ai-core";
+  /**
+   * Presente solo si se pidio `permitirRevision` y la extraccion no alcanzo:
+   * el caso NO puede ir a /match tal cual — un humano tiene que revisar los
+   * campos, corregirlos y confirmar (`Caso.revisionHumana`) antes.
+   */
+  revision?: {
+    requerida: true;
+    motivo: "PULSO_LOW_CONFIDENCE" | "PULSO_INCONSISTENT_TRIAGE";
+  };
 }
 
 /** POST {API}/match */

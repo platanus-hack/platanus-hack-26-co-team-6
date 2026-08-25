@@ -30,12 +30,20 @@ export class TriageController {
     }
     const result = await this.triage.procesar(cuerpo, texto);
     const clinical = this.routing.assess(result.caso);
-    if (clinical.state !== 'ready_for_matching')
-      throw new PulsoError(
-        clinical.reasons[0] as
-          'PULSO_LOW_CONFIDENCE' | 'PULSO_INCONSISTENT_TRIAGE',
-        'Clinical review is required before matching',
-      );
+    if (clinical.state !== 'ready_for_matching') {
+      const motivo = clinical.reasons[0] as
+        'PULSO_LOW_CONFIDENCE' | 'PULSO_INCONSISTENT_TRIAGE';
+      // La consola de campo manda `permitirRevision`: tiene a un humano
+      // delante que puede corregir los campos y confirmar (regla 6 — el
+      // humano decide). Se le entrega el caso CON la marca de revision
+      // requerida; /match lo seguira rechazando hasta que traiga
+      // `revisionHumana`. Los canales sin humano (voz) no mandan la
+      // bandera y conservan el 4xx de siempre.
+      if (cuerpo.permitirRevision) {
+        return { ...result, revision: { requerida: true, motivo } };
+      }
+      throw new PulsoError(motivo, 'Clinical review is required before matching');
+    }
     return result;
   }
 }

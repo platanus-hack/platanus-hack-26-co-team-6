@@ -36,6 +36,12 @@ const SECUENCIA_GUIONES: [number, number, number][] = [
 interface Props {
   origen: Coordenada;
   candidatos: Candidato[];
+  /**
+   * Posición actual de la ambulancia, si el GPS la dio. Es un punto DISTINTO
+   * de `origen` (donde está el paciente): en el detalle de un caso ajeno son
+   * los dos extremos de la pregunta "¿a cuánto estoy?".
+   */
+  unidad?: Coordenada | null;
   /** Código de la sede ya despachada; null mientras se elige. */
   sedeSeleccionada: string | null;
   /** Ruta real de core cuando exista el endpoint. Reemplaza al arco. */
@@ -47,6 +53,7 @@ interface Props {
 export default function MapaDespacho({
   origen,
   candidatos,
+  unidad = null,
   sedeSeleccionada,
   ruta = null,
   ubicacionDemo = false,
@@ -55,6 +62,7 @@ export default function MapaDespacho({
   const mapaRef = useRef<mapboxgl.Map | null>(null);
   const marcadoresRef = useRef<mapboxgl.Marker[]>([]);
   const marcadorOrigenRef = useRef<mapboxgl.Marker | null>(null);
+  const marcadorUnidadRef = useRef<mapboxgl.Marker | null>(null);
   const animacionRef = useRef<number>(0);
   const [listo, setListo] = useState(false);
 
@@ -181,6 +189,7 @@ export default function MapaDespacho({
       marcadoresRef.current.forEach((m) => m.remove());
       marcadoresRef.current = [];
       marcadorOrigenRef.current = null;
+      marcadorUnidadRef.current = null;
       mapa.remove();
       mapaRef.current = null;
       setListo(false);
@@ -207,6 +216,30 @@ export default function MapaDespacho({
       marcadorOrigenRef.current.setLngLat([origen.lng, origen.lat]);
     }
   }, [listo, origen.lng, origen.lat]);
+
+  // ── Marcador de la unidad (dónde estás tú) ─────────────────────
+  //
+  // Punto sólido azul, sin anillo: el anillo que late es el paciente. Dos
+  // marcadores idénticos en el mismo plano es no decir nada con ninguno.
+  useEffect(() => {
+    const mapa = mapaRef.current;
+    if (!mapa || !listo) return;
+    if (!unidad) {
+      marcadorUnidadRef.current?.remove();
+      marcadorUnidadRef.current = null;
+      return;
+    }
+    if (!marcadorUnidadRef.current) {
+      const el = document.createElement("div");
+      el.className = "mapa-unidad-punto";
+      el.title = "Tu posición";
+      marcadorUnidadRef.current = new mapboxgl.Marker({ element: el })
+        .setLngLat([unidad.lng, unidad.lat])
+        .addTo(mapa);
+    } else {
+      marcadorUnidadRef.current.setLngLat([unidad.lng, unidad.lat]);
+    }
+  }, [listo, unidad?.lng, unidad?.lat]);
 
   // ── Pins de sedes (cápsulas por congestión) ────────────────────
   useEffect(() => {
@@ -273,7 +306,21 @@ export default function MapaDespacho({
     }
 
     const viables = candidatos.filter((c) => c.motivoDescarte === null);
-    if (viables.length === 0) return;
+    if (viables.length === 0) {
+      // Detalle de caso: no hay ranking que encuadrar, pero si sabemos dónde
+      // está la unidad, la pregunta del mapa es "¿a cuánto estoy?" y la
+      // respuesta son los dos puntos en el mismo plano.
+      if (!unidad) return;
+      limites.extend([unidad.lng, unidad.lat]);
+      mapa.fitBounds(limites, {
+        padding: { top: 70, bottom: 50, left: 50, right: 50 },
+        pitch: 40,
+        bearing: -15,
+        maxZoom: 14.5,
+        duration: reducirMovimiento ? 0 : 1800,
+      });
+      return;
+    }
     viables.forEach((c) => limites.extend([c.sede.coord.lng, c.sede.coord.lat]));
     mapa.fitBounds(limites, {
       padding: { top: 80, bottom: 50, left: 50, right: 50 },
@@ -282,7 +329,7 @@ export default function MapaDespacho({
       maxZoom: 14.5,
       duration: reducirMovimiento ? 0 : 2200,
     });
-  }, [listo, candidatos, sedeSeleccionada, destino, origen.lng, origen.lat]);
+  }, [listo, candidatos, sedeSeleccionada, destino, origen.lng, origen.lat, unidad?.lng, unidad?.lat]);
 
   // ── Render ─────────────────────────────────────────────────────
 
@@ -319,6 +366,14 @@ export default function MapaDespacho({
           componente estuviese montado. Aquí se quedan los pines de sede, que
           son exclusivos del ranking. */}
       <style>{`
+        .mapa-unidad-punto {
+          width: 14px;
+          height: 14px;
+          border-radius: 9999px;
+          background: #4b9fff;
+          border: 2.5px solid rgba(255, 255, 255, 0.9);
+          box-shadow: 0 0 0 4px rgba(75, 159, 255, 0.25), 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
         .mapa-pin {
           padding: 4px 10px;
           border-radius: 9999px;
