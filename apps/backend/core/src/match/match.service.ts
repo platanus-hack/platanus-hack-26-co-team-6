@@ -15,6 +15,7 @@ import { AlmacenService } from '../almacen/almacen.service';
 import { SedesService } from '../sedes/sedes.service';
 import { EtaService } from '../eta/eta.service';
 import { ScoringService } from '../scoring/scoring.service';
+import { AfiliacionService } from '../afiliacion/afiliacion.service';
 
 /** Incompatibles más cercanas que igual mandamos a calcular ETA. Ver abajo. */
 const VITRINA_DESCARTADAS = 3;
@@ -26,6 +27,8 @@ export class MatchService {
     private readonly eta: EtaService,
     private readonly scoring: ScoringService,
     private readonly almacen: AlmacenService,
+    // Tarea 2.1: solo una organizacion `activa` es despachable.
+    private readonly afiliacion: AfiliacionService,
   ) {}
 
   async rankear(
@@ -53,7 +56,20 @@ export class MatchService {
         .filter((h) => h.estado === 'rechazado' || h.estado === 'timeout')
         .map((h) => h.sedeCodigo),
     );
-    const sedes = todas.filter((s) => !yaRechazaron.has(s.codigo));
+    // Una sede cuya organización no está `activa` tampoco entra — tarea
+    // 2.1, paso 4. Es lo que hace real la máquina de estados: sin este
+    // filtro, suspender una afiliación no cambia nada en el ruteo.
+    //
+    // ⚠️ Solo saca a las sedes AFILIADAS y no activas. Una sede del REPS
+    //    que nadie reclamó sigue entrando: exigir afiliación para rutear
+    //    vaciaría el ranking entero el día que esto se encienda, y «el
+    //    conjunto vacío escala al CRUE» convertiría cada caso en una
+    //    escalada. Está razonado en `AfiliacionService.sedeDespachable()`.
+    const noDespachables = await this.afiliacion.sedesNoDespachables();
+
+    const sedes = todas.filter(
+      (s) => !yaRechazaron.has(s.codigo) && !noDespachables.has(s.codigo),
+    );
 
     // 2. ETA con tráfico.
     //

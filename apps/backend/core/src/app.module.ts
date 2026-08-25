@@ -22,6 +22,8 @@ import { PulsoErrorFilter } from './common/pulso-error.filter';
 import { RoutingModule } from './routing/routing.module';
 import { EscalamientoModule } from './escalamiento/escalamiento.module';
 import { CapacidadesModule } from './capacidades/capacidades.module';
+import { AfiliacionModule } from './afiliacion/afiliacion.module';
+import { InvitacionesModule } from './invitaciones/invitaciones.module';
 import { CatalogoModule } from './catalogo/catalogo.module';
 
 @Module({
@@ -66,6 +68,14 @@ import { CatalogoModule } from './catalogo/catalogo.module';
     EscalamientoModule,
     // En qué modo corre cada integración. Lo lee la barra de /campo.
     CapacidadesModule,
+
+    // Cómo entra una organización a PULSO: se autoverifica contra el REPS
+    // (tarea 2.1) o contra el corte de transporte asistencial (2.9). Va
+    // antes que InvitacionesModule porque este último le pide la
+    // organización a la que se invita.
+    AfiliacionModule,
+    // Cómo entra el segundo humano de esa organización (tarea 2.5).
+    InvitacionesModule,
     // Catálogos versionados (motivos de rechazo). Los lee /hospital.
     CatalogoModule,
 

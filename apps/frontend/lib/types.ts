@@ -392,12 +392,234 @@ export interface DispatchResponse {
  * subconjunto que hoy llega por un 4xx; este es el conjunto completo, porque
  * `RespondResponse.codigo` viaja dentro de un 200.
  */
+
+// ─────────────────────────────────────────────────────────────────
+// Afiliación, organizaciones e identidad — OLA 2 (Juan: 2.1, 2.5, 2.9)
+//
+// Espejo de `core/src/contracts/types.ts`. El razonamiento largo de cada
+// campo vive allá; aquí queda lo que la pantalla necesita saber.
+// `node scripts/verificar-tipos.mts` compara los dos.
+// ─────────────────────────────────────────────────────────────────
+
+/** Contra qué se autoverifica: `ips` cruza el REPS, `operador_ambulancia` el catálogo TAB/TAM. */
+export type TipoOrganizacion =
+  | "ips"
+  | "operador_ambulancia"
+  | "crue"
+  | "entidad_pagadora";
+
+/** Máquina de estados de la afiliación. **Solo `activa` es despachable.** */
+export type EstadoAfiliacion =
+  | "borrador"
+  | "enviada"
+  | "en_verificacion"
+  | "observada"
+  | "aprobada"
+  | "activa"
+  | "suspendida"
+  | "retirada";
+
+export type VerificacionAfiliacion = "reps_automatico" | "manual" | "pendiente";
+
+/**
+ * Los roles del sistema. Es lo que decide a dónde redirige `/entrar` tras
+ * el login (tarea 1.4) y qué pinta `/panel`.
+ */
+export type Rol =
+  | "paramedico"
+  | "jefe_urgencias"
+  | "admin_organizacion"
+  | "regulador_crue"
+  | "auditor"
+  | "admin_plataforma"
+  | "servicio";
+
+/** La entidad jurídica afiliada. El inquilino. */
+export interface Organizacion {
+  id: string;
+  tipo: TipoOrganizacion;
+  razonSocial: string;
+  nombreCorto?: string | null;
+  nit: string;
+  estado: EstadoAfiliacion;
+  verificacion: VerificacionAfiliacion;
+  /** Códigos REPS de 12 dígitos. Vacío para un operador de ambulancias. */
+  sedes: string[];
+  /** Por qué quedó `observada`. Es lo que se le muestra al afiliado. */
+  observaciones?: string[];
+  creadaEn: string;
+  actualizadaEn?: string;
+}
+
+/** Una persona o un servicio. Nunca se borra: se desactiva. */
+export interface Actor {
+  id: string;
+  organizacionId: string;
+  nombre: string;
+  roles: Rol[];
+  /** Códigos de sede. Vacío = toda la organización. */
+  sedes: string[];
+  tipo: "humano" | "servicio";
+  /** false = desactivado. Se pinta "Nombre (inactivo)", no se esconde. */
+  activo?: boolean;
+  ultimoAcceso?: string | null;
+}
+
+/**
+ * Lo que el REPS ya sabe y el afiliado NO tipea: lo confirma o lo corrige.
+ *
+ * No trae `nombre` a propósito — ese se muestra aparte, en grande. Ver que
+ * PULSO encontró SU sede es el momento que vende el producto.
+ */
+export interface PrecargaSede {
+  direccion: string;
+  coord: Coordenada;
+  localidad: string | null;
+  naturaleza: Sede["naturaleza"];
+  complejidad: Complejidad;
+  telefono: string | null;
+  servicios: CodServicio[];
+  camas: CamaSede[];
+}
+
+/** Lo mismo para un operador de transporte asistencial (tarea 2.9). */
+export interface PrecargaOperador {
+  prestador: string;
+  direccion: string;
+  telefono: string | null;
+  correo: string | null;
+  /** La marca TAB/TAM del corte oficial. Después alimenta `movil.tipo`. */
+  tiposMovil: TipoMovil[];
+  urgencias: boolean;
+}
+
+/** POST {API}/afiliacion/verificar */
+export interface VerificarAfiliacionRequest {
+  tipo: TipoOrganizacion;
+  /** 12 dígitos. Obligatorio para `ips`. */
+  codigoHabilitacion?: string;
+  nit: string;
+  razonSocial?: string;
+}
+
+/**
+ * `encontrada: false` llega en un **200**, no en un 404: trae el motivo
+ * específico y la pantalla lo muestra tal cual.
+ */
+export interface VerificarAfiliacionResponse {
+  encontrada: boolean;
+  /** Existe pero el nombre no cuadra: va a revisión humana. */
+  requiereRevision?: boolean;
+  estadoSugerido: EstadoAfiliacion;
+  verificacion: VerificacionAfiliacion;
+  sede?: Sede;
+  precarga?: PrecargaSede;
+  operador?: PrecargaOperador;
+  /** 0..1. Útil para explicarle al afiliado por qué pide revisión. */
+  similitud?: number;
+  motivo?: string;
+}
+
+/** POST {API}/afiliacion */
+export interface CrearAfiliacionRequest {
+  tipo: TipoOrganizacion;
+  nit: string;
+  razonSocial: string;
+  nombreCorto?: string;
+  sedes?: string[];
+  admin: {
+    nombre: string;
+    correo: string;
+    /** Mínimo 12 caracteres. Nunca se guarda en el cliente. */
+    clave: string;
+  };
+}
+
+export interface CrearAfiliacionResponse {
+  organizacion: Organizacion;
+  admin: Actor;
+}
+
+/** GET {API}/afiliacion/:id/estado */
+export interface EstadoAfiliacionResponse {
+  id: string;
+  estado: EstadoAfiliacion;
+  verificacion: VerificacionAfiliacion;
+  observaciones: string[];
+  actualizadaEn?: string;
+}
+
+/** POST {API}/afiliacion/:id/transicion — solo `admin_plataforma`. */
+export interface TransicionAfiliacionRequest {
+  estado: EstadoAfiliacion;
+  /** Obligatorio al observar o suspender. */
+  motivo?: string;
+}
+
+/** Una invitación. **El token no está aquí**: en base solo vive su hash. */
+export interface Invitacion {
+  id: string;
+  organizacionId: string;
+  correo: string;
+  rol: Rol;
+  codigoSede?: string | null;
+  expiraEn: string;
+  aceptadaEn: string | null;
+  revocadaEn?: string | null;
+  invitadaPor?: string | null;
+  creadaEn: string;
+}
+
+/** POST {API}/organizaciones/:id/invitaciones */
+export interface CrearInvitacionRequest {
+  correo: string;
+  rol: Rol;
+  codigoSede?: string;
+}
+
+export interface CrearInvitacionResponse {
+  invitacion: Invitacion;
+  /**
+   * El enlace con el token en claro. Llega **una** vez.
+   *
+   * Sin proveedor de correo, esta es la única forma de que llegue: la
+   * pantalla lo muestra para copiar. `enviadoPorCorreo` dice cuál pasó.
+   */
+  enlace: string;
+  enviadoPorCorreo: boolean;
+}
+
+/** POST {API}/invitaciones/:token/aceptar — público, un solo uso. */
+export interface AceptarInvitacionRequest {
+  nombre: string;
+  /** Mínimo 12 caracteres. */
+  clave: string;
+}
+
+export interface AceptarInvitacionResponse {
+  actor: Actor;
+  organizacion: Organizacion;
+}
+
+/** GET {API}/organizaciones/:id/equipo — lo que pinta `/panel/equipo`. */
+export interface EquipoResponse {
+  actores: Actor[];
+  /** Ni aceptadas, ni revocadas, ni vencidas. */
+  invitacionesPendientes: Invitacion[];
+}
+
 export type PulsoCode =
   | "PULSO_INVALID_INPUT"
   | "PULSO_LOW_CONFIDENCE"
   | "PULSO_INCONSISTENT_TRIAGE"
   | "PULSO_NO_ELIGIBLE_DESTINATION"
   | "PULSO_ILLEGAL_TRANSITION"
+  /** Token de invitación vencido (>72 h). Llega en un 410 — tarea 2.5. */
+  | "PULSO_INVITACION_EXPIRADA"
+  /** Token de invitación ya usado. Un solo uso, y 410 — tarea 2.5. */
+  | "PULSO_INVITACION_YA_USADA"
+  /** Demasiadas peticiones desde la misma IP. Llega en un 429. */
+  | "PULSO_RATE_LIMITED"
   | "PULSO_INCOMPLETE_EVIDENCE"
   | "PULSO_IDEMPOTENCY_CONFLICT"
   | "PULSO_DESTINATION_ALREADY_ACCEPTED"

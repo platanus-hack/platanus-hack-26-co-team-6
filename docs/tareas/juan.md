@@ -4,7 +4,7 @@
 > **En este plan rota:** también le tocan webhooks en Python, token de servicio en Nest, el constructor
 > de RDA FHIR y la instrumentación con OpenTelemetry. Ver [README de tareas](README.md).
 
-**Ola 0** [0.4](#04--deduplicar-webhooks-por-wamid) · [0.7](#07--test-de-espejo-de-tipos) — **Ola 1** [1.4](#14--vistas-de-login-y-sesión) · [1.8](#18--token-de-servicio-para-voz) — **Ola 2** [2.1](#21--api-de-afiliación) · [2.5](#25--crud-de-equipo-e-invitaciones) · [2.9](#29--autoverificación-de-operadores-de-ambulancia) — **Ola 3** [3.4](#34--vista-hospitalcapacidad) · [3.7](#37--posición-del-móvil-en-vivo--cruecobertura) · [3.11](#311--persistir-el-override-del-crue) — **Ola 4** [4.3](#43--vista-hospitalrecepcióncasoid) · [4.8](#48--rda-builder-fhir-r4) · [4.12](#412--vista-forense-auditoriacasosid) — **Ola 5** [5.3](#53--opentelemetry--pino-con-redacción-de-pii) · [5.7](#57--prueba-de-carga-con-k6) · [5.11](#511--adminatalogos-y-adminmodelos)
+**Ola 0** [0.4](#04--deduplicar-webhooks-por-wamid) · [0.7](#07--test-de-espejo-de-tipos) — **Ola 1** [1.4](#14--vistas-de-login-y-sesión) · [1.8](#18--token-de-servicio-para-voz) — **Ola 2** ✅ [2.1](#21--api-de-afiliación) · ✅ [2.5](#25--crud-de-equipo-e-invitaciones) · ✅ [2.9](#29--autoverificación-de-operadores-de-ambulancia) — **Ola 3** [3.4](#34--vista-hospitalcapacidad) · [3.7](#37--posición-del-móvil-en-vivo--cruecobertura) · [3.11](#311--persistir-el-override-del-crue) — **Ola 4** [4.3](#43--vista-hospitalrecepcióncasoid) · [4.8](#48--rda-builder-fhir-r4) · [4.12](#412--vista-forense-auditoriacasosid) — **Ola 5** [5.3](#53--opentelemetry--pino-con-redacción-de-pii) · [5.7](#57--prueba-de-carga-con-k6) · [5.11](#511--adminatalogos-y-adminmodelos)
 
 ---
 
@@ -135,13 +135,23 @@
 5. `@Publico()` en verificar y crear; todo lo demás exige sesión.
 
 **Hecho cuando.**
-- [ ] Un código REPS real devuelve la sede correcta con sus servicios
-- [ ] Un código inventado devuelve motivo específico
-- [ ] Rate limit por IP (es endpoint público: se puede usar para enumerar el REPS, aunque el REPS es público)
-- [ ] Test de todas las transiciones ilegales
-- [ ] Una organización que no está `activa` no aparece en el ranking
+- [x] Un código REPS real devuelve la sede correcta con sus servicios — precarga dirección, coords, localidad, naturaleza, complejidad, servicios y camas
+- [x] Un código inventado devuelve motivo específico — y uno de 10 dígitos lo llama por su nombre: *«ese es el código de PRESTADOR»*
+- [x] Rate limit por IP — `afiliacion/limite-ip.ts`, ventana deslizante de 20/min. **Lo reemplaza 2.11 cuando mergee**
+- [x] Test de todas las transiciones ilegales — las 38, enumeradas, no escritas a mano
+- [x] Una organización que no está `activa` no aparece en el ranking — el filtro está en `MatchService.rankear`, con su test
 
 **Trampas.** `codigohabilitacionsede` es de **12 dígitos y único**; `codigoprestador` es de 10 y **colapsa una subred entera en un código**. Está documentado en `data/CATALOGO.md` y ya causó un bug. Usa el de 12.
+
+> **Lo que se encontró al hacerla.**
+> - **El NIT no se puede cruzar contra el REPS.** La tabla `sede` no tiene columna de NIT — ni el catálogo compilado ni `0001_init.sql`. Se valida el formato y se guarda, pero quien afilie puede declarar el NIT de otra entidad. Lo contiene la razón social (que sí se cruza) y que la organización nace `aprobada`, no `activa`. Cerrarlo pide el NIT por sede en el pipeline de `data/`.
+> - **El NIT lleva dígito de verificación y eso rompía la unicidad.** `900123456` y `900123456-1` son el mismo NIT; comparando «todos los dígitos» la misma clínica se afiliaba dos veces. `afiliacion/nit.ts` normaliza a la base.
+> - **El umbral de 0.85 es estricto.** Medido: agregar «SAS» a la razón social ya baja de 0.85 (0.83). Se deja en 0.85 porque el error caro es el otro —«Usme» contra «Suba» da 0.55— y porque la respuesta trae `sede.nombre` para que el afiliado confirme.
+> - **Solo hay 84 sedes en el catálogo**, no 16.181: son las IPS con servicio de urgencias. Las 84 tienen código REPS de 12 dígitos válido.
+
+> **Lo que quedó fuera, y por qué.**
+> - **Persistencia.** Vive en memoria detrás de una interfaz, igual que `auth/actores.ts` de 1.3. La migración `0006_afiliacion.sql` está escrita pero **se pisa con la tarea 1.1 de Zaid**: la cabecera del archivo dice qué hacer al mergear.
+> - **El wizard de `/afiliacion`.** Depende de `2.7` (shell de `/panel`) y `2.8` (`lib/api.ts`), que son los que mergean primero en la ola.
 
 ---
 
@@ -160,13 +170,27 @@
 6. Desactivar un actor es `activo=false`, **nunca `DELETE`**: aparece en auditoría.
 
 **Hecho cuando.**
-- [ ] El token viaja en el enlace, en base solo está el hash
-- [ ] Un token usado dos veces → 410
-- [ ] Un token de 73 h → 410 con mensaje claro
-- [ ] `admin_organizacion` intentando crear `regulador_crue` → 403
-- [ ] Desactivar un actor no rompe la auditoría histórica
+- [x] El token viaja en el enlace, en base solo está el hash — 32 bytes, sha256; el test comprueba que el token no aparece en nada de lo guardado
+- [x] Un token usado dos veces → 410 `PULSO_INVITACION_YA_USADA`, y dice cuándo se usó
+- [x] Un token de 73 h → 410 `PULSO_INVITACION_EXPIRADA`, dice que duran 72 h y qué hacer
+- [x] `admin_organizacion` intentando crear `regulador_crue` → 403 — **con un matiz, ver abajo**
+- [x] Desactivar un actor no rompe la auditoría histórica — `activo=false`, sigue resolviendo por id y sigue en la tabla del equipo
 
 **Trampas.** No pongas el token en la URL de un correo **y** en el log. Redacción en Pino (5.3).
+
+> **El invariante 3, leído con cuidado.**
+> La lectura literal —«solo otorgas roles que tienes»— rompe el producto: un `admin_organizacion` no podría invitar al `jefe_urgencias` de su sede ni a sus paramédicos, que es literalmente para lo que existe `/panel/equipo`. El ejemplo de §5.3 no es casual: `regulador_crue` es un **rol de red**. Lo que el invariante protege es el salto de alcance. Implementado así:
+> - `admin_plataforma` → cualquiera.
+> - Roles de red (`regulador_crue`, `auditor`, `admin_plataforma`) → **nadie más**, ni teniéndolos.
+> - `servicio` → tampoco por correo; se emite con `POST /auth/servicio` (1.8).
+> - Roles de organización → los otorga `admin_organizacion` dentro de la suya.
+
+> **Lo que quedó fuera, y por qué.**
+> - **`/panel/equipo` y `/invitacion/:token`.** Dependen de `2.7` y `2.8`, que mergean antes que todo el frontend de la ola. El backend está completo y probado: `POST /organizaciones/:id/invitaciones`, `GET .../equipo`, `DELETE` de invitación y de actor, y `POST /invitaciones/:token/aceptar`.
+> - **El envío de correo.** No hay proveedor configurado, así que se devuelve el enlace y `enviadoPorCorreo: false`. Es la regla de degradación del repo, no un pendiente.
+> - **Un mismo correo en dos organizaciones** (caso límite 1 de §7). Necesita que `actor.identificador` deje de ser único, y eso es de la tarea 1.1. Hoy lo dice con todas las letras en vez de adivinar.
+
+> **⚠️ Para Sebas (1.3) y para quien haga el frontend de la ola.** `POST /auth/login` recibe la contraseña como **`password`**; `POST /afiliacion` y `POST /invitaciones/:token/aceptar` la reciben como **`clave`**. Son la contraseña de la misma persona en los tres. Hay que unificarlo antes de que el front escriba los tres formularios — la regla 7 del repo (dominio en español) apunta a `clave`, pero la decisión es de quien es dueño de `auth/`.
 
 ---
 
@@ -185,11 +209,18 @@
 4. Si no cruza → `observada` con motivo, no rechazo.
 
 **Hecho cuando.**
-- [ ] Un prestador real del CSV se autoverifica
-- [ ] La marca TAB/TAM llega precargada al alta de flota
-- [ ] Sin cruce, el mensaje dice qué falta
+- [x] Un prestador real del CSV se autoverifica — contra `afiliacion/ambulancias.generado.ts`, los 225 del corte
+- [x] La marca TAB/TAM llega precargada al alta de flota — `PrecargaOperador.tiposMovil`, del corte oficial y nunca inferida
+- [x] Sin cruce, el mensaje dice qué falta — y si hay algo parecido, lo nombra
 
 **Trampas.** El CSV trae `utf-8-sig` y nombres en mayúsculas sin tildes. Normaliza antes de comparar o no cruza nada.
+
+> **El paso 2 de esta tarea no se puede ejecutar.**
+> «Cruce por NIT si está, y por nombre con `pg_trgm` si no»: **el "si está" nunca se cumple.** El CSV de transporte asistencial trae nueve columnas —prestador, sede, dirección, teléfono, email y las tres marcas— y ninguna es el NIT. No está vacío en algunas filas: la columna no existe en la fuente. El cruce es **siempre** por nombre normalizado.
+>
+> El camino por NIT está escrito y probado igual, contra un catálogo de prueba: `PrestadorAmbulancia.nit` existe y hoy es `null` en las 225 filas. Hay un test que se cae el día que la fuente lo publique, para que alguien lo encienda.
+
+> **Además.** El catálogo lo emite ahora `scripts/datos/construir.py` (`_ts_ambulancias`), mismo patrón que `sedes/catalogo.generado.ts`. Antes `ambulancias.json` no lo consumía nadie.
 
 ---
 

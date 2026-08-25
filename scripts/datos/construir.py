@@ -13,6 +13,7 @@ Y genera el codigo TypeScript que core importa:
 
     apps/backend/core/src/sedes/catalogo.generado.ts
     apps/backend/core/src/scoring/demanda.generada.ts
+    apps/backend/core/src/afiliacion/ambulancias.generado.ts
 
 Es idempotente: correlo las veces que quieras. Solo stdlib, sin pip install.
 """
@@ -220,7 +221,87 @@ export const CASOS_REALES: CasoReal[] = """
     return ruta
 
 
-# ── Orquestacion ──────────────────────────────────────────────────
+def _ts_ambulancias() -> Path:
+    """
+    ambulancias.json -> el catalogo contra el que se autoverifica un operador.
+
+    Es la tarea 2.9. Hasta hoy estos 225 prestadores estaban en
+    data/procesado/ y no los consumia NADIE — el universo real de transporte
+    asistencial de Bogota, con la marca TAB/TAM del corte oficial, sin usar.
+
+    Mismo patron que _ts_sedes(): un modulo TS tipado que core importa como
+    cualquier otro, para que la autoverificacion funcione sin base de datos.
+
+    ⚠️ ESTA FUENTE NO TRAE NIT. El plan de la tarea dice "cruce por NIT si
+       esta, y por nombre si no": el "si esta" nunca se cumple con este CSV.
+       El cruce es siempre por nombre normalizado. Se emite `nit: null` en vez
+       de omitir el campo para que se vea que falta y no que se olvido.
+    """
+    datos = json.loads((SALIDA / "ambulancias.json").read_text(encoding="utf-8"))
+    prestadores = [
+        {
+            "prestador": p["prestador"],
+            "sede": p["sede"],
+            "direccion": p["direccion"],
+            "telefono": p["telefono"] or None,
+            "correo": p["email"] or None,
+            "nit": None,
+            "basico": p["basico"],
+            "medicalizado": p["medicalizado"],
+            "urgencias": p["urgencias"],
+        }
+        for p in datos["prestadores"]
+    ]
+
+    cuerpo = (
+        CABECERA.format(
+            fecha=dt.date.today().isoformat(),
+            fuente=datos["fuente"],
+        )
+        + """
+/** Un prestador de transporte asistencial del corte de la Secretaria. */
+export interface PrestadorAmbulancia {
+  prestador: string;
+  sede: string;
+  direccion: string;
+  telefono: string | null;
+  correo: string | null;
+  /**
+   * SIEMPRE null: el CSV de transporte asistencial no publica NIT.
+   *
+   * El campo existe para que el dia que la fuente lo traiga, el cruce por
+   * NIT de `ambulancias.ts` se encienda sin tocar una linea. Hoy el cruce
+   * es por nombre normalizado, y eso esta declarado.
+   */
+  nit: string | null;
+  /** TAB — Transporte Asistencial Basico. */
+  basico: boolean;
+  /** TAM — Transporte Asistencial Medicalizado. */
+  medicalizado: boolean;
+  /** El prestador declara ademas servicio de urgencias en el mismo corte. */
+  urgencias: boolean;
+}
+
+/**
+ * """
+        + f"{datos['total']} prestadores de transporte asistencial de Bogota "
+        + f"({datos['conBasico']} TAB, {datos['conMedicalizado']} TAM)."
+        + """
+ *
+ * Ver data/CATALOGO.md. Los nombres vienen en MAYUSCULAS SIN TILDES y con
+ * `utf-8-sig`: normalizar antes de comparar o no cruza nada.
+ */
+export const AMBULANCIAS_CATALOGO: PrestadorAmbulancia[] = """
+        + json.dumps(prestadores, ensure_ascii=False, indent=2)
+        + ";\n"
+    )
+
+    ruta = RAIZ / "apps/backend/core/src/afiliacion/ambulancias.generado.ts"
+    ruta.write_text(cuerpo, encoding="utf-8")
+    return ruta
+
+
+# ── Orquestacion ────────────────────────────────────────────
 
 
 def _faltan_descargas() -> list[str]:
@@ -270,7 +351,7 @@ def main() -> int:
 
     if not fallidos:
         print("  Generando TypeScript para core")
-        for ruta in (_ts_sedes(), _ts_demanda(), _ts_casos_reales()):
+        for ruta in (_ts_sedes(), _ts_demanda(), _ts_casos_reales(), _ts_ambulancias()):
             print(f"      {ruta.relative_to(RAIZ)}")
         print()
 

@@ -471,12 +471,267 @@ export interface ErrorApi {
   detalle?: string;
 }
 
+
+// ─────────────────────────────────────────────────────────────────
+// Afiliacion, organizaciones e identidad — OLA 2 (Juan: 2.1, 2.5, 2.9)
+//
+// Salen del Anexo B de `docs/pulso-plataforma-afiliacion-y-tramites.md`.
+// Todo lo que se agrega a un tipo que ya existia va OPCIONAL, que es la
+// regla del contrato.
+// ─────────────────────────────────────────────────────────────────
+
+/**
+ * Que clase de entidad se afilia. Determina contra QUE se autoverifica:
+ * `ips` cruza contra la tabla `sede` (REPS), `operador_ambulancia` contra el
+ * catalogo de transporte asistencial (tarea 2.9).
+ */
+export type TipoOrganizacion =
+  | 'ips'
+  | 'operador_ambulancia'
+  | 'crue'
+  | 'entidad_pagadora';
+
+/**
+ * Maquina de estados de la afiliacion (§3.2). Las transiciones legales
+ * viven en `afiliacion/estados.ts` y no se deducen de este union: un enum
+ * no dice que `retirada` no vuelve.
+ *
+ * ⚠️ `activa` es el UNICO estado despachable. El ranking filtra por eso.
+ */
+export type EstadoAfiliacion =
+  | 'borrador'
+  | 'enviada'
+  | 'en_verificacion'
+  | 'observada'
+  | 'aprobada'
+  | 'activa'
+  | 'suspendida'
+  | 'retirada';
+
+/** Como se verifico. `reps_automatico` es el camino sin tramite (§3.3). */
+export type VerificacionAfiliacion = 'reps_automatico' | 'manual' | 'pendiente';
+
+/**
+ * Los roles del sistema (§5.2 de multitenancy).
+ *
+ * ⚠️ ESPEJO de `auth/roles.ts::ROLES`, que es el que usa el guard. Los dos
+ *    tienen que decir exactamente lo mismo y hay un test que lo verifica
+ *    (`afiliacion/roles-espejo.spec.ts`). Vive aqui ademas de alli porque el
+ *    front lo necesita —la redireccion por rol tras el login es de 1.4— y
+ *    `auth/` no cruza el cable.
+ */
+export type Rol =
+  | 'paramedico'
+  | 'jefe_urgencias'
+  | 'admin_organizacion'
+  | 'regulador_crue'
+  | 'auditor'
+  | 'admin_plataforma'
+  | 'servicio';
+
+/** La entidad juridica afiliada. El inquilino, en terminos de multitenancy. */
+export interface Organizacion {
+  id: string;
+  tipo: TipoOrganizacion;
+  razonSocial: string;
+  nombreCorto?: string | null;
+  nit: string;
+  estado: EstadoAfiliacion;
+  verificacion: VerificacionAfiliacion;
+  /** Codigos REPS de 12 digitos. Para un operador de ambulancias, vacio. */
+  sedes: string[];
+  /** Por que quedo `observada`. Vacio en cualquier otro estado. */
+  observaciones?: string[];
+  creadaEn: string;
+  actualizadaEn?: string;
+}
+
+/** Una persona o un servicio dentro de una organizacion. Nunca se borra. */
+export interface Actor {
+  id: string;
+  organizacionId: string;
+  nombre: string;
+  roles: Rol[];
+  /** Codigos de sede. Vacio = toda la organizacion. */
+  sedes: string[];
+  tipo: 'humano' | 'servicio';
+  /** false = desactivado. Sigue apareciendo en la auditoria (caso limite 4). */
+  activo?: boolean;
+  ultimoAcceso?: string | null;
+}
+
+/**
+ * Lo que el REPS ya sabe y el afiliado NO tiene que tipear (§3.3).
+ *
+ * No incluye `nombre`: ese se muestra aparte para que el afiliado confirme
+ * que PULSO encontro SU sede y no la de al lado. Ese momento es el producto.
+ */
+export interface PrecargaSede {
+  direccion: string;
+  coord: Coordenada;
+  localidad: string | null;
+  naturaleza: Sede['naturaleza'];
+  complejidad: Complejidad;
+  telefono: string | null;
+  servicios: CodServicio[];
+  camas: CamaSede[];
+}
+
+/** Lo que el catalogo de transporte asistencial sabe de un operador (2.9). */
+export interface PrecargaOperador {
+  prestador: string;
+  direccion: string;
+  telefono: string | null;
+  correo: string | null;
+  /** La marca que despues alimenta `movil.tipo` en 3.6. Nunca se infiere. */
+  tiposMovil: TipoMovil[];
+  /** El prestador tambien declara servicio de urgencias en el mismo corte. */
+  urgencias: boolean;
+}
+
+/** POST /afiliacion/verificar */
+export interface VerificarAfiliacionRequest {
+  tipo: TipoOrganizacion;
+  /** 12 digitos. Obligatorio para `ips`; los operadores no lo tienen. */
+  codigoHabilitacion?: string;
+  nit: string;
+  /** Razon social declarada. Se compara contra la del REPS por similitud. */
+  razonSocial?: string;
+}
+
+/**
+ * La respuesta de la autoverificacion.
+ *
+ * `encontrada: false` NO es un error HTTP: es una respuesta 200 con el
+ * motivo especifico. Un 404 mudo obliga al afiliado a adivinar si escribio
+ * mal el codigo o si su sede no esta en el REPS, y son dos arreglos
+ * distintos.
+ */
+export interface VerificarAfiliacionResponse {
+  encontrada: boolean;
+  /** true = existe pero el nombre no cuadra. Va a revision humana. */
+  requiereRevision?: boolean;
+  /** Que estado le corresponderia si se afiliara ahora mismo. */
+  estadoSugerido: EstadoAfiliacion;
+  verificacion: VerificacionAfiliacion;
+  sede?: Sede;
+  precarga?: PrecargaSede;
+  operador?: PrecargaOperador;
+  /** Similitud 0..1 entre la razon social declarada y la del registro. */
+  similitud?: number;
+  /** Especifico, nunca "no encontrado". Lo lee un humano y actua. */
+  motivo?: string;
+}
+
+/** POST /afiliacion — crea la organizacion y su primer admin. */
+export interface CrearAfiliacionRequest {
+  tipo: TipoOrganizacion;
+  nit: string;
+  razonSocial: string;
+  nombreCorto?: string;
+  /** Codigos REPS de 12 digitos. Vacio para un operador de ambulancias. */
+  sedes?: string[];
+  admin: {
+    nombre: string;
+    correo: string;
+    /** Minimo 12 caracteres (§3.6). Nunca viaja de vuelta ni al log. */
+    clave: string;
+  };
+}
+
+export interface CrearAfiliacionResponse {
+  organizacion: Organizacion;
+  /** El primer `admin_organizacion`. Sin el, nadie puede entrar despues. */
+  admin: Actor;
+}
+
+/** GET /afiliacion/:id/estado */
+export interface EstadoAfiliacionResponse {
+  id: string;
+  estado: EstadoAfiliacion;
+  verificacion: VerificacionAfiliacion;
+  observaciones: string[];
+  actualizadaEn?: string;
+}
+
+/** POST /afiliacion/:id/transicion — solo `admin_plataforma`. */
+export interface TransicionAfiliacionRequest {
+  estado: EstadoAfiliacion;
+  /** Obligatorio al observar o suspender: se le dice QUE falta. */
+  motivo?: string;
+}
+
+/**
+ * Una invitacion — como entra el segundo humano de una organizacion (2.5).
+ *
+ * ⚠️ El token NO esta aqui y nunca lo estara: en base solo vive su hash y en
+ *    la respuesta de creacion viaja una sola vez, dentro de `enlace`.
+ */
+export interface Invitacion {
+  id: string;
+  organizacionId: string;
+  correo: string;
+  rol: Rol;
+  codigoSede?: string | null;
+  expiraEn: string;
+  aceptadaEn: string | null;
+  revocadaEn?: string | null;
+  invitadaPor?: string | null;
+  creadaEn: string;
+}
+
+/** POST /organizaciones/:id/invitaciones */
+export interface CrearInvitacionRequest {
+  correo: string;
+  rol: Rol;
+  codigoSede?: string;
+}
+
+export interface CrearInvitacionResponse {
+  invitacion: Invitacion;
+  /**
+   * El enlace con el token en claro. Se devuelve UNA vez y no se repite:
+   * en base solo queda el hash.
+   *
+   * ⚠️ Sin proveedor de correo configurado, esta es la unica forma de que
+   *    llegue — es la regla de degradacion del repo, y `enviadoPorCorreo`
+   *    dice cual de los dos caminos ocurrio.
+   */
+  enlace: string;
+  enviadoPorCorreo: boolean;
+}
+
+/** POST /invitaciones/:token/aceptar — publico, un solo uso. */
+export interface AceptarInvitacionRequest {
+  nombre: string;
+  /** Minimo 12 caracteres. */
+  clave: string;
+}
+
+export interface AceptarInvitacionResponse {
+  actor: Actor;
+  organizacion: Organizacion;
+}
+
+/** GET /organizaciones/:id/equipo — lo que pinta /panel/equipo. */
+export interface EquipoResponse {
+  actores: Actor[];
+  /** Solo las que siguen vivas: ni aceptadas, ni revocadas, ni vencidas. */
+  invitacionesPendientes: Invitacion[];
+}
+
 export type PulsoCode =
   | 'PULSO_INVALID_INPUT'
   | 'PULSO_LOW_CONFIDENCE'
   | 'PULSO_INCONSISTENT_TRIAGE'
   | 'PULSO_NO_ELIGIBLE_DESTINATION'
   | 'PULSO_ILLEGAL_TRANSITION'
+  /** El token de invitacion vencio (>72 h). Se responde 410 — tarea 2.5. */
+  | 'PULSO_INVITACION_EXPIRADA'
+  /** El token de invitacion ya se uso. Un solo uso, y 410 — tarea 2.5. */
+  | 'PULSO_INVITACION_YA_USADA'
+  /** Demasiadas peticiones desde la misma IP a un endpoint publico. 429. */
+  | 'PULSO_RATE_LIMITED'
   | 'PULSO_INCOMPLETE_EVIDENCE'
   | 'PULSO_IDEMPOTENCY_CONFLICT'
   | 'PULSO_DESTINATION_ALREADY_ACCEPTED'

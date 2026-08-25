@@ -38,6 +38,24 @@ export interface RepoActores {
   porId(id: string): Promise<ActorRegistrado | undefined>;
   /** Reemplaza el hash tras un rehash o un cambio de contraseña. */
   guardarHash(id: string, hash: string): Promise<void>;
+
+  // ── Agregado por la tarea 2.5 (Juan) ────────────────────────────
+  //
+  // ⚠️ ESTE HUNK TOCA UN ARCHIVO DE LA TAREA 1.3 (Sebas). Es aditivo: dos
+  //    lecturas y un `activo = false`. Se agrega aqui y no en un indice
+  //    propio de `invitaciones/` porque el dueño de los actores es este
+  //    repositorio — un segundo mapa de actores en otro modulo es
+  //    exactamente como se desincronizan dos fuentes de verdad.
+
+  /** El equipo de una organizacion. Incluye a los desactivados. */
+  deOrganizacion(organizacionId: string): ActorRegistrado[];
+
+  /**
+   * Activa o desactiva. **Nunca hay un delete**: los eventos de auditoria
+   * guardan `actor_id` y tienen que seguir resolviendo a un nombre (caso
+   * limite 4 de multitenancy §7).
+   */
+  activar(id: string, activo: boolean): Promise<ActorRegistrado | undefined>;
 }
 
 @Injectable()
@@ -70,6 +88,26 @@ export class RepoActoresMemoria implements RepoActores, OnModuleInit {
     const actor = this.porUuid.get(id);
     if (actor) actor.hash = hash;
     return Promise.resolve();
+  }
+
+  // ── Agregado por la tarea 2.5 (Juan). Ver la nota en la interfaz. ──
+
+  /**
+   * Sincrona a diferencia de las otras tres: no hay `Promise` que devolver
+   * porque quien la llama ya esta dentro de un `async` y lo unico que hace
+   * es filtrar un Map. Cuando llegue la version Postgres pasa a asincrona
+   * como las demas — es un solo llamador (`InvitacionesService.equipo`).
+   */
+  deOrganizacion(organizacionId: string): ActorRegistrado[] {
+    return [...this.porUuid.values()].filter(
+      (a) => a.organizacionId === organizacionId,
+    );
+  }
+
+  activar(id: string, activo: boolean): Promise<ActorRegistrado | undefined> {
+    const actor = this.porUuid.get(id);
+    if (actor) actor.activo = activo;
+    return Promise.resolve(actor);
   }
 
   /** Para los tests y para la semilla. No es una ruta: nadie se crea solo. */
