@@ -20,6 +20,8 @@ import { Interval } from '@nestjs/schedule';
 import type { Handshake } from '../contracts/types';
 import { AlmacenService } from '../almacen/almacen.service';
 import { PulsoError } from '../common/pulso-error.filter';
+import type { ActorEvento } from '../eventos/evento.tipos';
+import { RegistroService } from '../eventos/registro.service';
 import { SedesService } from '../sedes/sedes.service';
 import { MatchService } from '../match/match.service';
 import { DispatchService } from '../dispatch/dispatch.service';
@@ -35,6 +37,13 @@ const CADA_MS = 5_000;
  * no aguanta más, y el punto es justamente que el sistema no se queda quieto.
  */
 const ESPERA_HANDSHAKE_S = 60;
+
+/** El vigilante actúa solo: sus eventos se firman como sistema. */
+const ACTOR_VIGILANTE: ActorEvento = {
+  id: 'sys:vigilante',
+  nombre: null,
+  tipo: 'sistema',
+};
 
 /**
  * Cuánto puede pasarse un traslado de su ETA antes de que llamemos.
@@ -55,6 +64,7 @@ export class VigilanteService {
     private readonly dispatch: DispatchService,
     private readonly voz: VozClient,
     private readonly escalamiento: EscalamientoService,
+    private readonly registro: RegistroService,
   ) {}
 
   @Interval(CADA_MS)
@@ -92,6 +102,15 @@ export class VigilanteService {
       this.log.warn(
         `handshake ${h.id} venció tras ${vencido.latenciaS}s — ${h.sedeCodigo} no contestó`,
       );
+
+      await this.registro.registrar({
+        casoId: h.casoId,
+        tipo: 'timeout',
+        actor: ACTOR_VIGILANTE,
+        codigoSede: h.sedeCodigo,
+        claveIdempotencia: h.id,
+        detalle: { handshakeId: h.id, esperaS: vencido.latenciaS },
+      });
 
       // ⚠️ UN SILENCIO CUENTA COMO RECHAZO — y es una decisión discutida.
       //
@@ -152,6 +171,24 @@ export class VigilanteService {
         sedeCodigo: siguiente.sede.codigo,
         canal: 'telegram',
       });
+
+      // ⭐ EL MEJOR MOMENTO DEL PRODUCTO, y no quedaba registrado en ninguna
+      //    parte: "el hospital dijo que no y el sistema siguió solo". Lleva
+      //    las dos sedes —de dónde venía y a dónde fue— porque sin el origen
+      //    la línea de tiempo no cuenta la historia, solo el final.
+      await this.registro.registrar({
+        casoId: caso.id,
+        tipo: 'rerouteado',
+        actor: ACTOR_VIGILANTE,
+        codigoSede: siguiente.sede.codigo,
+        claveIdempotencia: `${vencido.id}:${siguiente.sede.codigo}`,
+        detalle: {
+          desdeSede: vencido.sedeCodigo,
+          haciaSede: siguiente.sede.codigo,
+          motivo: 'timeout',
+          rank: siguiente.rank,
+        },
+      });
     } catch (e) {
       this.log.error(`no pude re-rutear el caso ${caso.id}: ${String(e)}`);
 
@@ -195,6 +232,20 @@ export class VigilanteService {
         `traslado ${h.casoId} lleva ${Math.round(transcurridoMin)} min ` +
           `contra un ETA de ${h.etaMinAlDespachar} min`,
       );
+
+      // Disparaba una llamada y no dejaba nada escrito: el ETA prometido
+      // contra el real es la mitad del reporte del traslado (3.10).
+      await this.registro.registrar({
+        casoId: h.casoId,
+        tipo: 'demora_detectada',
+        actor: ACTOR_VIGILANTE,
+        codigoSede: h.sedeCodigo,
+        claveIdempotencia: h.id,
+        detalle: {
+          etaPrometidoMin: h.etaMinAlDespachar,
+          transcurridoMin: Math.round(transcurridoMin),
+        },
+      });
 
       if (caso?.telefonoReporta && this.voz.configurado()) {
         await this.voz.llamarSeguimiento(

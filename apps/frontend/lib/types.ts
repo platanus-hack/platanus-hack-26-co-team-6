@@ -234,6 +234,36 @@ export interface Candidato {
 export type CanalHandshake = "telegram" | "whatsapp" | "consola";
 export type EstadoHandshake = "enviado" | "aceptado" | "rechazado" | "timeout";
 
+/**
+ * Categoría del motivo de rechazo — tarea 0.6.
+ *
+ * `administrativo` es la que sostiene la tesis: un rebote por falta de cama y
+ * uno por falta de claridad del pagador son problemas distintos, y hasta hoy
+ * se contaban juntos.
+ */
+export type CategoriaMotivoRechazo =
+  | "capacidad"
+  | "recurso_humano"
+  | "tecnico"
+  | "administrativo";
+
+/** Una entrada del catálogo `motivo_rechazo`. El `codigo` es inmutable. */
+export interface MotivoRechazoCatalogo {
+  codigo: string;
+  /** Editable: cambiarla NO parte la serie histórica. */
+  etiqueta: string;
+  categoria: CategoriaMotivoRechazo;
+  version: number;
+  /** false = ya no se ofrece, pero el histórico lo sigue resolviendo. */
+  vigente?: boolean;
+}
+
+/** GET /catalogo/motivos-rechazo */
+export interface CatalogoMotivosResponse {
+  version: number;
+  motivos: MotivoRechazoCatalogo[];
+}
+
 export interface Handshake {
   id: string;
   casoId: string;
@@ -242,6 +272,12 @@ export interface Handshake {
   estado: EstadoHandshake;
   /** "Sin camas UCI", "Hemodinamia en procedimiento"... */
   motivoRechazo: string | null;
+  /**
+   * Código del catálogo `motivo_rechazo` — tarea 0.6. ESTE es el campo que se
+   * agrega y se reporta; `motivoRechazo` es la etiqueta congelada al momento
+   * del rechazo y solo se conserva para no romper lo que ya la pinta.
+   */
+  motivoCodigo?: string | null;
   enviadoEn: string;
   /**
    * Cuándo esta solicitud deja de esperar y pasa a 'timeout'.
@@ -375,6 +411,25 @@ export interface DispatchResponse {
 }
 
 /** POST {API}/handshake/respond */
+/**
+ * Códigos de dominio de core. Espejo de `PulsoCode` — tarea 0.1.
+ *
+ * No son fallos técnicos: son decisiones del motor de ruteo que la pantalla
+ * tiene que saber contar. `lib/api.ts` declara `CodigoError` con el
+ * subconjunto que hoy llega por un 4xx; este es el conjunto completo, porque
+ * `RespondResponse.codigo` viaja dentro de un 200.
+ */
+export type PulsoCode =
+  | "PULSO_INVALID_INPUT"
+  | "PULSO_LOW_CONFIDENCE"
+  | "PULSO_INCONSISTENT_TRIAGE"
+  | "PULSO_NO_ELIGIBLE_DESTINATION"
+  | "PULSO_ILLEGAL_TRANSITION"
+  | "PULSO_INCOMPLETE_EVIDENCE"
+  | "PULSO_IDEMPOTENCY_CONFLICT"
+  | "PULSO_DESTINATION_ALREADY_ACCEPTED"
+  | "PULSO_INTERNAL";
+
 export interface RespondResponse {
   handshake: Handshake;
   /** Congestión de la sede DESPUÉS de procesar la respuesta. */
@@ -386,6 +441,16 @@ export interface RespondResponse {
    * MÍRALO antes de decirle a alguien que el traslado quedó aceptado.
    */
   aplicada: boolean;
+  /**
+   * Por qué NO se aplicó. Solo viaja con `aplicada: false` — tarea 0.1.
+   *
+   * El caso que importa no se ve en `handshake.estado`: el handshake sigue
+   * en 'enviado' y lo que cambió es que OTRA sede ya aceptó este caso
+   * (`PULSO_DESTINATION_ALREADY_ACCEPTED`). Sin este campo la pantalla decía
+   * "esta solicitud ya estaba enviado", que no le dice nada a quien acaba de
+   * tocar el botón.
+   */
+  codigo?: PulsoCode;
 }
 
 /** POST {API}/escalamiento */

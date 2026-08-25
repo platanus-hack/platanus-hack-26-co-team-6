@@ -41,6 +41,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { timingSafeEqual } from 'node:crypto';
+import { MOTIVO_POR_DEFECTO } from '../catalogo/motivos-rechazo';
 import { HandshakeService } from '../handshake/handshake.service';
 import { Publico } from '../auth/publico.decorator';
 
@@ -134,19 +135,27 @@ export class TelegramController {
       const resultado = await this.handshake.procesarRespuesta({
         handshakeId,
         decision,
-        motivo:
-          decision === 'rechazado' ? 'Saturación del servicio' : undefined,
+        // Telegram no ofrece la lista de motivos (son dos botones), así que
+        // manda el código genérico del catálogo — tarea 0.6. Lo que NO se
+        // hace es mandar texto libre: eso es lo que partía la serie.
+        motivoCodigo:
+          decision === 'rechazado' ? MOTIVO_POR_DEFECTO : undefined,
       });
 
       if (!resultado.aplicada) {
-        // La respuesta no cambió nada: o el plazo venció y el caso ya siguió
-        // a otra sede, o alguien ya había tocado el botón. Decirlo importa —
-        // si aquí saliera "ACEPTADO", este jefe de urgencias prepararía una
-        // cama para un paciente que va camino a otro hospital.
+        // La respuesta no cambió nada. Decirlo importa — si aquí saliera
+        // "ACEPTADO", este jefe de urgencias prepararía una cama para un
+        // paciente que va camino a otro hospital.
+        //
+        // Los tres motivos son distintos y hay que distinguirlos. El tercero
+        // NO se veía en `handshake.estado` (sigue en 'enviado') y salía como
+        // "esta solicitud ya estaba enviado", que no le dice nada a nadie.
         texto =
-          resultado.handshake.estado === 'timeout'
-            ? '⏱ Esta solicitud ya venció · PULSO la envió a otra sede'
-            : `Esta solicitud ya estaba ${resultado.handshake.estado}`;
+          resultado.codigo === 'PULSO_DESTINATION_ALREADY_ACCEPTED'
+            ? '🏥 Otra sede ya aceptó este caso · no prepare cama'
+            : resultado.handshake.estado === 'timeout'
+              ? '⏱ Esta solicitud ya venció · PULSO la envió a otra sede'
+              : `Esta solicitud ya estaba ${resultado.handshake.estado}`;
       } else {
         texto =
           decision === 'aceptado'

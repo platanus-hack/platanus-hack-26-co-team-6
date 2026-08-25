@@ -21,6 +21,8 @@ import { EstadoModule } from './estado/estado.module';
 import { TriageModule } from './triage/triage.module';
 import { TelegramModule } from './telegram/telegram.module';
 import { PulsoErrorFilter } from './common/pulso-error.filter';
+import { ComunModule } from './common/comun.module';
+import { CatalogoModule } from './catalogo/catalogo.module';
 import { RoutingModule } from './routing/routing.module';
 import { EscalamientoModule } from './escalamiento/escalamiento.module';
 import { CapacidadesModule } from './capacidades/capacidades.module';
@@ -48,6 +50,11 @@ import { SemillasDemoModule } from './semillas-demo/semillas-demo.module';
     // ruta exige sesión salvo las marcadas con @Publico(). Va primero a
     // propósito — es la puerta, no una feature más.
     AuthModule,
+
+    // Idempotencia por `Idempotency-Key` y límite de tasa por actor y por
+    // organización. Después de AuthModule porque los dos leen el actor que
+    // deja el SesionGuard.
+    ComunModule,
 
     // Estado de sesión (@Global): casos, handshakes e historial de aceptación.
     // De dónde salen caso y handshake. @Global, va antes que AlmacenModule.
@@ -86,6 +93,8 @@ import { SemillasDemoModule } from './semillas-demo/semillas-demo.module';
     EscalamientoModule,
     // En qué modo corre cada integración. Lo lee la barra de /campo.
     CapacidadesModule,
+    // Catálogos versionados (motivos de rechazo). Los lee /hospital.
+    CatalogoModule,
 
     // Catálogos clínicos versionados y versiones de prompt/scoring (5.11).
     // Solo admin_plataforma; todo cambio deja evento. Su guard es propio y

@@ -135,12 +135,30 @@ export class EscalamientoService {
         `${cuerpo.motivo} · ${sedesIntentadas.length} sedes agotadas`,
     );
 
+    // `void` y no `await`: `escalar()` es sincrono y lo llaman el controlador
+    // y el vigilante. Volverlo async por el registro obligaria a cambiar los
+    // dos llamadores para ganar nada; el `catch` de abajo recoge el fallo
+    // para que no quede un rechazo suelto.
+    void this.registro
+      .registrar({
+        casoId: cuerpo.casoId,
+        tipo: 'escalado',
+        actor: { id: 'sys:escalamiento', nombre: null, tipo: 'sistema' },
+        // Idempotente por caso: escalar dos veces devuelve el mismo
+        // escalamiento (arriba) y ahora tampoco escribe dos eventos.
+        claveIdempotencia: escalamiento.id,
+        detalle: {
+          escalamientoId: escalamiento.id,
+          motivo: cuerpo.motivo,
+          sedesIntentadas: sedesIntentadas.length,
+        },
+      })
+      .catch((e) => this.log.error(`no se registró 'escalado': ${String(e)}`));
+
     return { escalamiento };
   }
 
-  atender(
-    cuerpo: AtenderEscalamientoRequest,
-  ): AtenderEscalamientoResponse {
+  atender(cuerpo: AtenderEscalamientoRequest): AtenderEscalamientoResponse {
     const e = this.almacen.obtenerEscalamiento(cuerpo.escalamientoId);
     if (!e) throw new NotFoundException('Escalamiento no encontrado');
 

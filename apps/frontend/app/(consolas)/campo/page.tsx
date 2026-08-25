@@ -141,6 +141,13 @@ export default function Campo() {
   const [meta, setMeta] = useState({ evaluadas: 0, compatibles: 0 });
   const [handshake, setHandshake] = useState<Handshake | null>(null);
   const [error, setError] = useState<string | null>(null);
+  /**
+   * Clave de idempotencia del dictado en curso — tarea 2.11.
+   *
+   * En un `useRef` y no en estado: cambiarla no tiene que repintar nada, y
+   * tiene que sobrevivir al re-render que provoca el propio reintento.
+   */
+  const claveDictado = useRef<string | null>(null);
   const [bloqueo, setBloqueo] = useState<{ codigo: CodigoError; detalle: string } | null>(
     null,
   );
@@ -435,14 +442,27 @@ export default function Campo() {
       const origen = casoReal?.origen ?? geo.origen ?? undefined;
       setUbicacionDemo(!origen);
 
-      const { caso: c, revision } = await api.triage({
-        texto,
-        origen,
-        unidad: unidad ?? undefined,
-        // Aquí hay un humano delante: si la extracción no alcanza, queremos
-        // el caso para revisarlo, no un error. Regla 6 en acción.
-        permitirRevision: true,
-      });
+      // Una clave por intento de dictado — tarea 2.11. Se genera ANTES de la
+      // primera llamada y sobrevive al reintento: si el touch se repite o la
+      // señal se cae a mitad, core reconoce la misma acción y no abre un
+      // segundo caso para el mismo paciente.
+      claveDictado.current ??= api.claveIdempotencia(
+        "triage",
+        unidad?.id ?? "sin-unidad",
+        String(Date.now()),
+      );
+
+      const { caso: c, revision } = await api.triage(
+        {
+          texto,
+          origen,
+          unidad: unidad ?? undefined,
+          // Aquí hay un humano delante: si la extracción no alcanza, queremos
+          // el caso para revisarlo, no un error. Regla 6 en acción.
+          permitirRevision: true,
+        },
+        claveDictado.current,
+      );
       setCaso(c);
       // Lo guarda para que el detalle del inicio pueda enseñarlo después.
       setOrigenes((previo) => new Map(previo).set(c.id, c.origen));
@@ -457,6 +477,8 @@ export default function Campo() {
       setCandidatos(m.candidatos);
       setMeta({ evaluadas: m.evaluadas, compatibles: m.compatibles });
       setFase("ranking");
+      // El caso quedó creado: el siguiente dictado es otra acción.
+      claveDictado.current = null;
     } catch (e) {
       // Un rechazo del motor de ruteo NO es un fallo técnico: tiene su propia
       // pantalla, porque el paramédico puede hacer algo distinto en cada caso.

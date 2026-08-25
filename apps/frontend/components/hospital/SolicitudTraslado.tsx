@@ -42,7 +42,8 @@ export function SolicitudTraslado({
   eligiendoMotivo: boolean;
   onAceptar: () => void;
   onPedirMotivo: () => void;
-  onRechazar: (motivo: string) => void;
+  /** codigo del catálogo + etiqueta que se vio al tocarlo. */
+  onRechazar: (codigo: string, etiqueta: string) => void;
   onCancelarMotivo: () => void;
 }) {
   const { restanteS, fraccion, vencida } = useCuentaAtras(

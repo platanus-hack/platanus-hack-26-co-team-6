@@ -21,7 +21,8 @@ pnpm test:e2e
 | `POST /escalamiento` | El caso pasa a un regulador humano | — |
 | `GET /estado` | Estado vivo para `/hospital` y `/crue` (polling 2 s) | — |
 | `GET /capacidades` | En qué modo está cada integración | — |
-| `POST /auth/login` · `/logout` · `GET /auth/sesion` | Sesión | Sebas |
+| `POST /auth/login` · `/refresh` · `/logout` · `GET /auth/sesion` · `/auth/yo` | Sesión con actor real: token con organización, roles y alcance | Sebas |
+| `GET/POST /auth/llaves` · `POST /auth/llaves/:id/rotar` · `DELETE /auth/llaves/:id` | Llaves de API con alcance para integraciones (`pulso_sk_…`) | Sebas |
 | `GET /health` | Liveness. No toca nada aguas abajo | — |
 | `POST /telegram/webhook` | Webhook de Telegram (`secret_token`) | Sebas |
 
@@ -44,16 +45,39 @@ explicados en [`docs/contrato-api.md`](../../../docs/contrato-api.md).
    `UPDATE`, `DELETE` y `TRUNCATE`. Una corrección es un evento nuevo.
 5. **Sin PII en logs ni en URLs.** `textoCrudo`, `origen`, teléfono y token de paciente nunca salen.
 
+## Autenticación — lo que hay que saber antes de tocarla
+
+**Dos puertas.** Una persona entra con `identificador` + contraseña y su token lleva quién es, de qué
+organización, con qué roles y sobre qué sedes. El **turno compartido** sigue abierto mientras
+`PULSO_AUTH_LEGACY` no diga `false` — viene encendido a propósito, porque la tabla `actor` llega con
+[1.1](../../../docs/tareas/zaid.md#11--migración-0003_identidad) y apagarlo antes deja al equipo fuera.
+Quien entra por ahí queda marcado `legado: true`: la auditoría no lo confunde con una persona.
+
+**Dos tokens.** Access de 15 min (cookie `pulso_sesion`, `path=/`) y refresh de 30 días (cookie
+`pulso_refresco`, `path=/auth/refresh` — **no viaja en cada petición**). El refresh **rota en cada uso**
+y un `jti` ya gastado que reaparece revoca la cadena completa: es lo que convierte un token robado en un
+incidente detectable. El front renueva solo, con una única renovación en vuelo — si cada petición del
+polling pidiera la suya, la rotación las leería como reuso y cerraría la sesión sola.
+
+**Dos guards, en este orden.** `SesionGuard` (global, niega por defecto, resuelve el actor) y `RolGuard`
+(`@Rol()`, `@AlcanceSede()`). Una sede fuera del alcance es `403` **más evento `intento_cruzado`**: un
+403 mudo pierde la señal más interesante del sistema.
+
+⚠️ **Lo que todavía vive en RAM:** las sesiones y los actores (`PULSO_ACTORES`). Se pierden al
+reiniciar — el lado seguro del fallo, nunca al revés. Las contraseñas se hashean con **Argon2id si el
+módulo está instalado, y si no con scrypt** (`N=2^15,r=8,p=3`); el arranque dice cuál está activo y cada
+login migra su propio hash el día que se instale `argon2`.
+
 ## Estado actual y hacia dónde va
 
 | Pieza | Hoy | Destino | Tarea |
 |---|---|---|---|
 | `AlmacenService` | **`Map` en RAM** — se pierde al reiniciar | Postgres | [1.2](../../../docs/tareas/neid.md#12--persistir-caso-y-handshake) |
-| Sesión | Contraseña de turno compartida | Actor + organización + roles | [1.3](../../../docs/tareas/sebas.md#13--sesión-con-actor-real) |
+| Sesión | ✅ Actor + organización + roles + alcance. El turno compartido sigue abierto con `PULSO_AUTH_LEGACY` | Tabla `actor` en Postgres y 2FA | [1.3](../../../docs/tareas/sebas.md#13--sesión-con-actor-real) ✅ · [1.1](../../../docs/tareas/zaid.md#11--migración-0003_identidad) |
 | Aislamiento | No existe | RLS + alcance + guard | [1.5](../../../docs/tareas/zaid.md#15--rol-no-owner--force-rls--encontextode), [1.6](../../../docs/tareas/neid.md#16--policies-de-rls--caso_acceso) |
 | `VigilanteService` | `@Interval` en el proceso web | Worker con lock distribuido | [3.8](../../../docs/tareas/neid.md#38--vigilante-a-worker-con-lock-distribuido) |
 | Eventos | 3 de 22 se guardan | `evento_caso` append-only | [3.1](../../../docs/tareas/neid.md#31--evento_caso--registroservice), [3.2](../../../docs/tareas/sebas.md#32--cablear-los-22-eventos) |
-| Aceptación única | Guard escrito, **nadie lo llama** | Conectado | [0.1](../../../docs/tareas/sebas.md#01--conectar-el-guard-de-aceptación-única) |
+| Aceptación única | ✅ Conectado en `HandshakeService` | — | [0.1](../../../docs/tareas/sebas.md#01--conectar-el-guard-de-aceptación-única) ✅ |
 
 Plan completo en [`docs/`](../../../docs/README.md).
 
@@ -62,7 +86,7 @@ Plan completo en [`docs/`](../../../docs/README.md).
 ```
 src/
 ├── contracts/      types.ts (LEY) + schemas zod
-├── auth/           sesión + guard global
+├── auth/           sesión con actor, roles y alcance + los dos guards globales
 ├── triage/         dictado → caso (respaldo TS del prompt de ai-core)
 ├── match/          orquesta sedes + ETA + scoring
 ├── sedes/          catálogo REPS (Supabase o semillas)

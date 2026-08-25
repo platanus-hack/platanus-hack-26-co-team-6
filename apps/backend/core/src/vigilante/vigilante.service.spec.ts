@@ -16,6 +16,8 @@ import { MatchService } from '../match/match.service';
 import { DispatchService } from '../dispatch/dispatch.service';
 import { VozClient } from '../voz/voz.client';
 import { EscalamientoService } from '../escalamiento/escalamiento.service';
+import { MemoriaAlmacenEventos } from '../eventos/almacen-eventos';
+import { RegistroService } from '../eventos/registro.service';
 import { VigilanteService } from './vigilante.service';
 
 const AHORA = Date.parse('2026-08-22T20:00:00.000Z');
@@ -70,8 +72,12 @@ describe('VigilanteService', () => {
   };
   const match = { rankear: jest.fn() };
   const dispatch = { despachar: jest.fn().mockResolvedValue({}) };
-  const sedes = { porCodigo: jest.fn().mockResolvedValue({ nombre: 'Clínica X' }) };
-  const escalamiento = { escalar: jest.fn().mockReturnValue({ escalamiento: {} }) };
+  const sedes = {
+    porCodigo: jest.fn().mockResolvedValue({ nombre: 'Clínica X' }),
+  };
+  const escalamiento = {
+    escalar: jest.fn().mockReturnValue({ escalamiento: {} }),
+  };
 
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -87,6 +93,14 @@ describe('VigilanteService', () => {
         { provide: DispatchService, useValue: dispatch },
         { provide: VozClient, useValue: voz },
         { provide: EscalamientoService, useValue: escalamiento },
+        // Tarea 3.2: el vigilante ahora escribe timeout, rerouteado y
+        // demora_detectada. Se le da el registro de verdad contra memoria en
+        // vez de un doble: asi el test tambien cubre que lo que escribe es
+        // un evento valido.
+        {
+          provide: RegistroService,
+          useValue: new RegistroService(new MemoriaAlmacenEventos()),
+        },
       ],
     }).compile();
 

@@ -74,23 +74,39 @@ export default function Hospital() {
   async function responder(
     handshakeId: string,
     decision: "aceptado" | "rechazado",
+    // Tarea 0.6: viajan los dos. `motivoCodigo` es lo que se agrega después;
+    // `motivo` es la etiqueta que esta pantalla mostró, congelada al momento
+    // del rechazo para que el historial no cambie si mañana se reescribe.
+    motivoCodigo?: string,
     motivo?: string,
   ) {
     setEligiendoMotivo(null);
     try {
-      const r = await api.responder({ handshakeId, decision, motivo });
+      const r = await api.responder({
+        handshakeId,
+        decision,
+        motivo,
+        motivoCodigo,
+      });
 
       // La respuesta pudo no aplicarse: la solicitud vencía a los 45s y el
       // caso ya siguió a otra sede. Ahora el cronómetro de la tarjeta lo
       // anticipa, pero el aviso se queda: entre el último tick y el toque
       // caben unos milisegundos, y quien lo tocó tiene que saber que no
       // preparara una cama para un paciente que no viene.
+      //
+      // Tarea 0.1: hay un tercer motivo que no se ve en el estado del
+      // handshake —sigue en "enviado"— y es el más importante de contar:
+      // otra sede ya aceptó este caso. Decir "ya estaba enviado" ahí es peor
+      // que no decir nada, porque no explica qué hacer.
       setAviso(
         r.aplicada
           ? null
-          : r.handshake.estado === "timeout"
-            ? "Esta solicitud ya había vencido. PULSO la envió a otra sede."
-            : `Esta solicitud ya estaba ${r.handshake.estado}.`,
+          : r.codigo === "PULSO_DESTINATION_ALREADY_ACCEPTED"
+            ? "Otra sede ya aceptó este traslado. No prepare cama para este paciente."
+            : r.handshake.estado === "timeout"
+              ? "Esta solicitud ya había vencido. PULSO la envió a otra sede."
+              : `Esta solicitud ya estaba ${r.handshake.estado}.`,
       );
     } catch {
       setAviso("No se pudo enviar la respuesta. Revisa la conexión con core.");
@@ -155,7 +171,9 @@ export default function Hospital() {
               eligiendoMotivo={eligiendoMotivo === h.id}
               onAceptar={() => void responder(h.id, "aceptado")}
               onPedirMotivo={() => setEligiendoMotivo(h.id)}
-              onRechazar={(motivo) => void responder(h.id, "rechazado", motivo)}
+              onRechazar={(codigo, etiqueta) =>
+                void responder(h.id, "rechazado", codigo, etiqueta)
+              }
               onCancelarMotivo={() => setEligiendoMotivo(null)}
             />
           );

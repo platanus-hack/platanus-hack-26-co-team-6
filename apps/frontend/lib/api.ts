@@ -16,6 +16,7 @@
 import type {
   AtenderEscalamientoResponse,
   Capacidades,
+  CatalogoMotivosResponse,
   CanalHandshake,
   Caso,
   Coordenada,
@@ -184,6 +185,19 @@ const AUTH_SIN_RENOVACION = new Set([
 ]);
 
 /**
+ * Clave de idempotencia — tarea 2.11.
+ *
+ * La clave identifica la acción, no la petición: el mismo despacho
+ * reintentado tres veces lleva la misma clave las tres, y core ejecuta
+ * **una**. Por eso se construye a partir de lo que hace única a la acción
+ * (el caso, la sede) y NO con un aleatorio por intento: un `randomUUID()`
+ * en cada reintento es exactamente el bug que esto viene a cerrar.
+ */
+export function claveIdempotencia(...partes: string[]): string {
+  return partes.join(":");
+}
+
+/**
  * La única puerta de salida hacia core.
  *
  * Se exporta —además de usarse aquí abajo— porque este archivo ya es el más
@@ -199,7 +213,7 @@ const AUTH_SIN_RENOVACION = new Set([
  */
 export async function pedir<T>(
   ruta: string,
-  init?: RequestInit,
+  init?: RequestInit & { clave?: string },
   /** Interno: marca que esta llamada YA es el reintento tras renovar. */
   reintento = false,
 ): Promise<T> {
@@ -208,7 +222,13 @@ export async function pedir<T>(
     // Sin esto el navegador no manda la cookie de sesión a otro puerto y core
     // responde 401 a todo. Es el único cambio que la autenticación exige aquí.
     credentials: "include",
-    headers: { "Content-Type": "application/json", ...init?.headers },
+    headers: {
+      "Content-Type": "application/json",
+      // Tarea 2.11: la clave identifica la ACCIÓN. Reintentar con la misma
+      // clave ejecuta una sola vez en core.
+      ...(init?.clave ? { "Idempotency-Key": init.clave } : {}),
+      ...init?.headers,
+    },
   });
 
   // Un 401 en las rutas de credenciales no se renueva ni saca a nadie: cae al
@@ -256,21 +276,33 @@ export async function pedir<T>(
 
 // ─────────────────────────────────────────────────────────────────
 
-export function triage(cuerpo: {
-  texto: string;
-  origen?: Coordenada;
-  tipoMovil?: TipoMovil;
-  unidad?: Unidad;
-  /**
-   * Con esto, una extracción floja vuelve como caso + `revision.requerida`
-   * en vez de 4xx: la consola tiene a un humano delante que puede corregir
-   * y confirmar. Sin la bandera, el error de siempre.
-   */
-  permitirRevision?: boolean;
-}): Promise<TriageResponse> {
+/**
+ * Dictado → caso.
+ *
+ * La clave la pone QUIEN LLAMA y no se deriva del texto: dos pacientes con el
+ * mismo cuadro en la misma esquina son dos emergencias, y colisionarlas haría
+ * desaparecer la segunda en silencio. `/campo` usa una clave por intento de
+ * dictado, que es la unidad real de "acción" aquí.
+ */
+export function triage(
+  cuerpo: {
+    texto: string;
+    origen?: Coordenada;
+    tipoMovil?: TipoMovil;
+    unidad?: Unidad;
+    /**
+     * Con esto, una extracción floja vuelve como caso + `revision.requerida`
+     * en vez de 4xx: la consola tiene a un humano delante que puede corregir
+     * y confirmar. Sin la bandera, el error de siempre.
+     */
+    permitirRevision?: boolean;
+  },
+  clave?: string,
+): Promise<TriageResponse> {
   return pedir<TriageResponse>("/triage", {
     method: "POST",
     body: JSON.stringify(cuerpo),
+    clave,
   });
 }
 
@@ -285,6 +317,13 @@ export function match(cuerpo: {
   });
 }
 
+/**
+ * Dispara el handshake.
+ *
+ * Lleva clave de idempotencia derivada de caso + sede: es la mutación donde
+ * un duplicado se nota más — dos handshakes al mismo hospital por el mismo
+ * paciente, y un jefe de urgencias viendo dos tarjetas idénticas.
+ */
 export function dispatch(cuerpo: {
   casoId: string;
   sedeCodigo: string;
@@ -293,17 +332,79 @@ export function dispatch(cuerpo: {
   return pedir<DispatchResponse>("/dispatch", {
     method: "POST",
     body: JSON.stringify(cuerpo),
+    clave: claveIdempotencia("dispatch", cuerpo.casoId, cuerpo.sedeCodigo),
   });
 }
 
 export function responder(cuerpo: {
   handshakeId: string;
   decision: "aceptado" | "rechazado";
+  /** Etiqueta que vio quien respondió. Se guarda congelada. */
   motivo?: string;
+  /** Código del catálogo — tarea 0.6. Es LO QUE SE AGREGA después. */
+  motivoCodigo?: string;
 }): Promise<RespondResponse> {
   return pedir<RespondResponse>("/handshake/respond", {
     method: "POST",
     body: JSON.stringify(cuerpo),
+    // handshake + decisión: el doble toque del jefe de urgencias es un solo
+    // efecto, igual que en el guard de aceptación única (0.1).
+    clave: claveIdempotencia(
+      "respond",
+      cuerpo.handshakeId,
+      cuerpo.decision,
+    ),
+  });
+}
+
+/**
+ * Catálogo versionado de motivos de rechazo — tarea 0.6.
+ *
+ * La consola NO lleva los motivos escritos adentro. Los pide, guarda el
+ * `codigo` y pinta la `etiqueta`: así, corregir una palabra es un deploy de
+ * core y no parte la serie histórica de aceptación, que es el activo.
+ */
+export function catalogoMotivosRechazo(): Promise<CatalogoMotivosResponse> {
+  return pedir<CatalogoMotivosResponse>("/catalogo/motivos-rechazo");
+}
+
+/**
+ * Línea de tiempo de un caso — tarea 3.1.
+ *
+ * `evento_caso` es append-only: nada de lo que sale de aquí se puede editar.
+ * Una corrección es un evento nuevo que apunta al anterior.
+ */
+export function eventosCaso(casoId: string): Promise<{ eventos: EventoCaso[] }> {
+  return pedir(`/casos/${encodeURIComponent(casoId)}/eventos`, {
+    cache: "no-store",
+  });
+}
+
+/**
+ * Registra un evento que solo un humano sabe — tarea 3.2.
+ *
+ * Core acepta una lista corta de tipos por esta puerta (`override_crue`,
+ * llegadas, entrega, demora reportada, cierre). Todo lo demás lo escribe el
+ * servidor desde su transición real: un `POST` abierto a los 22 tipos dejaría
+ * que una consola escribiera "aceptado" sin que nadie haya aceptado nada.
+ *
+ * **La firma es el actor de la sesión**, no lo que diga el cuerpo.
+ */
+export function registrarEventoCaso(
+  casoId: string,
+  cuerpo: {
+    tipo: string;
+    detalle?: Record<string, unknown>;
+    codigoSede?: string;
+    movilId?: string;
+    claveIdempotencia?: string;
+    corrigeA?: number;
+  },
+): Promise<{ evento: EventoCaso | null }> {
+  return pedir(`/casos/${encodeURIComponent(casoId)}/eventos`, {
+    method: "POST",
+    body: JSON.stringify(cuerpo),
+    clave: cuerpo.claveIdempotencia,
   });
 }
 
@@ -346,6 +447,7 @@ export function escalar(cuerpo: {
   return pedir<EscalarResponse>("/escalamiento", {
     method: "POST",
     body: JSON.stringify(cuerpo),
+    clave: claveIdempotencia("escalar", cuerpo.casoId, cuerpo.motivo),
   });
 }
 
@@ -445,6 +547,27 @@ export async function vivo(): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+/**
+ * Una fila de `evento_caso`. Espejo de `core/src/eventos/tipos.ts` — tarea 3.1.
+ *
+ * No vive en `lib/types.ts` por lo mismo que `ActorSesion`: `contracts/types.ts`
+ * recibe los tipos de evento en el PR de tipos de la ola 3, y ese es el sitio
+ * correcto. Aquí está lo mínimo que la UI necesita para pintar una línea de
+ * tiempo.
+ */
+export interface EventoCaso {
+  id: number;
+  casoId: string;
+  tipo: string;
+  actorId: string | null;
+  movilId: string | null;
+  codigoSede: string | null;
+  detalle: Record<string, unknown>;
+  ocurridoEn: string;
+  /** Id del evento que este corrige. El original NO se borra. */
+  corrigeA: number | null;
 }
 
 // ── Sesión ───────────────────────────────────────────────────────

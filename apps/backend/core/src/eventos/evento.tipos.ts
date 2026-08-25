@@ -55,12 +55,17 @@ export const TIPOS_EVENTO = [
   'entrega',
   'cerrado',
   'demora_reportada',
+  /** El vigilante detectó la demora solo; distinto de que alguien la reporte. */
+  'demora_detectada',
   'prearribo_enviado',
   'preparacion_confirmada',
   'derechos_verificados',
   'tramite_generado',
+  'tramite_firmado',
   'contrarreferencia',
   'lectura_auditoria',
+  /** Alguien intentó actuar sobre una sede fuera de su alcance. */
+  'intento_cruzado',
 ] as const;
 
 export type TipoEvento = (typeof TIPOS_EVENTO)[number];

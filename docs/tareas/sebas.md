@@ -4,7 +4,7 @@
 > **En este plan rota:** también le toca el core de identidad, Testcontainers, el shell de `/panel` y
 > los runbooks. **Es dueño de tipos en la ola 4.**
 
-**Ola 0** [0.1](#01--conectar-el-guard-de-aceptación-única) · [0.6](#06--motivos-de-rechazo-como-enum-versionado) — **Ola 1** [1.3](#13--sesión-con-actor-real) · [1.7](#17--testcontainers--aislamiento-de-inquilino) — **Ola 2** [2.3](#23--vista-afiliacionverificar) · [2.7](#27--shell-de-panel) · [2.11](#211--rate-limit--idempotency-key) — **Ola 3** [3.2](#32--cablear-los-22-eventos) · [3.5](#35--sede_canal--envío-dirigido) · [3.10](#310--reporte-del-traslado) — **Ola 4** [4.1](#41--tabla-recepcion--protocolos) · [4.5](#45--entrega-por-qr) · [4.10](#410--vista-de-firma-de-trámites) — **Ola 5** [5.2](#52--vista-panelwebhooks) · [5.5](#55--alertas-y-runbooks) · [5.9](#59--panelapi--llaves-con-alcance)
+**Ola 0** ✅ [0.1](#01--conectar-el-guard-de-aceptación-única) · ✅ [0.6](#06--motivos-de-rechazo-como-enum-versionado) — **Ola 1** ✅ [1.3](#13--sesión-con-actor-real) · [1.7](#17--testcontainers--aislamiento-de-inquilino) — **Ola 2** [2.3](#23--vista-afiliacionverificar) · [2.7](#27--shell-de-panel) · ✅ [2.11](#211--rate-limit--idempotency-key) — **Ola 3** 🟡 [3.2](#32--cablear-los-22-eventos) · [3.5](#35--sede_canal--envío-dirigido) · [3.10](#310--reporte-del-traslado) — **Ola 4** [4.1](#41--tabla-recepcion--protocolos) · [4.5](#45--entrega-por-qr) · [4.10](#410--vista-de-firma-de-trámites) — **Ola 5** [5.2](#52--vista-panelwebhooks) · [5.5](#55--alertas-y-runbooks) · 🟡 [5.9](#59--panelapi--llaves-con-alcance)
 
 ---
 
@@ -28,10 +28,10 @@ Lo que hoy tapa el hueco es que el fan-out es secuencial. **El día que alguien 
 5. Test de concurrencia: dos aceptaciones simultáneas sobre el mismo caso.
 
 **Hecho cuando.**
-- [ ] Dos sedes aceptan el mismo caso → la segunda recibe `aplicada: false`
-- [ ] El doble toque sigue siendo idempotente
-- [ ] El webhook de Telegram no dice "aceptado" cuando no se aplicó
-- [ ] Test de concurrencia real, no secuencial
+- [x] Dos sedes aceptan el mismo caso → la segunda recibe `aplicada: false`
+- [x] El doble toque sigue siendo idempotente
+- [x] El webhook de Telegram no dice "aceptado" cuando no se aplicó — dice "otra sede ya aceptó este caso · no prepare cama"
+- [x] Test de concurrencia real, no secuencial — dos `procesarRespuesta` en vuelo a la vez, con frontera asíncrona en el store: las dos pasan el chequeo de estado antes de que ninguna reserve. La concurrencia entre PROCESOS (dos clientes de Postgres) ya la cubre `postgres-routing.store.spec.ts`, que necesita `PULSO_TEST_DATABASE_URL` — se enciende en 1.7
 
 **Trampas.** No dupliques la lógica en `HandshakeService`. **Llama al guard que ya existe.** Dos mecanismos resolviendo la misma carrera es peor que cualquiera de los dos por separado — el propio `AlmacenService` documenta que ya pasó una vez con el vencimiento de handshakes.
 
@@ -55,10 +55,10 @@ Lo que hoy tapa el hueco es que el fan-out es secuencial. **El día que alguien 
 5. **Conservar la regla de producto que ya está bien puesta**: en triage I no se ofrece rechazo, escala directo al CRUE. Ley 1751/2015.
 
 **Hecho cuando.**
-- [ ] El handshake guarda código, no texto
-- [ ] Cambiar una etiqueta no rompe el histórico
-- [ ] La categoría administrativa existe y se puede reportar aparte
-- [ ] Triage I sigue sin botón de rechazo
+- [x] El handshake guarda código, no texto — `motivoCodigo`; el texto se conserva como la etiqueta congelada que se vio
+- [x] Cambiar una etiqueta no rompe el histórico
+- [x] La categoría administrativa existe y se puede reportar aparte — `SIN_CLARIDAD_PAGADOR`, con índice parcial en `handshake.motivo_codigo`
+- [x] Triage I sigue sin botón de rechazo
 
 **Trampas.** El quinto motivo es delicado en el pitch: es admitir que hay rechazos administrativos. **Es exactamente lo que hay que decir** — es la evidencia de la tesis, y medirlo es lo que permite atacarlo.
 
@@ -81,13 +81,19 @@ Lo que hoy tapa el hueco es que el fan-out es secuencial. **El día que alguien 
 8. 2FA (TOTP) para `regulador_crue`, `admin_plataforma` y `auditor`.
 
 **Hecho cuando.**
-- [ ] Un token lleva actor, organización, roles y alcance
-- [ ] Refresh reusado → cadena revocada + evento
-- [ ] Revocar un rol invalida la sesión al instante
-- [ ] Con `PULSO_AUTH_LEGACY=true` el demo sigue entrando como siempre
-- [ ] La cookie sigue siendo `HttpOnly` y el front nunca lee el token
+- [x] Un token lleva actor, organización, roles y alcance
+- [x] Refresh reusado → cadena revocada + evento (`refresh_reusado` en `RegistroSesiones`)
+- [x] Revocar un rol invalida la sesión al instante — `revocarDeActor()`; la lista de revocadas es un `Map`, no Redis, hasta 1.2
+- [x] Con `PULSO_AUTH_LEGACY=true` el demo sigue entrando como siempre — y viene encendido por defecto mientras no exista la tabla `actor`
+- [x] La cookie sigue siendo `HttpOnly` y el front nunca lee el token — ahora son dos, y la de refresco va con `path=/auth/refresh`
 
 **Trampas.** Es la tarea de la que dependen 12 más. **Mergéala pronto aunque esté incompleta en lo opcional** (2FA puede ir después). Lo que no puede faltar es la estructura del token.
+
+> **Lo que quedó fuera, y por qué.**
+> - **2FA (TOTP).** Es lo opcional de la tarea y no bloquea a nadie. Va aparte; la lista de roles que lo exigirán ya está declarada en `auth/roles.ts`.
+> - **Tabla `sesion` y actores en Postgres.** Dependen de `1.1`. Hoy viven en `Map` detrás de una interfaz: cuando 1.1 aterrice se agrega `RepoActoresPostgres` y ninguna ruta cambia.
+> - **Argon2id.** El código lo usa **si el módulo está**; sin él, scrypt (`N=2^15,r=8,p=3`), que también es memory-hard. No se agregó la dependencia porque el lockfile es de pnpm y no se puede regenerar desde aquí: `pnpm --filter core add argon2` y cada login migra su hash solo.
+> - **`@Rol()` sobre las rutas existentes.** La maquinaria está y probada; decorar cada ruta es de quien la conoce, en su tarea. Aplicarlas hoy sobre rutas que abría una contraseña compartida rompería el demo sin que nadie lo pida.
 
 ---
 
@@ -189,10 +195,10 @@ Lo que hoy tapa el hueco es que el fan-out es secuencial. **El día que alguien 
 5. El cliente de `/campo` genera la clave por acción y la reusa al reintentar (engancha con la cola offline).
 
 **Hecho cuando.**
-- [ ] La misma mutación con la misma clave dos veces → un solo efecto
-- [ ] La misma clave con cuerpo distinto → 409
-- [ ] El rate limit devuelve `Retry-After` y no rompe la UI
-- [ ] `/campo` reintenta sin duplicar
+- [x] La misma mutación con la misma clave dos veces → un solo efecto (y la respuesta lleva `Idempotency-Replayed: true`)
+- [x] La misma clave con cuerpo distinto → 409 `PULSO_IDEMPOTENCY_CONFLICT`
+- [x] El rate limit devuelve `Retry-After` y `retryable: true`; `/triage` nunca hace esperar más de 5 s
+- [x] `/campo` reintenta sin duplicar — la clave se deriva de la acción (caso+sede), no de un aleatorio por intento
 
 **Trampas.** No apliques rate limit a `POST /triage` con la misma dureza que al resto. **Un paramédico con un paciente crítico reintentando no es un abusador**, y bloquearlo es el peor fallo posible del sistema.
 
@@ -214,12 +220,41 @@ Lo que hoy tapa el hueco es que el fan-out es secuencial. **El día que alguien 
 5. `evento_caso` en la misma transacción que el cambio de estado.
 
 **Hecho cuando.**
-- [ ] Los 22 eventos se escriben desde su punto real
-- [ ] `rerouteado` aparece en la línea de tiempo con la sede origen y destino
-- [ ] "Ya llegué" por WhatsApp produce un evento, no un log
-- [ ] Ninguna transición escribe estado sin evento
+- [~] Los 22 eventos se escriben desde su punto real — **12 sí**; 6 tienen la puerta abierta y esperan a `1.8` (token de servicio de `voz`); 6 necesitan funcionalidad que no existe (`4.1`, `4.6`). Tabla abajo
+- [x] `rerouteado` aparece en la línea de tiempo con la sede origen y destino
+- [ ] "Ya llegué" por WhatsApp produce un evento, no un log — **bloqueado**: `POST /casos/:id/eventos` ya lo acepta, pero `voz` no puede autenticarse contra core hasta `1.8` (Juan)
+- [x] Ninguna transición escribe estado sin evento — de las que existen hoy en core. El test que lo vuelve exigible es `5.12`
 
 **Trampas.** Toca cuatro módulos a la vez. **Hazlo en un PR por módulo**, no en uno grande: son los archivos más calientes del repo y tres personas más los van a tocar en esta ola.
+
+> ### Estado real del cableado — [PR #22](https://github.com/platanus-hack/platanus-hack-26-co-team-6/pull/22), sobre la [#20](https://github.com/platanus-hack/platanus-hack-26-co-team-6/pull/20) (la `3.1` de Neid, hecha desde este carril)
+>
+> **Un solo PR y no cuatro**, a propósito: nadie más tenía trabajo en vuelo sobre
+> esos archivos en el momento de hacerlo (Neid iba por `voz` y `ai-core`, Zaid y
+> Juan no habían abierto rama). Con la ola vacía, cuatro PRs encadenados sobre el
+> mismo `RegistroService` era ceremonia sin revisor.
+>
+> | Evento | Estado | Dónde |
+> |---|---|---|
+> | `caso_creado` | ✅ | `triage.controller.ts` |
+> | `revision_humana` | ✅ | `triage.controller.ts` — la compuerta clínica por fin deja rastro |
+> | `match_calculado` | ✅ | `match.controller.ts`, con la huella de la evidencia |
+> | `despachado` | ✅ | `dispatch.service.ts`, idempotente por (caso, sede) |
+> | `aceptado` · `rechazado` | ✅ | `handshake.service.ts`, con `motivoCodigo` de `0.6` |
+> | `timeout` | ✅ | `vigilante.service.ts` |
+> | `rerouteado` | ✅ | `vigilante.service.ts`, con sede origen **y** destino |
+> | `demora_detectada` | ✅ | `vigilante.service.ts` |
+> | `escalado` | ✅ | `escalamiento.service.ts` |
+> | `intento_cruzado` | ✅ | `rol.guard.ts` — en el registro de seguridad **y** en la línea del caso |
+> | `override_crue` | ✅ | `POST /casos/:id/eventos` + `crue/bitacora.ts`. **Salió de `localStorage`** |
+> | `llegada_escena` · `salida_escena` · `llegada_puerta` · `entrega` · `demora_reportada` · `cerrado` | 🚪 | La puerta existe y valida; falta que `voz` la llame — necesita el token de servicio de **`1.8` (Juan)** |
+> | `prearribo_enviado` · `preparacion_confirmada` | ❌ | Necesitan la recepción de **`4.1`** (mía, bloqueada por `3.1`) |
+> | `derechos_verificados` · `tramite_generado` · `tramite_firmado` · `contrarreferencia` | ❌ | Necesitan la tabla `tramite` de **`4.6` (Zaid)** |
+>
+> **Lo que un cliente puede escribir es una lista corta y cerrada.** Un `POST`
+> abierto a los 22 tipos dejaría que una consola escribiera `aceptado` sin que
+> nadie haya aceptado nada. Y el evento se firma con **el actor de la sesión**,
+> nunca con lo que venga en el cuerpo.
 
 ---
 
@@ -411,9 +446,19 @@ Lo que hoy tapa el hueco es que el fan-out es secuencial. **El día que alguien 
 6. Rate limit por llave, independiente del de sesión.
 
 **Hecho cuando.**
-- [ ] Una llave solo hace lo de su alcance (probar el 403)
-- [ ] La rotación no tumba al integrador
-- [ ] El uso queda registrado
-- [ ] La llave no se puede volver a ver
+- [x] Una llave solo hace lo de su alcance (403 probado end-to-end) — y **una ruta sin `@Alcance()` no la admite ninguna llave**
+- [x] La rotación no tumba al integrador — 24 h de gracia, alcances heredados
+- [x] El uso queda registrado — conteo, última vez e IP; los intentos con una llave revocada también
+- [x] La llave no se puede volver a ver — se guarda solo el sha256 y los últimos 4 para la tabla
 
 **Trampas.** El prefijo `pulso_sk_` no es cosmético: permite que escáneres de secretos la detecten si alguien la commitea. Es una cortesía al integrador que cuesta cero.
+
+> **Estado: backend hecho, vista pendiente.** `core/src/auth/llaves.ts` +
+> `POST/GET/DELETE /auth/llaves` funcionan y están probados; `GET /estado` ya
+> acepta llaves con `caso:leer`. La vista `/panel/api` **cuelga del shell de
+> `/panel` (2.7)**, que a su vez espera `1.4`. Mientras tanto se administra con
+> `curl`, que es como lo va a usar el integrador de un HIS de todas formas.
+>
+> Dos cosas que hay que cerrar antes de repartir una llave fuera del equipo:
+> **`/estado` todavía no filtra por organización** (eso es 1.5/1.6), y las
+> llaves viven en memoria hasta que exista su tabla (1.2).
