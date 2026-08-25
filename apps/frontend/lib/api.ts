@@ -261,6 +261,12 @@ export function triage(cuerpo: {
   origen?: Coordenada;
   tipoMovil?: TipoMovil;
   unidad?: Unidad;
+  /**
+   * Con esto, una extracción floja vuelve como caso + `revision.requerida`
+   * en vez de 4xx: la consola tiene a un humano delante que puede corregir
+   * y confirmar. Sin la bandera, el error de siempre.
+   */
+  permitirRevision?: boolean;
 }): Promise<TriageResponse> {
   return pedir<TriageResponse>("/triage", {
     method: "POST",
@@ -298,6 +304,22 @@ export function responder(cuerpo: {
   return pedir<RespondResponse>("/handshake/respond", {
     method: "POST",
     body: JSON.stringify(cuerpo),
+  });
+}
+
+/**
+ * Dónde se recoge al paciente de UN caso.
+ *
+ * `origen` no viaja en `/estado` (lista blanca de `despojar()`); este es el
+ * endpoint por caso con su propia autorización que el contrato dejó previsto.
+ * Quien lo llama nombra un caso concreto y pasa por el guard — no es re-abrir
+ * el listado.
+ */
+export function origenCaso(
+  casoId: string,
+): Promise<{ casoId: string; origen: Coordenada }> {
+  return pedir(`/casos/${encodeURIComponent(casoId)}/origen`, {
+    cache: "no-store",
   });
 }
 

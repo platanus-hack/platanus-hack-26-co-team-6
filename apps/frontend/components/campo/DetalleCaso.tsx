@@ -13,19 +13,21 @@
  * campos que no salen del servidor. La lista blanca de `estado.service.ts`
  * está escrita campo por campo justo para que nadie los añada sin decidirlo.
  *
- * Así que el mapa aparece cuando **este dispositivo** dictó el caso — las
- * coordenadas ya estaban aquí, llegaron en la respuesta de `POST /triage` y no
- * se guardan en ningún sitio: viven en memoria y mueren al recargar. Para los
- * demás casos (los que entraron por WhatsApp, los de otra tripulación, los de
- * antes de recargar) se dice que no se puede y por qué, en vez de pintar un
- * mapa de Bogotá centrado en cualquier parte.
+ * El origen llega por dos caminos, y el orden importa:
  *
- * Lo que falta para cerrarlo es un endpoint por caso con su propia
- * autorización — `GET /casos/:id` —, que es exactamente lo que ya dejó escrito
- * el comentario de `CasoPublico` en `contracts/types.ts`. Es trabajo de core.
+ *   1. Este dispositivo dictó el caso → ya estaba aquí, vino en `POST /triage`.
+ *   2. Cualquier otro caso → la página se lo pide a `GET /casos/:id/origen`,
+ *      el endpoint por caso con autorización propia que el comentario de
+ *      `CasoPublico` dejó previsto. Nombra UN caso y pasa por el guard: no es
+ *      re-abrir el listado.
+ *
+ * Si core no lo tiene (se reinició y el caso murió con la RAM), se dice que
+ * no está y por qué, en vez de pintar un mapa de Bogotá centrado en cualquier
+ * parte.
  */
 
 import { ArrowRight, MapPinOff } from "lucide-react";
+import { kmEntre } from "@/components/mapa/geometria";
 import type { Coordenada, CasoPublico, Handshake } from "@/lib/types";
 import { ETIQUETA_TRIAGE, esHoraDorada } from "@/lib/presentacion";
 
@@ -33,14 +35,20 @@ export function DetalleCaso({
   caso,
   handshake,
   origen,
+  origenResuelto = true,
+  posicionUnidad = null,
   mapa,
   onContinuar,
   onCerrar,
 }: {
   caso: CasoPublico;
   handshake: Handshake | null;
-  /** Solo lo hay si este dispositivo dictó el caso. Ver la cabecera. */
+  /** Del dictado local o de GET /casos/:id/origen. Ver la cabecera. */
   origen: Coordenada | null;
+  /** false mientras la página le pregunta a core. Cambia el texto del hueco. */
+  origenResuelto?: boolean;
+  /** El GPS de esta unidad, para rotular a cuánto está del paciente. */
+  posicionUnidad?: Coordenada | null;
   /** El mapa ya montado, con `origen` dentro. Lo inyecta la página. */
   mapa?: React.ReactNode;
   /** Solo para los que siguen abiertos. */
@@ -108,10 +116,14 @@ export function DetalleCaso({
             {mapa}
             <p className="mt-1.5 text-[11px] text-[color:var(--color-texto-tenue)] tabular">
               {origen.lat.toFixed(5)}, {origen.lng.toFixed(5)}
+              {posicionUnidad &&
+                // "En línea recta" no es adorno: la distancia por calle la
+                // calcula core con tráfico, y esto no la finge.
+                ` · a ${kmEntre(posicionUnidad, origen).toFixed(1)} km de ti en línea recta`}
             </p>
           </>
         ) : (
-          <SinOrigen />
+          <SinOrigen resuelto={origenResuelto} />
         )}
       </div>
 
@@ -156,7 +168,7 @@ export function DetalleCaso({
  * El hueco declarado. No es un error ni un "cargando": es una decisión de
  * privacidad del sistema, y se cuenta como tal.
  */
-function SinOrigen() {
+function SinOrigen({ resuelto }: { resuelto: boolean }) {
   return (
     <div className="flex gap-3 rounded-xl border border-dashed border-[color:var(--color-borde)] px-3 py-3">
       <MapPinOff
@@ -165,9 +177,12 @@ function SinOrigen() {
         aria-hidden
       />
       <p className="text-xs leading-relaxed text-[color:var(--color-texto-tenue)]">
-        La ubicación de recogida no viaja en el listado de casos: es uno de los
-        dos datos que no salen del servidor. Se ve mientras el caso está en
-        curso en este dispositivo.
+        {resuelto
+          ? "Core no tiene la ubicación de este caso: no viaja en el listado " +
+            "(decisión de privacidad) y el registro por caso ya no la guarda — " +
+            "probablemente el caso murió con un reinicio."
+          : "Consultando la ubicación de recogida… Se pide caso por caso, " +
+            "nunca en el listado."}
       </p>
     </div>
   );

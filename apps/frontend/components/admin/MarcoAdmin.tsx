@@ -30,23 +30,24 @@ import {
 } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AlertTriangle, KeyRound, ShieldCheck } from "lucide-react";
+import { AlertTriangle, KeyRound, PlugZap, ShieldCheck } from "lucide-react";
 import * as admin from "@/lib/api-admin";
+import { clasificar, describir, type Fallo, type Icono } from "@/lib/fallo-core";
 import type { Acceso } from "@/lib/catalogos-modelo";
 import { LogoPulso } from "@/components/LogoPulso";
 
 interface Estado {
   acceso: Acceso | null;
   cargando: boolean;
-  /** Core no respondió. No es lo mismo que "no puedes" y no se pinta igual. */
-  sinCore: boolean;
+  /** Por qué no hay veredicto. `null` = lo hay (mira `acceso`). */
+  fallo: Fallo | null;
   recargar: () => Promise<void>;
 }
 
 const Contexto = createContext<Estado>({
   acceso: null,
   cargando: true,
-  sinCore: false,
+  fallo: null,
   recargar: async () => {},
 });
 
@@ -62,18 +63,19 @@ const PESTANAS = [
 export function MarcoAdmin({ children }: { children: ReactNode }) {
   const [acceso, setAcceso] = useState<Acceso | null>(null);
   const [cargando, setCargando] = useState(true);
-  const [sinCore, setSinCore] = useState(false);
+  const [fallo, setFallo] = useState<Fallo | null>(null);
   const ruta = usePathname();
 
   const recargar = useCallback(async () => {
     setCargando(true);
     try {
       setAcceso(await admin.acceso());
-      setSinCore(false);
-    } catch {
-      // Core caído no es una excepción que subir: es un estado que pintar.
+      setFallo(null);
+    } catch (e) {
+      // Que core no conteste no es una excepción que subir: es un estado que
+      // pintar. Pero *cuál* estado importa — ver `Fallo`.
       setAcceso(null);
-      setSinCore(true);
+      setFallo(clasificar(e, "/admin/acceso"));
     } finally {
       setCargando(false);
     }
@@ -84,7 +86,7 @@ export function MarcoAdmin({ children }: { children: ReactNode }) {
   }, [recargar]);
 
   return (
-    <Contexto.Provider value={{ acceso, cargando, sinCore, recargar }}>
+    <Contexto.Provider value={{ acceso, cargando, fallo, recargar }}>
       <div className="min-h-dvh bg-[color:var(--color-fondo)] text-[color:var(--color-texto)]">
         <header className="border-b border-[color:var(--color-borde)] bg-[color:var(--color-superficie)]">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
@@ -129,11 +131,11 @@ export function MarcoAdmin({ children }: { children: ReactNode }) {
 
         <main className="mx-auto max-w-6xl px-4 py-6">
           {cargando && <Cargando />}
-          {!cargando && sinCore && <SinCore onReintentar={recargar} />}
-          {!cargando && !sinCore && acceso && !acceso.permitido && (
+          {!cargando && fallo && <PantallaFallo fallo={fallo} onReintentar={recargar} />}
+          {!cargando && !fallo && acceso && !acceso.permitido && (
             <Puerta acceso={acceso} onEntrar={recargar} />
           )}
-          {!cargando && !sinCore && acceso?.permitido && (
+          {!cargando && !fallo && acceso?.permitido && (
             <>
               <Degradacion avisos={acceso.degradacion} />
               {children}
@@ -151,20 +153,51 @@ function Cargando() {
   );
 }
 
-function SinCore({ onReintentar }: { onReintentar: () => void }) {
+/**
+ * Un fallo, dicho por su nombre y con la salida que le corresponde.
+ *
+ * `reintentar` es la diferencia que hace útil esta pantalla: se ofrece solo
+ * cuando volver a pedir puede dar otro resultado. Ofrecerlo en un 403 es
+ * invitar a pulsar un botón para siempre.
+ */
+const ICONOS: Record<Icono, typeof AlertTriangle> = {
+  enchufe: PlugZap,
+  llave: KeyRound,
+  alerta: AlertTriangle,
+};
+
+function PantallaFallo({
+  fallo,
+  onReintentar,
+}: {
+  fallo: Fallo;
+  onReintentar: () => void;
+}) {
+  const { titulo, detalle, reintentar, icono } = describir(fallo);
+  const Icono = ICONOS[icono];
   return (
     <Tarjeta>
-      <p className="text-sm">Core no responde.</p>
-      <p className="mt-1 text-xs text-[color:var(--color-texto-tenue)]">
-        No sabemos si tu sesión sigue viva, y no te sacamos por una duda.
-      </p>
-      <button
-        type="button"
-        onClick={onReintentar}
-        className="mt-4 inline-flex min-h-11 items-center rounded-lg bg-[color:var(--color-marca)] px-4 text-sm font-semibold text-white"
-      >
-        Reintentar
-      </button>
+      <div className="flex items-start gap-3">
+        <Icono
+          className="mt-0.5 size-5 shrink-0 text-[color:var(--color-alerta)]"
+          aria-hidden
+        />
+        <div className="min-w-0">
+          <p className="text-sm font-semibold">{titulo}</p>
+          <p className="mt-1 text-xs leading-relaxed text-[color:var(--color-texto-tenue)]">
+            {detalle}
+          </p>
+        </div>
+      </div>
+      {reintentar && (
+        <button
+          type="button"
+          onClick={onReintentar}
+          className="mt-4 inline-flex min-h-11 items-center rounded-lg bg-[color:var(--color-marca)] px-4 text-sm font-semibold text-white"
+        >
+          Reintentar
+        </button>
+      )}
     </Tarjeta>
   );
 }

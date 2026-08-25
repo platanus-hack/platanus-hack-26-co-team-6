@@ -16,7 +16,7 @@
  */
 
 import { useMemo, useState } from "react";
-import { Search, SlidersHorizontal, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, SlidersHorizontal, X } from "lucide-react";
 import { ETIQUETA_TRIAGE, esHoraDorada } from "@/lib/presentacion";
 import type { NivelTriage } from "@/lib/types";
 import {
@@ -178,6 +178,14 @@ export function TableroCasos({
 
 // ── Piezas ───────────────────────────────────────────────────────
 
+/**
+ * Un turno cargado pasa de 10 casos y la lista completa entierra al mapa y
+ * al detalle. 10 por página: los urgentes ya vienen primero (el orden lo
+ * pone `agrupar`), así que la página 1 es la que importa y el resto es
+ * archivo. La página se resetea sola si el filtro encoge la lista.
+ */
+const POR_PAGINA = 10;
+
 function Bloque({
   rotulo,
   detalle,
@@ -193,6 +201,12 @@ function Bloque({
   seleccionado: string | null;
   onSeleccionar: (casoId: string) => void;
 }) {
+  const [pagina, setPagina] = useState(0);
+  const paginas = Math.max(1, Math.ceil(items.length / POR_PAGINA));
+  // Si el filtro encogió la lista, no quedarse mirando una página vacía.
+  const actual = Math.min(pagina, paginas - 1);
+  const visibles = items.slice(actual * POR_PAGINA, (actual + 1) * POR_PAGINA);
+
   if (items.length === 0) return null;
 
   return (
@@ -215,7 +229,7 @@ function Bloque({
         </span>
       </h2>
       <ul className="space-y-2">
-        {items.map((i) => (
+        {visibles.map((i) => (
           <li key={i.caso.id}>
             <FilaCaso
               item={i}
@@ -225,6 +239,34 @@ function Bloque({
           </li>
         ))}
       </ul>
+      {paginas > 1 && (
+        <nav
+          aria-label={`Páginas de ${rotulo}`}
+          className="mt-2 flex items-center justify-between text-xs text-[color:var(--color-texto-tenue)]"
+        >
+          <button
+            type="button"
+            onClick={() => setPagina(actual - 1)}
+            disabled={actual === 0}
+            className="inline-flex min-h-11 items-center gap-1 px-2 text-[color:var(--color-info)] disabled:opacity-30"
+          >
+            <ChevronLeft className="size-3.5" strokeWidth={2.5} aria-hidden />
+            Anteriores
+          </button>
+          <span className="tabular">
+            {actual * POR_PAGINA + 1}–{Math.min((actual + 1) * POR_PAGINA, items.length)} de {items.length}
+          </span>
+          <button
+            type="button"
+            onClick={() => setPagina(actual + 1)}
+            disabled={actual >= paginas - 1}
+            className="inline-flex min-h-11 items-center gap-1 px-2 text-[color:var(--color-info)] disabled:opacity-30"
+          >
+            Siguientes
+            <ChevronRight className="size-3.5" strokeWidth={2.5} aria-hidden />
+          </button>
+        </nav>
+      )}
     </div>
   );
 }
